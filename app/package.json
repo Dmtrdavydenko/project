@@ -1,21 +1,12 @@
 {
-  "name": "hello-sqlite",
-  "version": "0.1.1",
-  "description": "A Node app with SQLite database, instantly up and running.",
+  "name": "my-railway-app",
+  "version": "1.0.0",
+  "description": "",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "dependencies": {
-    "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7",
-    "ws": "^8.18.2"
-  },
-  "engines": {
-    "node": "^14.x"
-  },
-  "license": "MIT",
-  "keywords": [
-    "node"
-  ]
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
