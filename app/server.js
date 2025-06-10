@@ -9,7 +9,7 @@ const crypto = require('crypto');
 const functionDB = require("./src/db.js");
 
 
-
+process.env.PORT = 3000;
 
 // console.log(db);
 
