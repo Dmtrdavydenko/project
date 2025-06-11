@@ -4,11 +4,52 @@ const path = require("path"); // For working with file and directory paths
 const url = require("url"); // For URL resolution and parsing
 const crypto = require('crypto');
 
-
+const mysql = require('mysql2/promise');
 
 const PORT = process.env.PORT || 3000;
+
 // const db = require("./src/sqlite.js");
 // const functionDB = require("./src/db.js");
+
+
+
+const dbConfig = {
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+  port: process.env.MYSQL_PORT || 3306, // Укажите порт по умолчанию, если переменная не установлена
+};
+
+async function main() {
+  try {
+    const pool = mysql.createPool(dbConfig);
+    const connection = await pool.getConnection();
+
+    console.log('Успешно подключено к базе данных MySQL!');
+
+    const [rows, fields] = await connection.execute('SELECT * FROM users'); // Используем execute()
+
+    console.log('Результаты запроса:', rows);
+
+    connection.release(); // Важно освободить соединение
+
+    await pool.end(); // Закрываем пул соединений
+    console.log('Пул соединений закрыт.');
+
+  } catch (err) {
+    console.error('Ошибка:', err);
+  }
+}
+
+main();
+
+
+
+
+
+
+
 const mimeTypes = {
   ".txt":"text/plain",
   ".html": "text/html",
@@ -114,79 +155,4 @@ console.log("Server listening on " + PORT);
 
 
 module.exports = combined;
-
-
-
-// const http = require('http');
-// const url = require('url');
-// const sqlite3 = require('sqlite3').verbose();
-
-// // Создаем соединение с базой данных
-// const db = new sqlite3.Database('your_database.db');
-
-// // Создаем HTTP сервер
-// const server = http.createServer((req, res) => {
-//     // Проверяем, что это GET запрос к /records
-//     if (req.method === 'GET' && req.url.startsWith('/records')) {
-//         // Парсим URL и параметры
-//         const parsedUrl = url.parse(req.url, true);
-//         const filters = parsedUrl.query; // Получаем параметры из URL
-
-//         // Вызываем функцию select с параметрами фильтрации
-//         select(filters)
-//             .then(rows => {
-//                 res.writeHead(200, { 'Content-Type': 'application/json' });
-//                 res.end(JSON.stringify(rows)); // Отправляем полученные данные в ответе
-//             })
-//             .catch(err => {
-//                 res.writeHead(500, { 'Content-Type': 'text/plain' });
-//                 res.end('Ошибка при получении данных: ' + err.message);
-//             });
-//     } else {
-//         // Если метод не поддерживается или неправильный путь
-//         res.writeHead(404, { 'Content-Type': 'text/plain' });
-//         res.end('Не найдено');
-//     }
-// });
-
-// // Функция select для выполнения SQL-запроса
-// function select(filters) {
-//     return new Promise((resolve, reject) => {
-//         db.serialize(() => {
-//             let query = "SELECT * FROM records";
-//             let conditions = [];
-//             let params = [];
-
-//             // Добавляем условия фильтрации, если они указаны
-//             if (filters.meters) {
-//                 conditions.push("meters = ?");
-//                 params.push(filters.meters);
-//             }
-//             if (filters.quantity) {
-//                 conditions.push("quantity = ?");
-//                 params.push(filters.quantity);
-//             }
-
-//             // Если есть условия, добавляем их к запросу
-//             if (conditions.length > 0) {
-//                 query += " WHERE " + conditions.join(" AND ");
-//             }
-
-//             db.all(query, params, (err, rows) => {
-//                 if (err) {
-//                     reject("Ошибка при получении данных: " + err.message);
-//                 } else {
-//                     resolve(rows);
-//                 }
-//             });
-//         });
-//     });
-// }
-
-// // Запуск сервера
-// const PORT = 3000;
-// server.listen(PORT, () => {
-//     console.log(`Сервер запущен на http://localhost:${PORT}`);
-// });
-
 
