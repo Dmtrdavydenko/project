@@ -147,14 +147,14 @@ server.on("request", (req, res) => {
                 body = JSON.parse(body);
                 console.log(body);
 
-                //functionDB[body.action](body)
-                //  .then((resolve) => JSON.stringify(resolve))
-                //  .then((resolve) => res.end(resolve))
-                //  .catch(error=>{
-                //  res.end(error)
-                //  console.log(error);
-                //})
-                //}
+                functionDB[body.action](body)
+                  .then((resolve) => JSON.stringify(resolve))
+                  .then((resolve) => res.end(resolve))
+                  .catch(error=>{
+                  res.end(error)
+                  console.log(error);
+                })
+                }
             });
         }
 });
