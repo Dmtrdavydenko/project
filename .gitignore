@@ -1,36 +1,36 @@
 .vs/
-# Зависимости
+# link
 node_modules/
 
-# Логи
+# log
 logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Среда разработки
+# local code eriter
 .vscode/
 .idea/
 
-# Файлы окружения
+# file key
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Папки сборки
+# folder bind
 dist/
 build/
 
-# Кэш
+# cache
 .cache/
 .tmp/
 
-# Отчёты покрытия тестов
+# test
 coverage/
 
-# Системные файлы
+# sustsem file
 .DS_Store
 Thumbs.db
