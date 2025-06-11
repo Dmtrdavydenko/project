@@ -25,24 +25,25 @@ send.textContent = "Send"
 main.append(width);
 main.append(density);
 main.append(send);
-function Textile(InputWidth,inputDensity){
+function Textile(InputWidth, inputDensity) {
     this.width = InputWidth.valueAsNumber;
     this.density = inputDensity.valueAsNumber;
 }
 send.addEventListener("click", async function (e) {
-    fetch(document.location.href, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify({
-        action: "insert",
-        table: {
-          name: "textile",
+    fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
         },
-        data: new Textile(width,density)
-      }),
+        body: JSON.stringify({
+            action: "insert",
+            table: {
+                name: "textile",
+            },
+            data: new Textile(width, density)
+        }),
     })
+
         .then((response) => response.json())
-      .then(console.log)
+        .then(console.log)
 })

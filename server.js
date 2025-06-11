@@ -141,7 +141,7 @@ server.on("request", (req, res) => {
             body.push(chunk);
         }).on("end", () => {
             body = Buffer.concat(body)
-            if (body != "") {
+            //if (body != "") {
                 body = JSON.parse(body);
                 console.log(body);
                 console.log(req.url);
@@ -154,7 +154,7 @@ server.on("request", (req, res) => {
                 //  res.end(error)
                 //  console.log(error);
                 //})
-            }
+            //}
         });
     }
 });
