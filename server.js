@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 // const db = require("./src/sqlite.js");
 const functionDB = {
     "insert": insert,
+    "select": select
 }
 
 
@@ -50,6 +51,32 @@ async function insert(body) {
 
         return {
             insertId: insertResult.insertId,
+            rows // все данные таблицы
+        };
+
+    } catch (err) {
+        console.error('Ошибка:', err);
+        throw err;
+    } finally {
+        connection.release();
+        await pool.end();
+        console.log('Пул соединений закрыт.');
+    }
+}
+
+async function select(body) {
+    const pool = mysql.createPool(dbConfig); // создаём пул подключений
+    const connection = await pool.getConnection();
+
+    try {
+        console.log('Успешно подключено к базе данных MySQL!');
+
+        // Получаем все данные из таблицы после вставки
+        const [rows] = await connection.execute(
+            'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
+        );
+
+        return {
             rows // все данные таблицы
         };
 

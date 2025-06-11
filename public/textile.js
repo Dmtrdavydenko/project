@@ -96,7 +96,34 @@ send.addEventListener("click", async function (e) {
     } else {
         container.textContent = 'U';
     }
-
-
-
 })
+
+
+    (async () => {
+
+        const result = await fetch("https://worktime.up.railway.app/textile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify({
+                action: "select",
+                table: {
+                    name: "textile",
+                },
+            }),
+        }).then((response) => response.json());
+
+        const container = document.getElementById('table-container');
+        container.innerHTML = '';
+
+        if (result.rows) {
+            const table = createTable(result.rows);
+            container.appendChild(table);
+        } else {
+            container.textContent = 'U';
+        }
+
+
+
+    })()
