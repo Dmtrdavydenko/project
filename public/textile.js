@@ -6,7 +6,7 @@ console.log(document.location.href);
 
 function createTable(data) {
     if (!data || data.length === 0) {
-        return '<p>Нет данных для отображения</p>';
+        return '<p>U</p>';
     }
 
     let table = document.createElement('table');
