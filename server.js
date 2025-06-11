@@ -23,7 +23,8 @@ const PORT = process.env.PORT || 3000;
 
 const mysql = require('mysql2/promise');
 
-const dbConfig = process.env.MYSQL_URL; // считываем из env
+const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env
+
 
 async function main() {
     try {
