@@ -13,13 +13,13 @@ const PORT = process.env.PORT || 3000;
 
 
 
-const dbConfig = {
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-  port: process.env.MYSQL_PORT || 3306, // Укажите порт по умолчанию, если переменная не установлена
-};
+//const dbConfig = {
+//  host: process.env.MYSQL_HOST,
+//  user: process.env.MYSQL_USER,
+//  password: process.env.MYSQL_PASSWORD,
+//  database: process.env.MYSQL_DATABASE,
+//  port: process.env.MYSQL_PORT || 3306, // Укажите порт по умолчанию, если переменная не установлена
+//};
 
 const mysql = require('mysql2/promise');
 
