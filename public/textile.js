@@ -90,8 +90,8 @@ send.addEventListener("click", async function (e) {
     const container = document.getElementById('table-container');
     container.innerHTML = '';
 
-    if (result.data) {
-        const table = createTable(result.data);
+    if (result.rows) {
+        const table = createTable(result.rows);
         container.appendChild(table);
     } else {
         container.textContent = 'U';
