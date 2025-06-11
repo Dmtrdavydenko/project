@@ -7,7 +7,10 @@ console.log(document.location.href);
 
 
 
-
+const id = document.createElement("input");
+id.type = "number";
+id.min = 1;
+id.step = 1;
 const width = document.createElement("input");
 width.type = "number";
 width.min = 0;
@@ -25,8 +28,9 @@ send.textContent = "Send"
 main.append(width);
 main.append(density);
 main.append(send);
-function Textile(InputWidth, inputDensity) {
-    this.width = InputWidth.valueAsNumber;
+function Textile(inputId,inputWidth, inputDensity) {
+    this.id = inputId.valueAsNumber;
+    this.width = inputWidth.valueAsNumber;
     this.density = inputDensity.valueAsNumber;
 }
 send.addEventListener("click", async function (e) {
@@ -40,7 +44,7 @@ send.addEventListener("click", async function (e) {
             table: {
                 name: "textile",
             },
-            data: new Textile(width, density)
+            data: new Textile(id,width, density)
         }),
     })
 

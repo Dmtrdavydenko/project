@@ -36,8 +36,8 @@ async function insert(body) {
         console.log('Успешно подключено к базе данных MySQL!');
 
         const [result] = await connection.execute(
-            'INSERT INTO '+body.table.name+' (width, density) VALUES (?, ?)',
-            [body.data.width, body.data.density]
+            'INSERT INTO '+body.table.name+' (id, width, density) VALUES (?, ?, ?)',
+            [body.data.id,body.data.width, body.data.density]
         );
 
         console.log('Inserted ID:', result.insertId);
