@@ -5,6 +5,8 @@ const url = require("url"); // For URL resolution and parsing
 const crypto = require('crypto');
 
 
+
+const PORT = process.env.PORT || 3000;
 // const db = require("./src/sqlite.js");
 // const functionDB = require("./src/db.js");
 const mimeTypes = {
@@ -107,8 +109,8 @@ server.on("request", (req, res) => {
     // });
   }
 });
-server.listen(process.env.PORT);
-console.log("Server listening on " + process.env.PORT);
+server.listen(PORT);
+console.log("Server listening on " + PORT);
 
 
 module.exports = combined;
