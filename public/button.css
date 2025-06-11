@@ -1,0 +1,32 @@
+.success {
+  /*             background-color: green; */
+  /* Change to green on success */
+  /*             transform: scale(1.1); */
+  /* Slightly enlarge the button */
+  animation: successAnimation 3s;
+  /*             animation: successAnimation 3s infinite; */
+  /*             animation: successAnimation 1s forwards; */
+  /* Apply success animation */
+}
+
+@keyframes successAnimation {
+  50% {
+    background-color: green;
+  }
+}
+.reject {
+  /*             background-color: green; */
+  /* Change to green on success */
+  /*             transform: scale(1.1); */
+  /* Slightly enlarge the button */
+  animation: rejectAnimation 3s;
+  /*             animation: successAnimation 3s infinite; */
+  /*             animation: successAnimation 1s forwards; */
+  /* Apply success animation */
+}
+
+@keyframes rejectAnimation {
+  50% {
+    background-color: red;
+  }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма ввода данных</title>
+    <style>
+        table {
+            width: 100%; /* Занимаем всю ширину родителя */
+            border-collapse: collapse; /* Убираем двойные границы */
+        }
+        td {
+            padding: 5px; /* Отступы внутри ячеек */
+    white-space: nowrap;
+          
+        }
+        label {
+            min-width: 70px; /* Минимальная ширина метки для лучшего выравнивания */
+            display: inline-block; /* Чтобы метка была на одной линии с полем ввода */
+        }
+        input {
+          
+            width: 80px; /* Фиксированная ширина для полей ввода */
+        }
+    </style>
+</head>
+<body>
+
+<main>
+    <table>
+        <tr>
+            <td><label for="seconds">Секунда:</label></td>
+            <td>
+                <input type="number" id="seconds" name="seconds1">
+                <input type="number" name="seconds2">
+                <input type="number" name="seconds3">
+                <input type="number" name="seconds4">
+                <input type="number" name="seconds5">
+                <input type="number" name="seconds6">
+                <input type="number" name="seconds7">
+            </td>
+        </tr>
+        <tr>
+            <td><label for="time">Время:</label></td>
+            <td><input type="time" id="time" name="time"></td>
+        </tr>
+        <tr>
+            <td><label for="meters">Метр:</label></td>
+            <td>
+                <input type="number" id="meters" name="meters1">
+                <input type="number" name="meters2">
+                <input type="number" name="meters3">
+                <input type="number" name="meters4">
+                <input type="number" name="meters5">
+                <input type="number" name="meters6">
+                <input type="number" name="meters7">
+            </td>
+        </tr>
+        <tr>
+            <td><label for="speed">Скорость:</label></td>
+            <td>
+                <input type="number" id="speed" name="speed1">
+                <input type="number" name="speed2">
+                <input type="number" name="speed3">
+                <input type="number" name="speed4">
+                <input type="number" name="speed5">
+                <input type="number" name="speed6">
+                <input type="number" name="speed7">
+            </td>
+        </tr>
+    </table>
+</main>
+
+</body>
+</html>
