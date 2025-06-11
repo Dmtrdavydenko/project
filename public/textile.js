@@ -18,12 +18,6 @@ density.min = 0;
 density.step = 1;
 
 
-
-const density = document.createElement("input");
-density.type = "number";
-density.min = 0;
-density.step = 1;
-
 const send = document.createElement("button");
 send.textContent = "Send"
 
@@ -49,5 +43,6 @@ send.addEventListener("click", async function (e) {
         data: new Textile(width,density)
       }),
     })
-      .then((response) => response.json())
+        .then((response) => response.json())
+      .then(console.log)
 })
