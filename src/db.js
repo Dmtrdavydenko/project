@@ -1,6 +1,8 @@
-const db = require("./sqlite");
+//const db = require("./sqlite");
 const combined = require("../server");
 const text = require("./data.json");
+
+const mysql = require('mysql2/promise');
 
 function login() {
   return new Promise((resolve, reject) => {

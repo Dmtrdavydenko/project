@@ -9,7 +9,9 @@ const crypto = require('crypto');
 const PORT = process.env.PORT || 3000;
 
 // const db = require("./src/sqlite.js");
-// const functionDB = require("./src/db.js");
+const functionDB = {
+    "insert": insert,
+}
 
 
 //считываем из env railway
@@ -26,17 +28,19 @@ const mysql = require('mysql2/promise');
 //const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
 
 
-async function main() {
+async function insert(body) {
     try {
-        const pool = mysql.createPool(dbConfig); // передаем строку подключения
-
+        const pool = mysql.createPool(dbConfig); // создаём пул подключений
         const connection = await pool.getConnection();
 
         console.log('Успешно подключено к базе данных MySQL!');
 
-        const [rows, fields] = await connection.execute('SELECT * FROM textile');
+        const [result] = await connection.execute(
+            'INSERT INTO users (width, density) VALUES (?, ?)',
+            [body.data.width, body.data.density]
+        );
 
-        console.log('Результаты запроса:', rows);
+        console.log('Inserted ID:', result.insertId);
 
         connection.release();
         await pool.end();
@@ -45,9 +49,6 @@ async function main() {
         console.error('Ошибка:', err);
     }
 }
-
-main();
-
 
 
 
@@ -135,17 +136,16 @@ server.on("request", (req, res) => {
             fileStream.pipe(res);
         });
     }
-    if (req.method === "POST") {
-        let body = [];
-        req.on("data", (chunk) => {
-            body.push(chunk);
-        }).on("end", () => {
-            body = Buffer.concat(body)
-            //if (body != "") {
+    if (req.url === "/textile")
+        if (req.method === "POST") {
+            let body = [];
+            req.on("data", (chunk) => {
+                body.push(chunk);
+            }).on("end", () => {
+                body = Buffer.concat(body)
+                //if (body != "") {
                 body = JSON.parse(body);
                 console.log(body);
-                console.log(req.url);
-                console.log(pathName);
 
                 //functionDB[body.action](body)
                 //  .then((resolve) => JSON.stringify(resolve))
@@ -154,9 +154,9 @@ server.on("request", (req, res) => {
                 //  res.end(error)
                 //  console.log(error);
                 //})
-            //}
-        });
-    }
+                //}
+            });
+        }
 });
 server.listen(PORT);
 console.log("Server listening on " + PORT);
