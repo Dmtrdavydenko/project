@@ -23,11 +23,11 @@ const PORT = process.env.PORT || 3000;
 
 const mysql = require('mysql2/promise');
 
-const dbConfig = process.env.MYSQL_URL || process.env.DATABASE_URL;
+const dbConfig = process.env.MYSQL_URL; // считываем из env
 
 async function main() {
     try {
-        const pool = mysql.createPool(dbConfig);
+        const pool = mysql.createPool(dbConfig); // передаем строку подключения
 
         const connection = await pool.getConnection();
 
@@ -38,7 +38,6 @@ async function main() {
         console.log('Результаты запроса:', rows);
 
         connection.release();
-
         await pool.end();
         console.log('Пул соединений закрыт.');
     } catch (err) {
