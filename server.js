@@ -29,26 +29,37 @@ const mysql = require('mysql2/promise');
 
 
 async function insert(body) {
-    try {
-        const pool = mysql.createPool(dbConfig); // создаём пул подключений
-        const connection = await pool.getConnection();
+    const pool = mysql.createPool(dbConfig); // создаём пул подключений
+    const connection = await pool.getConnection();
 
+    try {
         console.log('Успешно подключено к базе данных MySQL!');
 
-        const [result] = await connection.execute(
-            'INSERT INTO '+body.table.name+' (id, width, density) VALUES (?, ?, ?)',
-            [body.data.id,body.data.width, body.data.density]
+        // Вставка новой записи
+        const [insertResult] = await connection.execute(
+            'INSERT INTO ' + body.table.name + ' (id, width, density) VALUES (?, ?, ?)',
+            [body.data.id, body.data.width, body.data.density]
         );
 
-        console.log('Inserted ID:', result.insertId);
+        console.log('Inserted ID:', insertResult.insertId);
 
-        connection.release();
-        await pool.end();
-        console.log('Пул соединений закрыт.');
-        return result.insertId;
+        // Получаем все данные из таблицы после вставки
+        const [rows] = await connection.execute(
+            'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
+        );
+
+        return {
+            insertId: insertResult.insertId,
+            rows // все данные таблицы
+        };
+
     } catch (err) {
         console.error('Ошибка:', err);
         throw err;
+    } finally {
+        connection.release();
+        await pool.end();
+        console.log('Пул соединений закрыт.');
     }
 }
 

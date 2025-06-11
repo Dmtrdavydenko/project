@@ -4,7 +4,48 @@ console.log(document.location.href);
 
 
 
+function createTable(data) {
+    if (!data || data.length === 0) {
+        return '<p>Нет данных для отображения</p>';
+    }
 
+    // Создаём таблицу и заголовок
+    let table = document.createElement('table');
+    table.style.width = '100%';
+    table.style.borderCollapse = 'collapse';
+
+    // Создаём заголовок таблицы из ключей первого объекта
+    let thead = document.createElement('thead');
+    let headerRow = document.createElement('tr');
+    Object.keys(data[0]).forEach(key => {
+        let th = document.createElement('th');
+        th.textContent = key;
+        th.style.border = '1px solid #ccc';
+        th.style.padding = '8px';
+        th.style.backgroundColor = '#222';
+        th.style.color = '#fff';
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    // Создаём тело таблицы
+    let tbody = document.createElement('tbody');
+    data.forEach(row => {
+        let tr = document.createElement('tr');
+        Object.values(row).forEach(value => {
+            let td = document.createElement('td');
+            td.textContent = value;
+            td.style.border = '1px solid #ccc';
+            td.style.padding = '8px';
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+
+    return table;
+}
 
 
 const id = document.createElement("input");
@@ -35,7 +76,7 @@ function Textile(inputId,inputWidth, inputDensity) {
     this.density = inputDensity.valueAsNumber;
 }
 send.addEventListener("click", async function (e) {
-    fetch("https://worktime.up.railway.app/textile", {
+    const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -47,8 +88,15 @@ send.addEventListener("click", async function (e) {
             },
             data: new Textile(id, width, density)
         }),
-    })
+    }).then((response) => response.json());
 
-        .then((response) => response.json())
-        .then(console.log)
+    if (result.data) {
+        const table = createTable(result.data);
+        container.appendChild(table);
+    } else {
+        container.textContent = 'Нет данных для отображения';
+    }
+
+
+
 })
