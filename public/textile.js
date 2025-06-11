@@ -88,7 +88,7 @@ send.addEventListener("click", async function (e) {
     }).then((response) => response.json());
 
     const container = document.getElementById('table-container');
-    container.innerHTML = ''; // очищаем контейнер
+    container.innerHTML = '';
 
     if (result.data) {
         const table = createTable(result.data);
