@@ -10,7 +10,6 @@ const crypto = require('crypto');
 
 const PORT = process.env.PORT || 3000;
 
-// console.log(db);
 
 // const get = require("./src/getData.js");
 // const getTables = require("./src/getTables.js");
