@@ -25,6 +25,7 @@ const send = document.createElement("button");
 send.textContent = "Send"
 
 
+main.append(id);
 main.append(width);
 main.append(density);
 main.append(send);
@@ -44,7 +45,7 @@ send.addEventListener("click", async function (e) {
             table: {
                 name: "textile",
             },
-            data: new Textile(id,width, density)
+            data: new Textile(id, width, density)
         }),
     })
 
