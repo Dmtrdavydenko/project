@@ -45,8 +45,10 @@ async function insert(body) {
         connection.release();
         await pool.end();
         console.log('Пул соединений закрыт.');
+        return result.insertId;
     } catch (err) {
         console.error('Ошибка:', err);
+        throw err;
     }
 }
 
