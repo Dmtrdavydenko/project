@@ -94,7 +94,7 @@ send.addEventListener("click", async function (e) {
         const table = createTable(result.data);
         container.appendChild(table);
     } else {
-        container.textContent = 'Нет данных для отображения';
+        container.textContent = 'U';
     }
 
 
