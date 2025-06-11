@@ -4,7 +4,7 @@ const path = require("path"); // For working with file and directory paths
 const url = require("url"); // For URL resolution and parsing
 const crypto = require('crypto');
 
-const mysql = require('mysql2/promise');
+//const mysql = require('mysql2/promise');
 
 const PORT = process.env.PORT || 3000;
 
@@ -21,25 +21,29 @@ const dbConfig = {
   port: process.env.MYSQL_PORT || 3306, // Укажите порт по умолчанию, если переменная не установлена
 };
 
+const mysql = require('mysql2/promise');
+
+const dbConfig = process.env.MYSQL_URL || process.env.DATABASE_URL;
+
 async function main() {
-  try {
-    const pool = mysql.createPool(dbConfig);
-    const connection = await pool.getConnection();
+    try {
+        const pool = mysql.createPool(dbConfig);
 
-    console.log('Успешно подключено к базе данных MySQL!');
+        const connection = await pool.getConnection();
 
-    const [rows, fields] = await connection.execute('SELECT * FROM users'); // Используем execute()
+        console.log('Успешно подключено к базе данных MySQL!');
 
-    console.log('Результаты запроса:', rows);
+        const [rows, fields] = await connection.execute('SELECT * FROM users');
 
-    connection.release(); // Важно освободить соединение
+        console.log('Результаты запроса:', rows);
 
-    await pool.end(); // Закрываем пул соединений
-    console.log('Пул соединений закрыт.');
+        connection.release();
 
-  } catch (err) {
-    console.error('Ошибка:', err);
-  }
+        await pool.end();
+        console.log('Пул соединений закрыт.');
+    } catch (err) {
+        console.error('Ошибка:', err);
+    }
 }
 
 main();
