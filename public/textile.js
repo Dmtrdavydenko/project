@@ -9,12 +9,10 @@ function createTable(data) {
         return '<p>Нет данных для отображения</p>';
     }
 
-    // Создаём таблицу и заголовок
     let table = document.createElement('table');
     table.style.width = '100%';
     table.style.borderCollapse = 'collapse';
 
-    // Создаём заголовок таблицы из ключей первого объекта
     let thead = document.createElement('thead');
     let headerRow = document.createElement('tr');
     Object.keys(data[0]).forEach(key => {
@@ -29,7 +27,6 @@ function createTable(data) {
     thead.appendChild(headerRow);
     table.appendChild(thead);
 
-    // Создаём тело таблицы
     let tbody = document.createElement('tbody');
     data.forEach(row => {
         let tr = document.createElement('tr');
@@ -89,6 +86,9 @@ send.addEventListener("click", async function (e) {
             data: new Textile(id, width, density)
         }),
     }).then((response) => response.json());
+
+    const container = document.getElementById('table-container');
+    container.innerHTML = ''; // очищаем контейнер
 
     if (result.data) {
         const table = createTable(result.data);
