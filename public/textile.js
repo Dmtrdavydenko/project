@@ -96,10 +96,14 @@ send.addEventListener("click", async function (e) {
     } else {
         container.textContent = 'U';
     }
-})
+});
 
 
-    (async () => {
+
+
+
+
+(async () => {
 
         const result = await fetch("https://worktime.up.railway.app/textile", {
             method: "POST",
@@ -126,4 +130,4 @@ send.addEventListener("click", async function (e) {
 
 
 
-    })()
+})();
