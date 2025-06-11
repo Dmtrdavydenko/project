@@ -12,18 +12,18 @@ const PORT = process.env.PORT || 3000;
 // const functionDB = require("./src/db.js");
 
 
-
-//const dbConfig = {
-//  host: process.env.MYSQL_HOST,
-//  user: process.env.MYSQL_USER,
-//  password: process.env.MYSQL_PASSWORD,
-//  database: process.env.MYSQL_DATABASE,
-//  port: process.env.MYSQL_PORT || 3306, // Укажите порт по умолчанию, если переменная не установлена
-//};
+//считываем из env railway
+const dbConfig = {
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  port: process.env.MYSQLPORT || 3306, // Укажите порт по умолчанию, если переменная не установлена
+};
 
 const mysql = require('mysql2/promise');
 
-const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env
+//const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
 
 
 async function main() {
@@ -34,7 +34,7 @@ async function main() {
 
         console.log('Успешно подключено к базе данных MySQL!');
 
-        const [rows, fields] = await connection.execute('SELECT * FROM users');
+        const [rows, fields] = await connection.execute('SELECT * FROM textile');
 
         console.log('Результаты запроса:', rows);
 
