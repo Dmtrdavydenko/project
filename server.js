@@ -90,7 +90,54 @@ async function select(body) {
     }
 }
 
+async function createTable() {
+    const pool = mysql.createPool(dbConfig); // создаём пул подключений
+    const connection = await pool.getConnection();
 
+
+    connection.connect(err => {
+        if (err) {
+            console.error('Ошибка подключения: ' + err.stack);
+            return;
+        }
+        console.log('Подключено как id ' + connection.threadId);
+
+        // Создаем таблицу users
+        const createUsersTable = `
+        CREATE TABLE IF NOT EXISTS textileK (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            width INTEGER NOT NULL,
+            density INTEGER NOT NULL
+        )`;
+
+        // Создаем таблицу posts
+        const createPostsTable = `
+        CREATE TABLE IF NOT EXISTS circular_loom (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            textile_id INTEGER,
+            FOREIGN KEY (textile_id) REFERENCES textileK(id) ON DELETE CASCADE
+        )`;
+
+        // Выполняем запросы на создание таблиц
+        connection.query(createUsersTable, (err, results) => {
+            if (err) throw err;
+            console.log('Таблица textileK создана или уже существует.');
+
+            connection.query(createPostsTable, (err, results) => {
+                if (err) throw err;
+                console.log('Таблица circular_loom создана или уже существует.');
+
+                // Закрываем соединение
+                connection.end();
+            });
+        });
+    });
+}
+
+
+
+
+createTable();
 
 
 
