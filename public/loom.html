@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8" />
@@ -9,8 +9,32 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            display: flex;
             font-family: sans-serif;
+            overflow-y: auto; /* Прокручиваемый контент для страницы */
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                margin-right: 15px;
+                font-weight: bold;
+            }
+
+                nav a:hover {
+                    text-decoration: underline;
+                }
+
+        .main-content {
+            display: flex;
+            height: calc(100vh - 50px); /* Учитываем высоту навигации */
         }
 
         .zone {
@@ -18,24 +42,20 @@
             display: flex;
             flex-direction: column;
             border: 1px solid #ccc;
-            height: 100vh;
         }
 
         .half {
-            flex: 1;
+            flex: 0; /* Убираем flex-grow, чтобы блоки занимали только минимально необходимую высоту */
             display: flex;
             flex-wrap: wrap;
             align-content: flex-start;
             justify-content: flex-start;
             padding: 10px;
             border-bottom: 1px solid #ccc;
-            overflow-y: auto;
         }
 
-            
-        
-        .half:last-child {
-            border-bottom: none;
+            .half:last-child {
+                border-bottom: none;
             }
 
         button {
@@ -46,28 +66,32 @@
     </style>
 </head>
 <body>
-    <a href="/">Back</a>
-    <a href="/textile">textile</a>
-    <div class="zone" id="leftZone">
-        <div class="half" id="leftTop"></div>
-        <div class="half" id="leftSecond"></div>
-        <div class="half" id="leftThird"></div>
-        <div class="half" id="leftBottom"></div>
-    </div>
-    <div class="zone" id="rightZone">
-        <div class="half" id="rightTop"></div>
-        <div class="half" id="rightSecond"></div>
-        <div class="half" id="rightThird"></div>
-        <div class="half" id="rightBottom"></div>
-        <div class="half" id="rightBig"></div>
+    <nav>
+        <a href="/">Назад</a>
+        <a href="/textile">Текстиль</a>
+        <a href="/about">О нас</a>
+        <a href="/contact">Контакты</a>
+    </nav>
+
+    <div class="main-content">
+        <div class="zone" id="leftZone">
+            <div class="half" id="leftTop"></div>
+            <div class="half" id="leftSecond"></div>
+            <div class="half" id="leftThird"></div>
+            <div class="half" id="leftBottom"></div>
+        </div>
+        <div class="zone" id="rightZone">
+            <div class="half" id="rightTop"></div>
+            <div class="half" id="rightSecond"></div>
+            <div class="half" id="rightThird"></div>
+            <div class="half" id="rightBottom"></div>
+            <div class="half" id="rightBig"></div>
+        </div>
     </div>
 
     <script>
         // Задаем количество кнопок в каждой секции
         const leftTopButtons = 9;
-        const leftBottomButtons = 3;
-        const rightTopButtons = 10;
-        const rightBottomButtons = 10;
 
         function createButtons(containerId, count, labelPrefix) {
             const container = document.getElementById(containerId);

@@ -67,12 +67,16 @@ dropInput.type = "text";
 const drop = document.createElement("button");
 drop.textContent = "Delite";
 
+const getAllTablesName = document.createElement("button");
+getAllTablesName.textContent = "Получить имена всех таблиц";
+
 main.append(id);
 main.append(width);
 main.append(density);
 main.append(send);
 main.append(dropInput);
 main.append(drop);
+main.append(getAllTablesName);
 
 
 function Textile(inputId,inputWidth, inputDensity) {
@@ -124,7 +128,18 @@ drop.addEventListener("click", async function (e) {
     //const container = document.getElementById('table-container');
 });
 
-
+getAllTablesName.addEventListener("click", async function (e) {
+    const result = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "getAllTableNames"
+        }),
+    }).then((response) => response.json());
+    console.log(result);
+});
 
 
 
