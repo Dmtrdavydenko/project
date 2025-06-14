@@ -119,6 +119,7 @@ drop.addEventListener("click", async function (e) {
             }
         }),
     }).then((response) => response.json());
+    console.log(result);
 
     //const container = document.getElementById('table-container');
 });
