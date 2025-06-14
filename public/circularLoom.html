@@ -61,8 +61,8 @@
 
     <script>
         // Задаем количество кнопок в каждой секции
-        const leftTopButtons = 5;
-        const leftBottomButtons = 5;
+        const leftTopButtons = 9;
+        const leftBottomButtons = 3;
         const rightTopButtons = 10;
         const rightBottomButtons = 10;
 
@@ -79,11 +79,12 @@
         createButtons('leftTop', leftTopButtons, 'Левый Верх');
         createButtons('leftSecond', leftTopButtons, 'Левый Верх');
         createButtons('leftThird', leftTopButtons, 'Левый Верх');
-        createButtons('leftBottom', leftBottomButtons, 'Левый Низ');
-        createButtons('rightTop', rightTopButtons, 'Правый Верх');
-        createButtons('rightSecond', rightBottomButtons, 'Правый Низ');
-        createButtons('rightThird', rightBottomButtons, 'Правый Низ');
-        createButtons('rightBottom', rightBottomButtons, 'Правый Низ');
+        createButtons('leftBottom', leftTopButtons, 'Левый Низ');
+
+        createButtons('rightTop', leftTopButtons, 'Правый Верх');
+        createButtons('rightSecond', leftTopButtons, 'Правый Низ');
+        createButtons('rightThird', leftTopButtons, 'Правый Низ');
+        createButtons('rightBottom', leftTopButtons, 'Правый Низ');
     </script>
 </body>
 </html>
