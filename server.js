@@ -158,6 +158,7 @@ async function main() {
   `;
 
     try {
+        const pool = mysql.createPool(dbConfig); // создаём пул подключений
         const conn = await pool.getConnection();
 
         // Создание таблиц
