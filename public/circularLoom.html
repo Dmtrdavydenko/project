@@ -48,14 +48,14 @@
     <!--<a href="/textile">textile</a>-->
     <div class="zone" id="leftZone">
         <div class="half" id="leftTop"></div>
-        <div class="half" id="leftBottom"></div>
-        <div class="half" id="leftBottom"></div>
+        <div class="half" id="leftSecond"></div>
+        <div class="half" id="leftThird"></div>
         <div class="half" id="leftBottom"></div>
     </div>
     <div class="zone" id="rightZone">
         <div class="half" id="rightTop"></div>
-        <div class="half" id="rightBottom"></div>
-        <div class="half" id="rightBottom"></div>
+        <div class="half" id="rightSecond"></div>
+        <div class="half" id="rightThird"></div>
         <div class="half" id="rightBottom"></div>
     </div>
 
@@ -77,8 +77,12 @@
 
         // Генерация кнопок
         createButtons('leftTop', leftTopButtons, 'Левый Верх');
+        createButtons('leftSecond', leftTopButtons, 'Левый Верх');
+        createButtons('leftThird', leftTopButtons, 'Левый Верх');
         createButtons('leftBottom', leftBottomButtons, 'Левый Низ');
         createButtons('rightTop', rightTopButtons, 'Правый Верх');
+        createButtons('rightSecond', rightBottomButtons, 'Правый Низ');
+        createButtons('rightThird', rightBottomButtons, 'Правый Низ');
         createButtons('rightBottom', rightBottomButtons, 'Правый Низ');
     </script>
 </body>
