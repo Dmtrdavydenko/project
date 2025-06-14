@@ -65,7 +65,7 @@ dropInput.type = "text";
 
 
 const drop = document.createElement("button");
-drop.textContent = "Удалить";
+drop.textContent = "Delite";
 
 main.append(id);
 main.append(width);
@@ -152,7 +152,5 @@ drop.addEventListener("click", async function (e) {
         } else {
             container.textContent = 'U';
         }
-
-
 
 })();
