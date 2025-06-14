@@ -953,142 +953,142 @@ function getLinearGradientColor(minutes) {
     return `rgb(${red}, ${green}, ${blue})`;
 }
 
-(async () => {
-    const today = new Date();
+//(async () => {
+//    const today = new Date();
 
-    // Добавляем смещение к текущему времени
-    const adjustedTime = new Date(today.getTime());
+//    // Добавляем смещение к текущему времени
+//    const adjustedTime = new Date(today.getTime());
 
-    // Получаем год, месяц и день
-    const year = adjustedTime.getFullYear();
-    const month = adjustedTime.getMonth(); // Месяцы начинаются с 0 (январь)
-    const day = adjustedTime.getDate();
+//    // Получаем год, месяц и день
+//    const year = adjustedTime.getFullYear();
+//    const month = adjustedTime.getMonth(); // Месяцы начинаются с 0 (январь)
+//    const day = adjustedTime.getDate();
 
-    // Создаем новую дату без времени и получаем её в миллисекундах
-    const dateWithoutTimeInMs = new Date(year, month, day).getTime() + 3600000 * 7;
-    console.log(dateWithoutTimeInMs);
+//    // Создаем новую дату без времени и получаем её в миллисекундах
+//    const dateWithoutTimeInMs = new Date(year, month, day).getTime() + 3600000 * 7;
+//    console.log(dateWithoutTimeInMs);
 
-    const response = await fetch(document.location.href, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "today",
-            table: {
-                name: "diary_ref",
-            },
-            ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
-            // date:dateWithoutTimeInMs-47*60*60*1000,
-        }),
-    }).then((response) => response.json())
-    console.log(response);
+//    const response = await fetch(document.location.href, {
+//        method: "POST",
+//        headers: {
+//            "Content-Type": "application/json;charset=utf-8",
+//        },
+//        body: JSON.stringify({
+//            action: "today",
+//            table: {
+//                name: "diary_ref",
+//            },
+//            ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
+//            // date:dateWithoutTimeInMs-47*60*60*1000,
+//        }),
+//    }).then((response) => response.json())
+//    console.log(response);
 
 
-    let select = document.createElement("select");
-    section.id = "today";
+//    let select = document.createElement("select");
+//    section.id = "today";
 
-    if (response.messeag) {
-        const no_records = document.createElement("span");
-        no_records.textContent = response.messeag;
-        section.append(no_records);
-    } else {
-        viewData(response, select);
-    }
+//    if (response.messeag) {
+//        const no_records = document.createElement("span");
+//        no_records.textContent = response.messeag;
+//        section.append(no_records);
+//    } else {
+//        viewData(response, select);
+//    }
 
-    fetch(document.location.href, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "selectT",
-            table: {
-                name: "MyChrono",
-            },
-            data: null,
-            // ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
-            // date:dateWithoutTimeInMs-47*60*60*1000,
-        }),
-    })
-        .then((response) => response.json())
-        .then(console.log);
+//    fetch(document.location.href, {
+//        method: "POST",
+//        headers: {
+//            "Content-Type": "application/json;charset=utf-8",
+//        },
+//        body: JSON.stringify({
+//            action: "selectT",
+//            table: {
+//                name: "MyChrono",
+//            },
+//            data: null,
+//            // ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
+//            // date:dateWithoutTimeInMs-47*60*60*1000,
+//        }),
+//    })
+//        .then((response) => response.json())
+//        .then(console.log);
 
-    fetch(document.location.href, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "selectT",
-            table: {
-                name: "diary_ref",
-            },
-            data: null,
-            // ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
-            // date:dateWithoutTimeInMs-47*60*60*1000,
-        }),
-    })
-        .then((response) => response.json())
-        .then(console.log);
+//    fetch(document.location.href, {
+//        method: "POST",
+//        headers: {
+//            "Content-Type": "application/json;charset=utf-8",
+//        },
+//        body: JSON.stringify({
+//            action: "selectT",
+//            table: {
+//                name: "diary_ref",
+//            },
+//            data: null,
+//            // ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
+//            // date:dateWithoutTimeInMs-47*60*60*1000,
+//        }),
+//    })
+//        .then((response) => response.json())
+//        .then(console.log);
 
-    // fetch(document.location.href, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json;charset=utf-8",
-    //   },
-    //   body: JSON.stringify({
-    //     action: "selectT",
-    //     table: {
-    //       name: "MyСhange",
-    //     },
-    //     data: null
-    //   }),
-    // }).then((response) => response.json()).then(console.log);
+//    // fetch(document.location.href, {
+//    //   method: "POST",
+//    //   headers: {
+//    //     "Content-Type": "application/json;charset=utf-8",
+//    //   },
+//    //   body: JSON.stringify({
+//    //     action: "selectT",
+//    //     table: {
+//    //       name: "MyСhange",
+//    //     },
+//    //     data: null
+//    //   }),
+//    // }).then((response) => response.json()).then(console.log);
 
-    fetch(document.location.href, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "selectT",
-            table: {
-                name: "MySaveTest",
-            },
-            data: null,
-        }),
-    })
-        .then((response) => response.json())
-        .then(console.log);
+//    fetch(document.location.href, {
+//        method: "POST",
+//        headers: {
+//            "Content-Type": "application/json;charset=utf-8",
+//        },
+//        body: JSON.stringify({
+//            action: "selectT",
+//            table: {
+//                name: "MySaveTest",
+//            },
+//            data: null,
+//        }),
+//    })
+//        .then((response) => response.json())
+//        .then(console.log);
 
-    fetch(document.location.href, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "select",
-            table: {
-                name: "diary_ref",
-            },
-            data: null,
-        }),
-    })
-        .then((response) => response.json())
-        .then(console.log);
+//    fetch(document.location.href, {
+//        method: "POST",
+//        headers: {
+//            "Content-Type": "application/json;charset=utf-8",
+//        },
+//        body: JSON.stringify({
+//            action: "select",
+//            table: {
+//                name: "diary_ref",
+//            },
+//            data: null,
+//        }),
+//    })
+//        .then((response) => response.json())
+//        .then(console.log);
 
-    // fetch(document.location.href, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json;charset=utf-8",
-    //     },
-    //     body: JSON.stringify({
-    //       action: "getOrAddValue",
-    //         date:1747872000000
-    //     }),
-    //   }).then((response) => response.json()).then(console.log);
-})();
+//    // fetch(document.location.href, {
+//    //     method: "POST",
+//    //     headers: {
+//    //       "Content-Type": "application/json;charset=utf-8",
+//    //     },
+//    //     body: JSON.stringify({
+//    //       action: "getOrAddValue",
+//    //         date:1747872000000
+//    //     }),
+//    //   }).then((response) => response.json()).then(console.log);
+//})();
 
 let countDiv = 0;
 
