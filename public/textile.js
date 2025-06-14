@@ -110,7 +110,7 @@ send.addEventListener("click", async function (e) {
             body: JSON.stringify({
                 action: "select",
                 table: {
-                    name: "textile",
+                    name: "textileK",
                 },
             }),
         }).then((response) => response.json());
