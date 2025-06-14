@@ -11,7 +11,8 @@ const PORT = process.env.PORT || 3000;
 // const db = require("./src/sqlite.js");
 const functionDB = {
     "insert": insert,
-    "select": select
+    "select": select,
+    "drop": dropTable,
 }
 
 
@@ -27,6 +28,8 @@ const dbConfig = {
 const mysql = require('mysql2/promise');
 
 //const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
+
+const pool = mysql.createPool(dbConfig); // создаём пул подключений
 
 
 async function insert(body) {
@@ -198,9 +201,29 @@ async function main() {
     }
 }
 
-main();
+//main();
 
+async function dropTable(body) {
+    const dropTableQuery = `DROP TABLE IF EXISTS ??`;
+    try {
+        const conn = await pool.getConnection();
+        await conn.query(dropTableQuery, [body.table.name]);
+        console.log(`Таблица ${body.table.name} успешно удалена`);
+        conn.release();
+        const response = {
+            success: true,
+            message: `Таблица "${body.table.name}" успешно удалена.`,
+        };
 
+        return JSON.stringify(response);
+    } catch (err) {
+        console.error('Ошибка при удалении таблицы:', err);
+        throw err;
+    }
+}
+
+// Использование функции для удаления таблицы
+dropTable(); // Замените на имя вашей таблицы
 
 
 

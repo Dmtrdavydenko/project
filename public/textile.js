@@ -57,13 +57,24 @@ density.step = 1;
 
 
 const send = document.createElement("button");
-send.textContent = "Send"
+send.textContent = "Send";
 
+
+const dropInput = document.createElement("input");
+dropInput.type = "text";
+
+
+const drop = document.createElement("button");
+drop.textContent = "Удалить";
 
 main.append(id);
 main.append(width);
 main.append(density);
 main.append(send);
+main.append(dropInput);
+main.append(drop);
+
+
 function Textile(inputId,inputWidth, inputDensity) {
     this.id = inputId.valueAsNumber;
     this.width = inputWidth.valueAsNumber;
@@ -93,6 +104,23 @@ send.addEventListener("click", async function (e) {
     } else {
         container.textContent = 'U';
     }
+});
+
+drop.addEventListener("click", async function (e) {
+    const result = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "drop",
+            table: {
+                name: dropInput.value,
+            }
+        }),
+    }).then((response) => response.json());
+
+    //const container = document.getElementById('table-container');
 });
 
 
