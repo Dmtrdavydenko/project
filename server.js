@@ -161,6 +161,25 @@ async function main() {
     );
   `;
 
+    const threadPP = `
+    CREATE TABLE IF NOT EXISTS threadPP (
+      thread_id INT AUTO_INCREMENT PRIMARY KEY,
+      thread_name VARCHAR(300) NOT NULL,
+      thread_length SMALLINT UNSIGNED NOT NULL,
+      thread_density SMALLINT UNSIGNED NOT NULL
+    );
+  `;
+
+    const taskPP = `
+    CREATE TABLE IF NOT EXISTS threadPP (
+      thread_id INT AUTO_INCREMENT PRIMARY KEY,
+      thread_name VARCHAR(300) NOT NULL,
+      thread_length SMALLINT UNSIGNED NOT NULL,
+      thread_density SMALLINT UNSIGNED NOT NULL
+    );
+  `;
+
+
     try {
         const pool = mysql.createPool(dbConfig); // создаём пул подключений
         const conn = await pool.getConnection();
