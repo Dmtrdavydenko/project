@@ -1,4 +1,4 @@
-console.log("textile");
+п»їconsole.log("textile");
 console.log(document.location.href);
 
 function createTable(data) {
@@ -68,7 +68,7 @@ const drop = document.createElement("button");
 drop.textContent = "Delite";
 
 const getAllTablesName = document.createElement("button");
-getAllTablesName.textContent = "Получить имена всех таблиц";
+getAllTablesName.textContent = "РџРѕР»СѓС‡РёС‚СЊ РёРјРµРЅР° РІСЃРµС… С‚Р°Р±Р»РёС†";
 
 main.append(id);
 main.append(width);
