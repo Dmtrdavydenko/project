@@ -1,9 +1,6 @@
 console.log("textile");
 console.log(document.location.href);
 
-
-
-
 function createTable(data) {
     if (!data || data.length === 0) {
         return '<p>U</p>';
@@ -113,7 +110,7 @@ send.addEventListener("click", async function (e) {
             body: JSON.stringify({
                 action: "select",
                 table: {
-                    name: "textileK",
+                    name: "textile",
                 },
             }),
         }).then((response) => response.json());
