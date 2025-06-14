@@ -226,8 +226,7 @@ main.append(DeviceMotionEvent);
           // if (!Number.isNaN(speed.valueAsNumber) && speed.valueAsNumber > 0)
           // if (!Number.isNaN(seconds.valueAsNumber) && time.valueAsNumber > 0)
           // if(Number.isNaN(distance.valueAsNumber))
-          this.valueAsNumber =
-            speed.valueAsNumber * (time.valueAsNumber / 60000);
+          this.valueAsNumber = speed.valueAsNumber * (time.valueAsNumber / 60000);
       time.dispatchEvent(new MouseEvent("change", {}));
     });
     speed.addEventListener("calc", function (e) {
@@ -241,9 +240,10 @@ main.append(DeviceMotionEvent);
     time.addEventListener("calc", function (e) {
       // if (!Number.isNaN(distance.valueAsNumber) && distance.valueAsNumber > 0)
       //   if (!Number.isNaN(speed.valueAsNumber) && speed.valueAsNumber > 0)
-      //     if (Number.isNaN(time.valueAsNumber)) {
-      time.valueAsNumber =
-        (distance.valueAsNumber / speed.valueAsNumber) * 60000;
+        //     if (Number.isNaN(time.valueAsNumber)) {
+        if (distance.valueAsNumber > 0)
+            if (speed.valueAsNumber > 0)
+      time.valueAsNumber = (distance.valueAsNumber / speed.valueAsNumber) * 60000;
       time.dispatchEvent(new MouseEvent("change", {}));
       // seconds.valueAsNumber = (distance.valueAsNumber / speed.valueAsNumber) * 60;
       // }
