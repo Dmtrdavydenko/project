@@ -277,7 +277,7 @@ async function getAllTableNames() {
         console.error('Ошибка при получении таблиц:', err);
         throw err
     } finally {
-        await connection.end();
+        await connection.release();
     }
 }
 

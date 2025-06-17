@@ -144,29 +144,29 @@ getAllTablesName.addEventListener("click", async function (e) {
 
 
 
-(async () => {
+//(async () => {
 
-        const result = await fetch("https://worktime.up.railway.app/textile", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-            },
-            body: JSON.stringify({
-                action: "select",
-                table: {
-                    name: "textileK",
-                },
-            }),
-        }).then((response) => response.json());
+//        const result = await fetch("https://worktime.up.railway.app/textile", {
+//            method: "POST",
+//            headers: {
+//                "Content-Type": "application/json;charset=utf-8",
+//            },
+//            body: JSON.stringify({
+//                action: "select",
+//                table: {
+//                    name: "textileK",
+//                },
+//            }),
+//        }).then((response) => response.json());
 
-        const container = document.getElementById('table-container');
-        container.innerHTML = '';
+//        const container = document.getElementById('table-container');
+//        container.innerHTML = '';
 
-        if (result.rows) {
-            const table = createTable(result.rows);
-            container.appendChild(table);
-        } else {
-            container.textContent = 'U';
-        }
+//        if (result.rows) {
+//            const table = createTable(result.rows);
+//            container.appendChild(table);
+//        } else {
+//            container.textContent = 'U';
+//        }
 
-})();
+//})();
