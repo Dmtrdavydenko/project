@@ -77,6 +77,9 @@ function Textile(inputId, inputWidth, inputDensity) {
     this.width = inputWidth.valueAsNumber;
     this.density = inputDensity.valueAsNumber;
 }
+
+
+
 drop.addEventListener("click", async function (e) {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
