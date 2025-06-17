@@ -14,7 +14,7 @@ const functionDB = {
     "select": select,
     "drop": dropTable,
     "getAllTableNames": getAllTableNames,
-    "getTableColumns": getColumnsAndTypesForTable
+    "getColumnsAndTypesForTable": getTableColumns
 }
 
 
