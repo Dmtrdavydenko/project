@@ -77,32 +77,6 @@ function Textile(inputId, inputWidth, inputDensity) {
     this.width = inputWidth.valueAsNumber;
     this.density = inputDensity.valueAsNumber;
 }
-send.addEventListener("click", async function (e) {
-    const result = await fetch("https://worktime.up.railway.app/textile", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "insert",
-            table: {
-                name: "textile",
-            },
-            data: new Textile(id, width, density)
-        }),
-    }).then((response) => response.json());
-
-    const container = document.getElementById('table-container');
-    container.innerHTML = '';
-
-    if (result.rows) {
-        const table = createTable(result.rows);
-        container.appendChild(table);
-    } else {
-        container.textContent = 'U';
-    }
-});
-
 drop.addEventListener("click", async function (e) {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
