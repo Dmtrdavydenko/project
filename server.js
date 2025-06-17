@@ -234,7 +234,7 @@ async function main() {
     }
 }
 
-//main();
+main();
 
 async function dropTable(body) {
     const dropTableQuery = `DROP TABLE IF EXISTS ??`;
