@@ -150,11 +150,12 @@ getAllTablesName.addEventListener("click", async function (e) {
         }),
     }).then((response) => response.json());
     console.log(result);
-    await createSelectOptions(result);
+    createSelectOptions(result);
 });
 
 
-async function createSelectOptions(dataArray) {
+function createSelectOptions(dataArray) {
+    console.log(dataArray);
     dataArray.forEach(value => {
         const option = document.createElement('option');
         option.value = value;
