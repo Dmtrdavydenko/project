@@ -65,7 +65,7 @@ dropInput.type = "text";
 
 
 const drop = document.createElement("button");
-drop.textContent = "Delite";
+drop.textContent = "Delite table";
 
 const getAllTablesName = document.createElement("button");
 getAllTablesName.textContent = "Получить имена всех таблиц";
