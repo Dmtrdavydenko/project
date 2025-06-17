@@ -183,11 +183,11 @@ getAllTablesName.addEventListener("click", async function (e) {
         if (Array.isArray(result.data)) {  // Adjust based on actual response structure
             createSelectOptions(result.data);
         } else {
-            console.error("Expected an array but got:", result);
-            console.error("Expected an array but got:", result.data);
+            console.log("Expected an array but got:", result.data);
+            console.log("Expected an array but got:", result);
         }
     } catch (error) {
-        console.error("Error fetching table names:", error);
+        console.log("Error fetching table names:", error);
     }
 });
 
