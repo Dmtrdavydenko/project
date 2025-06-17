@@ -42,22 +42,6 @@ function createTable(data) {
 }
 
 
-const id = document.createElement("input");
-id.type = "number";
-id.min = 1;
-id.step = 1;
-const width = document.createElement("input");
-width.type = "number";
-width.min = 0;
-width.step = 1;
-const density = document.createElement("input");
-density.type = "number";
-density.min = 0;
-density.step = 1;
-
-
-const send = document.createElement("button");
-send.textContent = "Send";
 
 
 const dropInput = document.createElement("input");
@@ -81,10 +65,6 @@ getColumnsTypes.addEventListener("click", getSelectedValue);
 
 
 
-main.append(id);
-main.append(width);
-main.append(density);
-main.append(send);
 main.append(dropInput);
 main.append(drop);
 main.append(getAllTablesName);
