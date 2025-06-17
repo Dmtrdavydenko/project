@@ -13,7 +13,8 @@ const functionDB = {
     "insert": insert,
     "select": select,
     "drop": dropTable,
-    "getAllTableNames": getAllTableNames
+    "getAllTableNames": getAllTableNames,
+    "getColumnsAndTypesForTable": getColumnsAndTypesForTable
 }
 
 
@@ -181,14 +182,14 @@ async function main() {
     const typePP = `
     CREATE TABLE IF NOT EXISTS typePP (
       thread_id INT AUTO_INCREMENT PRIMARY KEY,
-      thread_name VARCHAR(200) NOT NULL,
+      thread_name VARCHAR(200) NOT NULL
     );
   `;
 
     const machine = `
     CREATE TABLE IF NOT EXISTS machine (
       machine_id INT AUTO_INCREMENT PRIMARY KEY,
-      machine_name VARCHAR(200) NOT NULL,
+      machine_name VARCHAR(200) NOT NULL
 
     );
   `;
@@ -280,8 +281,131 @@ async function getAllTableNames() {
         await connection.release();
     }
 }
-
 //getAllTableNames();
+
+
+async function getAllTableNames() {
+    // Создаём подключение к базе данных
+    const connection = await pool.getConnection();
+
+    try {
+        // Выполняем запрос SHOW TABLES
+        const [rows] = await connection.execute('SHOW TABLES');
+
+        // Имя колонки зависит от имени базы данных, получаем его динамически
+        const tableNames = rows.map(row => Object.values(row)[0]);
+
+        console.log('Список таблиц:', tableNames);
+        //return tableNames;
+        return JSON.stringify(tableNames);
+    } catch (err) {
+        console.error('Ошибка при получении таблиц:', err);
+        throw err
+    } finally {
+        await connection.release();
+    }
+}
+//getAllTableNames();
+
+
+async function getAllColumnsAndTypes() {
+    // Создаём подключение к базе данных
+    const connection = await pool.getConnection();
+
+    try {
+        // Выполняем запрос SHOW TABLES
+        const [tables] = await connection.execute('SHOW TABLES');
+
+        // Имя колонки зависит от имени базы данных, получаем его динамически
+        const tableNames = tables.map(row => Object.values(row)[0]);
+
+        // Массив для хранения информации о столбцах
+        const columnsInfo = {};
+
+        for (const tableName of tableNames) {
+            // Выполняем запрос для получения информации о столбцах
+            const [columns] = await connection.execute(`SHOW COLUMNS FROM ${tableName}`);
+            columnsInfo[tableName] = columns.map(column => ({
+                name: column.Field,
+                type: column.Type
+            }));
+        }
+
+        console.log('Информация о столбцах:', columnsInfo);
+        return JSON.stringify(columnsInfo);
+    } catch (err) {
+        console.error('Ошибка при получении информации о столбцах:', err);
+        throw err;
+    } finally {
+        await connection.release();
+    }
+}
+
+// Вызов функции
+//getAllColumnsAndTypes();
+
+
+async function getTableColumnsAndTypes() {
+    // Создаём подключение к базе данных
+    const connection = await pool.getConnection();
+
+    try {
+        // Выполняем запрос SHOW TABLES
+        const [tables] = await connection.execute('SHOW TABLES');
+
+        // Имя колонки зависит от имени базы данных, получаем его динамически
+        const tableNames = tables.map(row => Object.values(row)[0]);
+
+        // Массив для хранения информации о столбцах
+        const columnsInfo = {};
+
+        for (const tableName of tableNames) {
+            // Выполняем запрос для получения информации о столбцах
+            const [columns] = await connection.execute(`SHOW COLUMNS FROM ${tableName}`);
+            columnsInfo[tableName] = columns.map(column => ({
+                name: column.Field,
+                type: column.Type
+            }));
+        }
+
+        console.log('Информация о столбцах:', columnsInfo);
+        return JSON.stringify(columnsInfo);
+    } catch (err) {
+        console.error('Ошибка при получении информации о столбцах:', err);
+        throw err;
+    } finally {
+        await connection.release();
+    }
+}
+
+
+
+async function getColumnsAndTypesForTable(body) {
+    // Создаём подключение к базе данных
+    const connection = await pool.getConnection();
+
+    try {
+        // Выполняем запрос для получения информации о столбцах указанной таблицы
+        const [columns] = await connection.execute(`SHOW COLUMNS FROM ??`, [body.table.name]);
+
+        // Массив для хранения информации о столбцах
+        const columnsInfo = columns.map(column => ({
+            name: column.Field,
+            type: column.Type
+        }));
+
+        console.log(`Информация о столбцах для таблицы ${body.table.name}:`, columnsInfo);
+        return JSON.stringify(columnsInfo);
+    } catch (err) {
+        console.error(`Ошибка при получении информации о столбцах для таблицы ${body.table.name}:`, err);
+        throw err;
+    } finally {
+        await connection.release();
+    }
+}
+
+// Вызов функции с именем таблицы "MyTable"
+//getColumnsAndTypesForTable('MyTable');
 
 
 

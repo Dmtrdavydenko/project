@@ -70,6 +70,15 @@ drop.textContent = "Delite";
 const getAllTablesName = document.createElement("button");
 getAllTablesName.textContent = "Получить имена всех таблиц";
 
+
+const selectElement = document.createElement("select");
+
+
+const getColumnsTypes = document.createElement("button");
+getColumnsTypes.textContent = "Получить колонки";
+getColumnsTypes.addEventListener("click", getSelectedValue);
+
+
 main.append(id);
 main.append(width);
 main.append(density);
@@ -77,9 +86,11 @@ main.append(send);
 main.append(dropInput);
 main.append(drop);
 main.append(getAllTablesName);
+main.append(selectElement);
+main.append(getColumnsTypes);
 
 
-function Textile(inputId,inputWidth, inputDensity) {
+function Textile(inputId, inputWidth, inputDensity) {
     this.id = inputId.valueAsNumber;
     this.width = inputWidth.valueAsNumber;
     this.density = inputDensity.valueAsNumber;
@@ -139,8 +150,36 @@ getAllTablesName.addEventListener("click", async function (e) {
         }),
     }).then((response) => response.json());
     console.log(result);
+    await createSelectOptions(result);
 });
 
+
+async function createSelectOptions(dataArray) {
+    dataArray.forEach(value => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = value;
+        selectElement.appendChild(option);
+    });
+}
+
+async function getSelectedValue() {
+    const selectedValue = selectElement.value; // Get the selected value
+    //getColumnsAndTypesForTable();
+    const result = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "getColumnsAndTypesForTable",
+            table: {
+                name: selectedValue,
+            }
+        }),
+    }).then((response) => response.json());
+    console.log(result);
+}
 
 
 
