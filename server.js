@@ -273,7 +273,7 @@ async function getAllTableNames() {
 
         console.log('Список таблиц:', tableNames);
         //return tableNames;
-        return JSON.stringify(tableNames);
+        return JSON.stringify({ data: tableNames });
     } catch (err) {
         console.error('Ошибка при получении таблиц:', err);
         throw err
@@ -284,28 +284,6 @@ async function getAllTableNames() {
 //getAllTableNames();
 
 
-async function getAllTableNames() {
-    // Создаём подключение к базе данных
-    const connection = await pool.getConnection();
-
-    try {
-        // Выполняем запрос SHOW TABLES
-        const [rows] = await connection.execute('SHOW TABLES');
-
-        // Имя колонки зависит от имени базы данных, получаем его динамически
-        const tableNames = rows.map(row => Object.values(row)[0]);
-
-        console.log('Список таблиц:', tableNames);
-        //return tableNames;
-        return JSON.stringify(tableNames);
-    } catch (err) {
-        console.error('Ошибка при получении таблиц:', err);
-        throw err
-    } finally {
-        await connection.release();
-    }
-}
-//getAllTableNames();
 
 
 async function getAllColumnsAndTypes() {

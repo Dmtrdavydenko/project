@@ -139,20 +139,56 @@ drop.addEventListener("click", async function (e) {
     //const container = document.getElementById('table-container');
 });
 
-getAllTablesName.addEventListener("click", async function (e) {
-    const result = await fetch("https://worktime.up.railway.app/textile", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "getAllTableNames"
-        }),
-    }).then((response) => response.json());
-    console.log(result);
-    createSelectOptions(result);
-});
+//getAllTablesName.addEventListener("click", async function (e) {
+//    const result = await fetch("https://worktime.up.railway.app/textile", {
+//        method: "POST",
+//        headers: {
+//            "Content-Type": "application/json;charset=utf-8",
+//        },
+//        body: JSON.stringify({
+//            action: "getAllTableNames"
+//        }),
+//    }).then((response) => response.json());
+//    console.log(result);
+//    createSelectOptions(result);
+//});
+//function createSelectOptions(dataArray) {
+//    console.log(dataArray);
+//    dataArray.forEach(value => {
+//        const option = document.createElement('option');
+//        option.value = value;
+//        option.textContent = value;
+//        selectElement.appendChild(option);
+//    });
+//}
 
+
+
+getAllTablesName.addEventListener("click", async function (e) {
+    try {
+        const response = await fetch("https://worktime.up.railway.app/textile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify({
+                action: "getAllTableNames"
+            }),
+        });
+
+        const result = await response.json();
+        console.log(result);  // Inspect the result
+
+        // Make sure the result is an array
+        if (Array.isArray(result.data)) {  // Adjust based on actual response structure
+            createSelectOptions(result.data);
+        } else {
+            console.error("Expected an array but got:", result);
+        }
+    } catch (error) {
+        console.error("Error fetching table names:", error);
+    }
+});
 
 function createSelectOptions(dataArray) {
     console.log(dataArray);
@@ -163,6 +199,9 @@ function createSelectOptions(dataArray) {
         selectElement.appendChild(option);
     });
 }
+
+
+
 
 async function getSelectedValue() {
     const selectedValue = selectElement.value; // Get the selected value
