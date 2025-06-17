@@ -166,7 +166,7 @@ async function main() {
       thread_id INT AUTO_INCREMENT PRIMARY KEY,
       thread_name VARCHAR(300) NOT NULL,
       thread_density SMALLINT UNSIGNED NOT NULL,
-      thread_length SMALLINT UNSIGNED NOT NULL,
+      thread_length SMALLINT UNSIGNED NOT NULL
     );
   `;
 
