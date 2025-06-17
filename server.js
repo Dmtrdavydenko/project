@@ -165,55 +165,68 @@ async function main() {
     CREATE TABLE IF NOT EXISTS threadPP (
       thread_id INT AUTO_INCREMENT PRIMARY KEY,
       thread_name VARCHAR(300) NOT NULL,
+      thread_density SMALLINT UNSIGNED NOT NULL,
       thread_length SMALLINT UNSIGNED NOT NULL,
-      thread_density SMALLINT UNSIGNED NOT NULL
     );
   `;
 
     const taskPP = `
-    CREATE TABLE IF NOT EXISTS threadPP (
+    CREATE TABLE IF NOT EXISTS taskPP (
       thread_id INT AUTO_INCREMENT PRIMARY KEY,
-      thread_name VARCHAR(300) NOT NULL,
+      thread_name VARCHAR(200) NOT NULL,
       thread_length SMALLINT UNSIGNED NOT NULL,
       thread_density SMALLINT UNSIGNED NOT NULL
     );
   `;
+    const typePP = `
+    CREATE TABLE IF NOT EXISTS typePP (
+      thread_id INT AUTO_INCREMENT PRIMARY KEY,
+      thread_name VARCHAR(200) NOT NULL,
+    );
+  `;
 
+    const machine = `
+    CREATE TABLE IF NOT EXISTS machine (
+      machine_id INT AUTO_INCREMENT PRIMARY KEY,
+      machine_name VARCHAR(200) NOT NULL,
+
+    );
+  `;
 
     try {
         const pool = mysql.createPool(dbConfig); // создаём пул подключений
         const conn = await pool.getConnection();
 
         // Создание таблиц
-        await conn.query(createTextileKTable);
-        await conn.query(createCircularLoomTable);
+        await conn.query(threadPP);
+        //await conn.query(createCircularLoomTable);
         console.log('Таблицы успешно созданы');
 
         // Вставка записи в textileK
-        const [textileResult] = await conn.query(
-            'INSERT INTO textileK (width, density) VALUES (?, ?)',
-            [120, 300]
-        );
-        const textileId = textileResult.insertId;
-        console.log(`Запись в textileK добавлена с id = ${textileId}`);
+        //const [textileResult] = await conn.query(
+        //    'INSERT INTO textileK (width, density) VALUES (?, ?)',
+        //    [120, 300]
+        //);
+        //const textileId = textileResult.insertId;
+        //console.log(`Запись в textileK добавлена с id = ${textileId}`);
 
         // Вставка записи в circular_loom, ссылающейся на textileK
-        const [loomResult] = await conn.query(
-            'INSERT INTO circular_loom (textile_id) VALUES (?)',
-            [textileId]
-        );
-        const loomId = loomResult.insertId;
-        console.log(`Запись в circular_loom добавлена с id = ${loomId}`);
+        //const [loomResult] = await conn.query(
+        //    'INSERT INTO circular_loom (textile_id) VALUES (?)',
+        //    [textileId]
+        //);
+        //const loomId = loomResult.insertId;
+        //console.log(`Запись в circular_loom добавлена с id = ${loomId}`);
 
         // Получение всех circular_loom с параметрами из textileK
-        const [rows] = await conn.query(`
-      SELECT circular_loom.id AS loom_id, textileK.width, textileK.density
-      FROM circular_loom
-      JOIN textileK ON circular_loom.textile_id = textileK.id
-    `);
+    //    const [rows] = await conn.query(`
+    //  SELECT circular_loom.id AS loom_id, textileK.width, textileK.density
+    //  FROM circular_loom
+    //  JOIN textileK ON circular_loom.textile_id = textileK.id
+    //`);
 
-        console.log('Результаты JOIN:');
-        console.table(rows);
+        //console.log('Результаты JOIN:');
+        //console.table(rows);
 
         conn.release();
     } catch (err) {
