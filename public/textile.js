@@ -184,6 +184,7 @@ getAllTablesName.addEventListener("click", async function (e) {
             createSelectOptions(result.data);
         } else {
             console.error("Expected an array but got:", result);
+            console.error("Expected an array but got:", result.data);
         }
     } catch (error) {
         console.error("Error fetching table names:", error);
