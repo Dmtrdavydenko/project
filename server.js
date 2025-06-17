@@ -220,11 +220,11 @@ async function main() {
         //console.log(`Запись в circular_loom добавлена с id = ${loomId}`);
 
         // Получение всех circular_loom с параметрами из textileK
-    //    const [rows] = await conn.query(`
-    //  SELECT circular_loom.id AS loom_id, textileK.width, textileK.density
-    //  FROM circular_loom
-    //  JOIN textileK ON circular_loom.textile_id = textileK.id
-    //`);
+        //    const [rows] = await conn.query(`
+        //  SELECT circular_loom.id AS loom_id, textileK.width, textileK.density
+        //  FROM circular_loom
+        //  JOIN textileK ON circular_loom.textile_id = textileK.id
+        //`);
 
         //console.log('Результаты JOIN:');
         //console.table(rows);
@@ -360,8 +360,6 @@ async function getTableColumnsAndTypes() {
 
 
 
-
-
 async function getTableColumns(body) {
     // Создаём подключение к базе данных
     const connection = await pool.getConnection();
@@ -370,11 +368,14 @@ async function getTableColumns(body) {
         // Выполняем запрос DESCRIBE для получения колонок таблицы
         const [rows] = await connection.execute(`DESCRIBE ${body.table.name}`);
 
-        // Извлекаем названия колонок
-        const columnNames = rows.map(row => row.Field);
+        // Извлекаем названия колонок и их типы
+        const columnsInfo = rows.map(row => ({
+            name: row.Field,
+            type: row.Type
+        }));
 
-        console.log(`Список колонок таблицы "${body.table.name}":`, columnNames);
-        return columnNames;
+        console.log(`Список колонок и типов таблицы "${body.table.name}":`, columnsInfo);
+        return columnsInfo; // Возвращаем массив объектов с названиями и типами колонок
     } catch (err) {
         console.error('Ошибка при получении колонок таблицы:', err);
         throw err;
@@ -382,6 +383,28 @@ async function getTableColumns(body) {
         await connection.release();
     }
 }
+
+
+//async function getTableColumns(body) {
+//    // Создаём подключение к базе данных
+//    const connection = await pool.getConnection();
+
+//    try {
+//        // Выполняем запрос DESCRIBE для получения колонок таблицы
+//        const [rows] = await connection.execute(`DESCRIBE ${body.table.name}`);
+
+//        // Извлекаем названия колонок
+//        const columnNames = rows.map(row => row.Field);
+
+//        console.log(`Список колонок таблицы "${body.table.name}":`, columnNames);
+//        return columnNames;
+//    } catch (err) {
+//        console.error('Ошибка при получении колонок таблицы:', err);
+//        throw err;
+//    } finally {
+//        await connection.release();
+//    }
+//}
 
 
 async function getColumnsAndTypesForTable(body) {
@@ -507,13 +530,13 @@ server.on("request", (req, res) => {
                 console.log(body);
 
                 functionDB[body.action](body)
-                  .then((resolve) => JSON.stringify(resolve))
-                  .then((resolve) => res.end(resolve))
-                  .catch(error=>{
-                  res.end(error)
-                  console.log(error);
-                })
-                
+                    .then((resolve) => JSON.stringify(resolve))
+                    .then((resolve) => res.end(resolve))
+                    .catch(error => {
+                        res.end(error)
+                        console.log(error);
+                    })
+
             });
         }
 });

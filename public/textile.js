@@ -78,9 +78,7 @@ const getColumnsTypes = document.createElement("button");
 getColumnsTypes.textContent = "Получить колонки";
 getColumnsTypes.addEventListener("click", getSelectedValue);
 
-const getAllTable = document.createElement("button");
-getAllTable.textContent = "Получить таблицы";
-getAllTable.addEventListener("click", getAllTablesEvent);
+
 
 
 main.append(id);
@@ -92,7 +90,6 @@ main.append(drop);
 main.append(getAllTablesName);
 main.append(selectElement);
 main.append(getColumnsTypes);
-main.append(getAllTable);
 
 
 function Textile(inputId, inputWidth, inputDensity) {
@@ -194,7 +191,7 @@ getAllTablesName.addEventListener("click", async function (e) {
 });
 
 function createSelectOptions(dataArray) {
-    console.log(dataArray);
+    selectElement.innerHTML = '';
     dataArray.forEach(value => {
         const option = document.createElement('option');
         option.value = value;
