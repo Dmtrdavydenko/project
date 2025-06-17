@@ -78,6 +78,10 @@ const getColumnsTypes = document.createElement("button");
 getColumnsTypes.textContent = "Получить колонки";
 getColumnsTypes.addEventListener("click", getSelectedValue);
 
+const getAllTable = document.createElement("button");
+getAllTable.textContent = "Получить таблицы";
+getAllTable.addEventListener("click", getAllTablesEvent);
+
 
 main.append(id);
 main.append(width);
@@ -88,6 +92,7 @@ main.append(drop);
 main.append(getAllTablesName);
 main.append(selectElement);
 main.append(getColumnsTypes);
+main.append(getAllTable);
 
 
 function Textile(inputId, inputWidth, inputDensity) {
@@ -220,6 +225,31 @@ async function getSelectedValue() {
 }
 
 
+async function getAllTablesEvent() {
+    const result = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "select",
+            table: {
+                name: selectElement.value,
+            }
+        }),
+    }).then((response) => response.json());
+    console.log(result);
+
+    const container = document.getElementById('table-container');
+    container.innerHTML = '';
+
+    if (result.rows) {
+        const table = createTable(result.rows);
+        container.appendChild(table);
+    } else {
+        container.textContent = 'U';
+    }
+}
 
 //(async () => {
 
