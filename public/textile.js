@@ -178,13 +178,13 @@ getAllTablesName.addEventListener("click", async function (e) {
 
         const result = await response.json();
         console.log(result);  // Inspect the result
-        console.log(result.data);  // Inspect the result
+        console.log(result);  // Inspect the result
 
         // Make sure the result is an array
-        if (Array.isArray(result.data)) {  // Adjust based on actual response structure
-            createSelectOptions(result.data);
+        if (Array.isArray(result)) {  // Adjust based on actual response structure
+            createSelectOptions(result);
         } else {
-            console.log("Expected an array but got:", result.data);
+            console.log("Expected an array but got:", result);
             console.log("Expected an array but got:", result);
         }
     } catch (error) {

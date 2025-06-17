@@ -273,7 +273,7 @@ async function getAllTableNames() {
 
         console.log('Список таблиц:', tableNames);
         //return tableNames;
-        return JSON.stringify({ data: tableNames });
+        return JSON.stringify(tableNames);
     } catch (err) {
         console.error('Ошибка при получении таблиц:', err);
         throw err
