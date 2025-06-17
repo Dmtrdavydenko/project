@@ -14,7 +14,7 @@ const functionDB = {
     "select": select,
     "drop": dropTable,
     "getAllTableNames": getAllTableNames,
-    "getColumnsAndTypesForTable": getColumnsAndTypesForTable
+    "getTableColumns": getColumnsAndTypesForTable
 }
 
 
@@ -356,6 +356,32 @@ async function getTableColumnsAndTypes() {
     }
 }
 
+
+
+
+
+
+
+async function getTableColumns(body) {
+    // Создаём подключение к базе данных
+    const connection = await pool.getConnection();
+
+    try {
+        // Выполняем запрос DESCRIBE для получения колонок таблицы
+        const [rows] = await connection.execute(`DESCRIBE ${body.table.name}`);
+
+        // Извлекаем названия колонок
+        const columnNames = rows.map(row => row.Field);
+
+        console.log(`Список колонок таблицы "${body.table.name}":`, columnNames);
+        return columnNames;
+    } catch (err) {
+        console.error('Ошибка при получении колонок таблицы:', err);
+        throw err;
+    } finally {
+        await connection.release();
+    }
+}
 
 
 async function getColumnsAndTypesForTable(body) {
