@@ -85,6 +85,7 @@ main.append(getAllTablesName);
 main.append(selectElement);
 main.append(getColumnsTypes);
 main.append(textArea);
+main.append(query);
 
 
 function Textile(inputId, inputWidth, inputDensity) {
