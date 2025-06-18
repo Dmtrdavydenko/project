@@ -282,11 +282,15 @@ async function fetchTableStructure() {
 function createInputElement(column) {
     let inputElement;
     console.log(`${column.Field} & ${column.Type}`);
-    console.log(/^(tinyint|smallint|mediumint|int|bigint)(\s+(unsigned))?$/.test(column.Type));
+    //console.log(/^(tinyint|smallint|mediumint|int|bigint)(\s+(unsigned))?$/.test(column.Type));
 
     switch (true) {
         // Числовые типы
         case /^(tinyint|smallint|mediumint|int|bigint)$/.test(column.Type):
+            inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
+            break;
+
+        case /^(tinyint|smallint|mediumint|int|bigint)(\s+(unsigned))?$/.test(column.Type):
             inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
             break;
 
