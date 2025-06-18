@@ -387,14 +387,14 @@ async function getTableColumns(body) {
 
 
 
-async function sql(query) {
+async function sql(body) {
 
     // Создаём подключение к базе данных
     const connection = await pool.getConnection();
 
     try {
         // Выполняем переданный SQL-запрос
-        const [results] = await connection.execute(`${query}`);
+        const [results] = await connection.execute(body.query);
 
         console.log('Результаты запроса:', results);
         return results; // Возвращаем результаты запроса
