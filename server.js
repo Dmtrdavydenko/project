@@ -388,6 +388,8 @@ async function getTableColumns(body) {
 
 
 async function sql(query) {
+    const pool = mysql.createPool(dbConfig); // создаём пул подключений
+
     // Создаём подключение к базе данных
     const connection = await pool.getConnection();
 
