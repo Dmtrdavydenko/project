@@ -388,14 +388,13 @@ async function getTableColumns(body) {
 
 
 async function sql(query) {
-    const pool = mysql.createPool(dbConfig); // создаём пул подключений
 
     // Создаём подключение к базе данных
     const connection = await pool.getConnection();
 
     try {
         // Выполняем переданный SQL-запрос
-        const [results] = await connection.execute(query);
+        const [results] = await connection.execute(`${query}`);
 
         console.log('Результаты запроса:', results);
         return results; // Возвращаем результаты запроса
