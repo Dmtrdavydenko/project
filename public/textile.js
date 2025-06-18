@@ -44,6 +44,8 @@ function createTable(data) {
 
 
 
+
+
 const dropInput = document.createElement("input");
 dropInput.type = "text";
 
@@ -62,6 +64,18 @@ const getColumnsTypes = document.createElement("button");
 getColumnsTypes.textContent = "Получить колонки";
 getColumnsTypes.addEventListener("click", getSelectedValue);
 
+const textArea = document.createElement("textarea");
+
+const query = document.createElement("button");
+query.textContent = "Сделать запрос sql";
+query.addEventListener("click", () => {
+    sqlQuery(textArea.value); // Передаем текст из textarea в функцию sqlQuery
+});
+
+// Устанавливаем атрибуты для textarea (по желанию)
+textArea.rows = 10; // Количество строк
+textArea.cols = 30; // Количество колонок
+textArea.placeholder = "Введите ваш SQL-запрос здесь...";
 
 
 
@@ -70,6 +84,7 @@ main.append(drop);
 main.append(getAllTablesName);
 main.append(selectElement);
 main.append(getColumnsTypes);
+main.append(textArea);
 
 
 function Textile(inputId, inputWidth, inputDensity) {
@@ -204,6 +219,38 @@ async function getAllTablesEvent() {
         container.textContent = 'U';
     }
 }
+
+
+
+// Пример использования функции
+//const sql = "SELECT * FROM your_table"; // Замените на ваш SQL-запрос
+//sqlQuery(sql);
+
+async function sqlQuery(sqlQueryString) {
+    try {
+        const response = await fetch("https://worktime.up.railway.app/textile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify({
+                action: "sql", // Измените на нужное действие, если необходимо
+                query: sqlQueryString, // Отправляем SQL-запрос
+            }),
+        });
+
+        // Проверка на успешный ответ
+        if (!response.ok) {
+            throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+        }
+
+        const result = await response.json(); // Получаем JSON-ответ
+        console.log(result); // Выводим результат в консоль
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
+    }
+}
+
 
 //(async () => {
 

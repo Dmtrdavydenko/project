@@ -14,7 +14,8 @@ const functionDB = {
     "select": select,
     "drop": dropTable,
     "getAllTableNames": getAllTableNames,
-    "getColumnsAndTypesForTable": getTableColumns
+    "getColumnsAndTypesForTable": getTableColumns,
+    "sql":sql
 }
 
 
@@ -381,6 +382,26 @@ async function getTableColumns(body) {
         throw err;
     } finally {
         await connection.release();
+    }
+}
+
+
+
+async function sql(query) {
+    // Создаём подключение к базе данных
+    const connection = await pool.getConnection();
+
+    try {
+        // Выполняем переданный SQL-запрос
+        const [results] = await connection.execute(query);
+
+        console.log('Результаты запроса:', results);
+        return results; // Возвращаем результаты запроса
+    } catch (err) {
+        console.error('Ошибка при выполнении запроса:', err);
+        throw err; // Пробрасываем ошибку дальше
+    } finally {
+        await connection.release(); // Освобождаем соединение
     }
 }
 
