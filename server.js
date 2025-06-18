@@ -371,8 +371,8 @@ async function getTableColumns(body) {
 
         // Извлекаем названия колонок и их типы
         const columnsInfo = rows.map(row => ({
-            name: row.Field,
-            type: row.Type
+            Field: row.Field,
+            Type: row.Type
         }));
 
         console.log(`Список колонок и типов таблицы "${body.table.name}":`, columnsInfo);
