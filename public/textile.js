@@ -281,6 +281,7 @@ async function fetchTableStructure() {
 
 function createInputElement(column) {
     let inputElement;
+    console.log(`${ column.Field } & ${ column.Field }`);
 
     switch (true) {
         // Числовые типы
@@ -328,7 +329,6 @@ function createInputElement(column) {
 async function generateForm() {
     const columns = await getSelectedValue();
     const formContainer = document.getElementById('form-container');
-    console.log(columns);
     columns.forEach(column => {
         const inputElement = createInputElement(column);
         formContainer.innerHTML += `<div>${inputElement}</div>`;
