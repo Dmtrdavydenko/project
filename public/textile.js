@@ -358,15 +358,11 @@ async function generateForm() {
     });
 }
 async function sendForm() {
-    array.forEach(input => {
-
-        console.log(input.value, input.type, input.name);
-    })
-    const fieds = array.map(input => input.value.length > 0 ? input.value :"");
-    const values = array.map(input => input.value.length > 0 ? input.value :"");
+    const arrayInput = array.filter(value => value.length > 0);
+    const fieds = arrayInput.map(input => input.name);
+    const values = arrayInput.map(input => input.value );
 
     console.log(fieds, values);
-
 
 }
 
