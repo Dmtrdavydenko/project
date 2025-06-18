@@ -73,7 +73,7 @@ query.addEventListener("click", () => {
 });
 
 const form = document.createElement("button");
-form.textContent = "Получить колонки";
+form.textContent = "Получить форму";
 form.addEventListener("click", generateForm);
 
 
@@ -281,41 +281,54 @@ async function fetchTableStructure() {
 
 function createInputElement(column) {
     let inputElement;
-    switch (column.Type) {
-        case 'int':
-        case 'tinyint':
-        case 'smallint':
-        case 'smallint unsigned':
-        case 'mediumint':
-        case 'bigint':
+
+    switch (true) {
+        // Числовые типы
+        case /^(tinyint|smallint|mediumint|int|bigint)$/.test(column.Type):
             inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
             break;
-        case 'varchar':
-        case 'char':
-        case 'text':
-            inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
-            break;
-        case 'date':
-            inputElement = `<input type="date" name="${column.Field}">`;
-            break;
-        case 'datetime':
-        case 'timestamp':
-            inputElement = `<input type="datetime-local" name="${column.Field}">`;
-            break;
-        case 'float':
-        case 'double':
+
+        // Числа с плавающей запятой
+        case /^(float|double|decimal)$/.test(column.Type):
             inputElement = `<input type="number" step="0.01" name="${column.Field}" placeholder="${column.Field}">`;
             break;
-        // Добавьте дополнительные типы по мере необходимости
+
+        // Строковые типы
+        case /^(varchar|char|text|tinytext|mediumtext|longtext)$/.test(column.Type):
+            inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
+            break;
+
+        // Дата и время
+        case /^(date)$/.test(column.Type):
+            inputElement = `<input type="date" name="${column.Field}">`;
+            break;
+        case /^(datetime|timestamp)$/.test(column.Type):
+            inputElement = `<input type="datetime-local" name="${column.Field}">`;
+            break;
+
+        // Логический тип
+        case /^(boolean|bit)$/.test(column.Type):
+            inputElement = `<input type="checkbox" name="${column.Field}">`;
+            break;
+
+        // Перечисление и набор
+        case /^(enum|set)$/.test(column.Type):
+            const options = column.Type.replace(/^(enum|set)\('([^']*)'\)$/, '\$2').split(',');
+            inputElement = `<select name="${column.Field}">${options.map(option => `<option value="${option.trim()}">${option.trim()}</option>`).join('')}</select>`;
+            break;
+
+        // Неизвестный тип - текстовое поле по умолчанию
         default:
             inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
     }
+
     return inputElement;
 }
+
 async function generateForm() {
     const columns = await getSelectedValue();
     const formContainer = document.getElementById('form-container');
-
+    console.log(columns);
     columns.forEach(column => {
         const inputElement = createInputElement(column);
         formContainer.innerHTML += `<div>${inputElement}</div>`;
