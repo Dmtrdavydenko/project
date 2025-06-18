@@ -281,7 +281,8 @@ async function fetchTableStructure() {
 
 function createInputElement(column) {
     let inputElement;
-    console.log(`${ column.Field } & ${ column.Field }`);
+    console.log(`${column.Field} & ${column.Field}`);
+    console.log(/^(tinyint|smallint|mediumint|int|bigint)$/.test(column.Type));
 
     switch (true) {
         // Числовые типы
