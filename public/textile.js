@@ -296,7 +296,7 @@ function createInputElement(column) {
             break;
 
         // Строковые типы
-        case /^(varchar|char|text|tinytext|mediumtext|longtext)(\w+)?$/.test(column.Type):
+        case /^(varchar|char|text|tinytext|mediumtext|longtext)(\(\d+\))?$/.test(column.Type):
             inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
             break;
 
