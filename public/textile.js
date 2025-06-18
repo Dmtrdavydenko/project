@@ -285,6 +285,7 @@ function createInputElement(column) {
         case 'int':
         case 'tinyint':
         case 'smallint':
+        case 'smallint unsigned':
         case 'mediumint':
         case 'bigint':
             inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
