@@ -347,16 +347,21 @@ function createInputElement(column) {
 
     return input;
 }
-
+const array = [];
 async function generateForm() {
     const columns = await getSelectedValue();
     const formContainer = document.getElementById('form-container');
     columns.forEach(column => {
         const inputElement = createInputElement(column);
         formContainer.append(inputElement);
+        array.push(inputElement);
     });
 }
 async function sendForm() {
+    array.forEach(input => {
+        console.log(input.value, input.type, input.name);
+    })
+
 
 }
 
