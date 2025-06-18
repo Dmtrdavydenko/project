@@ -84,6 +84,10 @@ textArea.placeholder = "Введите ваш SQL-запрос здесь...";
 
 
 
+const insert = document.createElement("button");
+insert.textContent = "Отправить форму";
+insert.addEventListener("click", sendForm);
+
 main.append(dropInput);
 main.append(drop);
 main.append(getAllTablesName);
@@ -92,6 +96,7 @@ main.append(getColumnsTypes);
 main.append(textArea);
 main.append(query);
 main.append(form);
+main.append(insert);
 
 
 function Textile(inputId, inputWidth, inputDensity) {
@@ -280,16 +285,27 @@ async function fetchTableStructure() {
 }
 
 function createInputElement(column) {
+
+
+    const input = document.createElement('input');
+    input.name = column.Field;
+    input.placeholder = column.Field;
+
+
+
     let inputElement;
     console.log(`Field: ${column.Field} Type: ${column.Type}`);
     switch (true) {
         // Числовые типы
         case /^(tinyint|smallint|mediumint|int|bigint)$/.test(column.Type):
-            inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
+            //inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
+            input.type = "number";
             break;
 
         case /^(tinyint|smallint|mediumint|int|bigint)(\s+(unsigned))?$/.test(column.Type):
-            inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
+            //inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
+            input.type = "number";
+            input.min = 0;
             break;
 
         // Числа с плавающей запятой
@@ -299,7 +315,10 @@ function createInputElement(column) {
 
         // Строковые типы
         case /^(varchar|char|text|tinytext|mediumtext|longtext)(\(\d+\))?$/.test(column.Type):
-            inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
+            //inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
+            input.type = 'text'; // Используем тип text для строк
+            input.maxLength = 300; // Устанавливаем максимальную длину
+
             break;
 
         // Дата и время
@@ -326,7 +345,7 @@ function createInputElement(column) {
             inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
     }
 
-    return inputElement;
+    return input;
 }
 
 async function generateForm() {
@@ -334,8 +353,11 @@ async function generateForm() {
     const formContainer = document.getElementById('form-container');
     columns.forEach(column => {
         const inputElement = createInputElement(column);
-        formContainer.innerHTML += `<div>${inputElement}</div>`;
+        formContainer.append(inputElement);
     });
+}
+async function sendForm() {
+
 }
 
 // Генерация формы для таблицы 'your_table_name'
@@ -354,3 +376,40 @@ async function generateForm() {
 
 
 //})();
+
+
+
+const columns = [
+    { name: 'thread_id', type: 'int' },
+    { name: 'thread_name', type: 'varchar(300)' },
+    { name: 'thread_density', type: 'smallint unsigned' },
+    { name: 'thread_length', type: 'smallint unsigned' }
+];
+
+//const formContainer = document.getElementById('formContainer');
+
+columns.forEach(column => {
+    // Создаем элемент input
+    const input = document.createElement('input');
+    input.name = column.name;
+    input.placeholder = column.name;
+
+    // Определяем тип поля ввода в зависимости от типа данных
+    switch (column.type) {
+        case 'int':
+        case 'smallint unsigned':
+            input.type = 'number'; // Используем тип number для целых чисел
+            input.min = 0; // Устанавливаем минимальное значение для unsigned
+            break;
+        case 'varchar(300)':
+            input.type = 'text'; // Используем тип text для строк
+            input.maxLength = 300; // Устанавливаем максимальную длину
+            break;
+        default:
+            input.type = 'text'; // По умолчанию используем text
+    }
+
+    // Добавляем элемент input в контейнер формы
+    //formContainer.appendChild(input);
+    //formContainer.appendChild(document.createElement('br')); // Добавляем перенос строки
+});
