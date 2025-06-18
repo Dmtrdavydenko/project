@@ -72,6 +72,11 @@ query.addEventListener("click", () => {
     sqlQuery(textArea.value); // Передаем текст из textarea в функцию sqlQuery
 });
 
+const form = document.createElement("button");
+form.textContent = "Получить колонки";
+form.addEventListener("click", generateForm);
+
+
 // Устанавливаем атрибуты для textarea (по желанию)
 textArea.rows = 10; // Количество строк
 textArea.cols = 30; // Количество колонок
@@ -86,6 +91,7 @@ main.append(selectElement);
 main.append(getColumnsTypes);
 main.append(textArea);
 main.append(query);
+main.append(form);
 
 
 function Textile(inputId, inputWidth, inputDensity) {
@@ -177,8 +183,6 @@ function createSelectOptions(dataArray) {
 
 
 async function getSelectedValue() {
-    const selectedValue = selectElement.value; // Get the selected value
-    //getColumnsAndTypesForTable();
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
@@ -187,11 +191,12 @@ async function getSelectedValue() {
         body: JSON.stringify({
             action: "getColumnsAndTypesForTable",
             table: {
-                name: selectedValue,
+                name: selectElement.value,
             }
         }),
     }).then((response) => response.json());
     console.log(result);
+    return await result;
 }
 
 
@@ -253,29 +258,82 @@ async function sqlQuery(sqlQueryString) {
 }
 
 
+
+
+
+
+
+async function fetchTableStructure() {
+    const response = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "getColumnsAndTypesForTable",
+            table: {
+                name: selectElement.value,
+            }
+        }),
+    })
+    return await response.json();
+}
+
+function createInputElement(column) {
+    let inputElement;
+    switch (column.Type) {
+        case 'int':
+        case 'tinyint':
+        case 'smallint':
+        case 'mediumint':
+        case 'bigint':
+            inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
+            break;
+        case 'varchar':
+        case 'char':
+        case 'text':
+            inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
+            break;
+        case 'date':
+            inputElement = `<input type="date" name="${column.Field}">`;
+            break;
+        case 'datetime':
+        case 'timestamp':
+            inputElement = `<input type="datetime-local" name="${column.Field}">`;
+            break;
+        case 'float':
+        case 'double':
+            inputElement = `<input type="number" step="0.01" name="${column.Field}" placeholder="${column.Field}">`;
+            break;
+        // Добавьте дополнительные типы по мере необходимости
+        default:
+            inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
+    }
+    return inputElement;
+}
+async function generateForm() {
+    const columns = await getSelectedValue();
+    const formContainer = document.getElementById('form-container');
+
+    columns.forEach(column => {
+        const inputElement = createInputElement(column);
+        formContainer.innerHTML += `<div>${inputElement}</div>`;
+    });
+}
+
+// Генерация формы для таблицы 'your_table_name'
+//generateForm('your_table_name');
+
+
+
+
+
+
+
+
+
+
 //(async () => {
 
-//        const result = await fetch("https://worktime.up.railway.app/textile", {
-//            method: "POST",
-//            headers: {
-//                "Content-Type": "application/json;charset=utf-8",
-//            },
-//            body: JSON.stringify({
-//                action: "select",
-//                table: {
-//                    name: "textileK",
-//                },
-//            }),
-//        }).then((response) => response.json());
-
-//        const container = document.getElementById('table-container');
-//        container.innerHTML = '';
-
-//        if (result.rows) {
-//            const table = createTable(result.rows);
-//            container.appendChild(table);
-//        } else {
-//            container.textContent = 'U';
-//        }
 
 //})();
