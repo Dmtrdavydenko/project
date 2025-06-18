@@ -358,9 +358,9 @@ async function generateForm() {
     });
 }
 async function sendForm() {
-    const arrayInput = array.filter(value => value.length > 0);
+    const arrayInput = array.filter(input => input.value.length > 0);
     const fieds = arrayInput.map(input => input.name);
-    const values = arrayInput.map(input => input.value );
+    const values = arrayInput.map(input => input.value);
 
     console.log(fieds, values);
 
