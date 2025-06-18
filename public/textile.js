@@ -359,8 +359,13 @@ async function generateForm() {
 }
 async function sendForm() {
     array.forEach(input => {
+
         console.log(input.value, input.type, input.name);
     })
+    const fieds = array.map(input => input.value.length > 0 ? input.name : "");
+    const values = array.map(input => input.value.length > 0 ? input.value :"");
+
+    console.log(fieds, values);
 
 
 }
