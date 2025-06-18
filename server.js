@@ -439,8 +439,8 @@ async function getColumnsAndTypesForTable(body) {
 
         // Массив для хранения информации о столбцах
         const columnsInfo = columns.map(column => ({
-            name: column.Field,
-            type: column.Type
+            Field: column.Field,
+            Type: column.Type
         }));
 
         console.log(`Информация о столбцах для таблицы ${body.table.name}:`, columnsInfo);
