@@ -44,12 +44,15 @@ async function insertGenerate(body) {
     const connection = await pool.getConnection();
     try {
         console.log('Успешно подключено к базе данных MySQL!');
+
         // Вставка новой записи
-        const arr = await connection.execute(sql, body.table.values);
-        console.log('Inserted ID:', arr[0].insertResult.insertId);
+        const [insertResult] = await connection.execute(sql, body.table.values);
+
+        console.log('Inserted ID:', insertResult.insertId);
+
         return {
-            insertId: arr[0].insertResult.insertId,
-            rows: arr
+            insertId: insertResult.insertId,
+            //rows // все данные таблицы
         };
     } catch (err) {
         console.error('Ошибка:', err);
