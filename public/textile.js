@@ -259,7 +259,8 @@ async function sqlQuery(sqlQueryString) {
 
         const result = await response.json(); // Получаем JSON-ответ
         console.log(result); // Выводим результат в консоль
-        textAsk.value = result;
+        textAsk.value = response;
+        //textAsk.value = JSON.stringify(result);
     } catch (error) {
         console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
     }
