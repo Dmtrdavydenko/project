@@ -362,7 +362,7 @@ async function sendForm() {
     const fields = arrayInput.map(input => input.name);
     const values = arrayInput.map(input => input.value);
 
-    await fetch("https://worktime.up.railway.app/textile", {
+    const response = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -375,8 +375,9 @@ async function sendForm() {
                 values: values
             }
         }),
-    });
-
+    }).then((response) => response.json());
+    console.log(response);
+    return await response;
 }
 
 // Генерация формы для таблицы 'your_table_name'
