@@ -359,10 +359,23 @@ async function generateForm() {
 }
 async function sendForm() {
     const arrayInput = array.filter(input => input.value.length > 0);
-    const fieds = arrayInput.map(input => input.name);
+    const fields = arrayInput.map(input => input.name);
     const values = arrayInput.map(input => input.value);
 
-    console.log(fieds, values);
+    await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "insertGenerate",
+            table: {
+                name: selectElement.value,
+                fields: fields,
+                values: values
+            }
+        }),
+    });
 
 }
 

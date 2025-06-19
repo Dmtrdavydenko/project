@@ -15,7 +15,8 @@ const functionDB = {
     "drop": dropTable,
     "getAllTableNames": getAllTableNames,
     "getColumnsAndTypesForTable": getTableColumns,
-    "sql":sql
+    "sql": sql,
+    "insertGenerate": insertGenerate
 }
 
 
@@ -34,6 +35,15 @@ const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool(dbConfig); // создаём пул подключений
 
+async function insertGenerate(body) {
+    body.table.name
+    body.table.fields
+    body.table.values
+    const shape = body.table.fields.map(() => '?').join(', ');
+
+    const sql = "INSERT INTO " + body.table.name + " (" + body.table.fields.join(', ') + ") VALUES (" + shape + ")";
+    return sql;
+}
 
 async function insert(body) {
     const pool = mysql.createPool(dbConfig); // создаём пул подключений
