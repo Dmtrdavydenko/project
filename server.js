@@ -36,13 +36,36 @@ const mysql = require('mysql2/promise');
 const pool = mysql.createPool(dbConfig); // создаём пул подключений
 
 async function insertGenerate(body) {
-    body.table.name
-    body.table.fields
-    body.table.values
+    //body.table.name
+    //body.table.fields
+    //body.table.values
     const shape = body.table.fields.map(() => '?').join(', ');
-
     const sql = "INSERT INTO " + body.table.name + " (" + body.table.fields.join(', ') + ") VALUES (" + shape + ")";
-    return sql;
+    const connection = await pool.getConnection();
+    try {
+        console.log('Успешно подключено к базе данных MySQL!');
+        // Вставка новой записи
+        const arr = await connection.execute(sql, body.table.values);
+        console.log('Inserted ID:', arr[0].insertResult.insertId);
+        return {
+            insertId: arr[0].insertResult.insertId,
+            rows: arr
+        };
+    } catch (err) {
+        console.error('Ошибка:', err);
+        throw err;
+    } finally {
+        connection.release();
+        await pool.end();
+        console.log('Пул соединений закрыт.');
+    }
+
+
+
+
+
+
+
 }
 
 async function insert(body) {
