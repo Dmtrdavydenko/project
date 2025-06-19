@@ -65,6 +65,7 @@ getColumnsTypes.textContent = "Получить колонки";
 getColumnsTypes.addEventListener("click", getSelectedValue);
 
 const textArea = document.createElement("textarea");
+const textAsk = document.createElement("textarea");
 
 const query = document.createElement("button");
 query.textContent = "Сделать запрос sql";
@@ -95,6 +96,7 @@ main.append(selectElement);
 main.append(getColumnsTypes);
 main.append(textArea);
 main.append(query);
+main.append(textAsk);
 main.append(form);
 main.append(insert);
 
@@ -257,6 +259,7 @@ async function sqlQuery(sqlQueryString) {
 
         const result = await response.json(); // Получаем JSON-ответ
         console.log(result); // Выводим результат в консоль
+        textAsk.value = result;
     } catch (error) {
         console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
     }
