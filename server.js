@@ -586,7 +586,7 @@ server.on("request", (req, res) => {
                     .then((resolve) => JSON.stringify(resolve))
                     .then((resolve) => res.end(resolve))
                     .catch(error => {
-                        res.end(error)
+                        res.end(error.message)
                         console.log(error);
                     })
 
