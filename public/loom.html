@@ -85,34 +85,42 @@
             <div class="half" id="rightSecond"></div>
             <div class="half" id="rightThird"></div>
             <div class="half" id="rightBottom"></div>
-            <div class="half" id="rightBig"></div>
         </div>
     </div>
 
     <script>
-        // Задаем количество кнопок в каждой секции
-        const leftTopButtons = 9;
+        const buttonsPerBlock = 9;
 
-        function createButtons(containerId, count, labelPrefix) {
+        const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
+        const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
+
+        let currentNumber = 1;
+
+        function createButtonsInBlock(containerId, count, startNum, reverse = false) {
             const container = document.getElementById(containerId);
-            for (let i = 1; i <= count; i++) {
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) {
                 const btn = document.createElement('button');
-                btn.textContent = `${labelPrefix} ${i}`;
+                const num = reverse ? startNum - i : startNum + i;
+                btn.textContent = num;
                 container.appendChild(btn);
             }
         }
 
-        // Генерация кнопок
-        createButtons('leftTop', leftTopButtons, 'Левый Верх');
-        createButtons('leftSecond', leftTopButtons, 'Левый Верх');
-        createButtons('leftThird', leftTopButtons, 'Левый Верх');
-        createButtons('leftBottom', leftTopButtons, 'Левый Низ');
+        const totalButtons = buttonsPerBlock * (rightBlocks.length + leftBlocks.length); // 72
 
-        createButtons('rightTop', leftTopButtons, 'Правый Верх');
-        createButtons('rightSecond', leftTopButtons, 'Правый Низ');
-        createButtons('rightThird', leftTopButtons, 'Правый Низ');
-        createButtons('rightBottom', leftTopButtons, 'Правый Низ');
-        createButtons('rightBig', leftTopButtons, 'Правый Низ');
+        let num = totalButtons;
+        for (let i = 0; i < rightBlocks.length; i++) {
+            const blockId = rightBlocks[i];
+            createButtonsInBlock(blockId, buttonsPerBlock, num, true);
+            num -= buttonsPerBlock;
+        }
+
+        for (let i = 0; i < leftBlocks.length; i++) {
+            const blockId = leftBlocks[i];
+            createButtonsInBlock(blockId, buttonsPerBlock, num + 1, false);
+            num += buttonsPerBlock;
+        }
     </script>
 </body>
 </html>
