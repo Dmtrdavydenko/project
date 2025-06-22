@@ -91,7 +91,7 @@ insertButton.addEventListener("click", sendForm);
 
 const showTable = document.createElement("button");
 showTable.textContent = "Показать таблицу";
-showTable.addEventListener("click", showTable);
+showTable.addEventListener("click", showTableFn);
 
 main.append(dropInput);
 main.append(drop);
@@ -212,7 +212,7 @@ async function getSelectedValue() {
 }
 
 
-async function showTable() {
+async function showTableFn() {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
