@@ -85,9 +85,13 @@ textArea.placeholder = "Введите ваш SQL-запрос здесь...";
 
 
 
-const insert = document.createElement("button");
-insert.textContent = "Отправить форму";
-insert.addEventListener("click", sendForm);
+const insertButton = document.createElement("button");
+insertButton.textContent = "Отправить форму";
+insertButton.addEventListener("click", sendForm);
+
+const showTable = document.createElement("button");
+showTable.textContent = "Показать таблицу";
+showTable.addEventListener("click", showTable);
 
 main.append(dropInput);
 main.append(drop);
@@ -99,6 +103,7 @@ main.append(query);
 main.append(textAsk);
 main.append(form);
 main.append(insert);
+main.append(showTable);
 
 
 function Textile(inputId, inputWidth, inputDensity) {
@@ -207,7 +212,7 @@ async function getSelectedValue() {
 }
 
 
-async function getAllTablesEvent() {
+async function showTable() {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
