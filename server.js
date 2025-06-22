@@ -102,16 +102,15 @@ async function insert(body) {
 }
 
 async function select(body) {
-    const pool = mysql.createPool(dbConfig); // создаём пул подключений
+    //const pool = mysql.createPool(dbConfig); // создаём пул подключений
     const connection = await pool.getConnection();
 
     try {
         console.log('Успешно подключено к базе данных MySQL!');
 
         // Получаем все данные из таблицы после вставки
-        const [rows] = await connection.execute(
-            'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
-        );
+        const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
+        const [rows] = await connection.execute(sql);
 
         return {
             rows // все данные таблицы
