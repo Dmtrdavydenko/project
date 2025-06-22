@@ -99,31 +99,37 @@
 
         let currentNumber = 1;
 
-        // Создание кнопок с последовательной нумерацией слева направо
-        function createButtonsInBlock(containerId, count, startNum) {
+        // Функция создания кнопок с возможным разворотом нумерации внутри блока
+        function createButtonsInBlock(containerId, count, startNum, reverse = false) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
             for (let i = 0; i < count; i++) {
                 const btn = document.createElement('button');
-                btn.textContent = startNum + i;
+                const num = reverse ? startNum + count - 1 - i : startNum + i;
+                btn.textContent = num;
                 container.appendChild(btn);
             }
         }
 
-        // Сначала создаём кнопки для правой колонки (снизу вверх)
+        // Создаём кнопки для правой колонки (снизу вверх)
         for (let i = 0; i < rightBlocks.length; i++) {
             const blockId = rightBlocks[i];
-            createButtonsInBlock(blockId, buttonsPerBlock, currentNumber);
+            // Нумерация разворачивается в нечетных блоках (i=0,2,...)
+            const reverse = (i % 2 === 0);
+            createButtonsInBlock(blockId, buttonsPerBlock, currentNumber, reverse);
             currentNumber += buttonsPerBlock;
         }
 
-        // Потом для левой колонки (сверху вниз)
+        // Создаём кнопки для левой колонки (сверху вниз)
         for (let i = 0; i < leftBlocks.length; i++) {
             const blockId = leftBlocks[i];
-            createButtonsInBlock(blockId, buttonsPerBlock, currentNumber);
+            // Нумерация разворачивается в нечетных блоках (i=0,2,...)
+            const reverse = (i % 2 === 0);
+            createButtonsInBlock(blockId, buttonsPerBlock, currentNumber, reverse);
             currentNumber += buttonsPerBlock;
         }
     </script>
+
 
 </body>
 </html>
