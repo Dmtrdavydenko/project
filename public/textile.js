@@ -102,7 +102,7 @@ main.append(textArea);
 main.append(query);
 main.append(textAsk);
 main.append(form);
-main.append(insert);
+main.append(insertButton);
 main.append(showTable);
 
 
