@@ -91,36 +91,39 @@
     <script>
         const buttonsPerBlock = 9;
 
+        // Порядок обхода блоков:
+        // Правая колонка снизу вверх
         const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
+        // Левая колонка сверху вниз
         const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
 
         let currentNumber = 1;
 
-        function createButtonsInBlock(containerId, count, startNum, reverse = false) {
+        // Создание кнопок с последовательной нумерацией слева направо
+        function createButtonsInBlock(containerId, count, startNum) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
             for (let i = 0; i < count; i++) {
                 const btn = document.createElement('button');
-                const num = reverse ? startNum - i : startNum + i;
-                btn.textContent = num;
+                btn.textContent = startNum + i;
                 container.appendChild(btn);
             }
         }
 
-        const totalButtons = buttonsPerBlock * (rightBlocks.length + leftBlocks.length); // 72
-
-        let num = totalButtons;
+        // Сначала создаём кнопки для правой колонки (снизу вверх)
         for (let i = 0; i < rightBlocks.length; i++) {
             const blockId = rightBlocks[i];
-            createButtonsInBlock(blockId, buttonsPerBlock, num, true);
-            num -= buttonsPerBlock;
+            createButtonsInBlock(blockId, buttonsPerBlock, currentNumber);
+            currentNumber += buttonsPerBlock;
         }
 
+        // Потом для левой колонки (сверху вниз)
         for (let i = 0; i < leftBlocks.length; i++) {
             const blockId = leftBlocks[i];
-            createButtonsInBlock(blockId, buttonsPerBlock, num + 1, false);
-            num += buttonsPerBlock;
+            createButtonsInBlock(blockId, buttonsPerBlock, currentNumber);
+            currentNumber += buttonsPerBlock;
         }
     </script>
+
 </body>
 </html>
