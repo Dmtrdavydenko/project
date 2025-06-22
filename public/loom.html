@@ -96,6 +96,7 @@
 
         let currentNumber = 1;
         let blockIndex = 1; // Счётчик блоков по порядку обхода (начинается с 1)
+        const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
 
         function createButtonsInBlock(containerId, count, startNum, reverse = false) {
             const container = document.getElementById(containerId);
@@ -111,7 +112,12 @@
         // Правая колонка (снизу вверх)
         for (let i = 0; i < rightBlocks.length; i++, blockIndex++) {
             const blockId = rightBlocks[i];
-            const reverse = (blockIndex % 2 === 1); // нечетные блоки разворачиваем
+            // Разворот для нечетных блоков
+            let reverse = (blockIndex % 2 === 1);
+            // Если это последний блок (8-й), разворачиваем в любом случае
+            if (blockIndex === totalBlocks) {
+                reverse = true;
+            }
             createButtonsInBlock(blockId, buttonsPerBlock, currentNumber, reverse);
             currentNumber += buttonsPerBlock;
         }
@@ -119,11 +125,15 @@
         // Левая колонка (сверху вниз)
         for (let i = 0; i < leftBlocks.length; i++, blockIndex++) {
             const blockId = leftBlocks[i];
-            const reverse = (blockIndex % 2 === 1);
+            let reverse = (blockIndex % 2 === 1);
+            if (blockIndex === totalBlocks) {
+                reverse = true;
+            }
             createButtonsInBlock(blockId, buttonsPerBlock, currentNumber, reverse);
             currentNumber += buttonsPerBlock;
         }
     </script>
+
 
 
 
