@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Общий блок под колонками</title>
+    <title>Общий блок под колонками с нумерацией</title>
     <style>
         body, html {
             margin: 0;
@@ -91,8 +91,16 @@
     <div id="footerBlock"></div>
 
     <script>
-        // Пример заполнения кнопок в блоках (упрощённый)
-        function createButtons(containerId, count, startNum = 1, reverse = false) {
+        const buttonsPerBlock = 9;
+
+        const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
+        const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
+
+        let currentNumber = 1;
+        let blockIndex = 1; // Счётчик блоков по порядку обхода (начинается с 1)
+        const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
+
+        function createButtonsInBlock(containerId, count, startNum, reverse = false) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
             for (let i = 0; i < count; i++) {
@@ -103,19 +111,41 @@
             }
         }
 
-        // Пример заполнения блоков (можно заполнить по вашей логике)
-        createButtons('leftTop', 9, 1);
-        createButtons('leftSecond', 9, 10);
-        createButtons('leftThird', 9, 19);
-        createButtons('leftBottom', 9, 28);
+        // Правая колонка (снизу вверх)
+        for (let i = 0; i < rightBlocks.length; i++, blockIndex++) {
+            const blockId = rightBlocks[i];
+            // Разворот для нечетных блоков
+            let reverse = (blockIndex % 2 === 1);
+            // Если это последний блок (8-й), разворачиваем в любом случае
+            if (blockIndex === totalBlocks) {
+                reverse = true;
+            }
+            createButtonsInBlock(blockId, buttonsPerBlock, currentNumber, reverse);
+            currentNumber += buttonsPerBlock;
+        }
 
-        createButtons('rightTop', 9, 37);
-        createButtons('rightSecond', 9, 46);
-        createButtons('rightThird', 9, 55);
-        createButtons('rightBottom', 9, 64);
+        // Левая колонка (сверху вниз)
+        for (let i = 0; i < leftBlocks.length; i++, blockIndex++) {
+            const blockId = leftBlocks[i];
+            let reverse = (blockIndex % 2 === 1);
+            if (blockIndex === totalBlocks) {
+                reverse = true;
+            }
+            createButtonsInBlock(blockId, buttonsPerBlock, currentNumber, reverse);
+            currentNumber += buttonsPerBlock;
+        }
 
-        // Общий блок с 12 кнопками под колонками
-        createButtons('footerBlock', 12, 1);
+        // Общий блок с 12 кнопками под колонками, нумерация 1..12
+        function createFooterButtons(containerId, count) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                container.appendChild(btn);
+            }
+        }
+        createFooterButtons('footerBlock', 12);
     </script>
 
 </body>
