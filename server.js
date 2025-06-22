@@ -109,7 +109,8 @@ async function select(body) {
         console.log('Успешно подключено к базе данных MySQL!');
 
         // Получаем все данные из таблицы после вставки
-        const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
+        const sql = 'SELECT * FROM ' + body.table.name;
+        //const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
         const [rows] = await connection.execute(sql);
 
         return {
