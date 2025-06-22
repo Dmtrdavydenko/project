@@ -41,9 +41,9 @@ async function insertGenerate(body) {
     //body.table.values
     const shape = body.table.fields.map(() => '?').join(', ');
     const sql = "INSERT INTO " + body.table.name + " (" + body.table.fields.join(', ') + ") VALUES (" + shape + ")";
+    const connection = await pool.getConnection();
     try {
         //const pool = mysql.createPool(dbConfig); // создаём пул подключений
-        const connection = await pool.getConnection();
         console.log('Успешно подключено к базе данных MySQL!');
 
         // Вставка новой записи
