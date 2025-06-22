@@ -96,8 +96,8 @@ async function insert(body) {
         throw err;
     } finally {
         connection.release();
-        await pool.end();
-        console.log('Пул соединений закрыт.');
+        //await pool.end();
+        //console.log('Пул соединений закрыт.');
     }
 }
 
@@ -122,8 +122,8 @@ async function select(body) {
         throw err;
     } finally {
         connection.release();
-        await pool.end();
-        console.log('Пул соединений закрыт.');
+        //await pool.end();
+        //console.log('Пул соединений закрыт.');
     }
 }
 
@@ -223,6 +223,12 @@ async function main() {
       machine_id INT AUTO_INCREMENT PRIMARY KEY,
       machine_name VARCHAR(200) NOT NULL
 
+    );
+  `;
+    const color = `
+    CREATE TABLE IF NOT EXISTS color (
+      color_id INT AUTO_INCREMENT PRIMARY KEY,
+      color VARCHAR(200) NOT NULL
     );
   `;
 
