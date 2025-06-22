@@ -34,7 +34,7 @@
 
         .main-content {
             display: flex;
-            height: calc(100vh - 50px); /* Учитываем высоту навигации */
+            height: calc(100vh - 90px); /* Учитываем высоту навигации и футера */
         }
 
         .zone {
@@ -42,6 +42,7 @@
             display: flex;
             flex-direction: column;
             border: 1px solid #ccc;
+            box-sizing: border-box;
         }
 
         .half {
@@ -52,6 +53,7 @@
             justify-content: flex-start;
             padding: 10px;
             border-bottom: 1px solid #ccc;
+            box-sizing: border-box;
         }
 
             .half:last-child {
@@ -62,7 +64,26 @@
             margin: 5px;
             padding: 10px 15px;
             font-size: 14px;
+            cursor: pointer;
         }
+
+        /* Общий футер под колонками */
+        #footerBlock {
+            border-top: 1px solid #ccc;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+            #footerBlock button {
+                margin: 5px;
+                padding: 10px 15px;
+                font-size: 14px;
+                cursor: pointer;
+            }
     </style>
 </head>
 <body>
@@ -87,6 +108,9 @@
             <div class="half" id="rightBottom"></div>
         </div>
     </div>
+
+    <!-- Общий блок с 12 кнопками под обеими колонками -->
+    <div id="footerBlock"></div>
 
     <script>
         const buttonsPerBlock = 9;
@@ -132,10 +156,19 @@
             createButtonsInBlock(blockId, buttonsPerBlock, currentNumber, reverse);
             currentNumber += buttonsPerBlock;
         }
+
+        // Создаём общий блок с 12 кнопками под двумя колонками
+        function createFooterButtons(containerId, count) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                container.appendChild(btn);
+            }
+        }
+
+        createFooterButtons('footerBlock', 12);
     </script>
-
-
-
-
 </body>
 </html>
