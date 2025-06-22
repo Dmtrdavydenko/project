@@ -2,96 +2,75 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Две зоны с кнопками</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Общий блок под колонками</title>
     <style>
         body, html {
             margin: 0;
             padding: 0;
-            height: 100%;
             font-family: sans-serif;
-            overflow-y: auto; /* Прокручиваемый контент для страницы */
         }
 
         nav {
-            background-color: #333;
-            color: white;
+            background: #333;
+            color: #fff;
             padding: 10px 20px;
-            display: flex;
-            align-items: center;
         }
 
             nav a {
-                color: white;
+                color: #fff;
                 text-decoration: none;
                 margin-right: 15px;
-                font-weight: bold;
             }
-
-                nav a:hover {
-                    text-decoration: underline;
-                }
 
         .main-content {
             display: flex;
-            height: calc(100vh - 90px); /* Учитываем высоту навигации и футера */
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
         }
 
         .zone {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #ccc;
+            border-right: 1px solid #ccc;
             box-sizing: border-box;
-        }
-
-        .half {
-            flex: 0; /* Убираем flex-grow, чтобы блоки занимали только минимально необходимую высоту */
-            display: flex;
-            flex-wrap: wrap;
-            align-content: flex-start;
-            justify-content: flex-start;
             padding: 10px;
-            border-bottom: 1px solid #ccc;
-            box-sizing: border-box;
         }
 
-            .half:last-child {
-                border-bottom: none;
+            .zone:last-child {
+                border-right: none;
             }
 
-        button {
-            margin: 5px;
-            padding: 10px 15px;
-            font-size: 14px;
-            cursor: pointer;
+        .half {
+            margin-bottom: 15px;
         }
 
-        /* Общий футер под колонками */
+            .half button {
+                margin: 3px;
+                padding: 8px 12px;
+            }
+
+        /* Общий блок с 12 кнопками под колонками */
         #footerBlock {
+            padding: 10px 20px;
             border-top: 1px solid #ccc;
-            padding: 10px;
             display: flex;
             flex-wrap: wrap;
-            justify-content: flex-start;
-            max-width: 100%;
-            box-sizing: border-box;
+            gap: 5px;
         }
 
             #footerBlock button {
-                margin: 5px;
-                padding: 10px 15px;
-                font-size: 14px;
+                padding: 8px 12px;
                 cursor: pointer;
             }
     </style>
 </head>
 <body>
+
     <nav>
-        <a href="/">Назад</a>
-        <a href="/textile">Текстиль</a>
-        <a href="/about">О нас</a>
-        <a href="/contact">Контакты</a>
+        <a href="#">Назад</a>
+        <a href="#">Текстиль</a>
+        <a href="#">О нас</a>
+        <a href="#">Контакты</a>
     </nav>
 
     <div class="main-content">
@@ -109,20 +88,11 @@
         </div>
     </div>
 
-    <!-- Общий блок с 12 кнопками под обеими колонками -->
     <div id="footerBlock"></div>
 
     <script>
-        const buttonsPerBlock = 9;
-
-        const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
-        const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
-
-        let currentNumber = 1;
-        let blockIndex = 1; // Счётчик блоков по порядку обхода (начинается с 1)
-        const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
-
-        function createButtonsInBlock(containerId, count, startNum, reverse = false) {
+        // Пример заполнения кнопок в блоках (упрощённый)
+        function createButtons(containerId, count, startNum = 1, reverse = false) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
             for (let i = 0; i < count; i++) {
@@ -133,42 +103,20 @@
             }
         }
 
-        // Правая колонка (снизу вверх)
-        for (let i = 0; i < rightBlocks.length; i++, blockIndex++) {
-            const blockId = rightBlocks[i];
-            // Разворот для нечетных блоков
-            let reverse = (blockIndex % 2 === 1);
-            // Если это последний блок (8-й), разворачиваем в любом случае
-            if (blockIndex === totalBlocks) {
-                reverse = true;
-            }
-            createButtonsInBlock(blockId, buttonsPerBlock, currentNumber, reverse);
-            currentNumber += buttonsPerBlock;
-        }
+        // Пример заполнения блоков (можно заполнить по вашей логике)
+        createButtons('leftTop', 9, 1);
+        createButtons('leftSecond', 9, 10);
+        createButtons('leftThird', 9, 19);
+        createButtons('leftBottom', 9, 28);
 
-        // Левая колонка (сверху вниз)
-        for (let i = 0; i < leftBlocks.length; i++, blockIndex++) {
-            const blockId = leftBlocks[i];
-            let reverse = (blockIndex % 2 === 1);
-            if (blockIndex === totalBlocks) {
-                reverse = true;
-            }
-            createButtonsInBlock(blockId, buttonsPerBlock, currentNumber, reverse);
-            currentNumber += buttonsPerBlock;
-        }
+        createButtons('rightTop', 9, 37);
+        createButtons('rightSecond', 9, 46);
+        createButtons('rightThird', 9, 55);
+        createButtons('rightBottom', 9, 64);
 
-        // Создаём общий блок с 12 кнопками под двумя колонками
-        function createFooterButtons(containerId, count) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            for (let i = 1; i <= count; i++) {
-                const btn = document.createElement('button');
-                btn.textContent = i;
-                container.appendChild(btn);
-            }
-        }
-
-        createFooterButtons('footerBlock', 12);
+        // Общий блок с 12 кнопками под колонками
+        createButtons('footerBlock', 12, 1);
     </script>
+
 </body>
 </html>
