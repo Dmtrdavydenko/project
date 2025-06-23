@@ -231,6 +231,15 @@ async function main() {
       color VARCHAR(200) NOT NULL
     );
   `;
+    const looms = `
+    CREATE TABLE IF NOT EXISTS looms (
+        loom_id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        loom_name VARCHAR(50),
+        loom_speed SMALLINT UNSIGNED
+    );
+    `;
+    //thread_density SMALLINT UNSIGNED
+
 
     try {
         const pool = mysql.createPool(dbConfig); // создаём пул подключений
