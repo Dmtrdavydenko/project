@@ -565,7 +565,8 @@ server.on("request", (req, res) => {
 
         if (pathName === "/") {
             ext = ".html";
-            pathName = "/index.html";
+            pathName = "/table.html";
+            //pathName = "/index.html";
         } else if (!ext) {
             ext = ".html";
             pathName += ext;
