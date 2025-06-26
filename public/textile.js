@@ -311,6 +311,7 @@ function createInputElement(column) {
         case /^(auto_increment)$/.test(column.Extra):
             console.log("disabled", true);
             input.setAttribute("disabled", true);
+            input.placeholder = "auto";
             break;
     }
     switch (true) {
