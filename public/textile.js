@@ -303,9 +303,9 @@ function createInputElement(column) {
 
     column
     console.log(column);
-    console.log(column.Extra);
+    //console.log(column.Extra);
     let inputElement;
-    console.log(`Field: ${column.Field} Type: ${column.Type}`);
+    //console.log(`Field: ${column.Field} Type: ${column.Type}`);
 
     switch (true) {
         case /^(auto_increment)$/.test(column.Extra):
@@ -436,7 +436,7 @@ async function sendForm() {
             container.textContent = 'U';
         }
     }
-    showTableFn()
+    //showTableFn()
 })();
 
 
