@@ -301,7 +301,8 @@ function createInputElement(column) {
     input.placeholder = column.Field;
 
 
-
+    column
+    console.log(column);
     let inputElement;
     console.log(`Field: ${column.Field} Type: ${column.Type}`);
     switch (true) {
