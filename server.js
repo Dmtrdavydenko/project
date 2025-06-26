@@ -239,6 +239,15 @@ async function main() {
     );
     `;
     //thread_density SMALLINT UNSIGNED
+    //TINYINT UNSIGNED	
+    const textile = `
+    CREATE TABLE IF NOT EXISTS textile (
+        textile_id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        textile_width TINYINT UNSIGNED,
+        textile_density TINYINT UNSIGNED,
+        warp_quantity SMALLINT UNSIGNED
+    );
+    `;
 
 
     try {
@@ -418,11 +427,12 @@ async function getTableColumns(body) {
         // Извлекаем названия колонок и их типы
         const columnsInfo = rows.map(row => ({
             Field: row.Field,
-            Type: row.Type
+            Type: row.Type,
+            Extra: row.Extra
         }));
 
         console.log(`Список колонок и типов таблицы "${body.table.name}":`, columnsInfo);
-        return columnsInfo; // Возвращаем массив объектов с названиями и типами колонок
+        return rows; // Возвращаем массив объектов с названиями и типами колонок
     } catch (err) {
         console.error('Ошибка при получении колонок таблицы:', err);
         throw err;
