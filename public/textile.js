@@ -313,6 +313,7 @@ function createInputElement(column) {
             input.type = "number";
             break;
         case /^(auto_increment)$/.test(column.Extra):
+            console.log("disabled", true);
             //inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
             input.setAttribute("disabled", true);
             break;
@@ -359,7 +360,6 @@ function createInputElement(column) {
         default:
             inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
     }
-
     return input;
 }
 const array = [];
