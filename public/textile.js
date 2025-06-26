@@ -306,16 +306,18 @@ function createInputElement(column) {
     console.log(column.Extra);
     let inputElement;
     console.log(`Field: ${column.Field} Type: ${column.Type}`);
+
+    switch (true) {
+        case /^(auto_increment)$/.test(column.Extra):
+            console.log("disabled", true);
+            input.setAttribute("disabled", true);
+            break;
+    }
     switch (true) {
         // Числовые типы
         case /^(tinyint|smallint|mediumint|int|bigint)$/.test(column.Type):
             //inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
             input.type = "number";
-            break;
-        case /^(auto_increment)$/.test(column.Extra):
-            console.log("disabled", true);
-            //inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
-            input.setAttribute("disabled", true);
             break;
 
         case /^(tinyint|smallint|mediumint|int|bigint)(\s+(unsigned))?$/.test(column.Type):
