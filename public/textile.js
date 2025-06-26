@@ -303,6 +303,7 @@ function createInputElement(column) {
 
     column
     console.log(column);
+    console.log(column.Extra);
     let inputElement;
     console.log(`Field: ${column.Field} Type: ${column.Type}`);
     switch (true) {
@@ -310,6 +311,10 @@ function createInputElement(column) {
         case /^(tinyint|smallint|mediumint|int|bigint)$/.test(column.Type):
             //inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
             input.type = "number";
+            break;
+        case /^(auto_increment)$/.test(column.Extra):
+            //inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
+            input.setAttribute("disabled", true);
             break;
 
         case /^(tinyint|smallint|mediumint|int|bigint)(\s+(unsigned))?$/.test(column.Type):
