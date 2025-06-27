@@ -85,9 +85,9 @@ textArea.placeholder = "Введите ваш SQL-запрос здесь...";
 
 
 
-const insertButton = document.createElement("button");
-insertButton.textContent = "Отправить форму";
-insertButton.addEventListener("click", sendForm);
+const sendButton = document.createElement("button");
+sendButton.textContent = "Отправить форму";
+sendButton.addEventListener("click", sendForm);
 
 const showTable = document.createElement("button");
 showTable.textContent = "Показать таблицу";
@@ -102,7 +102,7 @@ main.append(textArea);
 main.append(query);
 main.append(textAsk);
 main.append(form);
-main.append(insertButton);
+main.append(sendButton);
 main.append(showTable);
 
 
@@ -395,6 +395,7 @@ async function sendForm() {
         }),
     }).then((response) => response.json());
     console.log(response);
+    showTableFn();
     return await response;
 }
 
