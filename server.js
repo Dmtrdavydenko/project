@@ -16,7 +16,8 @@ const functionDB = {
     "getAllTableNames": getAllTableNames,
     "getColumnsAndTypesForTable": getTableColumns,
     "sql": sql,
-    "insertGenerate": insertGenerate
+    "insertGenerate": insertGenerate,
+    "setWhere": setWhere
 }
 
 
@@ -173,7 +174,37 @@ async function createTable() {
 
 
 
+async function setWhere(body) {
 
+
+
+    const sqlQuery = `UPDATE ${body.table.name} SET ${body.table.colum_name} = ? WHERE ${body.table.whereColum} = ?`;
+    const params = [body.table.value, body.table.id + 1]; // если нужно добавить 1 к id
+
+    try {
+        console.log('Успешно подключено к базе данных MySQL!');
+
+        // Получаем все данные из таблицы после вставки
+        const sql = 'SELECT * FROM ' + body.table.name;
+        //const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
+        const [result] = await connection.execute(sqlQuery, params);
+
+
+        return {
+            result // все данные таблицы
+        };
+
+    } catch (err) {
+        console.error('Ошибка:', err);
+        throw err;
+    } finally {
+        connection.release();
+        //await pool.end();
+        //console.log('Пул соединений закрыт.');
+    }
+
+
+}
 //createTable();
 
 

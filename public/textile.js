@@ -231,7 +231,7 @@ async function showTableFn() {
     container.innerHTML = '';
 
     //if (true) {
-        if (result.rows) {
+    if (result.rows) {
         const array = [
             {
                 textile_density: 75,
@@ -304,58 +304,49 @@ async function queryTarget(event) {
     // Опционально: чтобы при потере фокуса выключать редактирование
     const table = document.querySelector('table');
     const headers = Array.from(table.querySelectorAll('thead th'));
-    td.addEventListener('blur', () => {
+    td.addEventListener('blur', async  () => {
         td.contentEditable = "false";
         td.textContent = td.textContent.trim();
         if (td.textContent.length > 0) {
+            console.log(td.textContent);
             console.log(tr.sectionRowIndex);
             console.log(selectElement.value);
             console.log(headers[td.cellIndex].textContent);
+            try {
+                const result = await sqlWhere({
+                    tableName: selectElement.value,
+                    rowId: rowIndex,
+                    columnName: columnName,
+                    whereColum:"textile_id",
+                    value: td.textContent
+                });
+                console.log('Ответ сервера:', result);
+            } catch (error) {
+                console.error('Ошибка при отправке данных:', error);
+            }
         }
     }, { once: true });
-
-
-
-    //const warpNameIndex = headers.findIndex(th => th.textContent.trim() === 'warp_name');
-
-    //if (warpNameIndex === -1) {
-    //    console.error('Столбец warp_name не найден');
-    //} else {
-    //    // Добавляем обработчик клика на ячейки столбца warp_name
-    //    const rows = table.querySelectorAll('tbody tr');
-    //    rows.forEach(row => {
-    //        const cell = row.querySelectorAll('td')[warpNameIndex];
-    //        if (cell) {
-    //            cell.style.cursor = 'pointer'; // чтобы было видно, что ячейка кликабельна
-    //            cell.addEventListener('click', () => {
-    //                const value = cell.textContent.trim();
-    //                console.log('Кликнули на warp_name:', value);
-
-    //                // Здесь можно отправить запрос на сервер для вставки данных
-    //                // Например, через fetch:
-    //                /*
-    //                fetch('/insert', {
-    //                  method: 'POST',
-    //                  headers: {
-    //                    'Content-Type': 'application/json'
-    //                  },
-    //                  body: JSON.stringify({ warp_name: value })
-    //                })
-    //                .then(response => response.json())
-    //                .then(data => {
-    //                  console.log('Ответ сервера:', data);
-    //                })
-    //                .catch(error => {
-    //                  console.error('Ошибка:', error);
-    //                });
-    //                */
-    //            });
-    //        }
-    //    });
-    //}
 }
-
-
+async function sqlWhere({ tableName, rowId, columnName, whereColum, value }) {
+    const result = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "setWhere",
+            table: {
+                name: tableName,
+                id: rowId,
+                colum_name: columnName,
+                value: value,
+                whereColum: whereColum
+            }
+        }),
+    }).then((response) => response.json());
+    console.log(result);
+    return await result;
+}
 
 // Пример использования функции
 //const sql = "SELECT * FROM your_table"; // Замените на ваш SQL-запрос
