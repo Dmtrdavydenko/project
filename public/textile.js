@@ -315,8 +315,8 @@ async function queryTarget(event) {
             try {
                 const result = await sqlWhere({
                     tableName: selectElement.value,
-                    rowId: rowIndex,
-                    columnName: columnName,
+                    rowId: tr.sectionRowIndex,
+                    columnName: headers[td.cellIndex].textContent,
                     whereColum:"textile_id",
                     value: td.textContent
                 });
