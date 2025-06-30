@@ -213,25 +213,25 @@ async function getSelectedValue() {
 
 
 async function showTableFn() {
-    //const result = await fetch("https://worktime.up.railway.app/textile", {
-    //    method: "POST",
-    //    headers: {
-    //        "Content-Type": "application/json;charset=utf-8",
-    //    },
-    //    body: JSON.stringify({
-    //        action: "select",
-    //        table: {
-    //            name: selectElement.value,
-    //        }
-    //    }),
-    //}).then((response) => response.json());
-    //console.log(result);
+    const result = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "select",
+            table: {
+                name: selectElement.value,
+            }
+        }),
+    }).then((response) => response.json());
+    console.log(result);
 
     const container = document.getElementById('table-container');
     container.innerHTML = '';
 
-    if (true) {
-        //if (result.rows) {
+    //if (true) {
+        if (result.rows) {
         const array = [
             {
                 textile_density: 75,
@@ -273,8 +273,8 @@ async function showTableFn() {
                     312,
             }
         ];
-        const table = createTable(array);
-        //const table = createTable(result.rows);
+        //const table = createTable(array);
+        const table = createTable(result.rows);
         table.addEventListener("click", queryTarget)
         container.appendChild(table);
     } else {
