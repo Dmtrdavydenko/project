@@ -239,8 +239,9 @@ async function showTableFn() {
     }
 }
 async function queryTarget(event) {
-    console.log(event.target)
-    //if()
+    console.dir(event.target);
+
+    if (!event.target.closest("warp_name")) return;
 
 
 }
