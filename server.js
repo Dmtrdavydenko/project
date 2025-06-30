@@ -186,6 +186,8 @@ async function setWhere(body) {
 
         // Получаем все данные из таблицы после вставки
         //const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
+        const connection = await pool.getConnection();
+
         const [result] = await connection.execute(sqlQuery, params);
 
 
