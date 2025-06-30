@@ -339,8 +339,8 @@ async function sqlWhere({ tableName, rowId, columnName, whereColum, value }) {
                 name: tableName,
                 id: rowId,
                 colum_name: columnName,
-                value: value,
-                whereColum: whereColum
+                whereColum: whereColum,
+                value: value
             }
         }),
     }).then((response) => response.json());

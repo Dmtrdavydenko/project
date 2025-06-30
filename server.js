@@ -178,14 +178,13 @@ async function setWhere(body) {
 
 
 
-    const sqlQuery = `UPDATE ${body.table.name} SET ${body.table.colum_name} = ? WHERE ${body.table.whereColum} = ?`;
-    const params = [body.table.value, body.table.id + 1]; // если нужно добавить 1 к id
 
     try {
-        console.log('Успешно подключено к базе данных MySQL!');
+
+        const sqlQuery = `UPDATE ${body.table.name} SET ${body.table.colum_name} = ? WHERE ${body.table.whereColum} = ?`;
+        const params = [body.table.value, body.table.id + 1]; // если нужно добавить 1 к id
 
         // Получаем все данные из таблицы после вставки
-        const sql = 'SELECT * FROM ' + body.table.name;
         //const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
         const [result] = await connection.execute(sqlQuery, params);
 
