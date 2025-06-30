@@ -67,9 +67,9 @@ getColumnsTypes.addEventListener("click", getSelectedValue);
 const textArea = document.createElement("textarea");
 const textAsk = document.createElement("textarea");
 
-const query = document.createElement("button");
-query.textContent = "Сделать запрос sql";
-query.addEventListener("click", () => {
+const queryButton = document.createElement("button");
+queryButton.textContent = "Сделать запрос sql";
+queryButton.addEventListener("click", () => {
     sqlQuery(textArea.value); // Передаем текст из textarea в функцию sqlQuery
 });
 
@@ -99,7 +99,7 @@ main.append(getAllTablesName);
 main.append(selectElement);
 main.append(getColumnsTypes);
 main.append(textArea);
-main.append(query);
+main.append(queryButton);
 main.append(textAsk);
 main.append(form);
 main.append(sendButton);
@@ -232,12 +232,57 @@ async function showTableFn() {
 
     if (result.rows) {
         const table = createTable(result.rows);
+        table.addEventListener("click",queryTarget)
         container.appendChild(table);
     } else {
         container.textContent = 'U';
     }
 }
+async function queryTarget(event) {
+    console.log(event.target)
+    //if()
 
+
+}
+const table = document.querySelector('table');
+const headers = Array.from(table.querySelectorAll('thead th'));
+const warpNameIndex = headers.findIndex(th => th.textContent.trim() === 'warp_name');
+
+if (warpNameIndex === -1) {
+    console.error('Столбец warp_name не найден');
+} else {
+    // Добавляем обработчик клика на ячейки столбца warp_name
+    const rows = table.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        const cell = row.querySelectorAll('td')[warpNameIndex];
+        if (cell) {
+            cell.style.cursor = 'pointer'; // чтобы было видно, что ячейка кликабельна
+            cell.addEventListener('click', () => {
+                const value = cell.textContent.trim();
+                console.log('Кликнули на warp_name:', value);
+
+                // Здесь можно отправить запрос на сервер для вставки данных
+                // Например, через fetch:
+                /*
+                fetch('/insert', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ warp_name: value })
+                })
+                .then(response => response.json())
+                .then(data => {
+                  console.log('Ответ сервера:', data);
+                })
+                .catch(error => {
+                  console.error('Ошибка:', error);
+                });
+                */
+            });
+        }
+    });
+}
 
 
 // Пример использования функции
