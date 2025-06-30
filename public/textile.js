@@ -286,16 +286,16 @@ async function queryTarget(event) {
 
     const td = event.target.closest("td");
     if (!td) return;
-        //console.dir(event.target.closest("td").cellIndex);
+    //console.dir(event.target.closest("td").cellIndex);
 
 
     const tr = td.closest("tr");
     //if (!event.target.closest("tr")) return;
     if (!tr) return;
-        //console.dir(event.target.closest("tr").rowIndex);
+    //console.dir(event.target.closest("tr").rowIndex);
 
 
-    
+
     td.contentEditable = "true";
 
     // Поставить фокус внутрь td
@@ -304,13 +304,14 @@ async function queryTarget(event) {
     // Опционально: чтобы при потере фокуса выключать редактирование
     const table = document.querySelector('table');
     const headers = Array.from(table.querySelectorAll('thead th'));
-
     td.addEventListener('blur', () => {
         td.contentEditable = "false";
-        console.log(td.textContent);
-        console.log(tr.sectionRowIndex);
-        console.log(selectElement.value);
-        console.log(headers[td.cellIndex].textContent);
+        td.textContent = td.textContent.trim();
+        if (td.textContent.length > 0) {
+            console.log(tr.sectionRowIndex);
+            console.log(selectElement.value);
+            console.log(headers[td.cellIndex].textContent);
+        }
     }, { once: true });
 
 
