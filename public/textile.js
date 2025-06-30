@@ -213,26 +213,69 @@ async function getSelectedValue() {
 
 
 async function showTableFn() {
-    const result = await fetch("https://worktime.up.railway.app/textile", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "select",
-            table: {
-                name: selectElement.value,
-            }
-        }),
-    }).then((response) => response.json());
-    console.log(result);
+    //const result = await fetch("https://worktime.up.railway.app/textile", {
+    //    method: "POST",
+    //    headers: {
+    //        "Content-Type": "application/json;charset=utf-8",
+    //    },
+    //    body: JSON.stringify({
+    //        action: "select",
+    //        table: {
+    //            name: selectElement.value,
+    //        }
+    //    }),
+    //}).then((response) => response.json());
+    //console.log(result);
 
     const container = document.getElementById('table-container');
     container.innerHTML = '';
 
-    if (result.rows) {
-        const table = createTable(result.rows);
-        table.addEventListener("click",queryTarget)
+    if (true) {
+        //if (result.rows) {
+        const array = [
+            {
+                textile_density: 75,
+                textile_id
+                    :
+                    1,
+                textile_number
+                    :
+                    1,
+                textile_width
+                    :
+                    56,
+                warp_name
+                    :
+                    null,
+                warp_quantity
+                    :
+                    456,
+            },
+            {
+
+                textile_density
+                    :
+                    68,
+                textile_id
+                    :
+                    2,
+                textile_number
+                    :
+                    2,
+                textile_width
+                    :
+                    42,
+                warp_name
+                    :
+                    null,
+                warp_quantity
+                    :
+                    312,
+            }
+        ];
+        const table = createTable(array);
+        //const table = createTable(result.rows);
+        table.addEventListener("click", queryTarget)
         container.appendChild(table);
     } else {
         container.textContent = 'U';
@@ -241,49 +284,76 @@ async function showTableFn() {
 async function queryTarget(event) {
     console.dir(event.target);
 
-    if (!event.target.closest("warp_name")) return;
+    const td = event.target.closest("td");
+    if (!td) return;
+        //console.dir(event.target.closest("td").cellIndex);
 
 
+    const tr = td.closest("tr");
+    //if (!event.target.closest("tr")) return;
+    if (!tr) return;
+        //console.dir(event.target.closest("tr").rowIndex);
+
+
+    
+    td.contentEditable = "true";
+
+    // Поставить фокус внутрь td
+    td.focus();
+
+    // Опционально: чтобы при потере фокуса выключать редактирование
+    const table = document.querySelector('table');
+    const headers = Array.from(table.querySelectorAll('thead th'));
+
+    td.addEventListener('blur', () => {
+        td.contentEditable = "false";
+        console.log(td.textContent);
+        console.log(tr.sectionRowIndex);
+        console.log(selectElement.value);
+        console.log(headers[td.cellIndex].textContent);
+    }, { once: true });
+
+
+
+    //const warpNameIndex = headers.findIndex(th => th.textContent.trim() === 'warp_name');
+
+    //if (warpNameIndex === -1) {
+    //    console.error('Столбец warp_name не найден');
+    //} else {
+    //    // Добавляем обработчик клика на ячейки столбца warp_name
+    //    const rows = table.querySelectorAll('tbody tr');
+    //    rows.forEach(row => {
+    //        const cell = row.querySelectorAll('td')[warpNameIndex];
+    //        if (cell) {
+    //            cell.style.cursor = 'pointer'; // чтобы было видно, что ячейка кликабельна
+    //            cell.addEventListener('click', () => {
+    //                const value = cell.textContent.trim();
+    //                console.log('Кликнули на warp_name:', value);
+
+    //                // Здесь можно отправить запрос на сервер для вставки данных
+    //                // Например, через fetch:
+    //                /*
+    //                fetch('/insert', {
+    //                  method: 'POST',
+    //                  headers: {
+    //                    'Content-Type': 'application/json'
+    //                  },
+    //                  body: JSON.stringify({ warp_name: value })
+    //                })
+    //                .then(response => response.json())
+    //                .then(data => {
+    //                  console.log('Ответ сервера:', data);
+    //                })
+    //                .catch(error => {
+    //                  console.error('Ошибка:', error);
+    //                });
+    //                */
+    //            });
+    //        }
+    //    });
+    //}
 }
-const table = document.querySelector('table');
-const headers = Array.from(table.querySelectorAll('thead th'));
-const warpNameIndex = headers.findIndex(th => th.textContent.trim() === 'warp_name');
 
-if (warpNameIndex === -1) {
-    console.error('Столбец warp_name не найден');
-} else {
-    // Добавляем обработчик клика на ячейки столбца warp_name
-    const rows = table.querySelectorAll('tbody tr');
-    rows.forEach(row => {
-        const cell = row.querySelectorAll('td')[warpNameIndex];
-        if (cell) {
-            cell.style.cursor = 'pointer'; // чтобы было видно, что ячейка кликабельна
-            cell.addEventListener('click', () => {
-                const value = cell.textContent.trim();
-                console.log('Кликнули на warp_name:', value);
-
-                // Здесь можно отправить запрос на сервер для вставки данных
-                // Например, через fetch:
-                /*
-                fetch('/insert', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({ warp_name: value })
-                })
-                .then(response => response.json())
-                .then(data => {
-                  console.log('Ответ сервера:', data);
-                })
-                .catch(error => {
-                  console.error('Ошибка:', error);
-                });
-                */
-            });
-        }
-    });
-}
 
 
 // Пример использования функции
