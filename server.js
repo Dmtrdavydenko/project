@@ -175,18 +175,15 @@ async function createTable() {
 
 
 async function setWhere(body) {
-
-
-
-
+    const sqlQuery = `UPDATE ${body.table.name} SET ${body.table.colum_name} = ? WHERE ${body.table.whereColum} = ?`;
+    const params = [body.table.value, body.table.id + 1]; // если нужно добавить 1 к id
+    const connection = await pool.getConnection();
     try {
 
-        const sqlQuery = `UPDATE ${body.table.name} SET ${body.table.colum_name} = ? WHERE ${body.table.whereColum} = ?`;
-        const params = [body.table.value, body.table.id + 1]; // если нужно добавить 1 к id
 
         // Получаем все данные из таблицы после вставки
         //const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
-        const connection = await pool.getConnection();
+
 
         const [result] = await connection.execute(sqlQuery, params);
 
@@ -199,7 +196,7 @@ async function setWhere(body) {
         console.error('Ошибка:', err);
         throw err;
     } finally {
-        connection.release();
+        if (connection) connection.release();
         //await pool.end();
         //console.log('Пул соединений закрыт.');
     }
