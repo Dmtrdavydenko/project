@@ -60,6 +60,8 @@ getTablesNameButton.addEventListener("click", getTableName);
 
 
 const selectTableName = document.createElement("select");
+selectTableName.addEventListener('change', showTableFn);
+
 
 
 
@@ -215,7 +217,7 @@ async function getSelectedValue() {
 }
 
 
-async function showTableFn() {
+async function showTableFn(event) {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
@@ -229,6 +231,7 @@ async function showTableFn() {
         }),
     }).then((response) => response.json());
     console.log(result);
+    console.log(event.target.value);
 
     const container = document.getElementById('table-container');
     container.innerHTML = '';
