@@ -1,4 +1,4 @@
-п»їconsole.log("textile");
+console.log("textile");
 console.log(document.location.href);
 
 function createTable(data) {
@@ -54,53 +54,53 @@ const drop = document.createElement("button");
 drop.textContent = "Delite table";
 
 const getAllTablesName = document.createElement("button");
-getAllTablesName.textContent = "РџРѕР»СѓС‡РёС‚СЊ РёРјРµРЅР° РІСЃРµС… С‚Р°Р±Р»РёС†";
+getAllTablesName.textContent = "Получить имена всех таблиц";
 
 
-const selectTableName = document.createElement("select");
+const selectElement = document.createElement("select");
 
 
 const getColumnsTypes = document.createElement("button");
-getColumnsTypes.textContent = "РџРѕР»СѓС‡РёС‚СЊ РєРѕР»РѕРЅРєРё";
+getColumnsTypes.textContent = "Получить колонки";
 getColumnsTypes.addEventListener("click", getSelectedValue);
 
 const textArea = document.createElement("textarea");
 const textAsk = document.createElement("textarea");
 
 const queryButton = document.createElement("button");
-queryButton.textContent = "РЎРґРµР»Р°С‚СЊ Р·Р°РїСЂРѕСЃ sql";
+queryButton.textContent = "Сделать запрос sql";
 queryButton.addEventListener("click", () => {
-    sqlQuery(textArea.value); // РџРµСЂРµРґР°РµРј С‚РµРєСЃС‚ РёР· textarea РІ С„СѓРЅРєС†РёСЋ sqlQuery
+    sqlQuery(textArea.value); // Передаем текст из textarea в функцию sqlQuery
 });
 
 const form = document.createElement("button");
-form.textContent = "РџРѕР»СѓС‡РёС‚СЊ С„РѕСЂРјСѓ";
+form.textContent = "Получить форму";
 form.addEventListener("click", generateForm);
 
 
-// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р°С‚СЂРёР±СѓС‚С‹ РґР»СЏ textarea (РїРѕ Р¶РµР»Р°РЅРёСЋ)
-textArea.rows = 10; // РљРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє
-textArea.cols = 30; // РљРѕР»РёС‡РµСЃС‚РІРѕ РєРѕР»РѕРЅРѕРє
-textArea.placeholder = "Р’РІРµРґРёС‚Рµ РІР°С€ SQL-Р·Р°РїСЂРѕСЃ Р·РґРµСЃСЊ...";
+// Устанавливаем атрибуты для textarea (по желанию)
+textArea.rows = 10; // Количество строк
+textArea.cols = 30; // Количество колонок
+textArea.placeholder = "Введите ваш SQL-запрос здесь...";
 
 
 
 const sendButton = document.createElement("button");
-sendButton.textContent = "РћС‚РїСЂР°РІРёС‚СЊ С„РѕСЂРјСѓ";
+sendButton.textContent = "Отправить форму";
 sendButton.addEventListener("click", sendForm);
 
 const showTable = document.createElement("button");
-showTable.textContent = "РџРѕРєР°Р·Р°С‚СЊ С‚Р°Р±Р»РёС†Сѓ";
+showTable.textContent = "Показать таблицу";
 showTable.addEventListener("click", showTableFn);
 
-//main.append(dropInput);
-//main.append(drop);
-//main.append(getAllTablesName);
-main.append(selectTableName);
-//main.append(getColumnsTypes);
-//main.append(textArea);
-//main.append(queryButton);
-//main.append(textAsk);
+main.append(dropInput);
+main.append(drop);
+main.append(getAllTablesName);
+main.append(selectElement);
+main.append(getColumnsTypes);
+main.append(textArea);
+main.append(queryButton);
+main.append(textAsk);
 main.append(form);
 main.append(sendButton);
 main.append(showTable);
@@ -151,7 +151,7 @@ drop.addEventListener("click", async function (e) {
 //        const option = document.createElement('option');
 //        option.value = value;
 //        option.textContent = value;
-//        selectTableName.appendChild(option);
+//        selectElement.appendChild(option);
 //    });
 //}
 
@@ -182,12 +182,12 @@ getAllTablesName.addEventListener("click", async function (e) {
 });
 
 function createSelectOptions(dataArray) {
-    selectTableName.innerHTML = '';
+    selectElement.innerHTML = '';
     dataArray.forEach(value => {
         const option = document.createElement('option');
         option.value = value;
         option.textContent = value;
-        selectTableName.appendChild(option);
+        selectElement.appendChild(option);
     });
 }
 
@@ -203,7 +203,7 @@ async function getSelectedValue() {
         body: JSON.stringify({
             action: "getColumnsAndTypesForTable",
             table: {
-                name: selectTableName.value,
+                name: selectElement.value,
             }
         }),
     }).then((response) => response.json());
@@ -221,7 +221,7 @@ async function showTableFn() {
         body: JSON.stringify({
             action: "select",
             table: {
-                name: selectTableName.value,
+                name: selectElement.value,
             }
         }),
     }).then((response) => response.json());
@@ -298,31 +298,31 @@ async function queryTarget(event) {
 
     td.contentEditable = "true";
 
-    // РџРѕСЃС‚Р°РІРёС‚СЊ С„РѕРєСѓСЃ РІРЅСѓС‚СЂСЊ td
+    // Поставить фокус внутрь td
     td.focus();
 
-    // РћРїС†РёРѕРЅР°Р»СЊРЅРѕ: С‡С‚РѕР±С‹ РїСЂРё РїРѕС‚РµСЂРµ С„РѕРєСѓСЃР° РІС‹РєР»СЋС‡Р°С‚СЊ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ
+    // Опционально: чтобы при потере фокуса выключать редактирование
     const table = document.querySelector('table');
     const headers = Array.from(table.querySelectorAll('thead th'));
-    td.addEventListener('blur', async  () => {
+    td.addEventListener('blur', async () => {
         td.contentEditable = "false";
         td.textContent = td.textContent.trim();
         if (td.textContent.length > 0) {
             console.log(td.textContent);
             console.log(tr.sectionRowIndex);
-            console.log(selectTableName.value);
+            console.log(selectElement.value);
             console.log(headers[td.cellIndex].textContent);
             try {
                 const result = await sqlWhere({
-                    tableName: selectTableName.value,
+                    tableName: selectElement.value,
                     rowId: tr.sectionRowIndex,
                     columnName: headers[td.cellIndex].textContent,
-                    whereColum:"textile_id",
+                    whereColum: "textile_id",
                     value: td.textContent
                 });
-                console.log('РћС‚РІРµС‚ СЃРµСЂРІРµСЂР°:', result);
+                console.log('Ответ сервера:', result);
             } catch (error) {
-                console.error('РћС€РёР±РєР° РїСЂРё РѕС‚РїСЂР°РІРєРµ РґР°РЅРЅС‹С…:', error);
+                console.error('Ошибка при отправке данных:', error);
             }
         }
     }, { once: true });
@@ -348,8 +348,8 @@ async function sqlWhere({ tableName, rowId, columnName, whereColum, value }) {
     return await result;
 }
 
-// РџСЂРёРјРµСЂ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ С„СѓРЅРєС†РёРё
-//const sql = "SELECT * FROM your_table"; // Р—Р°РјРµРЅРёС‚Рµ РЅР° РІР°С€ SQL-Р·Р°РїСЂРѕСЃ
+// Пример использования функции
+//const sql = "SELECT * FROM your_table"; // Замените на ваш SQL-запрос
 //sqlQuery(sql);
 
 async function sqlQuery(sqlQueryString) {
@@ -360,22 +360,22 @@ async function sqlQuery(sqlQueryString) {
                 "Content-Type": "application/json;charset=utf-8",
             },
             body: JSON.stringify({
-                action: "sql", // РР·РјРµРЅРёС‚Рµ РЅР° РЅСѓР¶РЅРѕРµ РґРµР№СЃС‚РІРёРµ, РµСЃР»Рё РЅРµРѕР±С…РѕРґРёРјРѕ
-                query: sqlQueryString, // РћС‚РїСЂР°РІР»СЏРµРј SQL-Р·Р°РїСЂРѕСЃ
+                action: "sql", // Измените на нужное действие, если необходимо
+                query: sqlQueryString, // Отправляем SQL-запрос
             }),
         });
 
-        // РџСЂРѕРІРµСЂРєР° РЅР° СѓСЃРїРµС€РЅС‹Р№ РѕС‚РІРµС‚
+        // Проверка на успешный ответ
         if (!response.ok) {
-            throw new Error(`РћС€РёР±РєР°: ${response.status} ${response.statusText}`);
+            throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
         }
 
-        const result = await response.json(); // РџРѕР»СѓС‡Р°РµРј JSON-РѕС‚РІРµС‚
-        console.log(result); // Р’С‹РІРѕРґРёРј СЂРµР·СѓР»СЊС‚Р°С‚ РІ РєРѕРЅСЃРѕР»СЊ
+        const result = await response.json(); // Получаем JSON-ответ
+        console.log(result); // Выводим результат в консоль
         //textAsk.value = response;
         textAsk.value = JSON.stringify(result);
     } catch (error) {
-        console.error('РћС€РёР±РєР° РїСЂРё РІС‹РїРѕР»РЅРµРЅРёРё Р·Р°РїСЂРѕСЃР°:', error); // РћР±СЂР°Р±РѕС‚РєР° РѕС€РёР±РѕРє
+        console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
     }
 }
 
@@ -394,7 +394,7 @@ async function fetchTableStructure() {
         body: JSON.stringify({
             action: "getColumnsAndTypesForTable",
             table: {
-                name: selectTableName.value,
+                name: selectElement.value,
             }
         }),
     })
@@ -423,7 +423,7 @@ function createInputElement(column) {
             break;
     }
     switch (true) {
-        // Р§РёСЃР»РѕРІС‹Рµ С‚РёРїС‹
+        // Числовые типы
         case /^(tinyint|smallint|mediumint|int|bigint)$/.test(column.Type):
             //inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
             input.type = "number";
@@ -435,20 +435,20 @@ function createInputElement(column) {
             input.min = 0;
             break;
 
-        // Р§РёСЃР»Р° СЃ РїР»Р°РІР°СЋС‰РµР№ Р·Р°РїСЏС‚РѕР№
+        // Числа с плавающей запятой
         case /^(float|double|decimal)$/.test(column.Type):
             inputElement = `<input type="number" step="0.01" name="${column.Field}" placeholder="${column.Field}">`;
             break;
 
-        // РЎС‚СЂРѕРєРѕРІС‹Рµ С‚РёРїС‹
+        // Строковые типы
         case /^(varchar|char|text|tinytext|mediumtext|longtext)(\(\d+\))?$/.test(column.Type):
             //inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
-            input.type = 'text'; // РСЃРїРѕР»СЊР·СѓРµРј С‚РёРї text РґР»СЏ СЃС‚СЂРѕРє
-            input.maxLength = 300; // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РґР»РёРЅСѓ
+            input.type = 'text'; // Используем тип text для строк
+            input.maxLength = 300; // Устанавливаем максимальную длину
 
             break;
 
-        // Р”Р°С‚Р° Рё РІСЂРµРјСЏ
+        // Дата и время
         case /^(date)$/.test(column.Type):
             inputElement = `<input type="date" name="${column.Field}">`;
             break;
@@ -456,18 +456,18 @@ function createInputElement(column) {
             inputElement = `<input type="datetime-local" name="${column.Field}">`;
             break;
 
-        // Р›РѕРіРёС‡РµСЃРєРёР№ С‚РёРї
+        // Логический тип
         case /^(boolean|bit)$/.test(column.Type):
             inputElement = `<input type="checkbox" name="${column.Field}">`;
             break;
 
-        // РџРµСЂРµС‡РёСЃР»РµРЅРёРµ Рё РЅР°Р±РѕСЂ
+        // Перечисление и набор
         case /^(enum|set)$/.test(column.Type):
             const options = column.Type.replace(/^(enum|set)\('([^']*)'\)$/, '\$2').split(',');
             inputElement = `<select name="${column.Field}">${options.map(option => `<option value="${option.trim()}">${option.trim()}</option>`).join('')}</select>`;
             break;
 
-        // РќРµРёР·РІРµСЃС‚РЅС‹Р№ С‚РёРї - С‚РµРєСЃС‚РѕРІРѕРµ РїРѕР»Рµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+        // Неизвестный тип - текстовое поле по умолчанию
         default:
             inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
     }
@@ -496,7 +496,7 @@ async function sendForm() {
         body: JSON.stringify({
             action: "insertGenerate",
             table: {
-                name: selectTableName.value,
+                name: selectElement.value,
                 fields: fields,
                 values: values
             }
@@ -507,7 +507,7 @@ async function sendForm() {
     return await response;
 }
 
-// Р“РµРЅРµСЂР°С†РёСЏ С„РѕСЂРјС‹ РґР»СЏ С‚Р°Р±Р»РёС†С‹ 'your_table_name'
+// Генерация формы для таблицы 'your_table_name'
 //generateForm('your_table_name');
 
 
@@ -520,7 +520,32 @@ async function sendForm() {
 
 
 (async () => {
-    showTableFn();
+    async function showTableFn() {
+        const result = await fetch("https://worktime.up.railway.app/textile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify({
+                action: "select",
+                table: {
+                    name: "looms",
+                }
+            }),
+        }).then((response) => response.json());
+        console.log(result);
+
+        const container = document.getElementById('table-container');
+        container.innerHTML = '';
+
+        if (result.rows) {
+            const table = createTable(result.rows);
+            container.appendChild(table);
+        } else {
+            container.textContent = 'U';
+        }
+    }
+    //showTableFn()
 })();
 
 
@@ -535,27 +560,27 @@ const columns = [
 //const formContainer = document.getElementById('formContainer');
 
 columns.forEach(column => {
-    // РЎРѕР·РґР°РµРј СЌР»РµРјРµРЅС‚ input
+    // Создаем элемент input
     const input = document.createElement('input');
     input.name = column.name;
     input.placeholder = column.name;
 
-    // РћРїСЂРµРґРµР»СЏРµРј С‚РёРї РїРѕР»СЏ РІРІРѕРґР° РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ С‚РёРїР° РґР°РЅРЅС‹С…
+    // Определяем тип поля ввода в зависимости от типа данных
     switch (column.type) {
         case 'int':
         case 'smallint unsigned':
-            input.type = 'number'; // РСЃРїРѕР»СЊР·СѓРµРј С‚РёРї number РґР»СЏ С†РµР»С‹С… С‡РёСЃРµР»
-            input.min = 0; // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РјРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ unsigned
+            input.type = 'number'; // Используем тип number для целых чисел
+            input.min = 0; // Устанавливаем минимальное значение для unsigned
             break;
         case 'varchar(300)':
-            input.type = 'text'; // РСЃРїРѕР»СЊР·СѓРµРј С‚РёРї text РґР»СЏ СЃС‚СЂРѕРє
-            input.maxLength = 300; // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РґР»РёРЅСѓ
+            input.type = 'text'; // Используем тип text для строк
+            input.maxLength = 300; // Устанавливаем максимальную длину
             break;
         default:
-            input.type = 'text'; // РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РёСЃРїРѕР»СЊР·СѓРµРј text
+            input.type = 'text'; // По умолчанию используем text
     }
 
-    // Р”РѕР±Р°РІР»СЏРµРј СЌР»РµРјРµРЅС‚ input РІ РєРѕРЅС‚РµР№РЅРµСЂ С„РѕСЂРјС‹
+    // Добавляем элемент input в контейнер формы
     //formContainer.appendChild(input);
-    //formContainer.appendChild(document.createElement('br')); // Р”РѕР±Р°РІР»СЏРµРј РїРµСЂРµРЅРѕСЃ СЃС‚СЂРѕРєРё
+    //formContainer.appendChild(document.createElement('br')); // Добавляем перенос строки
 });
