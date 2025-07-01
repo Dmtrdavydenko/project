@@ -1,4 +1,4 @@
-console.log("textile");
+п»їconsole.log("textile");
 console.log(document.location.href);
 
 function createTable(data) {
@@ -54,43 +54,43 @@ const drop = document.createElement("button");
 drop.textContent = "Delite table";
 
 const getAllTablesName = document.createElement("button");
-getAllTablesName.textContent = "Получить имена всех таблиц";
+getAllTablesName.textContent = "РџРѕР»СѓС‡РёС‚СЊ РёРјРµРЅР° РІСЃРµС… С‚Р°Р±Р»РёС†";
 
 
 const selectElement = document.createElement("select");
 
 
 const getColumnsTypes = document.createElement("button");
-getColumnsTypes.textContent = "Получить колонки";
+getColumnsTypes.textContent = "РџРѕР»СѓС‡РёС‚СЊ РєРѕР»РѕРЅРєРё";
 getColumnsTypes.addEventListener("click", getSelectedValue);
 
 const textArea = document.createElement("textarea");
 const textAsk = document.createElement("textarea");
 
 const queryButton = document.createElement("button");
-queryButton.textContent = "Сделать запрос sql";
+queryButton.textContent = "РЎРґРµР»Р°С‚СЊ Р·Р°РїСЂРѕСЃ sql";
 queryButton.addEventListener("click", () => {
-    sqlQuery(textArea.value); // Передаем текст из textarea в функцию sqlQuery
+    sqlQuery(textArea.value); // РџРµСЂРµРґР°РµРј С‚РµРєСЃС‚ РёР· textarea РІ С„СѓРЅРєС†РёСЋ sqlQuery
 });
 
 const form = document.createElement("button");
-form.textContent = "Получить форму";
+form.textContent = "РџРѕР»СѓС‡РёС‚СЊ С„РѕСЂРјСѓ";
 form.addEventListener("click", generateForm);
 
 
-// Устанавливаем атрибуты для textarea (по желанию)
-textArea.rows = 10; // Количество строк
-textArea.cols = 30; // Количество колонок
-textArea.placeholder = "Введите ваш SQL-запрос здесь...";
+// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р°С‚СЂРёР±СѓС‚С‹ РґР»СЏ textarea (РїРѕ Р¶РµР»Р°РЅРёСЋ)
+textArea.rows = 10; // РљРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє
+textArea.cols = 30; // РљРѕР»РёС‡РµСЃС‚РІРѕ РєРѕР»РѕРЅРѕРє
+textArea.placeholder = "Р’РІРµРґРёС‚Рµ РІР°С€ SQL-Р·Р°РїСЂРѕСЃ Р·РґРµСЃСЊ...";
 
 
 
 const sendButton = document.createElement("button");
-sendButton.textContent = "Отправить форму";
+sendButton.textContent = "РћС‚РїСЂР°РІРёС‚СЊ С„РѕСЂРјСѓ";
 sendButton.addEventListener("click", sendForm);
 
 const showTable = document.createElement("button");
-showTable.textContent = "Показать таблицу";
+showTable.textContent = "РџРѕРєР°Р·Р°С‚СЊ С‚Р°Р±Р»РёС†Сѓ";
 showTable.addEventListener("click", showTableFn);
 
 main.append(dropInput);
@@ -298,10 +298,10 @@ async function queryTarget(event) {
 
     td.contentEditable = "true";
 
-    // Поставить фокус внутрь td
+    // РџРѕСЃС‚Р°РІРёС‚СЊ С„РѕРєСѓСЃ РІРЅСѓС‚СЂСЊ td
     td.focus();
 
-    // Опционально: чтобы при потере фокуса выключать редактирование
+    // РћРїС†РёРѕРЅР°Р»СЊРЅРѕ: С‡С‚РѕР±С‹ РїСЂРё РїРѕС‚РµСЂРµ С„РѕРєСѓСЃР° РІС‹РєР»СЋС‡Р°С‚СЊ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ
     const table = document.querySelector('table');
     const headers = Array.from(table.querySelectorAll('thead th'));
     td.addEventListener('blur', async () => {
@@ -320,9 +320,9 @@ async function queryTarget(event) {
                     whereColum: "textile_id",
                     value: td.textContent
                 });
-                console.log('Ответ сервера:', result);
+                console.log('РћС‚РІРµС‚ СЃРµСЂРІРµСЂР°:', result);
             } catch (error) {
-                console.error('Ошибка при отправке данных:', error);
+                console.error('РћС€РёР±РєР° РїСЂРё РѕС‚РїСЂР°РІРєРµ РґР°РЅРЅС‹С…:', error);
             }
         }
     }, { once: true });
@@ -348,8 +348,8 @@ async function sqlWhere({ tableName, rowId, columnName, whereColum, value }) {
     return await result;
 }
 
-// Пример использования функции
-//const sql = "SELECT * FROM your_table"; // Замените на ваш SQL-запрос
+// РџСЂРёРјРµСЂ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ С„СѓРЅРєС†РёРё
+//const sql = "SELECT * FROM your_table"; // Р—Р°РјРµРЅРёС‚Рµ РЅР° РІР°С€ SQL-Р·Р°РїСЂРѕСЃ
 //sqlQuery(sql);
 
 async function sqlQuery(sqlQueryString) {
@@ -360,22 +360,22 @@ async function sqlQuery(sqlQueryString) {
                 "Content-Type": "application/json;charset=utf-8",
             },
             body: JSON.stringify({
-                action: "sql", // Измените на нужное действие, если необходимо
-                query: sqlQueryString, // Отправляем SQL-запрос
+                action: "sql", // РР·РјРµРЅРёС‚Рµ РЅР° РЅСѓР¶РЅРѕРµ РґРµР№СЃС‚РІРёРµ, РµСЃР»Рё РЅРµРѕР±С…РѕРґРёРјРѕ
+                query: sqlQueryString, // РћС‚РїСЂР°РІР»СЏРµРј SQL-Р·Р°РїСЂРѕСЃ
             }),
         });
 
-        // Проверка на успешный ответ
+        // РџСЂРѕРІРµСЂРєР° РЅР° СѓСЃРїРµС€РЅС‹Р№ РѕС‚РІРµС‚
         if (!response.ok) {
-            throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+            throw new Error(`РћС€РёР±РєР°: ${response.status} ${response.statusText}`);
         }
 
-        const result = await response.json(); // Получаем JSON-ответ
-        console.log(result); // Выводим результат в консоль
+        const result = await response.json(); // РџРѕР»СѓС‡Р°РµРј JSON-РѕС‚РІРµС‚
+        console.log(result); // Р’С‹РІРѕРґРёРј СЂРµР·СѓР»СЊС‚Р°С‚ РІ РєРѕРЅСЃРѕР»СЊ
         //textAsk.value = response;
         textAsk.value = JSON.stringify(result);
     } catch (error) {
-        console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
+        console.error('РћС€РёР±РєР° РїСЂРё РІС‹РїРѕР»РЅРµРЅРёРё Р·Р°РїСЂРѕСЃР°:', error); // РћР±СЂР°Р±РѕС‚РєР° РѕС€РёР±РѕРє
     }
 }
 
@@ -423,7 +423,7 @@ function createInputElement(column) {
             break;
     }
     switch (true) {
-        // Числовые типы
+        // Р§РёСЃР»РѕРІС‹Рµ С‚РёРїС‹
         case /^(tinyint|smallint|mediumint|int|bigint)$/.test(column.Type):
             //inputElement = `<input type="number" name="${column.Field}" placeholder="${column.Field}">`;
             input.type = "number";
@@ -435,20 +435,20 @@ function createInputElement(column) {
             input.min = 0;
             break;
 
-        // Числа с плавающей запятой
+        // Р§РёСЃР»Р° СЃ РїР»Р°РІР°СЋС‰РµР№ Р·Р°РїСЏС‚РѕР№
         case /^(float|double|decimal)$/.test(column.Type):
             inputElement = `<input type="number" step="0.01" name="${column.Field}" placeholder="${column.Field}">`;
             break;
 
-        // Строковые типы
+        // РЎС‚СЂРѕРєРѕРІС‹Рµ С‚РёРїС‹
         case /^(varchar|char|text|tinytext|mediumtext|longtext)(\(\d+\))?$/.test(column.Type):
             //inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
-            input.type = 'text'; // Используем тип text для строк
-            input.maxLength = 300; // Устанавливаем максимальную длину
+            input.type = 'text'; // РСЃРїРѕР»СЊР·СѓРµРј С‚РёРї text РґР»СЏ СЃС‚СЂРѕРє
+            input.maxLength = 300; // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РґР»РёРЅСѓ
 
             break;
 
-        // Дата и время
+        // Р”Р°С‚Р° Рё РІСЂРµРјСЏ
         case /^(date)$/.test(column.Type):
             inputElement = `<input type="date" name="${column.Field}">`;
             break;
@@ -456,18 +456,18 @@ function createInputElement(column) {
             inputElement = `<input type="datetime-local" name="${column.Field}">`;
             break;
 
-        // Логический тип
+        // Р›РѕРіРёС‡РµСЃРєРёР№ С‚РёРї
         case /^(boolean|bit)$/.test(column.Type):
             inputElement = `<input type="checkbox" name="${column.Field}">`;
             break;
 
-        // Перечисление и набор
+        // РџРµСЂРµС‡РёСЃР»РµРЅРёРµ Рё РЅР°Р±РѕСЂ
         case /^(enum|set)$/.test(column.Type):
             const options = column.Type.replace(/^(enum|set)\('([^']*)'\)$/, '\$2').split(',');
             inputElement = `<select name="${column.Field}">${options.map(option => `<option value="${option.trim()}">${option.trim()}</option>`).join('')}</select>`;
             break;
 
-        // Неизвестный тип - текстовое поле по умолчанию
+        // РќРµРёР·РІРµСЃС‚РЅС‹Р№ С‚РёРї - С‚РµРєСЃС‚РѕРІРѕРµ РїРѕР»Рµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
         default:
             inputElement = `<input type="text" name="${column.Field}" placeholder="${column.Field}">`;
     }
@@ -507,7 +507,7 @@ async function sendForm() {
     return await response;
 }
 
-// Генерация формы для таблицы 'your_table_name'
+// Р“РµРЅРµСЂР°С†РёСЏ С„РѕСЂРјС‹ РґР»СЏ С‚Р°Р±Р»РёС†С‹ 'your_table_name'
 //generateForm('your_table_name');
 
 
@@ -560,27 +560,27 @@ const columns = [
 //const formContainer = document.getElementById('formContainer');
 
 columns.forEach(column => {
-    // Создаем элемент input
+    // РЎРѕР·РґР°РµРј СЌР»РµРјРµРЅС‚ input
     const input = document.createElement('input');
     input.name = column.name;
     input.placeholder = column.name;
 
-    // Определяем тип поля ввода в зависимости от типа данных
+    // РћРїСЂРµРґРµР»СЏРµРј С‚РёРї РїРѕР»СЏ РІРІРѕРґР° РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ С‚РёРїР° РґР°РЅРЅС‹С…
     switch (column.type) {
         case 'int':
         case 'smallint unsigned':
-            input.type = 'number'; // Используем тип number для целых чисел
-            input.min = 0; // Устанавливаем минимальное значение для unsigned
+            input.type = 'number'; // РСЃРїРѕР»СЊР·СѓРµРј С‚РёРї number РґР»СЏ С†РµР»С‹С… С‡РёСЃРµР»
+            input.min = 0; // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РјРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ unsigned
             break;
         case 'varchar(300)':
-            input.type = 'text'; // Используем тип text для строк
-            input.maxLength = 300; // Устанавливаем максимальную длину
+            input.type = 'text'; // РСЃРїРѕР»СЊР·СѓРµРј С‚РёРї text РґР»СЏ СЃС‚СЂРѕРє
+            input.maxLength = 300; // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РґР»РёРЅСѓ
             break;
         default:
-            input.type = 'text'; // По умолчанию используем text
+            input.type = 'text'; // РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РёСЃРїРѕР»СЊР·СѓРµРј text
     }
 
-    // Добавляем элемент input в контейнер формы
+    // Р”РѕР±Р°РІР»СЏРµРј СЌР»РµРјРµРЅС‚ input РІ РєРѕРЅС‚РµР№РЅРµСЂ С„РѕСЂРјС‹
     //formContainer.appendChild(input);
-    //formContainer.appendChild(document.createElement('br')); // Добавляем перенос строки
+    //formContainer.appendChild(document.createElement('br')); // Р”РѕР±Р°РІР»СЏРµРј РїРµСЂРµРЅРѕСЃ СЃС‚СЂРѕРєРё
 });
