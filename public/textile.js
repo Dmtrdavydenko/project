@@ -62,6 +62,7 @@ getTablesNameButton.addEventListener("click", getTableName);
 const selectTableName = document.createElement("select");
 
 
+
 const getColumnsTypes = document.createElement("button");
 getColumnsTypes.textContent = "Получить колонки";
 getColumnsTypes.addEventListener("click", getSelectedValue);
@@ -76,7 +77,7 @@ queryButton.addEventListener("click", () => {
 });
 
 const form = document.createElement("button");
-form.textContent = "Получить форму";
+form.textContent = "Создать форму";
 form.addEventListener("click", generateForm);
 
 
