@@ -310,6 +310,8 @@ async function queryTarget(event) {
     // Опционально: чтобы при потере фокуса выключать редактирование
     const table = document.querySelector('table');
     const headers = Array.from(table.querySelectorAll('thead th'));
+    const headersText = headers.map(th => th.textContent);
+    const found = headersText.find(text => text.includes('id'));
     td.addEventListener('blur', async  () => {
         td.contentEditable = "false";
         td.textContent = td.textContent.trim();
@@ -323,7 +325,7 @@ async function queryTarget(event) {
                     tableName: selectTableName.value,
                     rowId: tr.sectionRowIndex,
                     columnName: headers[td.cellIndex].textContent,
-                    whereColum:"textile_id",
+                    whereColum: found,
                     value: td.textContent
                 });
                 console.log('Ответ сервера:', result);
