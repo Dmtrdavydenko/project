@@ -217,7 +217,7 @@ async function getSelectedValue() {
 }
 
 
-async function showTableFn(event) {
+async function showTableFn() {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
@@ -231,7 +231,7 @@ async function showTableFn(event) {
         }),
     }).then((response) => response.json());
     console.log(result);
-    console.log(event.target.value);
+    //console.log(event.target.value);
 
     const container = document.getElementById('table-container');
     container.innerHTML = '';
