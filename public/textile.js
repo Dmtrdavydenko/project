@@ -53,8 +53,10 @@ dropInput.type = "text";
 const drop = document.createElement("button");
 drop.textContent = "Delite table";
 
-const getAllTablesName = document.createElement("button");
-getAllTablesName.textContent = "Получить имена всех таблиц";
+const getTablesNameButton = document.createElement("button");
+getTablesNameButton.textContent = "Получить имена всех таблиц";
+getTablesNameButton.addEventListener("click", getTableName);
+
 
 
 const selectTableName = document.createElement("select");
@@ -95,7 +97,7 @@ showTable.addEventListener("click", showTableFn);
 
 //main.append(dropInput);
 //main.append(drop);
-//main.append(getAllTablesName);
+//main.append(getAllTablesNameButton);
 main.append(selectTableName);
 //main.append(getColumnsTypes);
 //main.append(textArea);
@@ -156,8 +158,7 @@ drop.addEventListener("click", async function (e) {
 //}
 
 
-
-getAllTablesName.addEventListener("click", async function (e) {
+async function getTableName() {
     try {
         const response = await fetch("https://worktime.up.railway.app/textile", {
             method: "POST",
@@ -179,7 +180,8 @@ getAllTablesName.addEventListener("click", async function (e) {
     } catch (error) {
         console.log("Error fetching table names:", error);
     }
-});
+
+}
 
 function createSelectOptions(dataArray) {
     selectTableName.innerHTML = '';
@@ -520,7 +522,8 @@ async function sendForm() {
 
 
 (async () => {
-    showTableFn();
+    await getTableName();
+    await showTableFn();
 })();
 
 
