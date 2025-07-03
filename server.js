@@ -226,8 +226,9 @@ async function createTable() {
 
 
 async function setWhere(body) {
-    const sqlQuery = `UPDATE ${body.table.name} SET ${body.table.colum_name} = ? WHERE ${select.pri} = ?`;
-    const params = [body.table.value, body.table.id + 1]; // если нужно добавить 1 к id
+    const sqlQuery = `UPDATE ${body.table.name} SET ${body.table.colum_name} = ? WHERE ${select.} = ?`;
+    const params = [body.table.value, body.table.id]; // если нужно добавить 1 к id
+    //const params = [body.table.value, body.table.id + 1]; // если нужно добавить 1 к id
     const connection = await pool.getConnection();
     try {
 
