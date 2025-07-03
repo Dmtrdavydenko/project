@@ -79,6 +79,7 @@ async function getTypeTableHeder() {
     };
 }
 function sortGrid(colNum, type) {
+    const container = document.getElementById('table-container');
     let tbody = container.querySelector('tbody');
     let rowsArray = Array.from(tbody.rows);
     // compare(a, b) сравнивает две строки, нужен для сортировки
@@ -317,6 +318,7 @@ async function showTableFn() {
         const table = createTable(result.rows);
         table.addEventListener("click", queryTarget);
         container.appendChild(table);
+        await getTypeTableHeder();
     } else {
         container.textContent = 'U';
     }
@@ -564,7 +566,7 @@ async function sendForm() {
 (async () => {
     await getTableName();
     await showTableFn();
-    await getTypeTableHeder();
+    //await getTypeTableHeder();
 })();
 
 
