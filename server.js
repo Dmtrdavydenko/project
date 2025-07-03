@@ -36,6 +36,81 @@ const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool(dbConfig); // создаём пул подключений
 
+async function getTableColumns(body) {
+    // Создаём подключение к базе данных
+    const connection = await pool.getConnection
+    try {
+        // Выполняем запрос DESCRIBE для получения колонок таблицы
+        const [rows] = await connection.execute(`DESCRIBE ${body.table.name}`);
+        // Извлекаем названия колонок и их типы т.д.
+        const columnsInfo = rows.map(row => ({
+            Field: row.Field,
+            Type: row.Type,
+            Extra: row.Extra
+        }));
+
+        console.log(`Список колонок и типов таблицы "${body.table.name}":`, columnsInfo);
+        return rows; // Возвращаем массив объектов с названиями и типами колонок
+    } catch (err) {
+        console.error('Ошибка при получении колонок таблицы:', err);
+        throw err;
+    } finally {
+        await connection.release();
+    }
+}
+
+async function getPriKey(nameTable) {
+    const [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
+
+    const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
+    const primaryKeyColumns = descRows.filter(row => row.Key === 'PRI').map(row => row.Field);
+
+    return primaryKeyColumn;
+    //return primaryKeyColumns.length > 1 ? primaryKeyColumns : primaryKeyColumns[0];  // undefined
+    //return primaryKeyColumns.length ? (primaryKeyColumns.length > 1 ? primaryKeyColumns : primaryKeyColumns[0]) : null;
+}
+async function select(body) {
+    //const pool = mysql.createPool(dbConfig); // создаём пул подключений
+    const connection = await pool.getConnection();
+
+    try {
+        console.log('Успешно подключено к базе данных MySQL!');
+
+        // Получаем все данные из таблицы после вставки
+        //const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
+        const sql = 'SELECT * FROM ' + body.table.name;
+        const [rows] = await connection.execute(sql);
+
+        const [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
+
+        // Извлекаем информацию о колонках
+        const columnsInfo = descRows.map(row => ({
+            Field: row.Field,
+            Type: row.Type,
+            Extra: row.Extra,
+            Key: row.Key  // Здесь ключ (например, 'PRI' для первичного ключа)
+        }));
+
+        // Находим имя столбца с первичным ключом
+        const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
+        //const primaryKeyColumns = descRows.filter(row => row.Key === 'PRI').map(row => row.Field);
+        select.pri = primaryKeyColumn;
+
+        return {
+            rows // все данные таблицы
+        };
+
+    } catch (err) {
+        console.error('Ошибка:', err);
+        throw err;
+    } finally {
+        connection.release();
+        //await pool.end();
+        //console.log('Пул соединений закрыт.');
+    }
+}
+
+
 async function insertGenerate(body) {
     //body.table.name
     //body.table.fields
@@ -102,31 +177,7 @@ async function insert(body) {
     }
 }
 
-async function select(body) {
-    //const pool = mysql.createPool(dbConfig); // создаём пул подключений
-    const connection = await pool.getConnection();
 
-    try {
-        console.log('Успешно подключено к базе данных MySQL!');
-
-        // Получаем все данные из таблицы после вставки
-        const sql = 'SELECT * FROM ' + body.table.name;
-        //const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
-        const [rows] = await connection.execute(sql);
-
-        return {
-            rows // все данные таблицы
-        };
-
-    } catch (err) {
-        console.error('Ошибка:', err);
-        throw err;
-    } finally {
-        connection.release();
-        //await pool.end();
-        //console.log('Пул соединений закрыт.');
-    }
-}
 
 async function createTable() {
     const pool = mysql.createPool(dbConfig); // создаём пул подключений
@@ -175,7 +226,7 @@ async function createTable() {
 
 
 async function setWhere(body) {
-    const sqlQuery = `UPDATE ${body.table.name} SET ${body.table.colum_name} = ? WHERE ${body.table.whereColum} = ?`;
+    const sqlQuery = `UPDATE ${body.table.name} SET ${body.table.colum_name} = ? WHERE ${select.pri} = ?`;
     const params = [body.table.value, body.table.id + 1]; // если нужно добавить 1 к id
     const connection = await pool.getConnection();
     try {
@@ -444,32 +495,33 @@ async function getTableColumnsAndTypes() {
 
 
 
-
-async function getTableColumns(body) {
-    // Создаём подключение к базе данных
-    const connection = await pool.getConnection();
-
-    try {
-        // Выполняем запрос DESCRIBE для получения колонок таблицы
-        const [rows] = await connection.execute(`DESCRIBE ${body.table.name}`);
-
-        // Извлекаем названия колонок и их типы
-        const columnsInfo = rows.map(row => ({
-            Field: row.Field,
-            Type: row.Type,
-            Extra: row.Extra
-        }));
-
-        console.log(`Список колонок и типов таблицы "${body.table.name}":`, columnsInfo);
-        return rows; // Возвращаем массив объектов с названиями и типами колонок
-    } catch (err) {
-        console.error('Ошибка при получении колонок таблицы:', err);
-        throw err;
-    } finally {
-        await connection.release();
-    }
+const algorithm = 'aes-256-cbc';
+const key = crypto.randomBytes(32); // 32 байта ключа, храните этот ключ в безопасном месте
+const iv = crypto.randomBytes(16);  // 16 байт вектор инициализации
+function encodeId(id) {
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
+    let encrypted = cipher.update(id.toString(), 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    // Чтобы потом расшифровать, нужно знать iv, поэтому добавим его к результату
+    return iv.toString('hex') + ':' + encrypted;
 }
 
+function decodeToken(token) {
+    const parts = token.split(':');
+    const iv = Buffer.from(parts.shift(), 'hex');
+    const encryptedText = parts.join(':');
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
+}
+// Пример использования:
+const id = 12345;
+const token = encodeId(id);
+console.log('Token:', token);
+
+const decodedId = decodeToken(token);
+console.log('Decoded id:', decodedId);
 
 
 async function sql(body) {
