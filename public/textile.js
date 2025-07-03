@@ -44,6 +44,53 @@ function createTable(data) {
 
 
 
+//let tbody = document.querySelector('tbody');
+//let firstRow = tbody.rows[0]; // первая строка
+
+//for (let i = 0; i < firstRow.cells.length; i++) {
+//    console.log(firstRow.cells[i].textContent);
+//}
+
+//const thElements = document.querySelectorAll('thead th');
+//thElements.forEach((th,i) => {
+//    const num = Number(firstRow.cells[i].textContent);
+//    th.dataset.type = !isNaN(num) ? 'number' : 'string';
+//});
+
+
+async function getTypeTableHeder() {
+    const container = document.getElementById('table-container');
+    const tbody = container.querySelector('tbody');
+    const thElements = container.querySelectorAll('thead th');
+    const firstRow = tbody.rows[0]; // первая строка
+    thElements.forEach((th, i) => {
+        const num = Number(firstRow.cells[i].textContent);
+        th.dataset.type = !isNaN(num) ? 'number' : 'string';
+    });
+}
+function sortGrid(colNum, type) {
+    let tbody = container.querySelector('tbody');
+    let rowsArray = Array.from(tbody.rows);
+    // compare(a, b) сравнивает две строки, нужен для сортировки
+    let compare;
+    switch (type) {
+        case 'number':
+            compare = function (rowA, rowB) {
+                return rowA.cells[colNum].innerHTML - rowB.cells[colNum].innerHTML;
+            };
+            break;
+        case 'string':
+            compare = function (rowA, rowB) {
+                return rowA.cells[colNum].innerHTML > rowB.cells[colNum].innerHTML ? 1 : -1;
+            };
+            break;
+    }
+    // сортировка
+    rowsArray.sort(compare);
+    tbody.append(...rowsArray);
+}
+
+
 
 
 const dropInput = document.createElement("input");
@@ -241,47 +288,35 @@ async function showTableFn() {
         const array = [
             {
                 textile_density: 75,
-                textile_id
-                    :
-                    1,
-                textile_number
-                    :
-                    1,
-                textile_width
-                    :
-                    56,
-                warp_name
-                    :
-                    null,
-                warp_quantity
-                    :
-                    456,
+                textile_id: 1,
+                textile_number: 1,
+                textile_width: 56,
+                warp_name: null,
+                warp_quantity: 456,
             },
             {
-
-                textile_density
-                    :
-                    68,
-                textile_id
-                    :
-                    2,
-                textile_number
-                    :
-                    2,
-                textile_width
-                    :
-                    42,
-                warp_name
-                    :
-                    null,
-                warp_quantity
-                    :
-                    312,
+                textile_density: 68,
+                textile_id: 2,
+                textile_number: 2,
+                textile_width: 42,
+                warp_name: null,
+                warp_quantity: 312,
             }
         ];
         //const table = createTable(array);
         const table = createTable(result.rows);
-        table.addEventListener("click", queryTarget)
+        table.addEventListener("click", queryTarget);
+
+        table.onclick = function (e) {
+            if (e.target.tagName != 'TH') return;
+
+            let th = e.target;
+            // если ячейка TH, тогда сортировать
+            // cellIndex - это номер ячейки th:
+            //   0 для первого столбца
+            //   1 для второго и т.д.
+            sortGrid(th.cellIndex, th.dataset.type);
+        };
         container.appendChild(table);
     } else {
         container.textContent = 'U';
@@ -312,7 +347,7 @@ async function queryTarget(event) {
     const headers = Array.from(table.querySelectorAll('thead th'));
     const headersText = headers.map(th => th.textContent);
     const found = headersText.find(text => text.includes('id'));
-    td.addEventListener('blur', async  () => {
+    td.addEventListener('blur', async () => {
         td.contentEditable = "false";
         td.textContent = td.textContent.trim();
         if (td.textContent.length > 0) {
@@ -530,6 +565,7 @@ async function sendForm() {
 (async () => {
     await getTableName();
     await showTableFn();
+    await getTypeTableHeder();
 })();
 
 
