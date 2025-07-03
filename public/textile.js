@@ -67,6 +67,16 @@ async function getTypeTableHeder() {
         const num = Number(firstRow.cells[i].textContent);
         th.dataset.type = !isNaN(num) ? 'number' : 'string';
     });
+    container.onclick = function (e) {
+        if (e.target.tagName != 'TH') return;
+
+        let th = e.target;
+        // если ячейка TH, тогда сортировать
+        // cellIndex - это номер ячейки th:
+        //   0 для первого столбца
+        //   1 для второго и т.д.
+        sortGrid(th.cellIndex, th.dataset.type);
+    };
 }
 function sortGrid(colNum, type) {
     let tbody = container.querySelector('tbody');
@@ -306,17 +316,6 @@ async function showTableFn() {
         //const table = createTable(array);
         const table = createTable(result.rows);
         table.addEventListener("click", queryTarget);
-
-        table.onclick = function (e) {
-            if (e.target.tagName != 'TH') return;
-
-            let th = e.target;
-            // если ячейка TH, тогда сортировать
-            // cellIndex - это номер ячейки th:
-            //   0 для первого столбца
-            //   1 для второго и т.д.
-            sortGrid(th.cellIndex, th.dataset.type);
-        };
         container.appendChild(table);
     } else {
         container.textContent = 'U';
