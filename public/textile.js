@@ -348,6 +348,8 @@ async function queryTarget(event) {
     const headers = Array.from(table.querySelectorAll('thead th'));
     const headersText = headers.map(th => th.textContent);
     const found = headersText.find(text => text.includes('id'));
+    const index = headersText.findIndex(text => text.includes('id'));
+
     td.addEventListener('blur', async () => {
         td.contentEditable = "false";
         td.textContent = td.textContent.trim();
@@ -356,10 +358,11 @@ async function queryTarget(event) {
             console.log(tr.sectionRowIndex);
             console.log(selectTableName.value);
             console.log(headers[td.cellIndex].textContent);
+            console.log("rowId: "+tr.cells[0].textContent);
             try {
                 const result = await sqlWhere({
                     tableName: selectTableName.value,
-                    rowId: tr.sectionRowIndex,
+                    rowId: tr.cells[index].textContent,
                     columnName: headers[td.cellIndex].textContent,
                     whereColum: found,
                     value: td.textContent
