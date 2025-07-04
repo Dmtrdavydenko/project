@@ -571,7 +571,7 @@ async function sendForm() {
 (async () => {
     await getTableName();
     await showTableFn();
-    await generateForm()();
+    await generateForm();
 })();
 
 
