@@ -121,9 +121,9 @@ function createButtonsInBlockFromArray(containerId, numbersArray, reverse = fals
     const container = document.getElementById(containerId);
     container.innerHTML = '';
     const arr = reverse ? [...numbersArray].reverse() : numbersArray;
-    arr.forEach(num => {
+    arr.forEach(object => {
         const btn = document.createElement('button');
-        btn.textContent = num;
+        btn.textContent = object.textile_number;
         container.appendChild(btn);
     });
 }
