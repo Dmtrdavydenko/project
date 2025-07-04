@@ -244,7 +244,6 @@ async function getTableName() {
     }
 
 }
-
 function createSelectOptions(dataArray) {
     selectTableName.innerHTML = '';
     dataArray.forEach(value => {
