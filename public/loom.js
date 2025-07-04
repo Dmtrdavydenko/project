@@ -1,10 +1,10 @@
-const buttonsPerBlock = 9;
+п»їconst buttonsPerBlock = 9;
 
 const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
 const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
 
 let currentNumber = 1;
-let blockIndex = 1; // Счётчик блоков по порядку обхода (начинается с 1)
+let blockIndex = 1; // РЎС‡С‘С‚С‡РёРє Р±Р»РѕРєРѕРІ РїРѕ РїРѕСЂСЏРґРєСѓ РѕР±С…РѕРґР° (РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ 1)
 const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
 
 function createButtonsInBlock(containerId, count, startNum, reverse = false) {
@@ -18,12 +18,12 @@ function createButtonsInBlock(containerId, count, startNum, reverse = false) {
     }
 }
 
-// Правая колонка (снизу вверх)
+// РџСЂР°РІР°СЏ РєРѕР»РѕРЅРєР° (СЃРЅРёР·Сѓ РІРІРµСЂС…)
 for (let i = 0; i < rightBlocks.length; i++, blockIndex++) {
     const blockId = rightBlocks[i];
-    // Разворот для нечетных блоков
+    // Р Р°Р·РІРѕСЂРѕС‚ РґР»СЏ РЅРµС‡РµС‚РЅС‹С… Р±Р»РѕРєРѕРІ
     let reverse = (blockIndex % 2 === 1);
-    // Если это последний блок (8-й), разворачиваем в любом случае
+    // Р•СЃР»Рё СЌС‚Рѕ РїРѕСЃР»РµРґРЅРёР№ Р±Р»РѕРє (8-Р№), СЂР°Р·РІРѕСЂР°С‡РёРІР°РµРј РІ Р»СЋР±РѕРј СЃР»СѓС‡Р°Рµ
     if (blockIndex === totalBlocks) {
         reverse = true;
     }
@@ -31,7 +31,7 @@ for (let i = 0; i < rightBlocks.length; i++, blockIndex++) {
     currentNumber += buttonsPerBlock;
 }
 
-// Левая колонка (сверху вниз)
+// Р›РµРІР°СЏ РєРѕР»РѕРЅРєР° (СЃРІРµСЂС…Сѓ РІРЅРёР·)
 for (let i = 0; i < leftBlocks.length; i++, blockIndex++) {
     const blockId = leftBlocks[i];
     let reverse = (blockIndex % 2 === 1);
@@ -42,7 +42,7 @@ for (let i = 0; i < leftBlocks.length; i++, blockIndex++) {
     currentNumber += buttonsPerBlock;
 }
 
-// Общий блок с 12 кнопками под колонками, нумерация 1..12
+// РћР±С‰РёР№ Р±Р»РѕРє СЃ 12 РєРЅРѕРїРєР°РјРё РїРѕРґ РєРѕР»РѕРЅРєР°РјРё, РЅСѓРјРµСЂР°С†РёСЏ 1..12
 function createFooterButtons(containerId, count) {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
