@@ -25,8 +25,9 @@ function createTable(data) {
     table.appendChild(thead);
 
     let tbody = document.createElement('tbody');
-    data.forEach(row => {
+    data.forEach((row,i) => {
         let tr = document.createElement('tr');
+        tr.id = i;
         Object.values(row).forEach(value => {
             let td = document.createElement('td');
             td.textContent = value;
