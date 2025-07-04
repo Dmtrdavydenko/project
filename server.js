@@ -38,10 +38,10 @@ const pool = mysql.createPool(dbConfig); // создаём пул подключ
 
 async function getTableColumns(body) {
     // Создаём подключение к базе данных
-    const connection = await pool.getConnection
+    const connection = await pool.getConnection();
     try {
         // Выполняем запрос DESCRIBE для получения колонок таблицы
-        const [rows] = await connection.execute(`DESCRIBE ${body.table.name}`);
+        const [rows] = await connection.execute(`DESCRIBE ${select.name}`);
         // Извлекаем названия колонок и их типы т.д.
         const columnsInfo = rows.map(row => ({
             Field: row.Field,
@@ -55,7 +55,7 @@ async function getTableColumns(body) {
         console.error('Ошибка при получении колонок таблицы:', err);
         throw err;
     } finally {
-        await connection.release();
+        connection.release();
     }
 }
 
@@ -95,7 +95,7 @@ async function select(body) {
         const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
         //const primaryKeyColumns = descRows.filter(row => row.Key === 'PRI').map(row => row.Field);
         select.pri = primaryKeyColumn;
-
+        select.name = body.table.name;
         return {
             rows // все данные таблицы
         };
