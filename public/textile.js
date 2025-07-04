@@ -27,7 +27,7 @@ function createTable(data) {
     let tbody = document.createElement('tbody');
     data.forEach((row,i) => {
         let tr = document.createElement('tr');
-        tr.id = i;
+        tr.id = i+1;
         Object.values(row).forEach(value => {
             let td = document.createElement('td');
             td.textContent = value;
@@ -570,7 +570,7 @@ async function sendForm() {
 (async () => {
     await getTableName();
     await showTableFn();
-    //await getTypeTableHeder();
+    await generateForm()();
 })();
 
 
