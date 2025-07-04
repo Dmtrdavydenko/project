@@ -646,7 +646,8 @@ server.on("request", (req, res) => {
     let pathname = parsedUrl.pathname;
 
     if (req.method === "GET") {
-        const parsedUrl = new URL(req.url, "https://worktime.glitch.me/");
+        const parsedUrl = url.parse(req.url, true);
+        console.log(parsedUrl.pathname);
         let pathName = parsedUrl.pathname;
         let ext = path.extname(pathName);
         if (pathName !== "/" && pathName[pathName.length - 1] === "/") {

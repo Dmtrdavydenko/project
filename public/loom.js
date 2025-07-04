@@ -244,7 +244,7 @@ async function loadAndRenderButtons() {
 }
 
 // Запускаем загрузку и рендер кнопок
-//loadAndRenderButtons();
+loadAndRenderButtons();
 
 async function getSelectedValue() {
     const result = await fetch("https://worktime.up.railway.app/textile", {
