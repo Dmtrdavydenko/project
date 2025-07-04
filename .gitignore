@@ -1,4 +1,5 @@
 .vs/
+.editorconfig
 # link
 node_modules/
 
