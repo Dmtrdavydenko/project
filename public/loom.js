@@ -65,7 +65,7 @@ async function edit(event) {
     console.log(button.textContent);
 }
 const selectColumName = document.createElement("select");
-selectColumName.addEventListener('change', showTableFn);
+//selectColumName.addEventListener('change', showTableFn);
 document.body.querySelector("nav").append(selectColumName);
 
 
