@@ -320,6 +320,7 @@ async function showTableFn() {
         table.addEventListener("click", queryTarget);
         container.appendChild(table);
         await getTypeTableHeder();
+        await generateForm();
     } else {
         container.textContent = 'U';
     }
@@ -552,7 +553,6 @@ async function sendForm() {
     }).then((response) => response.json());
     console.log(response);
     await showTableFn();
-    await generateForm();
     return await response;
 }
 
