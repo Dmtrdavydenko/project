@@ -41,7 +41,7 @@ async function getTableColumns(body) {
     const connection = await pool.getConnection();
     try {
         // Выполняем запрос DESCRIBE для получения колонок таблицы
-        const [rows] = await connection.execute(`DESCRIBE ${select.name}`);
+        const [rows] = await connection.execute(`DESCRIBE ${body.table.name}`);
         // Извлекаем названия колонок и их типы т.д.
         const columnsInfo = rows.map(row => ({
             Field: row.Field,
