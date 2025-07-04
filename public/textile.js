@@ -165,7 +165,7 @@ main.append(selectTableName);
 //main.append(textArea);
 //main.append(queryButton);
 //main.append(textAsk);
-main.append(form);
+//main.append(form);
 main.append(sendButton);
 main.append(showTable);
 
@@ -551,7 +551,8 @@ async function sendForm() {
         }),
     }).then((response) => response.json());
     console.log(response);
-    showTableFn();
+    await showTableFn();
+    await generateForm();
     return await response;
 }
 
