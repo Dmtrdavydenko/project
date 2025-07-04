@@ -1,4 +1,4 @@
-﻿document.body.addEventListener("click", edit)
+document.body.addEventListener("click", edit)
 async function edit(event) {
     const button = event.target.closest("button");
     if (!button) return;
@@ -51,89 +51,89 @@ function createSelectOptions(dataArray) {
 
 
 
-const buttonsPerBlock = 9;
-const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
-const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
-const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
+//const buttonsPerBlock = 9;
+//const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
+//const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
+//const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
 
-// Функция создания кнопок из массива номеров с учётом reverse
-function createButtonsInBlockFromArray(containerId, numbersArray, reverse = false) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    const arr = reverse ? [...numbersArray].reverse() : numbersArray;
-    arr.forEach(object => {
-        const btn = document.createElement('button');
-        btn.textContent = object.textile_number;
-        container.appendChild(btn);
-    });
-}
+//// Функция создания кнопок из массива номеров с учётом reverse
+//function createButtonsInBlockFromArray(containerId, numbersArray, reverse = false) {
+//    const container = document.getElementById(containerId);
+//    container.innerHTML = '';
+//    const arr = reverse ? [...numbersArray].reverse() : numbersArray;
+//    arr.forEach(object => {
+//        const btn = document.createElement('button');
+//        btn.textContent = object.textile_number;
+//        container.appendChild(btn);
+//    });
+//}
 
-// Предположим, что allNumbers — это массив из базы, например:
-async function loadAndRenderButtons() {
-    // Получаем все номера из базы (пример)
-    const response = await fetch('https://worktime.up.railway.app/textile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json;charset=utf-8' },
-        //body: JSON.stringify({ action: 'getAllNumbers' }) // пример запроса
-                    body: JSON.stringify({
-                        action: "sql", // Измените на нужное действие, если необходимо
-                        query: "select textile_number from textile", // Отправляем SQL-запрос
-                    }),
-    });
-    const allNumbers = await response.json(); // допустим, это массив чисел
+//// Предположим, что allNumbers — это массив из базы, например:
+//async function loadAndRenderButtons() {
+//    // Получаем все номера из базы (пример)
+//    const response = await fetch('https://worktime.up.railway.app/textile', {
+//        method: 'POST',
+//        headers: { 'Content-Type': 'application/json;charset=utf-8' },
+//        //body: JSON.stringify({ action: 'getAllNumbers' }) // пример запроса
+//        body: JSON.stringify({
+//            action: "sql", // Измените на нужное действие, если необходимо
+//            query: "select textile_number from textile", // Отправляем SQL-запрос
+//        }),
+//    });
+//    const allNumbers = await response.json(); // допустим, это массив чисел
 
-    // Проверим, что у нас достаточно номеров
-    if (!Array.isArray(allNumbers) || allNumbers.length < buttonsPerBlock * totalBlocks + 12) {
-        console.error('Недостаточно номеров в базе');
-        return;
-    }
+//    // Проверим, что у нас достаточно номеров
+//    if (!Array.isArray(allNumbers) || allNumbers.length < buttonsPerBlock * totalBlocks + 12) {
+//        console.error('Недостаточно номеров в базе');
+//        return;
+//    }
 
-    // Распределяем номера по блокам
-    // Берём первые 72 номера для 8 блоков по 9 кнопок
-    const blocksNumbersArray = allNumbers.slice(0, buttonsPerBlock * totalBlocks);
+//    // Распределяем номера по блокам
+//    // Берём первые 72 номера для 8 блоков по 9 кнопок
+//    const blocksNumbersArray = allNumbers.slice(0, buttonsPerBlock * totalBlocks);
 
-    // Последние 12 номеров для футера
-    const footerNumbers = allNumbers.slice(buttonsPerBlock * totalBlocks, buttonsPerBlock * totalBlocks + 12);
+//    // Последние 12 номеров для футера
+//    const footerNumbers = allNumbers.slice(buttonsPerBlock * totalBlocks, buttonsPerBlock * totalBlocks + 12);
 
-    // Формируем объект с массивами для каждого блока
-    const blocksNumbers = {};
+//    // Формируем объект с массивами для каждого блока
+//    const blocksNumbers = {};
 
-    // Правые блоки (4 блока)
-    for (let i = 0; i < rightBlocks.length; i++) {
-        const start = i * buttonsPerBlock;
-        blocksNumbers[rightBlocks[i]] = blocksNumbersArray.slice(start, start + buttonsPerBlock);
-    }
+//    // Правые блоки (4 блока)
+//    for (let i = 0; i < rightBlocks.length; i++) {
+//        const start = i * buttonsPerBlock;
+//        blocksNumbers[rightBlocks[i]] = blocksNumbersArray.slice(start, start + buttonsPerBlock);
+//    }
 
-    // Левые блоки (4 блока)
-    for (let i = 0; i < leftBlocks.length; i++) {
-        const start = (rightBlocks.length + i) * buttonsPerBlock;
-        blocksNumbers[leftBlocks[i]] = blocksNumbersArray.slice(start, start + buttonsPerBlock);
-    }
+//    // Левые блоки (4 блока)
+//    for (let i = 0; i < leftBlocks.length; i++) {
+//        const start = (rightBlocks.length + i) * buttonsPerBlock;
+//        blocksNumbers[leftBlocks[i]] = blocksNumbersArray.slice(start, start + buttonsPerBlock);
+//    }
 
-    blocksNumbers['footerBlock'] = footerNumbers;
+//    blocksNumbers['footerBlock'] = footerNumbers;
 
-    // Создаём кнопки с учётом reverse, как в вашем оригинальном коде
-    let blockIndex = 1;
+//    // Создаём кнопки с учётом reverse, как в вашем оригинальном коде
+//    let blockIndex = 1;
 
-    // Правая колонка (снизу вверх)
-    for (let i = 0; i < rightBlocks.length; i++, blockIndex++) {
-        const blockId = rightBlocks[i];
-        let reverse = (blockIndex % 2 === 1);
-        if (blockIndex === totalBlocks) reverse = true;
-        createButtonsInBlockFromArray(blockId, blocksNumbers[blockId], reverse);
-    }
+//    // Правая колонка (снизу вверх)
+//    for (let i = 0; i < rightBlocks.length; i++, blockIndex++) {
+//        const blockId = rightBlocks[i];
+//        let reverse = (blockIndex % 2 === 1);
+//        if (blockIndex === totalBlocks) reverse = true;
+//        createButtonsInBlockFromArray(blockId, blocksNumbers[blockId], reverse);
+//    }
 
-    // Левая колонка (сверху вниз)
-    for (let i = 0; i < leftBlocks.length; i++, blockIndex++) {
-        const blockId = leftBlocks[i];
-        let reverse = (blockIndex % 2 === 1);
-        if (blockIndex === totalBlocks) reverse = true;
-        createButtonsInBlockFromArray(blockId, blocksNumbers[blockId], reverse);
-    }
+//    // Левая колонка (сверху вниз)
+//    for (let i = 0; i < leftBlocks.length; i++, blockIndex++) {
+//        const blockId = leftBlocks[i];
+//        let reverse = (blockIndex % 2 === 1);
+//        if (blockIndex === totalBlocks) reverse = true;
+//        createButtonsInBlockFromArray(blockId, blocksNumbers[blockId], reverse);
+//    }
 
-    // Футер (развёрнутый)
-    createButtonsInBlockFromArray('footerBlock', blocksNumbers['footerBlock'], true);
-}
+//    // Футер (развёрнутый)
+//    createButtonsInBlockFromArray('footerBlock', blocksNumbers['footerBlock'], true);
+//}
 
 // Запускаем загрузку и рендер
 //loadAndRenderButtons();
@@ -244,5 +244,40 @@ async function loadAndRenderButtons() {
 }
 
 // Запускаем загрузку и рендер кнопок
-loadAndRenderButtons();
+//loadAndRenderButtons();
+
+async function getSelectedValue() {
+    const result = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "getColumnsAndTypesForTable",
+            table: {
+                name: "textile",
+            }
+        }),
+    }).then((response) => response.json());
+    console.log(result);
+    return await result;
+    //return await [{ "Field": "textile_id", "Type": "smallint unsigned", "Null": "NO", "Key": "PRI", "Default": null, "Extra": "auto_increment" }, { "Field": "textile_width", "Type": "tinyint unsigned", "Null": "YES", "Key": "", "Default": null, "Extra": "" }, { "Field": "textile_density", "Type": "tinyint unsigned", "Null": "YES", "Key": "", "Default": null, "Extra": "" }, { "Field": "warp_quantity", "Type": "smallint unsigned", "Null": "YES", "Key": "", "Default": null, "Extra": "" }, { "Field": "warp_name", "Type": "varchar(100)", "Null": "YES", "Key": "", "Default": null, "Extra": "" }, { "Field": "textile_number", "Type": "tinyint unsigned", "Null": "YES", "Key": "", "Default": null, "Extra": "" }]
+}
+
+
+function createA(item) {
+    const a = document.createElement("a");
+    a.href = "/";         // задаём адрес ссылки
+    a.href += item     // задаём адрес ссылки
+    a.textContent = item;  // задаём текст ссылки
+    return a;
+}
+
+
+(async () => {
+    const field = (await getSelectedValue()).map(item => item.Field);
+    console.log(field);
+    const nav = document.body.querySelector("nav");
+    field.forEach(item => nav.append(createA(item)));
+})();
 
