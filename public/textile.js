@@ -526,6 +526,7 @@ const array = [];
 async function generateForm() {
     const columns = await getSelectedValue();
     const formContainer = document.getElementById('form-container');
+    formContainer.innerHTML = '';
     columns.forEach(column => {
         const inputElement = createInputElement(column);
         formContainer.append(inputElement);
@@ -571,7 +572,6 @@ async function sendForm() {
 (async () => {
     await getTableName();
     await showTableFn();
-    await generateForm();
 })();
 
 
