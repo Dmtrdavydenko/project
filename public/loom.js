@@ -1,11 +1,11 @@
-﻿const buttonsPerBlock = 9;
+﻿//const buttonsPerBlock = 9;
 
-const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
-const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
+//const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
+//const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
 
-let currentNumber = 1;
-let blockIndex = 1; // Счётчик блоков по порядку обхода (начинается с 1)
-const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
+//let currentNumber = 1;
+//let blockIndex = 1; // Счётчик блоков по порядку обхода (начинается с 1)
+//const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
 
 function createButtonsInBlock(containerId, count, startNum, reverse = false) {
     const container = document.getElementById(containerId);
