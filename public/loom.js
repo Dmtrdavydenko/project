@@ -1,64 +1,4 @@
-﻿//const buttonsPerBlock = 9;
-
-//const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
-//const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
-
-//let currentNumber = 1;
-//let blockIndex = 1; // Счётчик блоков по порядку обхода (начинается с 1)
-//const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
-
-function createButtonsInBlock(containerId, count, startNum, reverse = false) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    for (let i = 0; i < count; i++) {
-        const btn = document.createElement('button');
-        const num = reverse ? startNum + count - 1 - i : startNum + i;
-        btn.textContent = num;
-        container.appendChild(btn);
-    }
-}
-
-// Правая колонка (снизу вверх)
-//for (let i = 0; i < rightBlocks.length; i++, blockIndex++) {
-//    const blockId = rightBlocks[i];
-//    // Разворот для нечетных блоков
-//    let reverse = (blockIndex % 2 === 1);
-//    // Если это последний блок (8-й), разворачиваем в любом случае
-//    if (blockIndex === totalBlocks) {
-//        reverse = true;
-//    }
-//    createButtonsInBlock(blockId, buttonsPerBlock, currentNumber, reverse);
-//    currentNumber += buttonsPerBlock;
-//}
-
-// Левая колонка (сверху вниз)
-//for (let i = 0; i < leftBlocks.length; i++, blockIndex++) {
-//    const blockId = leftBlocks[i];
-//    let reverse = (blockIndex % 2 === 1);
-//    if (blockIndex === totalBlocks) {
-//        reverse = true;
-//    }
-//    createButtonsInBlock(blockId, buttonsPerBlock, currentNumber, reverse);
-//    currentNumber += buttonsPerBlock;
-//}
-
-// Общий блок с 12 кнопками под колонками, нумерация 1..12
-function createFooterButtons(containerId, count) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    for (let i = 98; i > 98 - count; i--) {
-        const btn = document.createElement('button');
-        btn.textContent = i;
-        container.appendChild(btn);
-    }
-}
-//createFooterButtons('footerBlock', 12);
-
-
-
-
-
-document.body.addEventListener("click", edit)
+﻿document.body.addEventListener("click", edit)
 async function edit(event) {
     const button = event.target.closest("button");
     if (!button) return;
@@ -196,5 +136,113 @@ async function loadAndRenderButtons() {
 }
 
 // Запускаем загрузку и рендер
+//loadAndRenderButtons();
+
+
+
+
+
+
+
+
+
+
+
+
+
+const buttonsPerBlock = 9;
+const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
+const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
+const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
+
+/**
+ * Создаёт кнопки в контейнере из массива объектов с учётом реверса
+ * @param {string} containerId - ID контейнера для кнопок
+ * @param {Array} numbersArray - Массив объектов с полем textile_number
+ * @param {boolean} reverse - Нужно ли реверсировать порядок кнопок
+ */
+function createButtonsInBlockFromArray(containerId, numbersArray, reverse = false) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    // Копируем массив и, если нужно, переворачиваем порядок
+    const arr = reverse ? [...numbersArray].reverse() : numbersArray;
+
+    arr.forEach(item => {
+        const btn = document.createElement('button');
+        btn.textContent = item.textile_number;
+        container.appendChild(btn);
+    });
+}
+
+/**
+ * Загружает номера из базы, распределяет по блокам и создаёт кнопки
+ */
+async function loadAndRenderButtons() {
+    try {
+        const response = await fetch('https://worktime.up.railway.app/textile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json;charset=utf-8' },
+            body: JSON.stringify({
+                action: "sql",
+                query: "select textile_number from textile",
+            }),
+        });
+
+        const allNumbers = await response.json();
+
+        const requiredCount = buttonsPerBlock * totalBlocks + 12;
+        if (!Array.isArray(allNumbers) || allNumbers.length < requiredCount) {
+            console.error(`Недостаточно номеров в базе. Требуется минимум ${requiredCount}.`);
+            return;
+        }
+
+        // Разбиваем массив на части для блоков
+        const blocksNumbersArray = allNumbers.slice(0, buttonsPerBlock * totalBlocks);
+        const footerNumbers = allNumbers.slice(buttonsPerBlock * totalBlocks, requiredCount);
+
+        // Формируем объект с массивами для каждого блока
+        const blocksNumbers = {};
+
+        // Правые блоки
+        rightBlocks.forEach((blockId, i) => {
+            const start = i * buttonsPerBlock;
+            blocksNumbers[blockId] = blocksNumbersArray.slice(start, start + buttonsPerBlock);
+        });
+
+        // Левые блоки
+        leftBlocks.forEach((blockId, i) => {
+            const start = (rightBlocks.length + i) * buttonsPerBlock;
+            blocksNumbers[blockId] = blocksNumbersArray.slice(start, start + buttonsPerBlock);
+        });
+
+        blocksNumbers['footerBlock'] = footerNumbers;
+
+        // Создаём кнопки с учётом реверса
+        let blockIndex = 1;
+
+        // Правая колонка (снизу вверх)
+        rightBlocks.forEach(blockId => {
+            const reverse = (blockIndex % 2 === 1) || (blockIndex === totalBlocks);
+            createButtonsInBlockFromArray(blockId, blocksNumbers[blockId], reverse);
+            blockIndex++;
+        });
+
+        // Левая колонка (сверху вниз)
+        leftBlocks.forEach(blockId => {
+            const reverse = (blockIndex % 2 === 1) || (blockIndex === totalBlocks);
+            createButtonsInBlockFromArray(blockId, blocksNumbers[blockId], reverse);
+            blockIndex++;
+        });
+
+        // Футер (развёрнутый)
+        createButtonsInBlockFromArray('footerBlock', blocksNumbers['footerBlock'], true);
+
+    } catch (error) {
+        console.error('Ошибка загрузки номеров:', error);
+    }
+}
+
+// Запускаем загрузку и рендер кнопок
 loadAndRenderButtons();
 
