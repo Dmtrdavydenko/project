@@ -521,7 +521,7 @@ function createInputElement(column) {
     }
     return input;
 }
-const array = [];
+let array = [];
 async function generateForm() {
     const columns = await getSelectedValue();
     const formContainer = document.getElementById('form-container');
