@@ -1,12 +1,12 @@
 document.body.addEventListener("click", edit)
 async function edit(event) {
-    const button = event.target.closest("button");
+    const button = event.target.closest("div");
     if (!button) return;
     console.log(button.textContent);
 }
 const selectColumName = document.createElement("select");
 //selectColumName.addEventListener('change', showTableFn);
-document.body.querySelector("nav").append(selectColumName);
+//document.body.querySelector("nav").append(selectColumName);
 
 
 
