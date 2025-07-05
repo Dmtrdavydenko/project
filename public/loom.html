@@ -17,11 +17,26 @@
             padding: 10px 20px;
         }
 
-            nav a, nav button {
+            nav a {
                 color: #fff;
                 text-decoration: none;
                 margin-right: 15px;
             }
+       nav button {
+            background-color: #555; /* Темно-серый фон */
+            color: #fff; /* Белый текст */
+            border: none; /* Без рамки */
+            padding: 8px 16px; /* Отступы внутри */
+            border-radius: 4px; /* Скругленные углы */
+            cursor: pointer; /* Курсор указатель при наведении */
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+            nav button:hover {
+                background-color: #777; /* Светлее при наведении */
+            }
+
 
         .main-content {
             display: flex;
