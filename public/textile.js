@@ -1,4 +1,4 @@
-﻿console.log("textile");
+console.log("textile");
 console.log(document.location.href);
 
 function createTable(data) {
@@ -319,7 +319,7 @@ async function showTableFn() {
         table.addEventListener("click", queryTarget);
         container.appendChild(table);
         await getTypeTableHeder();
-        await generateForm();
+        document.getElementById('form-container').childElementCount || await generateForm();
     } else {
         container.textContent = 'U';
     }
