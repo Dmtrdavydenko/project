@@ -161,7 +161,7 @@ const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
  * @param {Array} numbersArray - Массив объектов с полем textile_number
  * @param {boolean} reverse - Нужно ли реверсировать порядок кнопок
  */
-function createButtonsInBlockFromArray(containerId, numbersArray, reverse = false) {
+function createButtonsInBlockFromArray(field,containerId, numbersArray, reverse = false) {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
 
@@ -170,7 +170,7 @@ function createButtonsInBlockFromArray(containerId, numbersArray, reverse = fals
 
     arr.forEach(item => {
         const btn = document.createElement('button');
-        btn.textContent = item.textile_number;
+        btn.textContent = item[field];
         container.appendChild(btn);
     });
 }
@@ -224,19 +224,19 @@ async function loadAndRenderButtons(field = "textile_number") {
         // Правая колонка (снизу вверх)
         rightBlocks.forEach(blockId => {
             const reverse = (blockIndex % 2 === 1) || (blockIndex === totalBlocks);
-            createButtonsInBlockFromArray(blockId, blocksNumbers[blockId], reverse);
+            createButtonsInBlockFromArray(field,blockId, blocksNumbers[blockId], reverse);
             blockIndex++;
         });
 
         // Левая колонка (сверху вниз)
         leftBlocks.forEach(blockId => {
             const reverse = (blockIndex % 2 === 1) || (blockIndex === totalBlocks);
-            createButtonsInBlockFromArray(blockId, blocksNumbers[blockId], reverse);
+            createButtonsInBlockFromArray(field,blockId, blocksNumbers[blockId], reverse);
             blockIndex++;
         });
 
         // Футер (развёрнутый)
-        createButtonsInBlockFromArray('footerBlock', blocksNumbers['footerBlock'], true);
+        createButtonsInBlockFromArray(field,'footerBlock', blocksNumbers['footerBlock'], true);
 
     } catch (error) {
         console.error('Ошибка загрузки номеров:', error);
