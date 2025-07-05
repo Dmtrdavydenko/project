@@ -83,7 +83,6 @@ async function select(body) {
         switch (body.table.name) {
             case "threadPP":
                 const field = ["thread_id", "thread_density", "thread_length"];
-                //field.join("t.");
                 sql = "SELECT t." + field.join(", t.") +", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
                 break;
             default:

@@ -521,15 +521,16 @@ function createInputElement(column) {
     }
     return input;
 }
-//const array = [];
+const array = [];
 async function generateForm() {
     const columns = await getSelectedValue();
     const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
+    array = [];
     columns.forEach(column => {
         const inputElement = createInputElement(column);
         formContainer.append(inputElement);
-        //array.push(inputElement);
+        array.push(inputElement);
     });
 }
 async function sendForm() {
