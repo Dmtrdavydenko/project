@@ -86,6 +86,7 @@ async function select(body) {
             default:
                 sql = 'SELECT * FROM ' + body.table.name;
         }   
+        console.log("Запрос sql " + sql);
         const [rows] = await connection.execute(sql);
 
         const [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
