@@ -79,6 +79,7 @@ async function select(body) {
         // Получаем все данные из таблицы после вставки
         //const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
         let sql;
+        console.log("Запрос от клиента имя таблицы "+body.table.name);
         switch (body.table.name) {
             case "threadPP":
                 sql=`SELECT t.*, c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id;`
