@@ -84,7 +84,8 @@ async function select(body) {
 
             case "looms":
                 //const field = ["thread_id", "thread_density", "thread_length"];
-                sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
+                //sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id JOIN machine m ON l.loom_name = m.machine_id";
+                sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
                 break;
             case "threadPP":
                 const field = ["thread_id", "thread_density", "thread_length"];
