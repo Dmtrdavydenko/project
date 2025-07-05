@@ -319,7 +319,7 @@ async function showTableFn() {
         table.addEventListener("click", queryTarget);
         container.appendChild(table);
         await getTypeTableHeder();
-        document.getElementById('form-container').childElementCount || await generateForm();
+        await generateForm();
     } else {
         container.textContent = 'U';
     }
@@ -521,7 +521,7 @@ function createInputElement(column) {
     }
     return input;
 }
-const array = [];
+//const array = [];
 async function generateForm() {
     const columns = await getSelectedValue();
     const formContainer = document.getElementById('form-container');
@@ -529,7 +529,7 @@ async function generateForm() {
     columns.forEach(column => {
         const inputElement = createInputElement(column);
         formContainer.append(inputElement);
-        array.push(inputElement);
+        //array.push(inputElement);
     });
 }
 async function sendForm() {
