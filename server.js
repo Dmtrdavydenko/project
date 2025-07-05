@@ -79,15 +79,20 @@ async function select(body) {
         // Получаем все данные из таблицы после вставки
         //const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
         let sql;
-        console.log("Запрос от клиента имя таблицы "+body.table.name);
+        console.log("Запрос от клиента имя таблицы " + body.table.name);
         switch (body.table.name) {
+
+            case "looms":
+                //const field = ["thread_id", "thread_density", "thread_length"];
+                sql = "SELECT loom_id, loom_number, loom_name, s.speed_id AS loom_speed, weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
+                break;
             case "threadPP":
                 const field = ["thread_id", "thread_density", "thread_length"];
-                sql = "SELECT t." + field.join(", t.") +", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
+                sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
                 break;
             default:
                 sql = 'SELECT * FROM ' + body.table.name;
-        }   
+        }
         console.log("Запрос sql " + sql);
         const [rows] = await connection.execute(sql);
 
