@@ -178,14 +178,14 @@ function createButtonsInBlockFromArray(containerId, numbersArray, reverse = fals
 /**
  * Загружает номера из базы, распределяет по блокам и создаёт кнопки
  */
-async function loadAndRenderButtons() {
+async function loadAndRenderButtons(field = "textile_number") {
     try {
         const response = await fetch('https://worktime.up.railway.app/textile', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json;charset=utf-8' },
             body: JSON.stringify({
                 action: "sql",
-                query: "select textile_number from textile",
+                query: "select " + field + " from textile",
             }),
         });
 
@@ -273,11 +273,20 @@ function createA(item) {
     return a;
 }
 
+const nav = document.body.querySelector("nav");
+nav.addEventListener("click", select)
+async function select(event) {
+    const nav = event.target.closest("nav");
+    if (!nav) return;
+    console.log(event.target.textContent);
+    loadAndRenderButtons(event.target.textContent);
+}
+
+
 
 (async () => {
     const field = (await getSelectedValue()).map(item => item.Field);
     console.log(field);
-    const nav = document.body.querySelector("nav");
     field.forEach(item => nav.append(createA(item)));
 })();
 
