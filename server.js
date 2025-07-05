@@ -643,42 +643,72 @@ function deleteCookie(res) {
 server.on("request", (req, res) => {
 
     const parsedUrl = url.parse(req.url, true);
-    let pathname = parsedUrl.pathname;
+    let pathName = parsedUrl.pathname;
 
     if (req.method === "GET") {
-        const parsedUrl = url.parse(req.url, true);
-        console.log(parsedUrl.pathname);
-        let pathName = parsedUrl.pathname;
-        let ext = path.extname(pathName);
-        if (pathName !== "/" && pathName[pathName.length - 1] === "/") {
-            res.writeHead(302, { Location: pathName.slice(0, -1) });
-            res.end();
-            return;
-        }
+        if (pathName.startsWith('/api')) {
+            // Здесь обработка запроса к базе данных и возврат JSON
+            // pathName оставляем как есть, не меняем
 
-        if (pathName === "/") {
-            ext = ".html";
-            //pathName = "/table.html";
-            pathName = "/index.html";
-        } else if (!ext) {
-            ext = ".html";
-            pathName += ext;
-        }
-        let filePath = path.join(process.cwd(), "/public", pathName);
-        console.log(pathName);
-        fs.exists(filePath, function (exists, err) {
-            if (!exists || !mimeTypes[ext]) {
-                console.log("File does not exist: " + pathName);
-                res.writeHead(404, { "Content-Type": "text/plain" });
-                res.write("404 Not Found");
+            const base = path.basename(pathName);
+            console.log(base);
+            getTableColumns({ table: { name: "textile" } })
+                .then(result => {
+                    res.setHeader('Content-Type', 'application/json');
+                    res.end(JSON.stringify(result));
+                })
+                .catch(error => {
+                    res.statusCode = 500;
+                    res.end(JSON.stringify({ error: error.message }));
+                    console.error(error);
+                });
+        } else {
+            // Для остальных маршрутов — отдаём HTML страницы
+            const parsedUrl = url.parse(req.url, true);
+            console.log(parsedUrl.pathname);
+            let pathName = parsedUrl.pathname;
+            let ext = path.extname(pathName);
+            if (pathName !== "/" && pathName[pathName.length - 1] === "/") {
+                res.writeHead(302, { Location: pathName.slice(0, -1) });
                 res.end();
                 return;
             }
-            res.writeHead(200, { "Content-Type": mimeTypes[ext] });
-            console.log(filePath);
-            const fileStream = fs.createReadStream(filePath);
-            fileStream.pipe(res);
-        });
+
+            if (pathName === '/') {
+                pathName = '/index.html';
+                ext = '.html';
+            } else if (!ext) {
+                pathName += '.html';
+                ext = '.html';
+            }
+
+            let filePath = path.join(process.cwd(), "/public", pathName);
+            console.log(pathName);
+            fs.exists(filePath, function (exists, err) {
+                if (!exists || !mimeTypes[ext]) {
+                    console.log("File does not exist: " + pathName);
+                    res.writeHead(404, { "Content-Type": "text/plain" });
+                    res.write("404 Not Found");
+                    res.end();
+                    return;
+                }
+                res.writeHead(200, { "Content-Type": mimeTypes[ext] });
+                console.log(filePath);
+                const fileStream = fs.createReadStream(filePath);
+                fileStream.pipe(res);
+            });
+            // Здесь отдаём статический файл из файловой системы
+        }
+
+
+
+
+
+
+
+
+
+
     }
     if (req.url === "/textile")
         if (req.method === "POST") {
