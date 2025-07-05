@@ -83,6 +83,7 @@ async function select(body) {
         switch (body.table.name) {
             case "threadPP":
                 sql = "SELECT t.*, c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
+                break;
             default:
                 sql = 'SELECT * FROM ' + body.table.name;
         }   
