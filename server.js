@@ -82,7 +82,7 @@ async function select(body) {
         console.log("Запрос от клиента имя таблицы "+body.table.name);
         switch (body.table.name) {
             case "threadPP":
-                sql=`SELECT t.*, c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id;`
+                sql = "SELECT t.*, c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
             default:
                 sql = 'SELECT * FROM ' + body.table.name;
         }   
