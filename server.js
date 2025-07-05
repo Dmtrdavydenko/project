@@ -79,6 +79,7 @@ async function select(body) {
         // Получаем все данные из таблицы после вставки
         //const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
         let sql;
+        let descRows;
         console.log("Запрос от клиента имя таблицы " + body.table.name);
         switch (body.table.name) {
 
@@ -93,7 +94,7 @@ async function select(body) {
                 //break;
             default:
                 sql = 'SELECT * FROM ' + body.table.name;
-                const [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
+                [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
 
         }
         console.log("Запрос sql " + sql);
