@@ -266,9 +266,9 @@ async function getSelectedValue() {
 
 
 function createA(item) {
-    const a = document.createElement("a");
-    a.href = "/api/";         // задаём адрес ссылки
-    a.href += item     // задаём адрес ссылки
+    const a = document.createElement("button");
+    //a.href = "/api/";         // задаём адрес ссылки
+    //a.href += item     // задаём адрес ссылки
     a.textContent = item;  // задаём текст ссылки
     return a;
 }
