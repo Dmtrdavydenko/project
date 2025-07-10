@@ -87,11 +87,11 @@ async function select(body) {
                 //const field = ["thread_id", "thread_density", "thread_length"];
                 sql = "SELECT l.loom_id, l.loom_number, m.machine_name AS loom_name, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id JOIN machine m ON l.loom_nameId = m.machine_id";
                 //sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
-                //break;
+                break;
             case "threadPP":
                 const field = ["thread_id", "thread_density", "thread_length"];
                 sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
-                //break;
+                break;
             default:
                 sql = 'SELECT * FROM ' + body.table.name;
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
