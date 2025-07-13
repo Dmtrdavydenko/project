@@ -96,24 +96,25 @@ async function select(body) {
                 sql = 'SELECT * FROM ' + body.table.name;
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
 
+
         }
         console.log("Запрос sql " + sql);
         const [rows] = await connection.execute(sql);
 
 
         // Извлекаем информацию о колонках
-        const columnsInfo = descRows.map(row => ({
-            Field: row.Field,
-            Type: row.Type,
-            Extra: row.Extra,
-            Key: row.Key  // Здесь ключ (например, 'PRI' для первичного ключа)
-        }));
+        //const columnsInfo = descRows.map(row => ({
+        //    Field: row.Field,
+        //    Type: row.Type,
+        //    Extra: row.Extra,
+        //    Key: row.Key  // Здесь ключ (например, 'PRI' для первичного ключа)
+        //}));
 
-        // Находим имя столбца с первичным ключом
-        const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
-        //const primaryKeyColumns = descRows.filter(row => row.Key === 'PRI').map(row => row.Field);
-        select.pri = primaryKeyColumn;
-        select.name = body.table.name;
+        //// Находим имя столбца с первичным ключом
+        //const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
+        ////const primaryKeyColumns = descRows.filter(row => row.Key === 'PRI').map(row => row.Field);
+        //select.pri = primaryKeyColumn;
+        //select.name = body.table.name;
         return {
             rows // все данные таблицы
         };
