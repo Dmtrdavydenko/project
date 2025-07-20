@@ -60,8 +60,9 @@ async function getTableColumns(body) {
     }
 }
 async function ping() {
-    return "pong";
+    return { result: "pong" };
 }
+
 async function getPriKey(nameTable) {
     const [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
 
