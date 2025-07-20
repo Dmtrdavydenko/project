@@ -726,7 +726,8 @@ send.addEventListener("click", async function (e) {
     console.log(dat);
 
     let response = "";
-    response = await fetch(document.location.href, {
+    response = await fetch("https://worktime.up.railway.app/", {
+        //response = await fetch(document.location.href, {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
