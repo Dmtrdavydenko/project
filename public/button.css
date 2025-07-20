@@ -10,9 +10,9 @@
 }
 
 @keyframes successAnimation {
-  50% {
-    background-color: green;
-  }
+    50% {
+        background-color: lightgreen;
+    }
 }
 .reject {
   /*             background-color: green; */

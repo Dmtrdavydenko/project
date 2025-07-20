@@ -725,19 +725,6 @@ send.addEventListener("click", async function (e) {
     console.log(list);
     console.log(dat);
 
-    let response = "";
-    response = await fetch("https://worktime.up.railway.app/", {
-        //response = await fetch(document.location.href, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "ping"
-        }),
-    }).then((response) => response.json());
-    console.log(response);
-
 
     try {
         // date:13
