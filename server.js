@@ -735,7 +735,8 @@ server.on("request", (req, res) => {
 
 
     }
-    if (req.url === "/textile")
+
+    if (req.url === "/textile") {
         if (req.method === "POST") {
             let body = [];
             req.on("data", (chunk) => {
@@ -756,6 +757,29 @@ server.on("request", (req, res) => {
 
             });
         }
+    } else {
+        if (req.method === "POST") {
+            let body = [];
+            req.on("data", (chunk) => {
+                body.push(chunk);
+            }).on("end", () => {
+                body = Buffer.concat(body)
+                //if (body != "") {
+                body = JSON.parse(body);
+                console.log(body);
+
+                functionDB[body.action](body)
+                    .then((resolve) => JSON.stringify(resolve))
+                    .then((resolve) => res.end(resolve))
+                    .catch(error => {
+                        res.end(error.message)
+                        console.log(error);
+                    })
+
+            });
+        }
+    }
+
 });
 server.listen(PORT);
 console.log("Server listening on " + PORT);
