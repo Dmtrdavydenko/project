@@ -60,7 +60,7 @@ async function getTableColumns(body) {
     }
 }
 async function ping() {
-    return { result: "pong" };
+    return "pong";
 }
 
 async function getPriKey(nameTable) {
