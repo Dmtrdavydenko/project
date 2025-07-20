@@ -739,66 +739,76 @@ send.addEventListener("click", async function (e) {
     console.log(response);
 
 
-    //try {
-    //    // date:13
-    //    // millisecond:2100000
-    //    // quantity:7
-    //    // run:28800000
-    //    // save_id:13
-    //    // time:"День"
+    try {
+        // date:13
+        // millisecond:2100000
+        // quantity:7
+        // run:28800000
+        // save_id:13
+        // time:"День"
 
-    //    // await fetch(document.location.href, {
-    //    //   method: "POST",
-    //    //   headers: {
-    //    //     "Content-Type": "application/json;charset=utf-8",
-    //    //   },
-    //    //   body: JSON.stringify({
-    //    //     action: "todayW",
-    //    //     table: {
-    //    //       name: "diary",
-    //    //     },
-    //    //     data: dat,
-    //    //     key: {
-    //    //       date: dateSave,
-    //    //       time: select.value,
-    //    //     },
-    //    //   }),
-    //    // }).then((response) => response.json());
-    //    // console.log(response);
+        // await fetch(document.location.href, {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json;charset=utf-8",
+        //   },
+        //   body: JSON.stringify({
+        //     action: "todayW",
+        //     table: {
+        //       name: "diary",
+        //     },
+        //     data: dat,
+        //     key: {
+        //       date: dateSave,
+        //       time: select.value,
+        //     },
+        //   }),
+        // }).then((response) => response.json());
+        // console.log(response);
 
-    //    response = await fetch(document.location.href, {
-    //        method: "POST",
-    //        headers: {
-    //            "Content-Type": "application/json;charset=utf-8",
-    //        },
-    //        body: JSON.stringify({
-    //            action: "save",
-    //            table: {
-    //                name: "diary_ref",
-    //            },
-    //            data: dat,
-    //            key: {
-    //                date: dateSave,
-    //                time: select.value,
-    //            },
-    //        }),
-    //    })
-    //        .then((response) => response.json())
+        //response = await fetch(document.location.href, {
+        //    method: "POST",
+        //    headers: {
+        //        "Content-Type": "application/json;charset=utf-8",
+        //    },
+        //    body: JSON.stringify({
+        //        action: "save",
+        //        table: {
+        //            name: "diary_ref",
+        //        },
+        //        data: dat,
+        //        key: {
+        //            date: dateSave,
+        //            time: select.value,
+        //        },
+        //    }),
+        //}).then((response) => response.json());
+        response = await fetch("https://worktime.up.railway.app/", {
+            //response = await fetch(document.location.href, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify({
+                action: "ping"
+            }),
+        }).then((response) => response.json());
+        console.log(response);
 
-    //    if (response.success === "0") {
-    //        this.classList.add("success");
-    //        setTimeout(() => {
-    //            this.classList.remove("success");
-    //        }, 3000);
-    //    } else throw response;
-    //} catch (error) {
-    //    this.classList.add("reject");
-    //    setTimeout(() => {
-    //        this.classList.remove("reject");
-    //    }, 3000);
-    //    console.warn(response);
-    //    // console.warn(error);
-    //}
+        if (response === "pong") {
+            this.classList.add("success");
+            setTimeout(() => {
+                this.classList.remove("success");
+            }, 3000);
+        } else throw response;
+    } catch (error) {
+        this.classList.add("reject");
+        setTimeout(() => {
+            this.classList.remove("reject");
+        }, 3000);
+        console.warn(response);
+        // console.warn(error);
+    }
 });
 
 // let newStart = {};
