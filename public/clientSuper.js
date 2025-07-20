@@ -726,9 +726,6 @@ send.addEventListener("click", async function (e) {
     console.log(dat);
 
     let response = "";
-
-
-
     response = await fetch(document.location.href, {
         method: "POST",
         headers: {
