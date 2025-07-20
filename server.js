@@ -82,7 +82,6 @@ async function select(body) {
         let descRows;
         console.log("Запрос от клиента имя таблицы " + body.table.name);
         switch (body.table.name) {
-
             case "looms":
                 //const field = ["thread_id", "thread_density", "thread_length"];
                 sql = "SELECT l.loom_id, l.loom_number, m.machine_name AS loom_name, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id JOIN machine m ON l.loom_nameId = m.machine_id";
@@ -95,6 +94,8 @@ async function select(body) {
             default:
                 sql = 'SELECT * FROM ' + body.table.name;
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
+                const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
+                select.pri = primaryKeyColumn;
 
 
         }
@@ -111,8 +112,9 @@ async function select(body) {
         //}));
 
         //// Находим имя столбца с первичным ключом
-        //const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
         ////const primaryKeyColumns = descRows.filter(row => row.Key === 'PRI').map(row => row.Field);
+
+        //const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
         //select.pri = primaryKeyColumn;
         //select.name = body.table.name;
         return {
