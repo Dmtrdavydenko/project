@@ -795,7 +795,7 @@ send.addEventListener("click", async function (e) {
         }).then((response) => response.json());
         console.log(response);
 
-        if (response === "pong.") {
+        if (response === "pong") {
             this.classList.add("success");
             setTimeout(() => {
                 this.classList.remove("success");
