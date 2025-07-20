@@ -17,7 +17,8 @@ const functionDB = {
     "getColumnsAndTypesForTable": getTableColumns,
     "sql": sql,
     "insertGenerate": insertGenerate,
-    "setWhere": setWhere
+    "setWhere": setWhere,
+    "ping": ping,
 }
 
 
@@ -58,7 +59,9 @@ async function getTableColumns(body) {
         connection.release();
     }
 }
-
+async function ping() {
+    return "pong";
+}
 async function getPriKey(nameTable) {
     const [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
 

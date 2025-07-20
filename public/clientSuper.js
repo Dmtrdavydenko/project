@@ -729,6 +729,17 @@ send.addEventListener("click", async function (e) {
 
 
 
+    response = await fetch(document.location.href, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "ping"
+        }),
+    }).then((response) => response.json());
+    console.log(response);
+
 
     //try {
     //    // date:13
