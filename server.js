@@ -114,14 +114,14 @@ async function select(body) {
                 ];
 
                 // Для полей из textile добавляем префикс "t."
-                const sqlFields = select.fields.map(f => {
+                select.sqlFields = select.fields.map(f => {
                     if (f.startsWith("width.") || f.startsWith("d.")) {
                         return f; // уже с префиксом правильным
                     } else {
                         return "t." + f;
                     }
                 });
-                sql = "SELECT " + sqlFields.join(", ") + " " +
+                sql = "SELECT " + select.sqlFields.join(", ") + " " +
                     "FROM textile t " +
                     "JOIN circular_width width ON t.textile_width = width.id " +
                     "JOIN density d ON t.textile_density = d.id;"
@@ -154,7 +154,8 @@ async function select(body) {
         //select.name = body.table.name;
         return {
             rows,
-            Field: select.fields
+            Field: select.fields,
+            F:select.sqlFields
         };
 
     } catch (err) {

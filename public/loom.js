@@ -201,7 +201,21 @@ function getLocalDateTimeForMySQL() {
  */
 async function loadAndRenderButtons(field = "textile_number") {
     try {
-        const sqlFields = field.map(f => {
+        select.fields = [
+            "textile_id",
+            "textile_number",
+            "width.circular_width",  // из circular_width
+            "d.density",             // из density
+            "weft_quantity",
+            "warp_quantity",
+            "warp_name",
+            "warp_name2",
+            "weft_name1",
+            "weft_name2"
+        ];
+
+        // Для полей из textile добавляем префикс "t."
+        const sqlFields = select.fields.map(f => {
             if (f.startsWith("width.") || f.startsWith("d.")) {
                 return f; // уже с префиксом правильным
             } else {
@@ -215,7 +229,7 @@ async function loadAndRenderButtons(field = "textile_number") {
                 action: "sql",
 
                 //query: "select " + field + " from textile",
-                query: "SELECT " + sqlFields + " " +
+                query: "SELECT " + field + " " +
                     "FROM textile t " +
                     "JOIN circular_width width ON t.textile_width = width.id " +
                     "JOIN density d ON t.textile_density = d.id;"
@@ -321,7 +335,7 @@ async function select(event) {
 
 (async () => {
     //const field = (await getSelectedValue()).map(item => item.Field);
-    const field = (await getSelectedValue()).Field;
+    const field = (await getSelectedValue()).F;
     console.log(field);
     field.forEach(item => nav.append(createA(item)));
 })();
