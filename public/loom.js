@@ -201,7 +201,7 @@ function getLocalDateTimeForMySQL() {
  */
 async function loadAndRenderButtons(field = "textile_number") {
     try {
-        const sqlFields = fields.map(f => {
+        const sqlFields = field.map(f => {
             if (f.startsWith("width.") || f.startsWith("d.")) {
                 return f; // уже с префиксом правильным
             } else {
