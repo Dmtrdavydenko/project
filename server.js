@@ -95,6 +95,12 @@ async function select(body) {
                 const field = ["thread_id", "thread_density", "thread_length"];
                 sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
                 break;
+            case "textile":
+                //const field = ["thread_id", "thread_density", "thread_length"];
+                sql = "SELECT * " +
+                    "FROM textile t JOIN circular_width width ON t.textile_width = width.id " +
+                    "JOIN density d ON t.textile_density = d.density";
+                break;
             default:
                 sql = 'SELECT * FROM ' + body.table.name;
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
