@@ -206,7 +206,11 @@ async function loadAndRenderButtons(field = "textile_number") {
             headers: { 'Content-Type': 'application/json;charset=utf-8' },
             body: JSON.stringify({
                 action: "sql",
-                query: "select " + field + " from textile",
+
+                //query: "select " + field + " from textile",
+                query: "select " + field + " FROM textile t "+
+                "JOIN circular_width width ON t.textile_width = width.id;"
+
             }),
         });
 
