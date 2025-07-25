@@ -274,7 +274,8 @@ async function getSelectedValue() {
             "Content-Type": "application/json;charset=utf-8",
         },
         body: JSON.stringify({
-            action: "getColumnsAndTypesForTable",
+            action: "select",
+            //action: "getColumnsAndTypesForTable",
             table: {
                 name: "textile",
             }
