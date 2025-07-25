@@ -100,7 +100,28 @@ async function select(body) {
                 // textile_id	textile_width	textile_density	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
                 // textile_id	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
 
-                sql = "SELECT t." + field.join(", t.")+" "+
+                const fields = [
+                    "textile_id",
+                    "textile_number",
+                    "width.circular_width",  // из circular_width
+                    "d.density",             // из density
+                    "weft_quantity",
+                    "warp_quantity",
+                    "warp_name",
+                    "warp_name2",
+                    "weft_name1",
+                    "weft_name2"
+                ];
+
+                // Для полей из textile добавляем префикс "t."
+                const sqlFields = fields.map(f => {
+                    if (f.startsWith("width.") || f.startsWith("d.")) {
+                        return f; // уже с префиксом правильным
+                    } else {
+                        return "t." + f;
+                    }
+                });
+                sql = "SELECT " + sqlFields.join(", ") + " " +
                     "FROM textile t " +
                     "JOIN circular_width width ON t.textile_width = width.id " +
                     "JOIN density d ON t.textile_density = d.id;"
