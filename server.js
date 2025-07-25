@@ -100,7 +100,7 @@ async function select(body) {
                 // textile_id	textile_width	textile_density	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
                 // textile_id	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
 
-                const fields = [
+                select.fields = [
                     "textile_id",
                     "textile_number",
                     "width.circular_width",  // из circular_width
@@ -114,7 +114,7 @@ async function select(body) {
                 ];
 
                 // Для полей из textile добавляем префикс "t."
-                const sqlFields = fields.map(f => {
+                const sqlFields = select.fields.map(f => {
                     if (f.startsWith("width.") || f.startsWith("d.")) {
                         return f; // уже с префиксом правильным
                     } else {
@@ -153,7 +153,8 @@ async function select(body) {
         //select.pri = primaryKeyColumn;
         //select.name = body.table.name;
         return {
-            rows // все данные таблицы
+            rows,
+            Field: select.fields
         };
 
     } catch (err) {
