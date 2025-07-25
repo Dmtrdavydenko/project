@@ -170,9 +170,13 @@ function createButtonsInBlockFromArray(field,containerId, numbersArray, reverse 
 
     arr.forEach(item => {
         const btn = document.createElement('button');
+        btn.addEventListener("click",toggle);
         btn.textContent = item[field];
         container.appendChild(btn);
     });
+}
+function toggle() {
+    this.classList.toggle('active');
 }
 
 /**
