@@ -178,7 +178,9 @@ function createButtonsInBlockFromArray(field,containerId, numbersArray, reverse 
 function toggle() {
     this.classList.toggle('active');
     const localDateTime = getLocalDateTimeForMySQL();
+    toggle.sum += 1;
     console.log(localDateTime);
+    console.log(toggle.sum);
 }
 function getLocalDateTimeForMySQL() {
     const now = new Date();
