@@ -307,7 +307,8 @@ async function select(event) {
 
 
 (async () => {
-    const field = (await getSelectedValue()).map(item => item.Field);
+    //const field = (await getSelectedValue()).map(item => item.Field);
+    const field = (await getSelectedValue()).Field;
     console.log(field);
     field.forEach(item => nav.append(createA(item)));
 })();
