@@ -208,8 +208,10 @@ async function loadAndRenderButtons(field = "textile_number") {
                 action: "sql",
 
                 //query: "select " + field + " from textile",
-                query: "select " + field + " FROM textile t "+
-                "JOIN circular_width width ON t.textile_width = width.id;"
+                query: "SELECT " + field + " " +
+                    "FROM textile t " +
+                    "JOIN circular_width width ON t.textile_width = width.id " +
+                    "JOIN density d ON t.textile_density = d.id;"
 
             }),
         });
