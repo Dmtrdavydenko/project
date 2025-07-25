@@ -238,6 +238,7 @@ async function loadAndRenderButtons(field = "textile_number") {
         });
 
         const allNumbers = await response.json();
+        console.log(allNumbers);
 
         const requiredCount = buttonsPerBlock * totalBlocks + 12;
         if (!Array.isArray(allNumbers) || allNumbers.length < requiredCount) {
