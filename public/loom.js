@@ -201,6 +201,13 @@ function getLocalDateTimeForMySQL() {
  */
 async function loadAndRenderButtons(field = "textile_number") {
     try {
+        const sqlFields = fields.map(f => {
+            if (f.startsWith("width.") || f.startsWith("d.")) {
+                return f; // уже с префиксом правильным
+            } else {
+                return "t." + f;
+            }
+        });
         const response = await fetch('https://worktime.up.railway.app/textile', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json;charset=utf-8' },
@@ -208,7 +215,7 @@ async function loadAndRenderButtons(field = "textile_number") {
                 action: "sql",
 
                 //query: "select " + field + " from textile",
-                query: "SELECT " + field + " " +
+                query: "SELECT " + sqlFields + " " +
                     "FROM textile t " +
                     "JOIN circular_width width ON t.textile_width = width.id " +
                     "JOIN density d ON t.textile_density = d.id;"
