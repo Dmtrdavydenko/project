@@ -97,9 +97,9 @@ async function select(body) {
                 break;
             case "textile":
                 //const field = ["thread_id", "thread_density", "thread_length"];
-                sql = "SELECT *" +
-                    "FROM textile t" +
-                    "JOIN circular_width width ON t.textile_width = width.id" +
+                sql = "SELECT * " +
+                    "FROM textile t " +
+                    "JOIN circular_width width ON t.textile_width = width.id " +
                     "JOIN density d ON t.textile_density = d.id;"
                 break;
             default:
