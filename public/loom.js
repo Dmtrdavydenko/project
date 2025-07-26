@@ -224,7 +224,10 @@ async function select(event) {
 
 (async () => {
     //const field = (await getSelectedValue()).map(item => item.Field);
-    const field = (await getSelectedValue()).F;
+    const field = (await getSelectedValue()).F.map(item => {
+        const parts = item.split('.');
+        return parts[parts.length - 1];
+    });;
     console.log(field);
     field.forEach(item => nav.append(createA(item)));
 })();
