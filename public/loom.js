@@ -51,96 +51,6 @@ function createSelectOptions(dataArray) {
 
 
 
-//const buttonsPerBlock = 9;
-//const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
-//const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
-//const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
-
-//// Функция создания кнопок из массива номеров с учётом reverse
-//function createButtonsInBlockFromArray(containerId, numbersArray, reverse = false) {
-//    const container = document.getElementById(containerId);
-//    container.innerHTML = '';
-//    const arr = reverse ? [...numbersArray].reverse() : numbersArray;
-//    arr.forEach(object => {
-//        const btn = document.createElement('button');
-//        btn.textContent = object.textile_number;
-//        container.appendChild(btn);
-//    });
-//}
-
-//// Предположим, что allNumbers — это массив из базы, например:
-//async function loadAndRenderButtons() {
-//    // Получаем все номера из базы (пример)
-//    const response = await fetch('https://worktime.up.railway.app/textile', {
-//        method: 'POST',
-//        headers: { 'Content-Type': 'application/json;charset=utf-8' },
-//        //body: JSON.stringify({ action: 'getAllNumbers' }) // пример запроса
-//        body: JSON.stringify({
-//            action: "sql", // Измените на нужное действие, если необходимо
-//            query: "select textile_number from textile", // Отправляем SQL-запрос
-//        }),
-//    });
-//    const allNumbers = await response.json(); // допустим, это массив чисел
-
-//    // Проверим, что у нас достаточно номеров
-//    if (!Array.isArray(allNumbers) || allNumbers.length < buttonsPerBlock * totalBlocks + 12) {
-//        console.error('Недостаточно номеров в базе');
-//        return;
-//    }
-
-//    // Распределяем номера по блокам
-//    // Берём первые 72 номера для 8 блоков по 9 кнопок
-//    const blocksNumbersArray = allNumbers.slice(0, buttonsPerBlock * totalBlocks);
-
-//    // Последние 12 номеров для футера
-//    const footerNumbers = allNumbers.slice(buttonsPerBlock * totalBlocks, buttonsPerBlock * totalBlocks + 12);
-
-//    // Формируем объект с массивами для каждого блока
-//    const blocksNumbers = {};
-
-//    // Правые блоки (4 блока)
-//    for (let i = 0; i < rightBlocks.length; i++) {
-//        const start = i * buttonsPerBlock;
-//        blocksNumbers[rightBlocks[i]] = blocksNumbersArray.slice(start, start + buttonsPerBlock);
-//    }
-
-//    // Левые блоки (4 блока)
-//    for (let i = 0; i < leftBlocks.length; i++) {
-//        const start = (rightBlocks.length + i) * buttonsPerBlock;
-//        blocksNumbers[leftBlocks[i]] = blocksNumbersArray.slice(start, start + buttonsPerBlock);
-//    }
-
-//    blocksNumbers['footerBlock'] = footerNumbers;
-
-//    // Создаём кнопки с учётом reverse, как в вашем оригинальном коде
-//    let blockIndex = 1;
-
-//    // Правая колонка (снизу вверх)
-//    for (let i = 0; i < rightBlocks.length; i++, blockIndex++) {
-//        const blockId = rightBlocks[i];
-//        let reverse = (blockIndex % 2 === 1);
-//        if (blockIndex === totalBlocks) reverse = true;
-//        createButtonsInBlockFromArray(blockId, blocksNumbers[blockId], reverse);
-//    }
-
-//    // Левая колонка (сверху вниз)
-//    for (let i = 0; i < leftBlocks.length; i++, blockIndex++) {
-//        const blockId = leftBlocks[i];
-//        let reverse = (blockIndex % 2 === 1);
-//        if (blockIndex === totalBlocks) reverse = true;
-//        createButtonsInBlockFromArray(blockId, blocksNumbers[blockId], reverse);
-//    }
-
-//    // Футер (развёрнутый)
-//    createButtonsInBlockFromArray('footerBlock', blocksNumbers['footerBlock'], true);
-//}
-
-// Запускаем загрузку и рендер
-//loadAndRenderButtons();
-
-
-
-
 
 
 
@@ -167,7 +77,7 @@ function createButtonsInBlockFromArray(field, containerId, numbersArray, reverse
 
     // Копируем массив и, если нужно, переворачиваем порядок
     const arr = reverse ? [...numbersArray].reverse() : numbersArray;
-
+    console.log(arr);
     arr.forEach(item => {
         const btn = document.createElement('button');
         btn.addEventListener("click", toggle);
