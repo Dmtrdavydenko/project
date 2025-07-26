@@ -161,7 +161,7 @@ const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
  * @param {Array} numbersArray - Массив объектов с полем textile_number
  * @param {boolean} reverse - Нужно ли реверсировать порядок кнопок
  */
-function createButtonsInBlockFromArray(field,containerId, numbersArray, reverse = false) {
+function createButtonsInBlockFromArray(field, containerId, numbersArray, reverse = false) {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
 
@@ -170,7 +170,7 @@ function createButtonsInBlockFromArray(field,containerId, numbersArray, reverse 
 
     arr.forEach(item => {
         const btn = document.createElement('button');
-        btn.addEventListener("click",toggle);
+        btn.addEventListener("click", toggle);
         btn.textContent = item[field];
         container.appendChild(btn);
     });
@@ -201,34 +201,11 @@ function getLocalDateTimeForMySQL() {
  */
 async function loadAndRenderButtons(field = "textile_number") {
     try {
-        select.fields = [
-            "textile_id",
-            "textile_number",
-            "width.circular_width",  // из circular_width
-            "d.density",             // из density
-            "weft_quantity",
-            "warp_quantity",
-            "warp_name",
-            "warp_name2",
-            "weft_name1",
-            "weft_name2"
-        ];
-
-        // Для полей из textile добавляем префикс "t."
-        const sqlFields = select.fields.map(f => {
-            if (f.startsWith("width.") || f.startsWith("d.")) {
-                return f; // уже с префиксом правильным
-            } else {
-                return "t." + f;
-            }
-        });
         const response = await fetch('https://worktime.up.railway.app/textile', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json;charset=utf-8' },
             body: JSON.stringify({
                 action: "sql",
-
-                //query: "select " + field + " from textile",
                 query: "SELECT " + field + " " +
                     "FROM textile t " +
                     "JOIN circular_width width ON t.textile_width = width.id " +
@@ -273,19 +250,19 @@ async function loadAndRenderButtons(field = "textile_number") {
         // Правая колонка (снизу вверх)
         rightBlocks.forEach(blockId => {
             const reverse = (blockIndex % 2 === 1) || (blockIndex === totalBlocks);
-            createButtonsInBlockFromArray(field,blockId, blocksNumbers[blockId], reverse);
+            createButtonsInBlockFromArray(field, blockId, blocksNumbers[blockId], reverse);
             blockIndex++;
         });
 
         // Левая колонка (сверху вниз)
         leftBlocks.forEach(blockId => {
             const reverse = (blockIndex % 2 === 1) || (blockIndex === totalBlocks);
-            createButtonsInBlockFromArray(field,blockId, blocksNumbers[blockId], reverse);
+            createButtonsInBlockFromArray(field, blockId, blocksNumbers[blockId], reverse);
             blockIndex++;
         });
 
         // Футер (развёрнутый)
-        createButtonsInBlockFromArray(field,'footerBlock', blocksNumbers['footerBlock'], true);
+        createButtonsInBlockFromArray(field, 'footerBlock', blocksNumbers['footerBlock'], true);
 
     } catch (error) {
         console.error('Ошибка загрузки номеров:', error);
