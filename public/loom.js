@@ -78,6 +78,7 @@ function createButtonsInBlockFromArray(field, containerId, numbersArray, reverse
     // Копируем массив и, если нужно, переворачиваем порядок
     const arr = reverse ? [...numbersArray].reverse() : numbersArray;
     console.log(arr);
+    console.log(field);
     arr.forEach(item => {
         const btn = document.createElement('button');
         btn.addEventListener("click", toggle);
