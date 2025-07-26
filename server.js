@@ -123,8 +123,8 @@ async function select(body) {
                 });
                 sql = "SELECT " + select.sqlFields.join(", ") + " " +
                     "FROM textile t " +
-                    "JOIN circular_width width ON t.textile_width = width.id " +
-                    "JOIN density d ON t.textile_density = d.id;"
+                    "JOIN circular_width width ON t.width_id = width.id " +
+                    "JOIN density d ON t.density_id = d.id;"
                 break;
             default:
                 sql = 'SELECT * FROM ' + body.table.name;
