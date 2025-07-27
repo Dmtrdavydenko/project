@@ -352,6 +352,26 @@ async function sqlWhere({ tableName, rowId, columnName, whereColum, value }) {
 //const sql = "SELECT * FROM your_table"; // Замените на ваш SQL-запрос
 //sqlQuery(sql);
 
+function getTableNameFromMetadata(metadata) {
+    if (
+        !metadata._buf ||
+        !metadata._buf.data ||
+        typeof metadata._orgTableStart !== 'number' ||
+        typeof metadata._orgTableLength !== 'number'
+    ) {
+        throw new Error('Недостаточно данных для извлечения имени таблицы');
+    }
+
+    // Создаём Buffer из массива байт
+    const buf = Buffer.from(metadata._buf.data);
+
+    const start = metadata._orgTableStart;
+    const length = metadata._orgTableLength;
+
+    const tableName = buf.slice(start, start + length).toString('utf8');
+
+    return tableName;
+}
 async function sqlQuery(sqlQueryString) {
     try {
         const response = await fetch("https://worktime.up.railway.app/textile", {
@@ -372,6 +392,10 @@ async function sqlQuery(sqlQueryString) {
 
         const result = await response.json(); // Получаем JSON-ответ
         console.log(result); // Выводим результат в консоль
+        console.log(result[1].map(meta => ({
+            name:meta.name,
+            table: getTableNameFromMetadata(meta)
+        }));
         //textAsk.value = response;
         textAsk.value = JSON.stringify(result);
     } catch (error) {
