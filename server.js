@@ -135,7 +135,8 @@ async function select(body) {
 
         }
         console.log("Запрос sql " + sql);
-        const [rows] = await connection.execute(sql);
+        const all = await connection.execute(sql);
+        const [rows] = all;
 
 
         // Извлекаем информацию о колонках
@@ -153,6 +154,7 @@ async function select(body) {
         //select.pri = primaryKeyColumn;
         //select.name = body.table.name;
         return {
+            all,
             rows,
             Field: select.fields,
             F:select.sqlFields
@@ -590,10 +592,10 @@ async function sql(body) {
 
     try {
         // Выполняем переданный SQL-запрос
-        const [results] = await connection.execute(body.query);
+        const all = await connection.execute(body.query);
 
         console.log('Результаты запроса:', results);
-        return results; // Возвращаем результаты запроса
+        return all; // Возвращаем результаты запроса
     } catch (err) {
         console.error('Ошибка при выполнении запроса:', err);
         throw err; // Пробрасываем ошибку дальше
