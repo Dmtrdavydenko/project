@@ -370,7 +370,7 @@ async function sqlQuery(sqlQueryString) {
             throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
         }
 
-        const result = await response.text(); // Получаем JSON-ответ
+        const result = await response.json(); // Получаем JSON-ответ
         console.log(result); // Выводим результат в консоль
         //textAsk.value = response;
         textAsk.value = JSON.stringify(result);
