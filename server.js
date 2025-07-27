@@ -39,39 +39,43 @@ const mysql = require('mysql2/promise');
 const pool = mysql.createPool(dbConfig); // создаём пул подключений
 
 async function getColumnsJoin(body) {
-    // Создаём подключение к базе данных
     const connection = await pool.getConnection();
-    const sql = "SELECT * " +
-        "FROM textile t " +
-        "JOIN circular_width width ON t.width_id = width.id " +
-        "JOIN density d ON t.density_id = d.id " +
-        "LIMIT 0;";
-    let data = {};
+    const baseSql = `
+    SELECT * 
+    FROM textile t 
+    JOIN circular_width width ON t.width_id = width.id 
+    JOIN density d ON t.density_id = d.id 
+    LIMIT 0;
+  `;
+    const data = {};
+
     try {
-        // Выполняем запрос DESCRIBE для получения колонок таблицы
-        const [rows, metadata] = await connection.execute(sql);
-        // Извлекаем названия колонок и их типы т.д.
+        // Выполняем запрос и получаем metadata
+        const [, metadata] = await connection.execute(baseSql);
 
-        metadata = metadata.map(metadata => decodeMetadataBuffer(metadata));
+        // Декодируем metadata
+        const decodedMetadata = metadata.map(decodeMetadataBuffer);
 
-        metadata.forEach(metadata => {
-
-            if (metadata.orgName === metadata.orgTable) {
-                sql = "SELECT " + metadata.orgName + " FROM " + metadata.orgTable;
-                data[metadata.orgName] = (await connection.execute(sql))[0];
+        // Последовательно выполняем запросы для каждого метаданных
+        for (const meta of decodedMetadata) {
+            if (meta.orgName === meta.orgTable) {
+                const sql = `SELECT \`${meta.orgName}\` FROM \`${meta.orgTable}\``;
+                data[meta.orgName] = (await connection.execute(sql))[0];
             }
-
-        })
+        }
 
         console.log(`Список колонок и типов таблицы "${body.table.name}":`, data);
-        return data; // Возвращаем массив объектов с названиями и типами колонок
+        return data;
+
     } catch (err) {
         console.error('Ошибка при получении колонок таблицы:', err);
         throw err;
+
     } finally {
         connection.release();
     }
 }
+
 function decodeSliceBuffer(data, start, length, encoding = 'utf8') {
     // Создаем Buffer из массива байт (если data — массив)
     const buf = Buffer.from(data);
