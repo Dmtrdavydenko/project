@@ -19,6 +19,7 @@ const functionDB = {
     "insertGenerate": insertGenerate,
     "setWhere": setWhere,
     "ping": ping,
+    "getColumnsJoin": getColumnsJoin,
 }
 
 
@@ -36,6 +37,59 @@ const mysql = require('mysql2/promise');
 //const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
 
 const pool = mysql.createPool(dbConfig); // создаём пул подключений
+
+async function getColumnsJoin(body) {
+    // Создаём подключение к базе данных
+    const connection = await pool.getConnection();
+    const sql = "SELECT * " +
+        "FROM textile t " +
+        "JOIN circular_width width ON t.width_id = width.id " +
+        "JOIN density d ON t.density_id = d.id " +
+        "LIMIT 0;";
+    let data = {};
+    try {
+        // Выполняем запрос DESCRIBE для получения колонок таблицы
+        const [rows, metadata] = await connection.execute(sql);
+        // Извлекаем названия колонок и их типы т.д.
+
+        metadata = metadata.map(metadata => decodeMetadataBuffer(metadata));
+
+        metadata.forEach(metadata => {
+
+            if (metadata.orgName === metadata.orgTable) {
+                sql = "SELECT " + metadata.orgName + " FROM " + metadata.orgTable;
+                data[metadata.orgName] = (await connection.execute(sql))[0];
+            }
+
+        })
+
+        console.log(`Список колонок и типов таблицы "${body.table.name}":`, data);
+        return data; // Возвращаем массив объектов с названиями и типами колонок
+    } catch (err) {
+        console.error('Ошибка при получении колонок таблицы:', err);
+        throw err;
+    } finally {
+        connection.release();
+    }
+}
+function decodeSliceBuffer(data, start, length, encoding = 'utf8') {
+    // Создаем Buffer из массива байт (если data — массив)
+    const buf = Buffer.from(data);
+    // Извлекаем срез и преобразуем в строку с указанной кодировкой
+    return buf.slice(start, start + length).toString(encoding);
+}
+
+function decodeMetadataBuffer(metadata) {
+    const data = metadata._buf.data;
+
+    return {
+        catalog: decodeSliceBuffer(data, metadata._catalogStart, metadata._catalogLength, metadata._clientEncoding),
+        schema: decodeSliceBuffer(data, metadata._schemaStart, metadata._schemaLength, metadata._clientEncoding),
+        table: decodeSliceBuffer(data, metadata._tableStart, metadata._tableLength, metadata._clientEncoding),
+        orgTable: decodeSliceBuffer(data, metadata._orgTableStart, metadata._orgTableLength, metadata._clientEncoding),
+        orgName: decodeSliceBuffer(data, metadata._orgNameStart, metadata._orgNameLength, metadata._clientEncoding),
+    };
+}
 
 async function getTableColumns(body) {
     // Создаём подключение к базе данных
@@ -157,7 +211,7 @@ async function select(body) {
             all,
             rows,
             Field: select.fields,
-            F:select.sqlFields
+            F: select.sqlFields
         };
 
     } catch (err) {

@@ -256,7 +256,22 @@ function createSelectOptions(dataArray) {
 
 
 
-
+async function getSelected() {
+    const result = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "getColumnsJoin",
+            table: {
+                name: selectTableName.value,
+            }
+        }),
+    }).then((response) => response.json());
+    console.log(result);
+    return await result;
+}
 async function getSelectedValue() {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
@@ -458,7 +473,6 @@ function createInputElement(column) {
 
 
     column
-    console.log(column);
     //console.log(column.Extra);
     let inputElement;
     //console.log(`Field: ${column.Field} Type: ${column.Type}`);
@@ -524,10 +538,11 @@ function createInputElement(column) {
 let array = [];
 async function generateForm() {
     const columns = await getSelectedValue();
+    const join = await getSelected();
     const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
     array = [];
-    console.log(columns);
+    console.log(join);
     columns.forEach(column => {
         const inputElement = createInputElement(column);
         formContainer.append(inputElement);
