@@ -375,6 +375,22 @@ function getTableNameFromMetadata(metadata) {
 
     return tableName;
 }
+function decodeSlice(data, start, length, encoding = 'utf-8') {
+    const slice = data.slice(start, start + length);
+    const decoder = new TextDecoder(encoding);
+    return decoder.decode(new Uint8Array(slice));
+}
+function decodeMetadata(metadata) {
+    const data = metadata._buf.data;
+
+    return {
+        catalog: decodeSlice(data, metadata._catalogStart, metadata._catalogLength, metadata._clientEncoding),
+        schema: decodeSlice(data, metadata._schemaStart, metadata._schemaLength, metadata._clientEncoding),
+        table: decodeSlice(data, metadata._tableStart, metadata._tableLength, metadata._clientEncoding),
+        orgTable: decodeSlice(data, metadata._orgTableStart, metadata._orgTableLength, metadata._clientEncoding),
+        orgName: decodeSlice(data, metadata._orgNameStart, metadata._orgNameLength, metadata._clientEncoding),
+    };
+}
 
 async function sqlQuery(sqlQueryString) {
     try {
@@ -398,7 +414,8 @@ async function sqlQuery(sqlQueryString) {
         console.log(result); // Выводим результат в консоль
         console.log(result[1].map(meta => ({
             name:meta.name,
-            table: getTableNameFromMetadata(meta)
+            table: getTableNameFromMetadata(meta),
+            all: decodeMetadata(meta)
         })));
         //textAsk.value = response;
         textAsk.value = JSON.stringify(result);
