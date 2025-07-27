@@ -527,6 +527,7 @@ async function generateForm() {
     const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
     array = [];
+    console.log(columns);
     columns.forEach(column => {
         const inputElement = createInputElement(column);
         formContainer.append(inputElement);
