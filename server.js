@@ -594,7 +594,7 @@ async function sql(body) {
         // Выполняем переданный SQL-запрос
         const all = await connection.execute(body.query);
 
-        console.log('Результаты запроса:', results);
+        console.log('Результаты запроса:', all);
         return all; // Возвращаем результаты запроса
     } catch (err) {
         console.error('Ошибка при выполнении запроса:', err);
