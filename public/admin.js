@@ -362,16 +362,20 @@ function getTableNameFromMetadata(metadata) {
         throw new Error('Недостаточно данных для извлечения имени таблицы');
     }
 
-    // Создаём Buffer из массива байт
-    const buf = Buffer.from(metadata._buf.data);
-
+    const data = metadata._buf.data;
     const start = metadata._orgTableStart;
     const length = metadata._orgTableLength;
 
-    const tableName = buf.slice(start, start + length).toString('utf8');
+    // Получаем срез массива байт
+    const slice = data.slice(start, start + length);
+
+    // Используем TextDecoder для преобразования байтов в строку
+    const decoder = new TextDecoder('utf-8');
+    const tableName = decoder.decode(new Uint8Array(slice));
 
     return tableName;
 }
+
 async function sqlQuery(sqlQueryString) {
     try {
         const response = await fetch("https://worktime.up.railway.app/textile", {
