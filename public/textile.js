@@ -564,7 +564,6 @@ async function generateForm() {
             const sql = `SELECT \`${meta.orgName}\` FROM \`${meta.orgTable}\``;
             const select = document.createElement('select');
             console.log(sql);
-            data[meta.orgName] = (await sqlQuery(sql))[0];
             (await sqlQuery(sql))[0].forEach(item => {
                 const option = document.createElement('option');
                 option.value = item[meta.orgName];
