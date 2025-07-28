@@ -41,7 +41,7 @@ const pool = mysql.createPool(dbConfig); // создаём пул подключ
 async function getColumnsJoin(body) {
     const connection = await pool.getConnection();
     const baseSql = `
-    SELECT * 
+    SELECT d.density
     FROM textile t 
     JOIN circular_width width ON t.width_id = width.id 
     JOIN density d ON t.density_id = d.id 
