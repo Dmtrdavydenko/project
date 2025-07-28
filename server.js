@@ -51,21 +51,22 @@ async function getColumnsJoin(body) {
 
     try {
         // Выполняем запрос и получаем metadata
-        const [, metadata] = await connection.execute(baseSql);
+        const data = await connection.execute(baseSql);
 
         // Декодируем metadata
-        console.log(metadata);
-        const decodedMetadata = metadata.map(meta=>decodeMetadataBuffer(meta));
-        console.log(decodedMetadata);
-        // Последовательно выполняем запросы для каждого метаданных
-        for (const meta of decodedMetadata) {
-            if (meta.orgName === meta.orgTable) {
-                const sql = "SELECT "+meta.orgName+" FROM "+meta.orgTable;
-                //const sql = `SELECT \`${meta.orgName}\` FROM \`${meta.orgTable}\``;
-                console.log(sql);
-                data[meta.orgName] = (await connection.execute(sql))[0];
-            }
-        }
+        console.log("all");
+        console.log(data);
+        //const decodedMetadata = metadata.map(meta=>decodeMetadataBuffer(meta));
+        //console.log(decodedMetadata);
+        //// Последовательно выполняем запросы для каждого метаданных
+        //for (const meta of decodedMetadata) {
+        //    if (meta.orgName === meta.orgTable) {
+        //        const sql = "SELECT "+meta.orgName+" FROM "+meta.orgTable;
+        //        //const sql = `SELECT \`${meta.orgName}\` FROM \`${meta.orgTable}\``;
+        //        console.log(sql);
+        //        data[meta.orgName] = (await connection.execute(sql))[0];
+        //    }
+        //}
 
         console.log(`Список колонок и типов таблицы "${body.table.name}":`, data);
         return data;
