@@ -124,7 +124,7 @@ async function loadAndRenderButtons(field = "textile_number") {
 
             }),
         }))[0];
-
+        console.log(response);
         const allNumbers = await response.json();
         console.log(allNumbers);
 
