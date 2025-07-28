@@ -112,7 +112,7 @@ function getLocalDateTimeForMySQL() {
  */
 async function loadAndRenderButtons(field = "textile_number") {
     try {
-        const response = (await fetch('https://worktime.up.railway.app/textile', {
+        const response = await fetch('https://worktime.up.railway.app/textile', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json;charset=utf-8' },
             body: JSON.stringify({
@@ -123,7 +123,7 @@ async function loadAndRenderButtons(field = "textile_number") {
                     "JOIN density d ON t.density_id = d.id;"
 
             }),
-        }))[0];
+        });
         console.log(response);
         const allNumbers = await response.json();
         console.log(allNumbers);
