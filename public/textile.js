@@ -552,6 +552,7 @@ function decodeMetadata(metadata) {
     };
 }
 async function generateForm() {
+    const formContainer = document.getElementById('form-container');
     const columns = await getSelectedValue();
     const join = await getSelected();
     console.log(join);
@@ -577,7 +578,6 @@ async function generateForm() {
 
 
 
-    const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
     array = [];
 
