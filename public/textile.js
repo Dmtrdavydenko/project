@@ -543,7 +543,6 @@ function decodeSlice(data, start, length, encoding = 'utf-8') {
 }
 function decodeMetadata(metadata) {
     const data = metadata._buf.data;
-
     return {
         catalog: decodeSlice(data, metadata._catalogStart, metadata._catalogLength, metadata._clientEncoding),
         schema: decodeSlice(data, metadata._schemaStart, metadata._schemaLength, metadata._clientEncoding),
@@ -557,15 +556,15 @@ async function generateForm() {
     const join = await getSelected();
     console.log(join);
     let decodedMetadata = join.map(meta => (decodeMetadata(meta)))
-
+    let data = {};
     for (const meta of decodedMetadata) {
         if (meta.orgName === meta.orgTable) {
             const sql = `SELECT \`${meta.orgName}\` FROM \`${meta.orgTable}\``;
             console.log(sql);
-            //data[meta.orgName] = (await connection.execute(sql))[0];
+            data[meta.orgName] = await sqlQuery(sql);
         }
     }
-
+    console.log(data);
 
 
 
@@ -578,6 +577,30 @@ async function generateForm() {
         formContainer.append(inputElement);
         array.push(inputElement);
     });
+}
+
+async function sqlQuery(sqlQueryString) {
+    try {
+        const response = await fetch("https://worktime.up.railway.app/textile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify({
+                action: "sql", // Измените на нужное действие, если необходимо
+                query: sqlQueryString, // Отправляем SQL-запрос
+            }),
+        });
+
+        // Проверка на успешный ответ
+        if (!response.ok) {
+            throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+        }
+
+        return await response.json(); // Получаем JSON-ответ
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
+    }
 }
 async function sendForm() {
     const arrayInput = array.filter(input => input.value.length > 0);
