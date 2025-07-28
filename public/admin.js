@@ -418,6 +418,15 @@ async function sqlQuery(sqlQueryString) {
             all: decodeMetadata(meta)
         })));
         console.log(result[1].map(meta => (decodeMetadata(meta))));
+        let decodedMetadata = result[1].map(meta => (decodeMetadata(meta)))
+
+        for (const meta of decodedMetadata) {
+            if (meta.orgName === meta.orgTable) {
+                const sql = `SELECT \`${meta.orgName}\` FROM \`${meta.orgTable}\``;
+                console.log(sql);
+                //data[meta.orgName] = (await connection.execute(sql))[0];
+            }
+        }
         //textAsk.value = response;
         textAsk.value = JSON.stringify(result);
     } catch (error) {
