@@ -417,6 +417,7 @@ async function sqlQuery(sqlQueryString) {
             table: getTableNameFromMetadata(meta),
             all: decodeMetadata(meta)
         })));
+        console.log(result[1].map(meta => (decodeMetadata(meta))));
         //textAsk.value = response;
         textAsk.value = JSON.stringify(result);
     } catch (error) {
