@@ -561,7 +561,7 @@ async function generateForm() {
         if (meta.orgName === meta.orgTable) {
             const sql = `SELECT \`${meta.orgName}\` FROM \`${meta.orgTable}\``;
             console.log(sql);
-            data[meta.orgName] = await sqlQuery(sql);
+            data[meta.orgName] = (await sqlQuery(sql))[0];
         }
     }
     console.log(data);
