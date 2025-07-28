@@ -538,7 +538,7 @@ function createInputElement(column) {
 let array = [];
 async function generateForm() {
     const columns = await getSelectedValue();
-    const join = await getSelected();
+    //const join = await getSelected();
     const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
     array = [];
