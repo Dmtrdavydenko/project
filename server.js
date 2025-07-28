@@ -41,7 +41,7 @@ const pool = mysql.createPool(dbConfig); // создаём пул подключ
 async function getColumnsJoin(body) {
     const connection = await pool.getConnection();
     const baseSql = `
-    SELECT d.density
+    SELECT *
     FROM textile t 
     JOIN circular_width width ON t.width_id = width.id 
     JOIN density d ON t.density_id = d.id 
@@ -51,11 +51,9 @@ async function getColumnsJoin(body) {
 
     try {
         // Выполняем запрос и получаем metadata
-        const data = await connection.execute(baseSql);
+        const data = (await connection.execute(baseSql))[1];
 
         // Декодируем metadata
-        console.log("all");
-        console.log(data);
         //const decodedMetadata = metadata.map(meta=>decodeMetadataBuffer(meta));
         //console.log(decodedMetadata);
         //// Последовательно выполняем запросы для каждого метаданных

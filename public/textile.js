@@ -25,9 +25,9 @@ function createTable(data) {
     table.appendChild(thead);
 
     let tbody = document.createElement('tbody');
-    data.forEach((row,i) => {
+    data.forEach((row, i) => {
         let tr = document.createElement('tr');
-        tr.id = i+1;
+        tr.id = i + 1;
         Object.values(row).forEach(value => {
             let td = document.createElement('td');
             td.textContent = value;
@@ -374,7 +374,7 @@ async function queryTarget(event) {
             console.log(tr.sectionRowIndex);
             console.log(selectTableName.value);
             console.log(headers[td.cellIndex].textContent);
-            console.log("rowId: "+tr.cells[0].textContent);
+            console.log("rowId: " + tr.cells[0].textContent);
             try {
                 const result = await sqlWhere({
                     tableName: selectTableName.value,
@@ -540,10 +540,23 @@ async function generateForm() {
     const columns = await getSelectedValue();
     const join = await getSelected();
     console.log(join);
+    let decodedMetadata = join.map(meta => (decodeMetadata(meta)))
+
+    for (const meta of decodedMetadata) {
+        if (meta.orgName === meta.orgTable) {
+            const sql = `SELECT \`${meta.orgName}\` FROM \`${meta.orgTable}\``;
+            console.log(sql);
+            //data[meta.orgName] = (await connection.execute(sql))[0];
+        }
+    }
+
+
+
+
     const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
     array = [];
-    
+
     columns.forEach(column => {
         const inputElement = createInputElement(column);
         formContainer.append(inputElement);
