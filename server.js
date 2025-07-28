@@ -54,7 +54,7 @@ async function getColumnsJoin(body) {
         const [, metadata] = await connection.execute(baseSql);
 
         // Декодируем metadata
-        const decodedMetadata = metadata.map(decodeMetadataBuffer);
+        const decodedMetadata = metadata.map(meta=>decodeMetadataBuffer(meta));
 
         // Последовательно выполняем запросы для каждого метаданных
         for (const meta of decodedMetadata) {
