@@ -133,6 +133,49 @@ async function getPriKey(nameTable) {
     //return primaryKeyColumns.length > 1 ? primaryKeyColumns : primaryKeyColumns[0];  // undefined
     //return primaryKeyColumns.length ? (primaryKeyColumns.length > 1 ? primaryKeyColumns : primaryKeyColumns[0]) : null;
 }
+async function slt() {
+    const connection = await pool.getConnection();
+
+    try {
+        console.log('Успешно подключено к базе данных MySQL!');
+
+        // Получаем все данные из таблицы после вставки
+        //const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
+        let sql;
+        let descRows;
+        console.log("Запрос от клиента имя таблицы " + body.table.name);
+        console.log("Запрос sql " + sql);
+        const all = await connection.execute(sql);
+        const [rows] = all;
+
+
+        // Извлекаем информацию о колонках
+        //const columnsInfo = descRows.map(row => ({
+        //    Field: row.Field,
+        //    Type: row.Type,
+        //    Extra: row.Extra,
+        //    Key: row.Key  // Здесь ключ (например, 'PRI' для первичного ключа)
+        //}));
+
+        //// Находим имя столбца с первичным ключом
+        ////const primaryKeyColumns = descRows.filter(row => row.Key === 'PRI').map(row => row.Field);
+
+        //const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
+        //select.pri = primaryKeyColumn;
+        //select.name = body.table.name;
+        return data
+
+    } catch (err) {
+        console.error('Ошибка:', err);
+        throw err;
+    } finally {
+        connection.release();
+        //await pool.end();
+        //console.log('Пул соединений закрыт.');
+    }
+
+
+}
 async function select(body) {
     //const pool = mysql.createPool(dbConfig); // создаём пул подключений
     const connection = await pool.getConnection();

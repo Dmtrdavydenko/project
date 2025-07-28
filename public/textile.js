@@ -560,8 +560,17 @@ async function generateForm() {
     for (const meta of decodedMetadata) {
         if (meta.orgName === meta.orgTable) {
             const sql = `SELECT \`${meta.orgName}\` FROM \`${meta.orgTable}\``;
+            const select = document.createElement('select');
             console.log(sql);
             data[meta.orgName] = (await sqlQuery(sql))[0];
+            (await sqlQuery(sql))[0].forEach(item => {
+                const option = document.createElement('option');
+                option.value = item[meta.orgName];
+                option.textContent = item[meta.orgName];
+                select.appendChild(option);
+            })
+            formContainer.append(select);
+
         }
     }
     console.log(data);
@@ -574,7 +583,7 @@ async function generateForm() {
 
     columns.forEach(column => {
         const inputElement = createInputElement(column);
-        formContainer.append(inputElement);
+        //formContainer.append(inputElement);
         array.push(inputElement);
     });
 }
