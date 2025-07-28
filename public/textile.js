@@ -536,6 +536,22 @@ function createInputElement(column) {
     return input;
 }
 let array = [];
+function decodeSlice(data, start, length, encoding = 'utf-8') {
+    const slice = data.slice(start, start + length);
+    const decoder = new TextDecoder(encoding);
+    return decoder.decode(new Uint8Array(slice));
+}
+function decodeMetadata(metadata) {
+    const data = metadata._buf.data;
+
+    return {
+        catalog: decodeSlice(data, metadata._catalogStart, metadata._catalogLength, metadata._clientEncoding),
+        schema: decodeSlice(data, metadata._schemaStart, metadata._schemaLength, metadata._clientEncoding),
+        table: decodeSlice(data, metadata._tableStart, metadata._tableLength, metadata._clientEncoding),
+        orgTable: decodeSlice(data, metadata._orgTableStart, metadata._orgTableLength, metadata._clientEncoding),
+        orgName: decodeSlice(data, metadata._orgNameStart, metadata._orgNameLength, metadata._clientEncoding),
+    };
+}
 async function generateForm() {
     const columns = await getSelectedValue();
     const join = await getSelected();
