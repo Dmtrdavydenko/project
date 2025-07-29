@@ -304,7 +304,7 @@ async function slect(table) {
 }
 
 async function showSelect() {
-    console.log({ [this]: this.value });
+    console.log({ [this.target]: this.value });
 }
 async function showTableFn() {
     const result = await fetch("https://worktime.up.railway.app/textile", {
