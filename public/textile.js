@@ -571,11 +571,12 @@ class ThreadInfo {
     }
 
     get density() {
-        return `плотность: ${this.thread.thread_density}`;
+        return this.thread.thread_density;
+        //return `плотность: ${this.thread.thread_density}`;
     }
 
     get color() {
-        return `цвет: ${this.thread.color}`;
+        return this.thread.color;
     }
 
     get id() {
