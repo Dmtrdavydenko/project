@@ -228,7 +228,7 @@ async function select(body) {
                     "FROM textile t " +
                     "JOIN circular_width width ON t.width_id = width.id " +
                     "JOIN density d ON t.density_id = d.id;";
-                [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
+                const [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 select.pri = primaryKeyColumn;
                 break;
