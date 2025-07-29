@@ -597,7 +597,7 @@ class YarnInfo {
     }
 
     get name() {
-        return this.yarn.thread_name;
+        return this.yarn.yarn_name;
     }
 }
 
