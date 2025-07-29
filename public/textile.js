@@ -303,8 +303,12 @@ async function slect(table) {
     }).then((response) => response.json());
 }
 
-async function showSelect() {
-    console.log({ [this.target]: this.value });
+async function showSelect(event) {
+    console.log({
+        [this]: this.value,
+        target: this.target,
+        event: event.target,
+    });
 }
 async function showTableFn() {
     const result = await fetch("https://worktime.up.railway.app/textile", {
