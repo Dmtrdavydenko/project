@@ -306,7 +306,7 @@ async function slect(table) {
 async function showSelect(event) {
     console.log({
         value: this.value,
-        event: event.target,
+        target: event.target,
         [event.target]: event.target,
     });
 }
