@@ -288,7 +288,7 @@ async function getSelectedValue() {
     console.log(result);
     return await result;
 }
-async function slect() {
+async function slect(table) {
     return await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
@@ -297,7 +297,7 @@ async function slect() {
         body: JSON.stringify({
             action: "select",
             table: {
-                name: "threadPP",
+                name: table,
             }
         }),
     }).then((response) => response.json());
@@ -587,6 +587,19 @@ class ThreadInfo {
         return `длина: ${this.thread.thread_length}`;
     }
 }
+class YarnInfo {
+    constructor(yarn) {
+        this.yarn = yarn;
+    }
+
+    get id() {
+        return this.yarn.yarn_id;
+    }
+
+    get name() {
+        return this.yarn.thread_name;
+    }
+}
 
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
@@ -614,19 +627,30 @@ async function generateForm() {
     console.log(data);
 
 
-
-    const select = document.createElement('select');
-    const threads = (await slect()).rows;
-    threads.forEach(thread => {
-        const option = document.createElement('option');
-        const threadInfo = new ThreadInfo(thread);
-        option.value = threadInfo.id;
-        option.textContent = threadInfo.density + " " + threadInfo.color;
-        //option.textContent = `ID: ${thread.thread_id}, цвет: ${thread.color}, плотность: ${thread.thread_density}, длина: ${thread.thread_length}`;
-        select.appendChild(option);
-    });
-    formContainer.append(select);
-
+    {
+        const select = document.createElement('select');
+        const threads = (await slect("threadPP")).rows;
+        threads.forEach(thread => {
+            const option = document.createElement('option');
+            const threadInfo = new ThreadInfo(thread);
+            option.value = threadInfo.id;
+            option.textContent = threadInfo.density + " " + threadInfo.color;
+            select.appendChild(option);
+        });
+        formContainer.append(select);
+    }
+    {
+        const select = document.createElement('select');
+        const threads = (await slect("yarn_type")).rows;
+        threads.forEach(thread => {
+            const option = document.createElement('option');
+            const yarnInfo = new YarnInfo(thread);
+            option.value = yarnInfo.id;
+            option.textContent = yarnInfo.name;
+            select.appendChild(option);
+        });
+        formContainer.append(select);
+    }
 
 
     array = [];
