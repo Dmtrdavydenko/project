@@ -303,7 +303,9 @@ async function slect(table) {
     }).then((response) => response.json());
 }
 
-
+async function showSelect() {
+    console.log({ [this]: this.value });
+}
 async function showTableFn() {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
@@ -620,6 +622,7 @@ async function generateForm() {
         if (meta.orgName === meta.orgTable) {
             const sql = `SELECT \`${meta.orgName}\` FROM \`${meta.orgTable}\``;
             const select = document.createElement('select');
+            select.addEventListener('change', showSelect);
             console.log(sql);
             (await sqlQuery(sql))[0].forEach(item => {
                 const option = document.createElement('option');
@@ -636,6 +639,7 @@ async function generateForm() {
 
     {
         const select = document.createElement('select');
+        select.addEventListener('change', showSelect);
         const threads = (await slect("threadPP")).rows;
         threads.forEach(thread => {
             const option = document.createElement('option');
@@ -648,6 +652,7 @@ async function generateForm() {
     }
     {
         const select = document.createElement('select');
+        select.addEventListener('change', showSelect);
         const threads = (await slect("yarn_type")).rows;
         threads.forEach(thread => {
             const option = document.createElement('option');
