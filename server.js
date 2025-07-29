@@ -20,6 +20,7 @@ const functionDB = {
     "setWhere": setWhere,
     "ping": ping,
     "getColumnsJoin": getColumnsJoin,
+    "getTable": getTable,
 }
 
 
@@ -177,6 +178,106 @@ async function slt() {
 
 }
 async function select(body) {
+    //const pool = mysql.createPool(dbConfig); // создаём пул подключений
+    const connection = await pool.getConnection();
+
+    try {
+        console.log('Успешно подключено к базе данных MySQL!');
+
+        // Получаем все данные из таблицы после вставки
+        //const sql = 'SELECT * FROM ' + body.table.name + ' ORDER BY id'
+        let sql;
+        let descRows;
+        console.log("Запрос от клиента имя таблицы " + body.table.name);
+        switch (body.table.name) {
+            case "looms":
+                //const field = ["thread_id", "thread_density", "thread_length"];
+                sql = "SELECT l.loom_id, l.loom_number, m.machine_name AS loom_name, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id JOIN machine m ON l.loom_nameId = m.machine_id";
+                //sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
+                break;
+            case "threadPP":
+                const field = ["thread_id", "thread_density", "thread_length"];
+                sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
+                break;
+            case "textile":
+                //const field = ["textile_id", "textile_number", "circular_width", "density", "weft_quantity", "warp_quantity", "warp_name", "warp_name2", "weft_name1", "weft_name2"];
+                // textile_id	textile_width	textile_density	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
+                // textile_id	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
+
+                select.fields = [
+                    "textile_id",
+                    "textile_number",
+                    "width.circular_width",  // из circular_width
+                    "d.density",             // из density
+                    "weft_quantity",
+                    "warp_quantity",
+                    "warp_name",
+                    "warp_name2",
+                    "weft_name1",
+                    "weft_name2"
+                ];
+
+                // Для полей из textile добавляем префикс "t."
+                select.sqlFields = select.fields.map(f => {
+                    if (f.startsWith("width.") || f.startsWith("d.")) {
+                        return f; // уже с префиксом правильным
+                    } else {
+                        return "t." + f;
+                    }
+                });
+                sql = "SELECT " + select.sqlFields.join(", ") + " " +
+                    "FROM textile t " +
+                    "JOIN circular_width width ON t.width_id = width.id " +
+                    "JOIN density d ON t.density_id = d.id;";
+
+                [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
+                select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
+                break;
+            default:
+                sql = 'SELECT * FROM ' + body.table.name;
+                [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
+                const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
+                select.pri = primaryKeyColumn;
+
+
+        }
+        const all = await connection.execute(sql);
+        const [rows] = all;
+
+
+        // Извлекаем информацию о колонках
+        //const columnsInfo = descRows.map(row => ({
+        //    Field: row.Field,
+        //    Type: row.Type,
+        //    Extra: row.Extra,
+        //    Key: row.Key  // Здесь ключ (например, 'PRI' для первичного ключа)
+        //}));
+
+        //// Находим имя столбца с первичным ключом
+        ////const primaryKeyColumns = descRows.filter(row => row.Key === 'PRI').map(row => row.Field);
+
+        //const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
+        //select.pri = primaryKeyColumn;
+        //select.name = body.table.name;
+        console.log("Клиент " + sql);
+        return {
+            all,
+            rows,
+            Field: select.fields,
+            F: select.sqlFields,
+            key: select.pri
+        };
+
+    } catch (err) {
+        console.error('Ошибка:', err);
+        throw err;
+    } finally {
+        connection.release();
+        //await pool.end();
+        //console.log('Пул соединений закрыт.');
+    }
+}
+async function getTable(body) {
     //const pool = mysql.createPool(dbConfig); // создаём пул подключений
     const connection = await pool.getConnection();
 

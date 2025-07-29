@@ -295,7 +295,7 @@ async function slect(table) {
             "Content-Type": "application/json;charset=utf-8",
         },
         body: JSON.stringify({
-            action: "select",
+            action: "getTable",
             table: {
                 name: table,
             }
