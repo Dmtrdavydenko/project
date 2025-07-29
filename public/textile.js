@@ -308,6 +308,7 @@ async function showSelect(event) {
         [this]: this.value,
         target: this.target,
         event: event.target,
+        [event.target]: event.target,
     });
 }
 async function showTableFn() {
