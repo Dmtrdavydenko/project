@@ -307,7 +307,6 @@ async function showSelect(event) {
     console.log({
         value: this.value,
         target: event.target,
-        [event.target]: event.target,
     });
 }
 async function showTableFn() {
@@ -593,7 +592,7 @@ class ThreadInfo {
     }
 
     get id() {
-        return `ID: ${this.thread.thread_id}`;
+        return this.thread.thread_id;
     }
 
     get length() {
