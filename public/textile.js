@@ -565,6 +565,28 @@ function decodeMetadata(metadata) {
         orgName: decodeSlice(data, metadata._orgNameStart, metadata._orgNameLength, metadata._clientEncoding),
     };
 }
+class ThreadInfo {
+    constructor(thread) {
+        this.thread = thread;
+    }
+
+    get density() {
+        return `плотность: ${this.thread.thread_density}`;
+    }
+
+    get color() {
+        return `цвет: ${this.thread.color}`;
+    }
+
+    get id() {
+        return `ID: ${this.thread.thread_id}`;
+    }
+
+    get length() {
+        return `длина: ${this.thread.thread_length}`;
+    }
+}
+
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
@@ -596,8 +618,10 @@ async function generateForm() {
     const threads = (await slect()).rows;
     threads.forEach(thread => {
         const option = document.createElement('option');
-        option.value = thread.thread_id;
-        option.textContent = `ID: ${thread.thread_id}, цвет: ${thread.color}, плотность: ${thread.thread_density}, длина: ${thread.thread_length}`;
+        const threadInfo = new ThreadInfo(thread);
+        option.value = threadInfo.id;
+        option.textContent = threadInfo.density + " " + threadInfo.color;
+        //option.textContent = `ID: ${thread.thread_id}, цвет: ${thread.color}, плотность: ${thread.thread_density}, длина: ${thread.thread_length}`;
         select.appendChild(option);
     });
     formContainer.append(select);
