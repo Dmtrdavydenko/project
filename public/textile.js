@@ -288,7 +288,7 @@ async function getSelectedValue() {
     console.log(result);
     return await result;
 }
-async function select() {
+async function slect() {
     return await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
@@ -593,7 +593,7 @@ async function generateForm() {
 
 
     const select = document.createElement('select');
-    const threads = (await select()).rows;
+    const threads = (await slect()).rows;
     threads.forEach(thread => {
         const option = document.createElement('option');
         option.value = thread.thread_id;
