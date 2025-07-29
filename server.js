@@ -240,7 +240,6 @@ async function select(body) {
 
 
         }
-        console.log("Запрос sql " + sql);
         const all = await connection.execute(sql);
         const [rows] = all;
 
@@ -259,6 +258,7 @@ async function select(body) {
         //const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
         //select.pri = primaryKeyColumn;
         //select.name = body.table.name;
+        console.log("Клиент " + sql);
         return {
             all,
             rows,
@@ -393,7 +393,7 @@ async function createTable() {
 
 
 async function setWhere(body) {
-    const sqlQuery = `UPDATE ${body.table.name} SET ${body.table.colum_name} = ? WHERE ${select.pri} = ?`;
+    const sqlQuery = `UPDATE ${body.table.name} SET ${body.table.colum_name} = ? WHERE ${body.table.whereColum} = ?`;
     const params = [body.table.value, body.table.id]; // если нужно добавить 1 к id
     //const params = [body.table.value, body.table.id + 1]; // если нужно добавить 1 к id
     const connection = await pool.getConnection();

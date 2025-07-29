@@ -389,6 +389,13 @@ async function queryTarget(event) {
             console.log(selectTableName.value);
             console.log(headers[td.cellIndex].textContent);
             console.log("rowId: " + tr.cells[0].textContent);
+            console.log({
+                tableName: selectTableName.value,
+                rowId: tr.cells[index].textContent,
+                columnName: headers[td.cellIndex].textContent,
+                whereColum: found,
+                value: td.textContent
+            });
             try {
                 const result = await sqlWhere({
                     tableName: selectTableName.value,
