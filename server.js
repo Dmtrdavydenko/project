@@ -263,7 +263,8 @@ async function select(body) {
             all,
             rows,
             Field: select.fields,
-            F: select.sqlFields
+            F: select.sqlFields,
+            key: select.pri
         };
 
     } catch (err) {
