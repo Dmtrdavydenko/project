@@ -307,6 +307,8 @@ async function showSelect(event) {
     console.log({
         value: this.value,
         target: event.target,
+        text: this.options[this.selectedIndex].textContent,
+        text2: this.selectedOptions[0].textContent,
     });
 }
 async function showTableFn() {
