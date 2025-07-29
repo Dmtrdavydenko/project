@@ -288,6 +288,20 @@ async function getSelectedValue() {
     console.log(result);
     return await result;
 }
+async function select() {
+    return await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "select",
+            table: {
+                name: "threadPP",
+            }
+        }),
+    }).then((response) => response.json());
+}
 
 
 async function showTableFn() {
@@ -557,7 +571,7 @@ async function generateForm() {
     const columns = await getSelectedValue();
     const join = await getSelected();
     console.log(join);
-    let decodedMetadata = join.map(meta => (decodeMetadata(meta)))
+    let decodedMetadata = join.map(meta => (decodeMetadata(meta)));
     let data = {};
     for (const meta of decodedMetadata) {
         if (meta.orgName === meta.orgTable) {
@@ -576,6 +590,17 @@ async function generateForm() {
     }
     console.log(data);
 
+
+
+    const select = document.createElement('select');
+    const threads = (await select()).rows;
+    threads.forEach(thread => {
+        const option = document.createElement('option');
+        option.value = thread.thread_id;
+        option.textContent = `ID: ${thread.thread_id}, цвет: ${thread.color}, плотность: ${thread.thread_density}, длина: ${thread.thread_length}`;
+        select.appendChild(option);
+    });
+    formContainer.append(select);
 
 
 
