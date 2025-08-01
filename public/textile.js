@@ -626,7 +626,7 @@ async function generateForm() {
     for (const meta of decodedMetadata) {
         console.log(meta);
         if (meta.orgName === meta.orgTable) {
-            const sql = `SELECT \`${meta.orgName}\` FROM \`${meta.orgTable}\``;
+            const sql = `SELECT * FROM \`${meta.orgTable}\``;
             const select = document.createElement('select');
             select.addEventListener('change', showSelect);
             console.log(sql);
