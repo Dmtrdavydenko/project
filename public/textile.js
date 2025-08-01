@@ -632,7 +632,7 @@ async function generateForm() {
             console.log(sql);
             (await sqlQuery(sql))[0].forEach(item => {
                 const option = document.createElement('option');
-                option.value = item[meta.orgName];
+                option.value = item.id;
                 option.textContent = item[meta.orgName];
                 select.appendChild(option);
             })
