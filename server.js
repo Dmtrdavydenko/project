@@ -228,7 +228,8 @@ async function select(body) {
                 sql = "SELECT " + select.sqlFields.join(", ") + " " +
                     "FROM textile t " +
                     "JOIN circular_width width ON t.width_id = width.id " +
-                    "JOIN density d ON t.density_id = d.id;";
+                    "JOIN density d ON t.density_id = d.id " +
+                    "WHERE width.circular_width = 50";
 
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
