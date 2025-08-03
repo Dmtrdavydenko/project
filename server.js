@@ -230,8 +230,7 @@ async function select(body) {
                     "JOIN circular_width width ON t.width_id = width.id " +
                     "JOIN density d ON t.density_id = d.id " +
                     "WHERE width.circular_width = 50 " +
-                    "ORDER BY d.density ASC " +
-                    "ORDER BY t.warp_quantity ASC";
+                    "ORDER BY d.density ASC, t.warp_quantity ASC;";
 
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
