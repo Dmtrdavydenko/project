@@ -364,6 +364,55 @@ async function showTableFn(query) {
         container.textContent = 'U';
     }
 }
+async function loadTableFn(query) {
+    const result = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "select",
+            table: {
+                name: selectTableName.value,
+            }
+        }),
+    }).then((response) => response.json());
+    console.log(result);
+    //console.log(event.target.value);
+
+    const container = document.getElementById('table-container');
+    container.innerHTML = '';
+
+    //if (true) {
+    if (result.rows) {
+        const array = [
+            {
+                textile_density: 75,
+                textile_id: 1,
+                textile_number: 1,
+                textile_width: 56,
+                warp_name: null,
+                warp_quantity: 456,
+            },
+            {
+                textile_density: 68,
+                textile_id: 2,
+                textile_number: 2,
+                textile_width: 42,
+                warp_name: null,
+                warp_quantity: 312,
+            }
+        ];
+        //const table = createTable(array);
+        const table = createTable(result.rows);
+        table.addEventListener("click", queryTarget);
+        container.appendChild(table);
+        await getTypeTableHeder();
+        await generateForm();
+    } else {
+        container.textContent = 'U';
+    }
+}
 async function queryTarget(event) {
     console.dir(event.target);
 
@@ -745,7 +794,7 @@ async function sendForm() {
 
 (async () => {
     await getTableName();
-    await showTableFn();
+    await loadTableFn();
 })();
 
 
