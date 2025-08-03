@@ -228,10 +228,21 @@ async function select(body) {
                 sql = "SELECT " + select.sqlFields.join(", ") + " " +
                     "FROM textile t " +
                     "JOIN circular_width width ON t.width_id = width.id " +
-                    "JOIN density d ON t.density_id = d.id " +
-                    "WHERE width.circular_width = (SELECT circular_width FROM circular_width WHERE id = " + body.circular_width.id + ") " +
-                    "ORDER BY d.density ASC, t.warp_quantity ASC;";
-
+                    "JOIN density d ON t.density_id = d.id "
+                if ('circular_width' in body) {
+                    if ('id' in body.circular_width) {
+                        // оба поля есть
+                        sql += "WHERE width.circular_width = (SELECT circular_width FROM circular_width WHERE id = " + body.circular_width.id + ") " +
+                            "ORDER BY d.density ASC, t.warp_quantity ASC;";
+                    } else {
+                        // circular_width есть, id нет
+                        console.log('circular_width есть, но id отсутствует');
+                    }
+                } else {
+                    // circular_width нет, значит id нет
+                    console.log('circular_width отсутствует, значит id тоже отсутствует');
+                }
+                sql += ";";
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 break;
