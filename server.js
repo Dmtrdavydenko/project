@@ -229,7 +229,7 @@ async function select(body) {
                     "FROM textile t " +
                     "JOIN circular_width width ON t.width_id = width.id " +
                     "JOIN density d ON t.density_id = d.id " +
-                    "WHERE width.circular_width = 50 " +
+                    "WHERE width.circular_width = (SELECT circular_width FROM circular_width WHERE id = 7) " +
                     "ORDER BY d.density ASC, t.warp_quantity ASC;";
 
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
