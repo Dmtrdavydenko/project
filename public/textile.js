@@ -310,8 +310,9 @@ async function showSelect(event) {
         //text: this.options[this.selectedIndex].textContent,
         text: this.selectedOptions[0].textContent,
     });
+    await showTableFn({ id: this.value });
 }
-async function showTableFn() {
+async function showTableFn(query) {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
@@ -321,6 +322,9 @@ async function showTableFn() {
             action: "select",
             table: {
                 name: selectTableName.value,
+            },
+            circular_width: {
+                id: query.id
             }
         }),
     }).then((response) => response.json());
