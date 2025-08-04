@@ -699,12 +699,12 @@ async function generateForm() {
     {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
-        const threads = (await slect("threadPP")).rows;
+        const threads = (await slect("Thread_Parameters")).rows;
         threads.forEach(thread => {
             const option = document.createElement('option');
             const threadInfo = new ThreadInfo(thread);
             option.value = threadInfo.id;
-            option.textContent = threadInfo.density + " " + threadInfo.color;
+            option.textContent = threadInfo.density;
             select.appendChild(option);
         });
         formContainer.append(select);
