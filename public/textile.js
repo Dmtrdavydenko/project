@@ -677,7 +677,7 @@ async function generateForm() {
     let decodedMetadata = join.map(meta => (decodeMetadata(meta)));
     let data = {};
     for (const meta of decodedMetadata) {
-        console.log(meta);
+        //console.log(meta);
         if (meta.orgName === meta.orgTable) {
             const sql = `SELECT * FROM \`${meta.orgTable}\``;
             const select = document.createElement('select');
