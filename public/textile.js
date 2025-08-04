@@ -285,7 +285,7 @@ async function getSelectedValue() {
             }
         }),
     }).then((response) => response.json());
-    console.log(result);
+    console.log({ colons:result });
     return await result;
 }
 async function slect(table) {
