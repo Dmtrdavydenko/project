@@ -667,6 +667,19 @@ class YarnInfo {
         return this.yarn.yarn_name;
     }
 }
+class ColorInfo {
+    constructor(yarn) {
+        this.yarn = yarn;
+    }
+
+    get id() {
+        return this.yarn.color_id;
+    }
+
+    get color() {
+        return this.yarn.color;
+    }
+}
 
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
@@ -718,6 +731,19 @@ async function generateForm() {
             const threadInfo = new ThreadInfo(thread);
             option.value = threadInfo.id;
             option.textContent = threadInfo.density;
+            select.appendChild(option);
+        });
+        formContainer.append(select);
+    }
+    {
+        const select = document.createElement('select');
+        select.addEventListener('change', showSelect);
+        const colors = (await slect("color")).rows;
+        colors.forEach(color => {
+            const option = document.createElement('option');
+            const colorInfo = new ColorInfo(color);
+            option.value = colorInfo.id;
+            option.textContent = colorInfo.color;
             select.appendChild(option);
         });
         formContainer.append(select);
