@@ -231,8 +231,12 @@ async function select(body) {
                 });
                 sql = "SELECT " + select.sqlFields.join(", ") + " " +
                     "FROM textile t " +
-                    "JOIN circular_width width ON t.width_id = width.id " +
-                    "JOIN density d ON t.density_id = d.id "
+                    "JOIN sleeve_width width ON t.width_id   = width.id " +
+                    "JOIN density          d ON t.density_id = d.id "
+
+
+
+                
                 if ('circular_width' in body) {
                     if ('id' in body.circular_width) {
                         // оба поля есть
