@@ -331,7 +331,7 @@ async function getTable(body) {
                 select.fields = [
                     "textile_id",
                     "textile_number",
-                    "width.sleeve_width",  // из circular_width
+                    "width.circular_width",  // из circular_width
                     "d.density",             // из density
                     "weft_quantity",
                     "warp_quantity",
@@ -351,8 +351,8 @@ async function getTable(body) {
                 });
                 sql = "SELECT " + select.sqlFields.join(", ") + " " +
                     "FROM textile t " +
-                    "JOIN sleeve_width width ON t.width_id   = width.sleeve_width_id " +
-                    "JOIN density          d ON t.density_id = d.textile_density_id "
+                    "JOIN circular_width width ON t.width_id = width.id " +
+                    "JOIN density d ON t.density_id = d.id;";
 
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
