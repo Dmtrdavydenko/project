@@ -240,7 +240,7 @@ async function select(body) {
                 if ('circular_width' in body) {
                     if ('id' in body.circular_width) {
                         // оба поля есть
-                        sql += "WHERE width.circular_width = (SELECT circular_width FROM circular_width WHERE id = " + body.circular_width.id + ") " +
+                        sql += "WHERE width.circular_width = (SELECT sleeve_width FROM sleeve_width WHERE id = " + body.circular_width.id + ") " +
                             "ORDER BY d.density ASC, t.warp_quantity ASC;";
                     } else {
                         // circular_width есть, id нет
