@@ -699,12 +699,12 @@ async function generateForm() {
     {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
-        const threads = (await slect("Thread_Parameters")).rows;
+        const threads = (await slect("yarn_type")).rows;
         threads.forEach(thread => {
             const option = document.createElement('option');
-            const threadInfo = new ThreadInfo(thread);
-            option.value = threadInfo.id;
-            option.textContent = threadInfo.density;
+            const yarnInfo = new YarnInfo(thread);
+            option.value = yarnInfo.id;
+            option.textContent = yarnInfo.name;
             select.appendChild(option);
         });
         formContainer.append(select);
@@ -712,12 +712,12 @@ async function generateForm() {
     {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
-        const threads = (await slect("yarn_type")).rows;
+        const threads = (await slect("Thread_Parameters")).rows;
         threads.forEach(thread => {
             const option = document.createElement('option');
-            const yarnInfo = new YarnInfo(thread);
-            option.value = yarnInfo.id;
-            option.textContent = yarnInfo.name;
+            const threadInfo = new ThreadInfo(thread);
+            option.value = threadInfo.id;
+            option.textContent = threadInfo.density;
             select.appendChild(option);
         });
         formContainer.append(select);
