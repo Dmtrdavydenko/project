@@ -680,6 +680,20 @@ class ColorInfo {
         return this.yarn.color;
     }
 }
+class AdditiveInfo {
+    constructor(yarn) {
+        this.yarn = yarn;
+    }
+
+    get id() {
+        return this.yarn.color_id;
+    }
+
+    get name() {
+        return this.yarn.additive_name;
+    }
+
+}
 
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
@@ -748,6 +762,20 @@ async function generateForm() {
         });
         formContainer.append(select);
     }
+    {
+        const select = document.createElement('select');
+        select.addEventListener('change', showSelect);
+        const colors = (await slect("additive")).rows;
+        colors.forEach(color => {
+            const option = document.createElement('option');
+            const additiveInfo = new AdditiveInfo(color);
+            option.value = additiveInfo.id;
+            option.textContent = additiveInfo.name;
+            select.appendChild(option);
+        });
+        formContainer.append(select);
+    }
+
 
 
     array = [];
