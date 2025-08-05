@@ -209,6 +209,7 @@ async function select(body) {
 
                 select.fields = [
                     "textile_id",
+                    "width_id",
                     "textile_number",
                     "width.circular_width",  // из circular_width
                     "d.density",             // из density
