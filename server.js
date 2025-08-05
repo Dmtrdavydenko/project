@@ -351,8 +351,8 @@ async function getTable(body) {
                 });
                 sql = "SELECT " + select.sqlFields.join(", ") + " " +
                     "FROM textile t " +
-                    "JOIN circular_width width ON t.width_id = width.id " +
-                    "JOIN density d ON t.density_id = d.id;";
+                    "JOIN sleeve_width width ON t.width_id   = width.sleeve_width_id " +
+                    "JOIN density          d ON t.density_id = d.textile_density_id "
 
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
