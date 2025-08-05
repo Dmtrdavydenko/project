@@ -229,7 +229,8 @@ async function select(body) {
                         return "t." + f;
                     }
                 });
-                sql = "SELECT " + select.sqlFields.join(", ") + " " +
+                //sql = "SELECT " + select.sqlFields.join(", ") + " " +
+                    sql = "SELECT * " +
                     "FROM textile t " +
                     "JOIN sleeve_width width ON t.width_id   = width.id " +
                     "JOIN density          d ON t.density_id = d.id "
