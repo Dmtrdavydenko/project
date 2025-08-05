@@ -43,9 +43,11 @@ async function getColumnsJoin(body) {
     const connection = await pool.getConnection();
     const baseSql = `
     SELECT *
-    FROM textile t 
-    JOIN circular_width width ON t.width_id = width.id 
-    JOIN density d ON t.density_id = d.id 
+    FROM textile tex
+    
+    JOIN sleeve_width wd ON tex.width_id   = wd.sleeve_width_id
+    JOIN density          dns ON tex.density_id = dns.textile_density_id
+
     LIMIT 0;
   `;
     const data = {};
