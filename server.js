@@ -211,7 +211,7 @@ async function select(body) {
                     "textile_id",
                     "width_id",
                     "textile_number",
-                    "width.circular_width",  // из circular_width
+                    "width.sleeve_width",  // из circular_width
                     "d.density",             // из density
                     "weft_quantity",
                     "warp_quantity",
