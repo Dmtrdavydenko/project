@@ -233,7 +233,7 @@ async function select(body) {
                     sql = "SELECT * " +
                     "FROM textile t " +
                     "JOIN sleeve_width width ON t.width_id   = width.sleeve_width_id " +
-                    "JOIN density          d ON t.density_id = d.id "
+                    "JOIN density          d ON t.density_id = d.textile_density_id "
 
 
 
