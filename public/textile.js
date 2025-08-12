@@ -323,7 +323,7 @@ async function showTableFn(query) {
             table: {
                 name: selectTableName.value,
             },
-            circular_width: {
+            sleeve_width: {
                 id: query.id
             }
         }),
