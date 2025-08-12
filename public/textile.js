@@ -746,7 +746,7 @@ async function generateForm() {
             const option = document.createElement('option');
             const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(thread);
             option.value = sleeveWidthDensityInfo.sleeve_width_density_id
-            option.textContent = sleeveWidthDensityInfo.sleeve_width_id + sleeveWidthDensityInfo.sleeve_density_id;
+            option.textContent = sleeveWidthDensityInfo.sleeve_width_id +" "+ sleeveWidthDensityInfo.sleeve_density_id;
             select.appendChild(option);
         });
         formContainer.append(select);
