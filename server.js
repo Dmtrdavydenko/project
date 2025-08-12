@@ -235,12 +235,14 @@ async function select(body) {
                 sql = "SELECT * " +
                     "FROM textile t " +
                     "JOIN sleeve_width        width ON t.width_id   = width.sleeve_width_id " +
-                    "JOIN density                 d ON t.density_id = d.sleeve_density_id " 
-                    //"JOIN sleeve_width_density swd ON t."
+                    "JOIN density                 d ON t.density_id = d.sleeve_density_id " +
+                    "JOIN sleeve_width_density  swd ON t.wd_id = swd.sleeve_width_density_id " +
+                    "JOIN sleeve_width           sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
+                    "JOIN density                 d ON swd.sleeve_density_id = d.sleeve_density_id "
 
 
 
-                
+
                 if ('circular_width' in body) {
                     if ('id' in body.circular_width) {
                         // оба поля есть
