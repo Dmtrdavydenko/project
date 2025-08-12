@@ -694,6 +694,21 @@ class AdditiveInfo {
     }
 
 }
+class SleeveWidthDensityInfo {
+    constructor(table) {
+        this.table = table;
+    }
+    get sleeve_width_density_id() {
+        return this.table.sleeve_width_density_id;
+    }
+    get sleeve_width_id() {
+        return this.table.sleeve_width_id;
+    }
+
+    get sleeve_density_id() {
+        return this.table.sleeve_density_id;
+    }
+}
 
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
@@ -723,6 +738,19 @@ async function generateForm() {
     console.log(data);
 
 
+    {
+        const select = document.createElement('select');
+        select.addEventListener('change', showSelect);
+        const threads = (await slect("sleeve_width_density")).rows;
+        threads.forEach(thread => {
+            const option = document.createElement('option');
+            const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(thread);
+            option.value = sleeveWidthDensityInfo.sleeve_width_density_id
+            option.textContent = sleeveWidthDensityInfo.sleeve_width_id + sleeveWidthDensityInfo.sleeve_density_id;
+            select.appendChild(option);
+        });
+        formContainer.append(select);
+    }
     {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
