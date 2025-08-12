@@ -46,7 +46,7 @@ async function getColumnsJoin(body) {
     FROM textile tex
     
     JOIN sleeve_width wd ON tex.width_id   = wd.sleeve_width_id
-    JOIN density          dns ON tex.density_id = dns.sleeve_density_id
+    JOIN sleeve_density          dns ON tex.density_id = dns.sleeve_density_id
 
     LIMIT 0;
   `;
