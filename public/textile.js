@@ -702,11 +702,11 @@ class SleeveWidthDensityInfo {
         return this.table.sleeve_width_density_id;
     }
     get sleeve_width_id() {
-        return this.table.sleeve_width_id;
+        return this.table.sleeve_width;
     }
 
     get sleeve_density_id() {
-        return this.table.sleeve_density_id;
+        return this.table.density;
     }
 }
 
