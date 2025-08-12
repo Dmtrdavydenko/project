@@ -232,7 +232,7 @@ async function select(body) {
                     }
                 });
                 //sql = "SELECT " + select.sqlFields.join(", ") + " " +
-                sql = "SELECT t.textile_id, * " +
+                sql = "SELECT * " +
                     "FROM textile t " +
                     "JOIN sleeve_width        width ON t.width_id   = width.sleeve_width_id " +
                     "JOIN density                 d ON t.density_id = d.sleeve_density_id " 
