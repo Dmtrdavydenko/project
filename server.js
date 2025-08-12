@@ -46,7 +46,7 @@ async function getColumnsJoin(body) {
     FROM textile tex
     
     JOIN sleeve_width wd ON tex.width_id   = wd.sleeve_width_id
-    JOIN density          dns ON tex.density_id = dns.textile_density_id
+    JOIN density          dns ON tex.density_id = dns.sleeve_density_id
 
     LIMIT 0;
   `;
@@ -235,7 +235,7 @@ async function select(body) {
                     sql = "SELECT * " +
                     "FROM textile t " +
                     "JOIN sleeve_width width ON t.width_id   = width.sleeve_width_id " +
-                    "JOIN density          d ON t.density_id = d.textile_density_id "
+                    "JOIN density          d ON t.density_id = d.sleeve_density_id "
 
 
 
