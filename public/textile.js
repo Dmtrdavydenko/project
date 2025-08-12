@@ -698,7 +698,7 @@ class SleeveWidthDensityInfo {
     constructor(table) {
         this.table = table;
     }
-    get sleeve_width_density_id() {
+    get id() {
         return this.table.sleeve_width_density_id;
     }
     get sleeve_width_id() {
@@ -745,7 +745,7 @@ async function generateForm() {
         threads.forEach(thread => {
             const option = document.createElement('option');
             const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(thread);
-            option.value = sleeveWidthDensityInfo.sleeve_width_density_id
+            option.value = sleeveWidthDensityInfo.id;
             option.textContent = sleeveWidthDensityInfo.sleeve_width_id +" "+ sleeveWidthDensityInfo.sleeve_density_id;
             select.appendChild(option);
         });
