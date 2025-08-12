@@ -119,8 +119,9 @@ async function loadAndRenderButtons(field = "textile_number") {
                 action: "sql",
                 query: "SELECT " + field + " " +
                     "FROM textile t " +
-                    "JOIN circular_width width ON t.width_id = width.id " +
-                    "JOIN density d ON t.density_id = d.id;"
+                    "JOIN sleeve_width_density swd ON t.wd_id = swd.sleeve_width_density_id " +
+                    "JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
+                    "JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id;"
 
             }),
         });
