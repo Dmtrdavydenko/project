@@ -42,13 +42,13 @@ const pool = mysql.createPool(dbConfig); // создаём пул подключ
 async function getColumnsJoin(body) {
     const connection = await pool.getConnection();
     const baseSql = `
-    SELECT *
-    FROM textile tex
-    
-    JOIN sleeve_width wd ON tex.width_id   = wd.sleeve_width_id
-    JOIN sleeve_density          dns ON tex.density_id = dns.sleeve_density_id
-
-    LIMIT 0;
+SELECT *
+FROM textile t
+JOIN sleeve_width_density  swd ON t.wd_id = swd.sleeve_width_density_id
+JOIN sleeve_width           sw ON swd.sleeve_width_id = sw.sleeve_width_id
+JOIN sleeve_density                 d ON swd.sleeve_density_id = d.sleeve_density_id
+JOIN warp_quantity                 wq ON t.warp_quantity = wq.warp_id
+LIMIT 0;
   `;
     const data = {};
 
@@ -234,15 +234,14 @@ async function select(body) {
                 //sql = "SELECT " + select.sqlFields.join(", ") + " " +
                 sql = "SELECT * " +
                     "FROM textile t " +
-                    //"JOIN sleeve_width        width ON t.width_id   = width.sleeve_width_id " +
-                    //"JOIN density                 d ON t.density_id = d.sleeve_density_id " +
                     "JOIN sleeve_width_density  swd ON t.wd_id = swd.sleeve_width_density_id " +
                     "JOIN sleeve_width           sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
                     "JOIN sleeve_density                 d ON swd.sleeve_density_id = d.sleeve_density_id " +
                     "JOIN warp_quantity                 wq ON t.warp_quantity = wq.warp_id "
 
 
-                
+                //"JOIN sleeve_width        width ON t.width_id   = width.sleeve_width_id " +
+                //"JOIN density                 d ON t.density_id = d.sleeve_density_id " +
 
 
 
@@ -370,7 +369,7 @@ async function getTable(body) {
                 // textile_id	textile_width	textile_density	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
                 // textile_id	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
 
-                
+
 
                 sql = "SELECT sleeve_width_density_id, sleeve_width, density " +
                     "FROM sleeve_width_density swd " +
