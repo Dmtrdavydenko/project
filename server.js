@@ -216,7 +216,7 @@ async function select(body) {
                     "width.sleeve_width",  // из circular_width
                     "d.sleeve_density",             // из density
                     "weft_quantity",
-                    "warp_quantity",
+                    "warp_quantity_id",
                     "warp_name",
                     "warp_name2",
                     "weft_name1",
@@ -341,7 +341,7 @@ async function getTable(body) {
                     "width.circular_width",  // из circular_width
                     "d.density",             // из density
                     "weft_quantity",
-                    "warp_quantity",
+                    "warp_quantity_id",
                     "warp_name",
                     "warp_name2",
                     "weft_name1",
