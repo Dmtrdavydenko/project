@@ -714,10 +714,10 @@ async function generateForm() {
     const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
     const columns = await getSelectedValue();
-    //const join = await getSelected();
-    //let decodedMetadata = join.map(meta => (decodeMetadata(meta)));
+    const join = await getSelected();
+    let decodedMetadata = join.map(meta => (decodeMetadata(meta)));
     //let data = {};
-    //console.log(decodedMetadata);
+    console.log(decodedMetadata);
     //for (const meta of decodedMetadata) {
     //    //console.log(meta);
     //    if (meta.orgName === meta.orgTable) {
