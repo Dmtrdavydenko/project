@@ -307,7 +307,6 @@ async function showSelect(event) {
     console.log({
         value: this.value,
         target: event.target,
-        //text: this.options[this.selectedIndex].textContent,
         text: this.selectedOptions[0].textContent,
     });
     await showTableFn({ id: this.value });
@@ -323,7 +322,7 @@ async function showTableFn(query) {
             table: {
                 name: selectTableName.value,
             },
-            sleeve_width: {
+            wd: {
                 id: query.id
             }
         }),
