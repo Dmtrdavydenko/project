@@ -358,7 +358,7 @@ async function showTableFn(query) {
         table.addEventListener("click", queryTarget);
         container.appendChild(table);
         await getTypeTableHeder();
-        await generateForm();
+        //await generateForm();
     } else {
         container.textContent = 'U';
     }
