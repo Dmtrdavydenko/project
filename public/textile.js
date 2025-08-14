@@ -685,7 +685,7 @@ class AdditiveInfo {
     }
 
     get id() {
-        return this.yarn.color_id;
+        return this.yarn.id;
     }
 
     get name() {
