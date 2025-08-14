@@ -709,6 +709,17 @@ class SleeveWidthDensityInfo {
         return this.table.density;
     }
 }
+class WarpQuantityInfo {
+    constructor(table) {
+        this.table = table;
+    }
+    get id() {
+        return this.table.warp_id;
+    }
+    get warp_quantity() {
+        return this.table.warp_quantity;
+    }
+}
 
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
@@ -760,6 +771,19 @@ async function generateForm() {
             const yarnInfo = new YarnInfo(thread);
             option.value = yarnInfo.id;
             option.textContent = yarnInfo.name;
+            select.appendChild(option);
+        });
+        formContainer.append(select);
+    }
+    {
+        const select = document.createElement('select');
+        select.addEventListener('change', showSelect);
+        const threads = (await slect("warp_quantity")).rows;
+        threads.forEach(thread => {
+            const option = document.createElement('option');
+            const warpQuantityInfo = new WarpQuantityInfo(thread);
+            option.value = warpQuantityInfo.id;
+            option.textContent = warpQuantityInfo.warp_quantity;
             select.appendChild(option);
         });
         formContainer.append(select);
