@@ -249,7 +249,7 @@ async function select(body) {
                     if ('id' in body.wd) {
                         // оба поля есть
                         sql += "WHERE t.wd_id = " + body.wd.id + " " +
-                            "ORDER BY d.sleeve_density ASC, wq.warp_quantity ASC;";
+                            "ORDER BY d.density ASC, wq.warp_quantity ASC ";
                     } else {
                         // circular_width есть, id нет
                         console.log('circular_width есть, но id отсутствует');
