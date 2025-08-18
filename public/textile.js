@@ -721,11 +721,11 @@ class WarpQuantityInfo {
 }
 
 async function switchYarn(select) {
-    let o = {
-        value: this.value,
-        target: event.target,
-        text: this.selectedOptions[0].textContent,
-    }
+    //let o = {
+    //    value: this.value,
+    //    target: event.target,
+    //    text: this.selectedOptions[0].textContent,
+    //}
     console.log(this);
     // Очищаем текущее содержимое select
     select.innerHTML = '';
