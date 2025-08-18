@@ -721,17 +721,16 @@ class WarpQuantityInfo {
 }
 
 async function switchYarn(select) {
-    //let o = {
-    //    value: this.value,
-    //    target: event.target,
-    //    text: this.selectedOptions[0].textContent,
-    //}
-    console.log(this);
+    let o = {
+        value: this.value,
+        target: event.target,
+        text: this.selectedOptions[0].textContent,
+    }
+    console.log(o);
     // Очищаем текущее содержимое select
     select.innerHTML = '';
 
     // Получаем выбранный тип пряжи
-    const selectedYarnType = select.value;
 
     let threads;
     if (o.text === 'weft') {
@@ -794,7 +793,7 @@ async function generateForm() {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
         select.addEventListener('change', function () {
-            switchYarn(selectType);
+            switchYarn.call(this, selectType);
         });
         (await slect("yarn_type")).rows.forEach(thread => {
             const option = document.createElement('option');
