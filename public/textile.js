@@ -721,36 +721,12 @@ class WarpQuantityInfo {
 }
 
 async function switchYarn(select) {
-    //{
-    //    select.addEventListener('change', showSelect);
-    //    const threads = (await slect("weft_quantity")).rows;
-    //    threads.forEach(thread => {
-    //        const option = document.createElement('option');
-    //        const warpQuantityInfo = new WarpQuantityInfo(thread);
-    //        option.value = warpQuantityInfo.id;
-    //        option.textContent = warpQuantityInfo.warp_quantity;
-    //        select.appendChild(option);
-    //    });
-    //    formContainer.append(select);
-    //}
-    //{
-    //    select.addEventListener('change', showSelect);
-    //    const threads = (await slect("warp_quantity")).rows;
-    //    threads.forEach(thread => {
-    //        const option = document.createElement('option');
-    //        const warpQuantityInfo = new WarpQuantityInfo(thread);
-    //        option.value = warpQuantityInfo.id;
-    //        option.textContent = warpQuantityInfo.warp_quantity;
-    //        select.appendChild(option);
-    //    });
-    //    formContainer.append(select);
-    //}
     let o = {
         value: this.value,
         target: event.target,
         text: this.selectedOptions[0].textContent,
     }
-    console.log(o);
+    console.log(this);
     // Очищаем текущее содержимое select
     select.innerHTML = '';
 
