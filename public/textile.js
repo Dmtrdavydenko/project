@@ -817,7 +817,9 @@ async function generateForm() {
     {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
-        select.addEventListener('change', () => switchYarn(selectType));
+        select.addEventListener('change', function () {
+            switchYarn(selectType);
+        });
         (await slect("yarn_type")).rows.forEach(thread => {
             const option = document.createElement('option');
             const yarnInfo = new YarnInfo(thread);
