@@ -766,7 +766,7 @@ async function switchYarn(select) {
 
     // Заполняем select новыми опциями
     threads.forEach(thread => {
-        const quantityInfo = new QuantityInfo(thread, o.text === 'weft' ? 'welf_id' : 'warp_id', o.text === 'weft' ? 'welf_quantity' : 'warp_quantity');
+        const quantityInfo = new QuantityInfo(thread, o.text === 'weft' ? 'welf_id' : 'warp_id', o.text === 'weft' ? 'weft_quantity' : 'warp_quantity');
         const option = document.createElement('option');
         option.value = quantityInfo.id;
         option.textContent = quantityInfo.quantity;
