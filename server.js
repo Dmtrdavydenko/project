@@ -38,18 +38,10 @@ const mysql = require('mysql2/promise');
 //const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
 
 const pool = mysql.createPool(dbConfig); // создаём пул подключений
-
+let copyQuerySql;
 async function getColumnsJoin(body) {
     const connection = await pool.getConnection();
-    const baseSql = `
-SELECT *
-FROM textile t
-JOIN sleeve_width_density  swd ON t.wd_id = swd.sleeve_width_density_id
-JOIN sleeve_width           sw ON swd.sleeve_width_id = sw.sleeve_width_id
-JOIN sleeve_density                 d ON swd.sleeve_density_id = d.sleeve_density_id
-JOIN warp_quantity                 wq ON t.warp_quantity_id = wq.warp_id
-LIMIT 0;
-  `;
+    const baseSql = `${copyQuerySql} LIMIT 0;`;
     const data = {};
 
     try {
@@ -240,7 +232,7 @@ async function select(body) {
                     "JOIN warp_quantity                 warp ON t.warp_quantity_id = warp.warp_id " +
                     "JOIN weft_quantity                 weft ON t.weft_quantity_id = weft.weft_id "
 
-                
+                copyQuerySql = sql;
 
 
                 //"JOIN sleeve_width        width ON t.width_id   = width.sleeve_width_id " +
