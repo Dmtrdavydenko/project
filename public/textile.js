@@ -818,8 +818,7 @@ async function generateForm() {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
         select.addEventListener('change', () => switchYarn(selectType));
-        const threads = (await slect("yarn_type")).rows;
-        threads.forEach(thread => {
+        (await slect("yarn_type")).rows.forEach(thread => {
             const option = document.createElement('option');
             const yarnInfo = new YarnInfo(thread);
             option.value = yarnInfo.id;
@@ -830,8 +829,7 @@ async function generateForm() {
 
         const selectType = document.createElement('select');
         selectType.addEventListener('change', showSelect);
-        const threads = (await slect("warp_quantity")).rows;
-        threads.forEach(thread => {
+        (await slect("warp_quantity")).rows.forEach(thread => {
             const option = document.createElement('option');
             const warpQuantityInfo = new WarpQuantityInfo(thread);
             option.value = warpQuantityInfo.id;
