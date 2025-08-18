@@ -285,7 +285,7 @@ async function getSelectedValue() {
             }
         }),
     }).then((response) => response.json());
-    console.log({ colons:result });
+    console.log({ colons: result });
     return await result;
 }
 async function slect(table) {
@@ -720,6 +720,59 @@ class WarpQuantityInfo {
     }
 }
 
+async function switchYarn(select) {
+    //{
+    //    select.addEventListener('change', showSelect);
+    //    const threads = (await slect("weft_quantity")).rows;
+    //    threads.forEach(thread => {
+    //        const option = document.createElement('option');
+    //        const warpQuantityInfo = new WarpQuantityInfo(thread);
+    //        option.value = warpQuantityInfo.id;
+    //        option.textContent = warpQuantityInfo.warp_quantity;
+    //        select.appendChild(option);
+    //    });
+    //    formContainer.append(select);
+    //}
+    //{
+    //    select.addEventListener('change', showSelect);
+    //    const threads = (await slect("warp_quantity")).rows;
+    //    threads.forEach(thread => {
+    //        const option = document.createElement('option');
+    //        const warpQuantityInfo = new WarpQuantityInfo(thread);
+    //        option.value = warpQuantityInfo.id;
+    //        option.textContent = warpQuantityInfo.warp_quantity;
+    //        select.appendChild(option);
+    //    });
+    //    formContainer.append(select);
+    //}
+    let o = {
+        value: this.value,
+        target: event.target,
+        text: this.selectedOptions[0].textContent,
+    }
+    console.log(o);
+    // Очищаем текущее содержимое select
+    select.innerHTML = '';
+
+    // Получаем выбранный тип пряжи
+    const selectedYarnType = select.value;
+
+    let threads;
+    if (o.text === 'weft') {
+        threads = (await slect("weft_quantity")).rows;
+    } else if (o.text === 'warp') {
+        threads = (await slect("warp_quantity")).rows;
+    }
+
+    // Заполняем select новыми опциями
+    threads.forEach(thread => {
+        const option = document.createElement('option');
+        const warpQuantityInfo = new WarpQuantityInfo(thread);
+        option.value = warpQuantityInfo.id;
+        option.textContent = warpQuantityInfo.warp_quantity;
+        select.appendChild(option);
+    });
+}
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
@@ -756,7 +809,7 @@ async function generateForm() {
             const option = document.createElement('option');
             const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(thread);
             option.value = sleeveWidthDensityInfo.id;
-            option.textContent = sleeveWidthDensityInfo.sleeve_width_id +"/"+ sleeveWidthDensityInfo.sleeve_density_id;
+            option.textContent = sleeveWidthDensityInfo.sleeve_width_id + "/" + sleeveWidthDensityInfo.sleeve_density_id;
             select.appendChild(option);
         });
         formContainer.append(select);
@@ -764,6 +817,7 @@ async function generateForm() {
     {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
+        select.addEventListener('change', () => switchYarn(selectType));
         const threads = (await slect("yarn_type")).rows;
         threads.forEach(thread => {
             const option = document.createElement('option');
@@ -773,19 +827,18 @@ async function generateForm() {
             select.appendChild(option);
         });
         formContainer.append(select);
-    }
-    {
-        const select = document.createElement('select');
-        select.addEventListener('change', showSelect);
+
+        const selectType = document.createElement('select');
+        selectType.addEventListener('change', showSelect);
         const threads = (await slect("warp_quantity")).rows;
         threads.forEach(thread => {
             const option = document.createElement('option');
             const warpQuantityInfo = new WarpQuantityInfo(thread);
             option.value = warpQuantityInfo.id;
             option.textContent = warpQuantityInfo.warp_quantity;
-            select.appendChild(option);
+            selectType.appendChild(option);
         });
-        formContainer.append(select);
+        formContainer.append(selectType);
     }
     {
         const select = document.createElement('select');
