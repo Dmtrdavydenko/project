@@ -240,6 +240,8 @@ async function select(body) {
                     "JOIN warp_quantity                 warp ON t.warp_quantity_id = warp.warp_id "
                     "JOIN weft_quantity                 weft ON t.weft_quantity_id = weft.weft_id "
 
+                
+
 
                 //"JOIN sleeve_width        width ON t.width_id   = width.sleeve_width_id " +
                 //"JOIN density                 d ON t.density_id = d.sleeve_density_id " +
