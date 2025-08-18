@@ -731,22 +731,6 @@ class WelfQuantityInfo {
     }
 }
 
-class QuantityInfo {
-    constructor(table, idKey, quantityKey) {
-        this.table = table;
-        this.idKey = idKey;
-        this.quantityKey = quantityKey;
-    }
-
-    get id() {
-        return this.table[this.idKey];
-    }
-
-    get quantity() {
-        return this.table[this.quantityKey];
-    }
-}
-
 async function switchYarn(select) {
     let o = {
         value: this.value,
@@ -758,6 +742,7 @@ async function switchYarn(select) {
     select.innerHTML = '';
 
     // Получаем выбранный тип пряжи
+
     let threads;
     if (o.text === 'weft') {
         threads = (await slect("weft_quantity")).rows;
@@ -767,13 +752,17 @@ async function switchYarn(select) {
 
     // Заполняем select новыми опциями
     threads.forEach(thread => {
-        const quantityInfo = new QuantityInfo(thread,
-            o.text === 'weft' ? 'welf_id' : 'warp_id',
-            o.text === 'weft' ? 'welf_quantity' : 'warp_quantity');
-
         const option = document.createElement('option');
-        option.value = quantityInfo.id;
-        option.textContent = quantityInfo.quantity;
+        const warpQuantityInfo = new WarpQuantityInfo(thread);
+        option.value = warpQuantityInfo.id;
+        option.textContent = warpQuantityInfo.warp_quantity;
+        select.appendChild(option);
+    });
+    threads.forEach(thread => {
+        const option = document.createElement('option');
+        const welfQuantityInfo = new WelfQuantityInfo(thread);
+        option.value = welfQuantityInfo.id;
+        option.textContent = welfQuantityInfo.welf_quantity;
         select.appendChild(option);
     });
 }
