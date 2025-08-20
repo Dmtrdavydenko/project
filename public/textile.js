@@ -805,7 +805,27 @@ async function generateForm() {
     //}
     //console.log(data);
 
-    const selectMap = []
+    const selectMap = [];
+    {
+        const select = document.createElement('input');
+        //const select = document.createElement('select');
+        select.addEventListener('change', showSelect);
+        select.name = "type";
+        select.type = "number";
+        select.min = 0;
+
+        //(await slect("sleeve_width_density")).rows.forEach(obj => {
+        //    //(await slect("sleeve_width_density")).rows.forEach(obj => {
+        //    const option = document.createElement('option');
+        //    const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(obj);
+        //    option.value = sleeveWidthDensityInfo.id;
+        //    option.textContent = sleeveWidthDensityInfo.sleeve_width_id + "/" + sleeveWidthDensityInfo.sleeve_density_id;
+        //    select.appendChild(option);
+        //});
+        console.log(select.valueAsNumber);
+        formContainer.append(select);
+        selectMap.push(select);
+    }
     {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
