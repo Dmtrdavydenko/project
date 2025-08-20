@@ -760,8 +760,10 @@ async function switchYarn(select) {
     let threads;
     if (o.value === 2) {
         threads = (await slect("weft_quantity")).rows;
+        select.name = "weft_quantity";
     } else if (o.value === 1) {
         threads = (await slect("warp_quantity")).rows;
+        select.name = "warp_quantity";
     }
 
     // Заполняем select новыми опциями
@@ -833,6 +835,7 @@ async function generateForm() {
 
         const selectType = document.createElement('select');
         selectType.addEventListener('change', showSelect);
+        selectType.name = "warp_quantity";
         (await slect("warp_quantity")).rows.forEach(thread => {
             const option = document.createElement('option');
             const warpQuantityInfo = new WarpQuantityInfo(thread);
