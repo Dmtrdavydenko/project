@@ -770,7 +770,7 @@ async function switchYarn(select) {
 
     // Заполняем select новыми опциями
     threads.forEach(thread => {
-        const quantityInfo = new QuantityInfo(thread, +this.value === 2 ? 'welf_id' : 'warp_id', +this.value === 2 ? 'weft_quantity' : 'warp_quantity');
+        const quantityInfo = new QuantityInfo(thread, +this.value === 2 ? 'weft_id' : 'warp_id', +this.value === 2 ? 'weft_quantity' : 'warp_quantity');
         //const quantityInfo = new QuantityInfo(thread, o.text === 'weft' ? 'welf_id' : 'warp_id', o.text === 'weft' ? 'weft_quantity' : 'warp_quantity');
         const option = document.createElement('option');
         option.value = quantityInfo.id;
@@ -928,7 +928,7 @@ async function generateForm() {
     })
 
     function showButton() {
-        let v = selectMap.map(tg => ({ key:tg.name, value: tg.valueAsNumber || tg.value }));
+        let v = selectMap.map(tg => ({ key:tg.name, value: tg.valueAsNumber || +tg.value }));
         console.log(v);
     }
 
