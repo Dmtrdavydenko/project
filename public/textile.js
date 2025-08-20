@@ -916,10 +916,19 @@ async function generateForm() {
         selectMap.push(select);
 
     }
+    {
+        const button = document.createElement('button');
+        button.addEventListener('click', showButton);
+        button.name = "send";
+        formContainer.append(button);
+    }
     selectMap.forEach(select => {
         console.log(select.name, select.value, select.id)
     })
 
+    function showButton() {
+        console.log(selectMap);
+    }
 
     array = [];
 
@@ -929,6 +938,7 @@ async function generateForm() {
         array.push(inputElement);
     });
 }
+
 
 async function sqlQuery(sqlQueryString) {
     try {
