@@ -928,7 +928,8 @@ async function generateForm() {
     })
 
     function showButton() {
-        console.log(selectMap);
+        let v = selectMap.map(tg => ({ key:tg.name, value: tg.valueAsNumber || tg.value }));
+        console.log(v);
     }
 
     array = [];
