@@ -758,9 +758,9 @@ async function switchYarn(select) {
 
     // Получаем выбранный тип пряжи
     let threads;
-    if (o.text === 'weft') {
+    if (o.value === 2) {
         threads = (await slect("weft_quantity")).rows;
-    } else if (o.text === 'warp') {
+    } else if (o.value === 1) {
         threads = (await slect("warp_quantity")).rows;
     }
 
@@ -800,19 +800,19 @@ async function generateForm() {
     //}
     //console.log(data);
 
-
+    const selectMap = []
     {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
-        const threads = (await slect("sleeve_width_density")).rows;
-        threads.forEach(thread => {
+        (await slect("sleeve_width_density")).rows.forEach(obj => {
             const option = document.createElement('option');
-            const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(thread);
+            const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(obj);
             option.value = sleeveWidthDensityInfo.id;
             option.textContent = sleeveWidthDensityInfo.sleeve_width_id + "/" + sleeveWidthDensityInfo.sleeve_density_id;
             select.appendChild(option);
         });
         formContainer.append(select);
+        selectMap.push(select);
     }
     {
         const select = document.createElement('select');
@@ -839,6 +839,9 @@ async function generateForm() {
             selectType.appendChild(option);
         });
         formContainer.append(selectType);
+        selectMap.push(select);
+        selectMap.push(selectType);
+
     }
     {
         const select = document.createElement('select');
@@ -852,6 +855,8 @@ async function generateForm() {
             select.appendChild(option);
         });
         formContainer.append(select);
+        selectMap.push(select);
+
     }
     {
         const select = document.createElement('select');
@@ -865,6 +870,8 @@ async function generateForm() {
             select.appendChild(option);
         });
         formContainer.append(select);
+        selectMap.push(select);
+
     }
     {
         const select = document.createElement('select');
@@ -878,8 +885,12 @@ async function generateForm() {
             select.appendChild(option);
         });
         formContainer.append(select);
-    }
+        selectMap.push(select);
 
+    }
+    selectMap.forEach(select => {
+        console.log(select.name, select.value, select.id)
+    })
 
 
     array = [];
