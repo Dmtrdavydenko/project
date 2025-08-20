@@ -812,7 +812,7 @@ async function generateForm() {
         select.addEventListener('change', showSelect);
         select.name = "type";
         select.type = "number";
-        select.min = 0;
+        select.min = 1;
 
         //(await slect("sleeve_width_density")).rows.forEach(obj => {
         //    //(await slect("sleeve_width_density")).rows.forEach(obj => {
