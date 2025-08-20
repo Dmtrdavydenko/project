@@ -920,6 +920,7 @@ async function generateForm() {
         const button = document.createElement('button');
         button.addEventListener('click', showButton);
         button.name = "send";
+        button.textContent = "send";
         formContainer.append(button);
     }
     selectMap.forEach(select => {
