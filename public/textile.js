@@ -758,17 +758,17 @@ async function switchYarn(select) {
 
     // Получаем выбранный тип пряжи
     let threads;
-    if (+this.value === 2) {
+    if (this.value === "2") {
         threads = (await slect("weft_quantity")).rows;
         select.name = "weft_quantity";
-    } else if (+this.value === 1) {
+    } else if (this.value === "1") {
         threads = (await slect("warp_quantity")).rows;
         select.name = "warp_quantity";
     }
 
     // Заполняем select новыми опциями
     threads.forEach(thread => {
-        const quantityInfo = new QuantityInfo(thread, +this.value === 1 ? 'welf_id' : 'warp_id', +this.value === 1 ? 'weft_quantity' : 'warp_quantity');
+        const quantityInfo = new QuantityInfo(thread, this.value === "1" ? 'welf_id' : 'warp_id', this.value === "1" ? 'weft_quantity' : 'warp_quantity');
         const option = document.createElement('option');
         option.value = quantityInfo.id;
         option.textContent = quantityInfo.quantity;
