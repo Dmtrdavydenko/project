@@ -753,6 +753,7 @@ async function switchYarn(select) {
         text: this.selectedOptions[0].textContent,
     }
     console.log(o);
+    console.log([this.value, event.target, this.selectedOptions[0].textContent]);
     // Очищаем текущее содержимое select
     select.innerHTML = '';
 
