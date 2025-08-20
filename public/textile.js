@@ -777,7 +777,7 @@ async function switchYarn(select) {
         option.textContent = quantityInfo.quantity;
         select.appendChild(option);
     });
-    console.log(threadss);
+    console.log(threads);
 }
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
