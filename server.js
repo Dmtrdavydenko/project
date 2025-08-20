@@ -231,7 +231,7 @@ async function select(body) {
                     }
                 });
                 //sql = "SELECT " + select.sqlFields.join(", ") + " " +
-                sql = "SELECT * " +
+                sql = "SELECT textile_id, sleeve_width,density,warp_quantity,weft_quantity,warp_name,	warp_name2,	weft_name1,	weft_name2 " +
                     "FROM textile t " +
                     "JOIN sleeve_width_density  swd ON t.wd_id = swd.sleeve_width_density_id " +
                     "JOIN sleeve_width           sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
