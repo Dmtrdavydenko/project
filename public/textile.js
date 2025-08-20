@@ -928,8 +928,13 @@ async function generateForm() {
         console.log(select.name, select.value, select.id)
     })
 
+    const createKeyValue = ({ name, valueAsNumber, value }) => ({
+        key: name,
+        value: valueAsNumber ?? value
+    });
+
     function showButton() {
-        let v = selectMap.map(tg => ({ key:tg.name, value: tg.valueAsNumber || +tg.value }));
+        let v = selectMap.map(createKeyValue);
         console.log(v);
     }
 
@@ -940,106 +945,105 @@ async function generateForm() {
         //formContainer.append(inputElement);
         array.push(inputElement);
     });
-}
 
 
-async function sqlQuery(sqlQueryString) {
-    try {
+    async function sqlQuery(sqlQueryString) {
+        try {
+            const response = await fetch("https://worktime.up.railway.app/textile", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: "sql", // Измените на нужное действие, если необходимо
+                    query: sqlQueryString, // Отправляем SQL-запрос
+                }),
+            });
+
+            // Проверка на успешный ответ
+            if (!response.ok) {
+                throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+            }
+
+            return await response.json(); // Получаем JSON-ответ
+        } catch (error) {
+            console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
+        }
+    }
+    async function sendForm() {
+        const arrayInput = array.filter(input => input.value.length > 0);
+        const fields = arrayInput.map(input => input.name);
+        const values = arrayInput.map(input => input.value);
+
         const response = await fetch("https://worktime.up.railway.app/textile", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
             },
             body: JSON.stringify({
-                action: "sql", // Измените на нужное действие, если необходимо
-                query: sqlQueryString, // Отправляем SQL-запрос
+                action: "insertGenerate",
+                table: {
+                    name: selectTableName.value,
+                    fields: fields,
+                    values: values
+                }
             }),
-        });
+        }).then((response) => response.json());
+        console.log(response);
+        await showTableFn();
+        return await response;
+    }
 
-        // Проверка на успешный ответ
-        if (!response.ok) {
-            throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+    // Генерация формы для таблицы 'your_table_name'
+    //generateForm('your_table_name');
+
+
+
+
+
+
+
+
+
+
+    (async () => {
+        await getTableName();
+        await loadTableFn();
+    })();
+
+
+
+    const columns = [
+        { name: 'thread_id', type: 'int' },
+        { name: 'thread_name', type: 'varchar(300)' },
+        { name: 'thread_density', type: 'smallint unsigned' },
+        { name: 'thread_length', type: 'smallint unsigned' }
+    ];
+
+    //const formContainer = document.getElementById('formContainer');
+
+    columns.forEach(column => {
+        // Создаем элемент input
+        const input = document.createElement('input');
+        input.name = column.name;
+        input.placeholder = column.name;
+
+        // Определяем тип поля ввода в зависимости от типа данных
+        switch (column.type) {
+            case 'int':
+            case 'smallint unsigned':
+                input.type = 'number'; // Используем тип number для целых чисел
+                input.min = 0; // Устанавливаем минимальное значение для unsigned
+                break;
+            case 'varchar(300)':
+                input.type = 'text'; // Используем тип text для строк
+                input.maxLength = 300; // Устанавливаем максимальную длину
+                break;
+            default:
+                input.type = 'text'; // По умолчанию используем text
         }
 
-        return await response.json(); // Получаем JSON-ответ
-    } catch (error) {
-        console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
-    }
-}
-async function sendForm() {
-    const arrayInput = array.filter(input => input.value.length > 0);
-    const fields = arrayInput.map(input => input.name);
-    const values = arrayInput.map(input => input.value);
-
-    const response = await fetch("https://worktime.up.railway.app/textile", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "insertGenerate",
-            table: {
-                name: selectTableName.value,
-                fields: fields,
-                values: values
-            }
-        }),
-    }).then((response) => response.json());
-    console.log(response);
-    await showTableFn();
-    return await response;
-}
-
-// Генерация формы для таблицы 'your_table_name'
-//generateForm('your_table_name');
-
-
-
-
-
-
-
-
-
-
-(async () => {
-    await getTableName();
-    await loadTableFn();
-})();
-
-
-
-const columns = [
-    { name: 'thread_id', type: 'int' },
-    { name: 'thread_name', type: 'varchar(300)' },
-    { name: 'thread_density', type: 'smallint unsigned' },
-    { name: 'thread_length', type: 'smallint unsigned' }
-];
-
-//const formContainer = document.getElementById('formContainer');
-
-columns.forEach(column => {
-    // Создаем элемент input
-    const input = document.createElement('input');
-    input.name = column.name;
-    input.placeholder = column.name;
-
-    // Определяем тип поля ввода в зависимости от типа данных
-    switch (column.type) {
-        case 'int':
-        case 'smallint unsigned':
-            input.type = 'number'; // Используем тип number для целых чисел
-            input.min = 0; // Устанавливаем минимальное значение для unsigned
-            break;
-        case 'varchar(300)':
-            input.type = 'text'; // Используем тип text для строк
-            input.maxLength = 300; // Устанавливаем максимальную длину
-            break;
-        default:
-            input.type = 'text'; // По умолчанию используем text
-    }
-
-    // Добавляем элемент input в контейнер формы
-    //formContainer.appendChild(input);
-    //formContainer.appendChild(document.createElement('br')); // Добавляем перенос строки
-});
+        // Добавляем элемент input в контейнер формы
+        //formContainer.appendChild(input);
+        //formContainer.appendChild(document.createElement('br')); // Добавляем перенос строки
+    });
