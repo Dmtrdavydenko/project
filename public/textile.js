@@ -804,6 +804,7 @@ async function generateForm() {
     {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
+        select.name = "sleeve_width_density";
         (await slect("sleeve_width_density")).rows.forEach(obj => {
             const option = document.createElement('option');
             const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(obj);
@@ -820,6 +821,7 @@ async function generateForm() {
         select.addEventListener('change', function () {
             switchYarn.call(this, selectType);
         });
+        select.name = "yarn_type";
         (await slect("yarn_type")).rows.forEach(thread => {
             const option = document.createElement('option');
             const yarnInfo = new YarnInfo(thread);
@@ -846,8 +848,8 @@ async function generateForm() {
     {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
-        const threads = (await slect("Thread_Parameters")).rows;
-        threads.forEach(thread => {
+        select.name = "Thread_Parameters";
+        (await slect("Thread_Parameters")).rows.forEach(thread => {
             const option = document.createElement('option');
             const threadInfo = new ThreadInfo(thread);
             option.value = threadInfo.id;
@@ -861,8 +863,8 @@ async function generateForm() {
     {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
-        const colors = (await slect("color")).rows;
-        colors.forEach(color => {
+        select.name = "color";
+        (await slect("color")).rows.forEach(color => {
             const option = document.createElement('option');
             const colorInfo = new ColorInfo(color);
             option.value = colorInfo.id;
@@ -876,8 +878,8 @@ async function generateForm() {
     {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
-        const colors = (await slect("additive")).rows;
-        colors.forEach(color => {
+        select.name = "additive";
+        (await slect("additive")).rows.forEach(color => {
             const option = document.createElement('option');
             const additiveInfo = new AdditiveInfo(color);
             option.value = additiveInfo.id;
