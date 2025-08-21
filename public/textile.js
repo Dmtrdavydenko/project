@@ -946,7 +946,7 @@ async function generateForm() {
             o[this.name] = this.valueAsNumber ?? +this.value;
             o.key = this.name;
         });
-        console.log(v);
+        console.log(o);
 
         let k = {};
         for (const item of selectMap) {
