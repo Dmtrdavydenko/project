@@ -942,9 +942,9 @@ async function generateForm() {
         let v = selectMap.map(createKeyValue);
         console.log(v);
         let o = {};
-        selectMap.forEach(function () {
-            o[this.name] = this.valueAsNumber ?? +this.value;
-            o.key = this.name;
+        selectMap.forEach(function (select) {
+            o[select.name] = select.valueAsNumber ?? +select.value;
+            o.key = select.name;
         });
         console.log(o);
 
