@@ -310,7 +310,7 @@ async function showSelect(event) {
         text: this.selectedOptions[0].textContent,
     });
     const o = {
-        [this.name]:+this.value,
+        [this.name]: +this.value,
         key: this.name,
     }
     console.log(o);
@@ -941,6 +941,18 @@ async function generateForm() {
     function showButton() {
         let v = selectMap.map(createKeyValue);
         console.log(v);
+        let o = {};
+        selectMap.forEach(function () {
+            o[this.name] = this.valueAsNumber ?? +this.value;
+            o.key = this.name;
+        });
+        console.log(v);
+
+        let k = {};
+        for (const item of selectMap) {
+            k[item.name] = item.valueAsNumber ?? +item.value;
+        }
+        console.log(k);
     }
 
     array = [];
