@@ -993,12 +993,10 @@ async function generateForm() {
         await showTableFn();
         return await response;
     }
+}
 
-    // Генерация формы для таблицы 'your_table_name'
-    //generateForm('your_table_name');
-
-
-
+// Генерация формы для таблицы 'your_table_name'
+//generateForm('your_table_name');
 
 
 
@@ -1006,44 +1004,47 @@ async function generateForm() {
 
 
 
-    (async () => {
-        await getTableName();
-        await loadTableFn();
-    })();
 
 
 
-    const columns = [
-        { name: 'thread_id', type: 'int' },
-        { name: 'thread_name', type: 'varchar(300)' },
-        { name: 'thread_density', type: 'smallint unsigned' },
-        { name: 'thread_length', type: 'smallint unsigned' }
-    ];
+(async () => {
+    await getTableName();
+    await loadTableFn();
+})();
 
-    //const formContainer = document.getElementById('formContainer');
 
-    columns.forEach(column => {
-        // Создаем элемент input
-        const input = document.createElement('input');
-        input.name = column.name;
-        input.placeholder = column.name;
 
-        // Определяем тип поля ввода в зависимости от типа данных
-        switch (column.type) {
-            case 'int':
-            case 'smallint unsigned':
-                input.type = 'number'; // Используем тип number для целых чисел
-                input.min = 0; // Устанавливаем минимальное значение для unsigned
-                break;
-            case 'varchar(300)':
-                input.type = 'text'; // Используем тип text для строк
-                input.maxLength = 300; // Устанавливаем максимальную длину
-                break;
-            default:
-                input.type = 'text'; // По умолчанию используем text
-        }
+const columns = [
+    { name: 'thread_id', type: 'int' },
+    { name: 'thread_name', type: 'varchar(300)' },
+    { name: 'thread_density', type: 'smallint unsigned' },
+    { name: 'thread_length', type: 'smallint unsigned' }
+];
 
-        // Добавляем элемент input в контейнер формы
-        //formContainer.appendChild(input);
-        //formContainer.appendChild(document.createElement('br')); // Добавляем перенос строки
-    });
+//const formContainer = document.getElementById('formContainer');
+
+columns.forEach(column => {
+    // Создаем элемент input
+    const input = document.createElement('input');
+    input.name = column.name;
+    input.placeholder = column.name;
+
+    // Определяем тип поля ввода в зависимости от типа данных
+    switch (column.type) {
+        case 'int':
+        case 'smallint unsigned':
+            input.type = 'number'; // Используем тип number для целых чисел
+            input.min = 0; // Устанавливаем минимальное значение для unsigned
+            break;
+        case 'varchar(300)':
+            input.type = 'text'; // Используем тип text для строк
+            input.maxLength = 300; // Устанавливаем максимальную длину
+            break;
+        default:
+            input.type = 'text'; // По умолчанию используем text
+    }
+
+    // Добавляем элемент input в контейнер формы
+    //formContainer.appendChild(input);
+    //formContainer.appendChild(document.createElement('br')); // Добавляем перенос строки
+});
