@@ -309,6 +309,11 @@ async function showSelect(event) {
         target: event.target,
         text: this.selectedOptions[0].textContent,
     });
+    const o = {
+        [this.name]:+this.value,
+        key: this.name,
+    }
+    console.log(o);
     await showTableFn({ id: this.value });
 }
 async function showTableFn(query) {
@@ -930,7 +935,7 @@ async function generateForm() {
 
     const createKeyValue = ({ name, valueAsNumber, value }) => ({
         key: name,
-        value: valueAsNumber ?? value
+        value: valueAsNumber ?? +value
     });
 
     function showButton() {
