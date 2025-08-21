@@ -735,7 +735,6 @@ class WelfQuantityInfo {
         return this.table.welf_quantity;
     }
 }
-
 class QuantityInfo {
     constructor(table, idKey, quantityKey) {
         this.table = table;
@@ -751,6 +750,7 @@ class QuantityInfo {
         return this.table[this.quantityKey];
     }
 }
+
 async function switchYarn(select) {
     let o = {
         value: this.value,
@@ -784,6 +784,32 @@ async function switchYarn(select) {
     });
     console.log(threads);
 }
+
+
+
+async function sendData(url, dataToSend) {
+    try {
+        const response = await fetch(url, {
+            method: 'POST', // Метод отправки
+            headers: {
+                'Content-Type': 'application/json' // Указываем, что отправляем JSON
+            },
+            body: JSON.stringify(dataToSend) // Преобразуем объект в строку JSON
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+
+        const responseData = await response.json(); // Получаем ответ от сервера
+        console.log('Success:', responseData);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+const serverUrl = "https://worktime.up.railway.app/textile";
+
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
@@ -938,7 +964,7 @@ async function generateForm() {
         value: valueAsNumber ?? +value
     });
 
-    function showButton() {
+    async function showButton() {
         let v = selectMap.map(createKeyValue);
         console.log(v);
         let o = {};
@@ -954,6 +980,7 @@ async function generateForm() {
             k.key = item.name;
         }
         console.log(k);
+        await sendData(serverUrl,v);
     }
 
     array = [];
