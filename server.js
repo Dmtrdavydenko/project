@@ -1066,21 +1066,35 @@ server.on("request", (req, res) => {
                     }
 
 
+                    if (typeof functionDB[action] !== "function") {
+                        throw new Error(`Function '${action}' not found`);
+                    }
+
+
+                    //functionDB[body.action](body)
+                    functionDB[action](body)
+                        .then((resolve) => JSON.stringify(resolve))
+                        .then((resolve) => res.end(resolve))
+                        .catch(error => {
+                            res.end(error.message);
+                            console.log(error);
+                        })
+
                 } catch (e) {
 
                 }
                 //body = Buffer.concat(body);
                 //if (body != "") {
-                body = JSON.parse(body);
-                console.log(body);
+                //body = JSON.parse(body);
+                //console.log(body);
 
-                functionDB[body.action](body)
-                    .then((resolve) => JSON.stringify(resolve))
-                    .then((resolve) => res.end(resolve))
-                    .catch(error => {
-                        res.end(error.message)
-                        console.log(error);
-                    })
+                //functionDB[body.action](body)
+                //    .then((resolve) => JSON.stringify(resolve))
+                //    .then((resolve) => res.end(resolve))
+                //    .catch(error => {
+                //        res.end(error.message);
+                //        console.log(error);
+                //    })
 
             });
         }
