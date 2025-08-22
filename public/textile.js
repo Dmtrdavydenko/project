@@ -796,10 +796,10 @@ async function sendData(url, dataToSend) {
             },
             body: JSON.stringify(dataToSend) // Преобразуем объект в строку JSON
         });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
+        console.log(response);
+        //if (!response.ok) {
+        //    throw new Error('Network response was not ok ' + response.statusText);
+        //}
 
         const responseData = await response.json(); // Получаем ответ от сервера
         console.log('Success:', responseData);
