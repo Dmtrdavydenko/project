@@ -1037,7 +1037,7 @@ server.on("request", (req, res) => {
                         throw new Error("Empty request body");
                     const buffer = Buffer.concat(chunks);
                     const parsedBody = JSON.parse(buffer);
-                    console.log("Received data:", parseBody);
+                    console.log("Received data:", parsedBody);
 
                     let action;
                     let data;
@@ -1072,7 +1072,7 @@ server.on("request", (req, res) => {
 
 
                     //functionDB[body.action](body)
-                    functionDB[body.action](body)
+                    functionDB[action](body)
                         .then((resolve) => JSON.stringify(resolve))
                         .then((resolve) => res.end(resolve))
                         .catch(error => {
