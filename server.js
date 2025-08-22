@@ -1028,11 +1028,48 @@ server.on("request", (req, res) => {
 
     if (req.url === "/textile") {
         if (req.method === "POST") {
-            let body = [];
+            let chunks = [];
             req.on("data", (chunk) => {
-                body.push(chunk);
+                chunks.push(chunk);
             }).on("end", () => {
-                body = Buffer.concat(body)
+                try {
+                    if (chunks.length === 0)
+                        throw new Error("Empty request body");
+                    const buffer = Buffer.concat(chunks);
+                    const parsedBody = JSON.parse(buffer);
+                    console.log("Received data:", parseBody);
+
+                    let action;
+                    let data;
+
+                    if (Array.isArray(parsedBody)) {
+                        // this array
+                        data = {};
+                        parsedBody.forEach(item => {
+                            if (item && item.key !== undefined) {
+                                data[item.key] = item.value;
+                            }
+                        });
+
+                        action = data.action || "processData";
+
+                    } else if (parsedBody && typeof parsedBody === "object") {
+                        // this object
+                        data = parsedBody;
+
+                        if (!parsedBody.action) 
+                            throw new Error("The 'action' field is missing from the request");
+                        
+                        action = parsedBody.action;
+                    } else {
+                        throw new Error("Invalid data format");
+                    }
+
+
+                } catch (e) {
+
+                }
+                //body = Buffer.concat(body);
                 //if (body != "") {
                 body = JSON.parse(body);
                 console.log(body);
