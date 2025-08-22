@@ -1080,7 +1080,13 @@ server.on("request", (req, res) => {
                             console.log(error);
                         })
 
-                } catch (e) {
+                } catch (error) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({
+                        error: error.message,
+                        status: 'error'
+                    }));
+                    console.error("Ошибка обработки запроса:", error);
 
                 }
                 //body = Buffer.concat(body);
