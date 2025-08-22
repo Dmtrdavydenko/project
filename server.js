@@ -1072,7 +1072,7 @@ server.on("request", (req, res) => {
 
 
                     //functionDB[body.action](body)
-                    functionDB[action](body)
+                    functionDB[body.action](body)
                         .then((resolve) => JSON.stringify(resolve))
                         .then((resolve) => res.end(resolve))
                         .catch(error => {
@@ -1133,23 +1133,4 @@ console.log("Server listening on " + PORT);
 
 
 module.exports = combined;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
