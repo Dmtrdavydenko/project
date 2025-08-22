@@ -912,7 +912,7 @@ async function getColumnsAndTypesForTable(body) {
 
 
 
-const mimeTypes = {
+const MIMETYPES = {
     ".txt": "text/plain",
     ".html": "text/html",
     ".js": "text/javascript",
@@ -1000,14 +1000,14 @@ server.on("request", (req, res) => {
             let filePath = path.join(process.cwd(), "/public", pathName);
             console.log(pathName);
             fs.exists(filePath, function (exists, err) {
-                if (!exists || !mimeTypes[ext]) {
+                if (!exists || !MIMETYPES[ext]) {
                     console.log("File does not exist: " + pathName);
                     res.writeHead(404, { "Content-Type": "text/plain" });
                     res.write("404 Not Found");
                     res.end();
                     return;
                 }
-                res.writeHead(200, { "Content-Type": mimeTypes[ext] });
+                res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
                 console.log(filePath);
                 const fileStream = fs.createReadStream(filePath);
                 fileStream.pipe(res);
@@ -1102,6 +1102,13 @@ server.on("request", (req, res) => {
                 //        console.log(error);
                 //    })
 
+            }).on("error", (error) => {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({
+                    error: 'Internal server error',
+                    status: 'error'
+                }));
+                console.error("Flow error:", error);
             });
         }
     } else {
