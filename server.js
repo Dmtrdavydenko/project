@@ -21,6 +21,7 @@ const functionDB = {
     "ping": ping,
     "getColumnsJoin": getColumnsJoin,
     "getTable": getTable,
+    "processData": ping,
 }
 
 
