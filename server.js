@@ -1072,7 +1072,7 @@ server.on("request", (req, res) => {
 
 
                     //functionDB[body.action](body)
-                    functionDB[action](body)
+                    functionDB[action](data)
                         .then((resolve) => JSON.stringify(resolve))
                         .then((resolve) => res.end(resolve))
                         .catch(error => {
