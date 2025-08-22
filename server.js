@@ -1090,19 +1090,6 @@ server.on("request", (req, res) => {
                     console.error("Ошибка обработки запроса:", error);
 
                 }
-                //body = Buffer.concat(body);
-                //if (body != "") {
-                //body = JSON.parse(body);
-                //console.log(body);
-
-                //functionDB[body.action](body)
-                //    .then((resolve) => JSON.stringify(resolve))
-                //    .then((resolve) => res.end(resolve))
-                //    .catch(error => {
-                //        res.end(error.message);
-                //        console.log(error);
-                //    })
-
             }).on("error", (error) => {
                 res.writeHead(500, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({
