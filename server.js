@@ -1066,13 +1066,10 @@ server.on("request", (req, res) => {
                         throw new Error("Invalid data format");
                     }
 
-
                     if (typeof functionDB[action] !== "function") {
                         throw new Error(`Function '${action}' not found`);
                     }
 
-
-                    //functionDB[body.action](body)
                     functionDB[action](data)
                         .then((resolve) => JSON.stringify(resolve))
                         .then((resolve) => res.end(resolve))
@@ -1117,11 +1114,9 @@ server.on("request", (req, res) => {
                         res.end(error.message)
                         console.log(error);
                     })
-
             });
         }
     }
-
 });
 server.listen(PORT);
 console.log("Server listening on " + PORT);
