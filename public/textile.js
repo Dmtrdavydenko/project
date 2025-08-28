@@ -801,7 +801,7 @@ async function sendData(url, dataToSend) {
         }
 
         const responseData = await response.json(); // Получаем ответ от сервера
-        console.log('Success:', responseData);
+        console.log('client success:', responseData);
         return responseData;
     } catch (error) {
         console.error('Error:', error);
