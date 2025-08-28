@@ -35,7 +35,7 @@ const dbConfig = {
 };
 
 const mysql = require('mysql2/promise');
-
+const ManualRepository = require('./ManualRepository');
 //const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
 
 const pool = mysql.createPool(dbConfig); // создаём пул подключений
