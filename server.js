@@ -21,7 +21,7 @@ const functionDB = {
     "ping": ping,
     "getColumnsJoin": getColumnsJoin,
     "getTable": getTable,
-    "processData": ping,
+    "processData": line,
 }
 
 
@@ -125,6 +125,9 @@ async function getTableColumns(body) {
 }
 async function ping() {
     return "pong";
+}
+async function line(x) {
+    return x;
 }
 
 async function getPriKey(nameTable) {
