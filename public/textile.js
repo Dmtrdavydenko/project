@@ -819,10 +819,13 @@ async function generateForm() {
     let decodedMetadata = join.map(meta => (decodeMetadata(meta)));
     //let data = {};
     console.log(decodedMetadata);
+
+    let Thread_Parameters = "Thread_Parameters";
+
     for (const meta of decodedMetadata) {
         //console.log(meta);
         if (meta.orgName === meta.orgTable) {
-            const sql = `SELECT * FROM \`${meta.orgTable}\``;
+            const sql = `SELECT * FROM \`${Thread_Parameters}\``;
             const select = document.createElement('select');
             select.addEventListener('change', showSelect);
             console.log(sql);
