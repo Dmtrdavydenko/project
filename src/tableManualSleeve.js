@@ -1,6 +1,6 @@
 const mysql = require('mysql2/promise');
 class ManualRepository {
-    constructor() {
+    constructor(pool) {
         //this.pool = mysql.createPool({
         //    host: process.env.DB_HOST,
         //    user: process.env.DB_USER,
@@ -10,6 +10,7 @@ class ManualRepository {
         //    connectionLimit: 10,
         //    queueLimit: 0
         //});
+        this.pool = pool;
     }
 
     /**

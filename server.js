@@ -126,8 +126,18 @@ async function getTableColumns(body) {
 async function ping() {
     return "pong";
 }
-async function line(x) {
-    return x;
+async function line(manualData) {
+    let str = "";
+    const repository = new ManualRepository(pool);
+    try {
+        const result = await repository.insertManual(manualData);
+        str = 'Data inserted successfully: ' + result;
+        console.log(str);
+    } catch (error) {
+        str = 'Insert failed: ' + error.message;
+        console.log(str);
+    }
+    return str;
 }
 
 async function getPriKey(nameTable) {
