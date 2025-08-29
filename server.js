@@ -330,7 +330,7 @@ async function select(body) {
                 thread_density,
                 color,
                 additive_name,
-                *,
+                t.*,
                 type.yarn_name,
                 CASE
                     WHEN type.yarn_name = 'warp' THEN warp.warp_quantity
