@@ -299,7 +299,7 @@ async function select(body) {
                 select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 break;
             default:
-                sql = 'SELECT * FROM ' + body.table.name;
+                sql = 'SELECT * FROM `' + body.table.name+"`";
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 select.pri = primaryKeyColumn;
