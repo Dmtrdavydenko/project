@@ -321,11 +321,12 @@ async function select(body) {
                 //    d.*,
                 //    type.yarn_name,
                 //    CASE
+                //quantity,
+
                 sql = `
                 SELECT
                 sleeve_width,
                 density,
-                quantity,
                 thread_density,
                 color,
                 additive_name,
