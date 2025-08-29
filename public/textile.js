@@ -826,7 +826,7 @@ async function generateForm() {
         //console.log(meta);
         if (meta.orgName === meta.orgTable) {
             const sql = `SELECT * FROM \`${Thread_Parameters}\``;
-            const select = document.createElement('select');
+            const select = document.createElement('input');
             select.addEventListener('change', showSelect);
             console.log(sql);
             (await sqlQuery(sql))[0].forEach(item => {
