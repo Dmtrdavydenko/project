@@ -303,15 +303,43 @@ async function select(body) {
 
 
                 //type_id	sleeve_w_d_id	yarn_id	quantity	thread_densiti_id	color_id	additive_id
-                sql = "SELECT * " +
-                    "FROM `manual` t " +
-                    "JOIN sleeve_width_density  swd ON t.sleeve_w_d_id = swd.sleeve_width_density_id " +
-                    "JOIN sleeve_width           sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
-                    "JOIN sleeve_density                 d ON swd.sleeve_density_id = d.sleeve_density_id " +
-                    "JOIN warp_quantity                 warp ON t.quantity = warp.warp_id " +
-                    "JOIN weft_quantity                 weft ON t.quantity = weft.weft_id " +
-                    "JOIN yarn_type                     type ON t.yarn_id = type.yarn_id "
-                sql += ";";
+                //sql = "SELECT * " +
+                //    "FROM `manual` t " +
+                //    "JOIN sleeve_width_density  swd ON t.sleeve_w_d_id = swd.sleeve_width_density_id " +
+                //    "JOIN sleeve_width           sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
+                //    "JOIN sleeve_density                 d ON swd.sleeve_density_id = d.sleeve_density_id " +
+                //    "JOIN warp_quantity                 warp ON t.quantity = warp.warp_id " +
+                //    "JOIN weft_quantity                 weft ON t.quantity = weft.weft_id " +
+                //    "JOIN yarn_type                     type ON t.yarn_id = type.yarn_id "
+                //sql += ";";
+
+                sql = `
+                SELECT
+                t.*,
+                swd.*,
+                sw.*,
+                d.*,
+                type.yarn_name,
+                CASE
+                    WHEN type.yarn_name = 'warp' THEN warp.warp_quantity
+                    WHEN type.yarn_name = 'weft' THEN weft.weft_quantity
+                    ELSE NULL
+                END AS quantity
+                FROM \`manual\` t
+                JOIN sleeve_width_density swd
+                    ON t.sleeve_w_d_id = swd.sleeve_width_density_id
+                JOIN sleeve_width sw
+                    ON swd.sleeve_width_id = sw.sleeve_width_id
+                JOIN sleeve_density d
+                    ON swd.sleeve_density_id = d.sleeve_density_id
+                LEFT JOIN warp_quantity warp
+                    ON t.quantity = warp.warp_id
+                LEFT JOIN weft_quantity weft
+                    ON t.quantity = weft.weft_id
+                JOIN yarn_type type
+                    ON t.yarn_id = type.yarn_id;
+                `
+
                 break;
             default:
                 sql = 'SELECT * FROM `' + body.table.name+"`";
