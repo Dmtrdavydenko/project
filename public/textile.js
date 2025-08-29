@@ -812,29 +812,30 @@ const serverUrl = "https://worktime.up.railway.app/textile";
 
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
+    const form = document.getElementById('form');
     formContainer.innerHTML = '';
     const columns = await getSelectedValue();
     const join = await getSelected();
     let decodedMetadata = join.map(meta => (decodeMetadata(meta)));
     //let data = {};
     console.log(decodedMetadata);
-    //for (const meta of decodedMetadata) {
-    //    //console.log(meta);
-    //    if (meta.orgName === meta.orgTable) {
-    //        const sql = `SELECT * FROM \`${meta.orgTable}\``;
-    //        const select = document.createElement('select');
-    //        select.addEventListener('change', showSelect);
-    //        console.log(sql);
-    //        (await sqlQuery(sql))[0].forEach(item => {
-    //            const option = document.createElement('option');
-    //            option.value = item.id;
-    //            option.textContent = item[meta.orgName];
-    //            select.appendChild(option);
-    //        })
-    //        formContainer.append(select);
+    for (const meta of decodedMetadata) {
+        //console.log(meta);
+        if (meta.orgName === meta.orgTable) {
+            const sql = `SELECT * FROM \`${meta.orgTable}\``;
+            const select = document.createElement('select');
+            select.addEventListener('change', showSelect);
+            console.log(sql);
+            (await sqlQuery(sql))[0].forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = item[meta.orgName];
+                select.appendChild(option);
+            })
+            form.append(select);
 
-    //    }
-    //}
+        }
+    }
     //console.log(data);
 
     const selectMap = [];
