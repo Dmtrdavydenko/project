@@ -308,8 +308,8 @@ async function select(body) {
                     "JOIN sleeve_width_density  swd ON t.sleeve_w_d_id = swd.sleeve_width_density_id " +
                     "JOIN sleeve_width           sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
                     "JOIN sleeve_density                 d ON swd.sleeve_density_id = d.sleeve_density_id " +
-                    "JOIN warp_quantity                 warp ON t.warp_quantity_id = warp.warp_id " +
-                    "JOIN weft_quantity                 weft ON t.weft_quantity_id = weft.weft_id " +
+                    "JOIN warp_quantity                 warp ON t.quantity = warp.warp_id " +
+                    "JOIN weft_quantity                 weft ON t.quantity = weft.weft_id " +
                     "JOIN yarn_type                     type ON t.yarn_id = type.yarn_id "
                 sql += ";";
                 break;
