@@ -325,18 +325,19 @@ async function select(body) {
 
                 sql = `
                 SELECT
+                type_id,
                 sleeve_width,
                 density,
-                thread_density,
-                color,
-                additive_name,
-                t.*,
                 type.yarn_name,
                 CASE
                     WHEN type.yarn_name = 'warp' THEN warp.warp_quantity
                     WHEN type.yarn_name = 'weft' THEN weft.weft_quantity
                     ELSE NULL
-                END AS quantity
+                END AS quantity,
+                thread_density,
+                color,
+                additive_name,
+                t.*
                 FROM \`manual\` t
                 JOIN sleeve_width_density swd
                     ON t.sleeve_w_d_id = swd.sleeve_width_density_id
