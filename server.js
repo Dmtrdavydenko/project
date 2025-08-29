@@ -335,8 +335,8 @@ async function select(body) {
                 additive_name,
                 t.*
                 CASE
-                    WHEN type.yarn_name = 'warp' THEN warp.warp_quantity
-                    WHEN type.yarn_name = 'weft' THEN weft.weft_quantity
+                    WHEN type.yarn_name = "warp" THEN warp.warp_quantity
+                    WHEN type.yarn_name = "weft" THEN weft.weft_quantity
                     ELSE NULL
                 END AS quantity
                 FROM \`manual\` t
