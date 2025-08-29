@@ -1073,7 +1073,7 @@ server.on("request", (req, res) => {
                     if (typeof functionDB[action] !== "function") {
                         throw new Error(`Function '${action}' not found`);
                     }
-
+                    console.log("Pre function data:", data);
                     functionDB[action](data)
                         .then((resolve) => JSON.stringify(resolve))
                         .then((resolve) => res.end(resolve))
