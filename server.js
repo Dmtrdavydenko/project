@@ -126,11 +126,31 @@ async function getTableColumns(body) {
 async function ping() {
     return "pong";
 }
+function transformKeys(inputObj) {
+    const keyMapping = {
+        'type': 'type_id',
+        'sleeve_width_density': 'sleeve_w_d_id',
+        'yarn_type': 'yarn_id',
+        'warp_quantity': 'quantity',
+        'Thread_Parameters': 'thread_densiti_id',
+        'color': 'color_id',
+        'additive': 'additive_id'
+    };
+
+    const result = {};
+
+    for (const [key, value] of Object.entries(inputObj)) {
+        const mappedKey = keyMapping[key] || key;
+        result[mappedKey] = value;
+    }
+
+    return result;
+}
 async function line(manualData) {
     let str = "";
     const repository = new ManualRepository(pool);
     try {
-        const result = await repository.insertManual(manualData);
+        const result = await repository.insertManual(transformKeys(manualData));
         str = 'Data inserted successfully: ' + result;
         console.log(str);
     } catch (error) {

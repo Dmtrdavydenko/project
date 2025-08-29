@@ -129,6 +129,15 @@ async function Usage() {
         color_id: 25,
         additive_id: 35
     };
+    let o = {
+        type: 1,
+        sleeve_width_density: 17,
+        yarn_type: 1,
+        warp_quantity: 1,
+        Thread_Parameters: 2,
+        color: 1,
+        additive: 2
+    }
 
     try {
         const result = await repository.insertManual(manualData);
