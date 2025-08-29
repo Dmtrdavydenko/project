@@ -348,8 +348,8 @@ async function select(body) {
                     ON t.thread_densiti_id = thread.thread_id
                 JOIN color c
                     ON t.color_id = c.color_id
-                JOIN additive add
-                    ON t.additive_id = add.id
+                JOIN additive ad
+                    ON t.additive_id = ad.id
                 LEFT JOIN warp_quantity warp
                     ON t.quantity = warp.warp_id
                 LEFT JOIN weft_quantity weft
