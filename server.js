@@ -299,6 +299,20 @@ async function select(body) {
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 break;
+            case "manual":
+
+
+                //type_id	sleeve_w_d_id	yarn_id	quantity	thread_densiti_id	color_id	additive_id
+                sql = "SELECT * " +
+                    "FROM `manual` t " +
+                    "JOIN sleeve_width_density  swd ON t.sleeve_w_d_id = swd.sleeve_width_density_id " +
+                    "JOIN sleeve_width           sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
+                    "JOIN sleeve_density                 d ON swd.sleeve_density_id = d.sleeve_density_id " +
+                    "JOIN warp_quantity                 warp ON t.warp_quantity_id = warp.warp_id " +
+                    "JOIN weft_quantity                 weft ON t.weft_quantity_id = weft.weft_id " +
+                    "JOIN yarn_type                     type ON t.yarn_id = type.yarn_id "
+                sql += ";";
+                break;
             default:
                 sql = 'SELECT * FROM `' + body.table.name+"`";
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
