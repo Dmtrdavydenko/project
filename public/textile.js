@@ -979,7 +979,6 @@ async function generateForm() {
         }
         console.log(k,o,v);
         await sendData(serverUrl,v);
-        await sendData(serverUrl,k);
     }
 
     array = [];
