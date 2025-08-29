@@ -966,20 +966,18 @@ async function generateForm() {
 
     async function showButton() {
         let v = selectMap.map(createKeyValue);
-        console.log(v);
         let o = {};
         selectMap.forEach(function (item) {
             o[item.name] = item.valueAsNumber ?? +item.value;
             o.key = item.name;
         });
-        console.log(o);
 
         let k = {};
         for (const item of selectMap) {
             k[item.name] = item.valueAsNumber ?? +item.value;
             k.key = item.name;
         }
-        console.log(k);
+        console.log(k,o,v);
         await sendData(serverUrl,v);
     }
 
