@@ -323,6 +323,12 @@ async function select(body) {
                 //    CASE
                 sql = `
                 SELECT
+                sleeve_width,
+                density,
+                quantity,
+                thread_density,
+                color,
+                additive_name,
                 *,
                 type.yarn_name,
                 CASE
@@ -337,6 +343,12 @@ async function select(body) {
                     ON swd.sleeve_width_id = sw.sleeve_width_id
                 JOIN sleeve_density d
                     ON swd.sleeve_density_id = d.sleeve_density_id
+                JOIN Thread_Parameters thread
+                    ON t.thread_densiti_id = thread.thread_id
+                JOIN color c
+                    ON t.color_id = c.color_id
+                JOIN additive add
+                    ON t.additive_id = add.id
                 LEFT JOIN warp_quantity warp
                     ON t.quantity = warp.warp_id
                 LEFT JOIN weft_quantity weft
@@ -344,6 +356,9 @@ async function select(body) {
                 JOIN yarn_type type
                     ON t.yarn_id = type.yarn_id;
                 `
+
+
+                //additive
 
                 break;
             default:
