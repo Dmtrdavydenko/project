@@ -313,12 +313,17 @@ async function select(body) {
                 //    "JOIN yarn_type                     type ON t.yarn_id = type.yarn_id "
                 //sql += ";";
 
+
+                //SELECT
+                //t.*,
+                //    swd.*,
+                //    sw.*,
+                //    d.*,
+                //    type.yarn_name,
+                //    CASE
                 sql = `
                 SELECT
-                t.*,
-                swd.*,
-                sw.*,
-                d.*,
+                *,
                 type.yarn_name,
                 CASE
                     WHEN type.yarn_name = 'warp' THEN warp.warp_quantity
