@@ -816,17 +816,33 @@ async function dropTable(body) {
 async function getAllTableNames() {
     // Создаём подключение к базе данных
     const connection = await pool.getConnection();
+    const parentNames = [
+        "Thread_Parameters",
+        "additive",
+        "circular_width",
+        "color",
+        "employees",
+        "machine",
+        "sleeve_density",
+        "sleeve_width",
+        "speed",
+        "warp_quantity",
+        "weft_quantity",
+        "yarn_type"
+    ];
 
     try {
         // Выполняем запрос SHOW TABLES
         const [rows] = await connection.execute('SHOW TABLES');
 
         // Имя колонки зависит от имени базы данных, получаем его динамически
-        const tableNames = rows.map(row => (
-            {
-                value: Object.values(row)[0],
-                isParent: true
-            }));
+        const tableNames = rows.map(row => {
+            const value = Object.values(row)[0];
+            return {
+                value: value,
+                isParent: parentNames.includes(value)
+            };
+        });
 
         console.log('Список таблиц:', tableNames);
         //return tableNames;
