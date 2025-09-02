@@ -119,6 +119,8 @@ getTablesNameButton.addEventListener("click", getTableName);
 
 
 const selectTableName = document.createElement("select");
+selectTableName.name = "name";
+selectTableName.id = "name";
 selectTableName.addEventListener('change', showTableFn);
 
 
@@ -248,8 +250,6 @@ async function getTableName() {
 }
 function createSelectOptions(dataArray) {
     selectTableName.innerHTML = '';
-    selectTableName.name = "name";
-    selectTableName.id = "name";
     dataArray.forEach(item => {
         const option = document.createElement('option');
         option.value = item.value;
