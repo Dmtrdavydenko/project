@@ -824,7 +824,6 @@ async function getTypeKey() {
     const form = document.getElementById('form');
     if (selectTableName.options[selectTableName.selectedIndex].dataset.isParent==="true") {
         form.innerHTML = '';
-        let array = [];
         const columns = await getSelectedValue();
         columns.forEach(column => {
             const inputElement = createInputElement(column);
@@ -1013,12 +1012,12 @@ async function generateForm() {
         console.log(resp);
     }
 
-    array = [];
+    //array = [];
 
     columns.forEach(column => {
         const inputElement = createInputElement(column);
         //form.append(inputElement);
-        array.push(inputElement);
+        //array.push(inputElement);
     });
 }
 
@@ -1050,21 +1049,27 @@ async function sendForm() {
     const arrayInput = array.filter(input => input.value.length > 0);
     const fields = arrayInput.map(input => input.name);
     const values = arrayInput.map(input => input.value);
-
-    const response = await fetch("https://worktime.up.railway.app/textile", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "insertGenerate",
-            table: {
+    let p = {
                 name: selectTableName.value,
                 fields: fields,
                 values: values
             }
-        }),
-    }).then((response) => response.json());
+    console.log(p);
+
+    //const response = await fetch("https://worktime.up.railway.app/textile", {
+    //    method: "POST",
+    //    headers: {
+    //        "Content-Type": "application/json;charset=utf-8",
+    //    },
+    //    body: JSON.stringify({
+    //        action: "insertGenerate",
+    //        table: {
+    //            name: selectTableName.value,
+    //            fields: fields,
+    //            values: values
+    //        }
+    //    }),
+    //}).then((response) => response.json());
     console.log(response);
     await showTableFn();
     return await response;
