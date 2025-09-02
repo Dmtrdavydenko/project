@@ -117,6 +117,9 @@ getTablesNameButton.textContent = "Получить имена всех табл
 getTablesNameButton.addEventListener("click", getTableName);
 
 
+const label = document.createElement('label');
+label.setAttribute('for', 'name');
+label.textContent = 'Выберите таблицу';
 
 const selectTableName = document.createElement("select");
 selectTableName.name = "name";
@@ -166,6 +169,7 @@ showTable.addEventListener("click", showTableFn);
 //main.append(drop);
 //main.append(getAllTablesNameButton);
 main.append(selectTableName);
+main.append(label);
 main.append(getColumnsTypes);
 //main.append(textArea);
 //main.append(queryButton);
