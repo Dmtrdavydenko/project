@@ -1056,20 +1056,20 @@ async function sendForm() {
             }
     console.log(p);
 
-    //const response = await fetch("https://worktime.up.railway.app/textile", {
-    //    method: "POST",
-    //    headers: {
-    //        "Content-Type": "application/json;charset=utf-8",
-    //    },
-    //    body: JSON.stringify({
-    //        action: "insertGenerate",
-    //        table: {
-    //            name: selectTableName.value,
-    //            fields: fields,
-    //            values: values
-    //        }
-    //    }),
-    //}).then((response) => response.json());
+    const response = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "insertGenerate",
+            table: {
+                name: selectTableName.value,
+                fields: fields,
+                values: values
+            }
+        }),
+    }).then((response) => response.json());
     console.log(response);
     await showTableFn();
     return await response;

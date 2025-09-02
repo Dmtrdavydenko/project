@@ -533,29 +533,30 @@ async function insertGenerate(body) {
     //body.table.values
     const shape = body.table.fields.map(() => '?').join(', ');
     const sql = "INSERT INTO " + body.table.name + " (" + body.table.fields.join(', ') + ") VALUES (" + shape + ")";
-    const connection = await pool.getConnection();
-    try {
-        //const pool = mysql.createPool(dbConfig); // создаём пул подключений
-        console.log('Успешно подключено к базе данных MySQL!');
+    console.log(body);
+    //const connection = await pool.getConnection();
+    //try {
+    //    //const pool = mysql.createPool(dbConfig); // создаём пул подключений
+    //    console.log('Успешно подключено к базе данных MySQL!');
 
-        // Вставка новой записи
-        const [insertResult] = await connection.execute(sql, body.table.values);
+    //    // Вставка новой записи
+    //    const [insertResult] = await connection.execute(sql, body.table.values);
 
-        console.log('Inserted ID:', insertResult.insertId);
+    //    console.log('Inserted ID:', insertResult.insertId);
 
-        return {
-            insertId: insertResult.insertId,
-            //rows // все данные таблицы
-        };
-    } catch (err) {
-        console.error('Ошибка:', err);
-        throw err;
-    } finally {
-        if (connection) connection.release();
-        //connection.release();
-        //await pool.end();
-        //console.log('Пул соединений закрыт.');
-    }
+    //    return {
+    //        insertId: insertResult.insertId,
+    //        //rows // все данные таблицы
+    //    };
+    //} catch (err) {
+    //    console.error('Ошибка:', err);
+    //    throw err;
+    //} finally {
+    //    if (connection) connection.release();
+    //    //connection.release();
+    //    //await pool.end();
+    //    //console.log('Пул соединений закрыт.');
+    //}
 }
 
 async function insert(body) {
