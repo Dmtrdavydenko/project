@@ -121,6 +121,7 @@ getTablesNameButton.addEventListener("click", getTableName);
 const selectTableName = document.createElement("select");
 selectTableName.name = "name";
 selectTableName.id = "name";
+selectElement.autocomplete = 'off';
 selectTableName.addEventListener('change', showTableFn);
 
 
