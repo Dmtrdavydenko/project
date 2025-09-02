@@ -124,7 +124,7 @@ label.textContent = 'Выберите таблицу';
 const selectTableName = document.createElement("select");
 selectTableName.name = "name";
 selectTableName.id = "name";
-selectElement.autocomplete = 'off';
+selectTableName.autocomplete = 'off';
 selectTableName.addEventListener('change', showTableFn);
 
 
