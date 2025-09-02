@@ -822,7 +822,11 @@ async function getAllTableNames() {
         const [rows] = await connection.execute('SHOW TABLES');
 
         // Имя колонки зависит от имени базы данных, получаем его динамически
-        const tableNames = rows.map(row => Object.values(row)[0]);
+        const tableNames = rows.map(row => (
+            {
+                value: Object.values(row)[0],
+                isParent: true
+            }));
 
         console.log('Список таблиц:', tableNames);
         //return tableNames;

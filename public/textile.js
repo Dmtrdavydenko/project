@@ -234,7 +234,6 @@ async function getTableName() {
             }),
         });
         const result = await response.json();
-        console.log(result);  // Inspect the result
         // Make sure the result is an array
         if (Array.isArray(result)) {  // Adjust based on actual response structure
             createSelectOptions(result);
@@ -249,10 +248,11 @@ async function getTableName() {
 }
 function createSelectOptions(dataArray) {
     selectTableName.innerHTML = '';
-    dataArray.forEach(value => {
+    dataArray.forEach(item => {
         const option = document.createElement('option');
-        option.value = value;
-        option.textContent = value;
+        option.value = item.value;
+        option.textContent = item.value;
+        option.dataset.isParent = item.isParent;
         selectTableName.appendChild(option);
     });
 }
