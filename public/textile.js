@@ -241,6 +241,7 @@ async function getTableName() {
         } else {
             console.log("Expected an array but got:", result);
         }
+        return result;
     } catch (error) {
         console.log("Error fetching table names:", error);
     }
@@ -1067,7 +1068,8 @@ async function sendForm() {
 
 
 (async () => {
-    await getTableName();
+    const tableName = await getTableName();
+    console.log(tableName);
     await loadTableFn();
 })();
 
