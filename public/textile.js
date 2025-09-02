@@ -374,6 +374,7 @@ async function showTableFn(query) {
         container.appendChild(table);
         await getTypeTableHeder();
         //await generateForm();
+        await getTypeKey()
     } else {
         container.textContent = 'U';
     }
@@ -832,10 +833,10 @@ async function getTypeKey() {
         });
         console.log(array);
         console.log(selectTableName.options[selectTableName.selectedIndex].dataset.isParent);
+        return columns;
     } else {
         console.log(selectTableName.options[selectTableName.selectedIndex].dataset.isParent);
         form.textContent = 'не удалось получить';
-        //container.textContent = 'U';
     }
 }
 async function generateForm() {
