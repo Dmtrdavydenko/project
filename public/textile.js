@@ -830,6 +830,7 @@ async function getTypeKey() {
         array.push(inputElement);
     });
     console.log(array);
+    console.log(selectTableName.options[selectTableName.selectedIndex].dataset.isParent);
 }
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
