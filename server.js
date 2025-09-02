@@ -816,7 +816,7 @@ async function dropTable(body) {
 async function getAllTableNames() {
     // Создаём подключение к базе данных
     const connection = await pool.getConnection();
-    const parentNames = [
+    const parentNamesSet = new Set([
         "Thread_Parameters",
         "additive",
         "circular_width",
@@ -829,7 +829,7 @@ async function getAllTableNames() {
         "warp_quantity",
         "weft_quantity",
         "yarn_type"
-    ];
+    ]);
 
     try {
         // Выполняем запрос SHOW TABLES
@@ -840,7 +840,7 @@ async function getAllTableNames() {
             const value = Object.values(row)[0];
             return {
                 value: value,
-                isParent: parentNames.includes(value)
+                isParent: parentNamesSet.has(value)
             };
         });
 
