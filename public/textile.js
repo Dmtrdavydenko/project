@@ -820,7 +820,7 @@ async function sendData(url, dataToSend) {
 
 const serverUrl = "https://worktime.up.railway.app/textile";
 async function getTypeKey() {
-    if (selectTableName.options[selectTableName.selectedIndex].dataset.isParent) {
+    if (selectTableName.options[selectTableName.selectedIndex].dataset.isParent==="true") {
         const form = document.getElementById('form');
         form.innerHTML = '';
         let array = [];
@@ -833,6 +833,7 @@ async function getTypeKey() {
         console.log(array);
         console.log(selectTableName.options[selectTableName.selectedIndex].dataset.isParent);
     } else {
+        console.log(selectTableName.options[selectTableName.selectedIndex].dataset.isParent);
         form.innerHTML = 'не удалось получить';
     }
 }
