@@ -533,7 +533,7 @@ async function insertGenerate(body) {
     //body.table.values
     const shape = body.table.fields.map(() => '?').join(', ');
     const sql = "INSERT INTO " + body.table.name + " (" + body.table.fields.join(', ') + ") VALUES (" + shape + ")";
-    console.log(body);
+    console.log(body,sql);
     //const connection = await pool.getConnection();
     //try {
     //    //const pool = mysql.createPool(dbConfig); // создаём пул подключений
