@@ -813,6 +813,7 @@ async function sendData(url, dataToSend) {
 const serverUrl = "https://worktime.up.railway.app/textile";
 async function getTypeKey() {
     const form = document.getElementById('form');
+    form.innerHTML = '';
     let array = [];
     const columns = await getSelectedValue();
     columns.forEach(column => {
