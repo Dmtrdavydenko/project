@@ -834,7 +834,8 @@ async function getTypeKey() {
         console.log(selectTableName.options[selectTableName.selectedIndex].dataset.isParent);
     } else {
         console.log(selectTableName.options[selectTableName.selectedIndex].dataset.isParent);
-        form.innerHTML = 'не удалось получить';
+        form.textContent = 'не удалось получить';
+        //container.textContent = 'U';
     }
 }
 async function generateForm() {
