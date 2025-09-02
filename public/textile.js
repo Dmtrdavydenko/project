@@ -820,17 +820,21 @@ async function sendData(url, dataToSend) {
 
 const serverUrl = "https://worktime.up.railway.app/textile";
 async function getTypeKey() {
-    const form = document.getElementById('form');
-    form.innerHTML = '';
-    let array = [];
-    const columns = await getSelectedValue();
-    columns.forEach(column => {
-        const inputElement = createInputElement(column);
-        form.append(inputElement);
-        array.push(inputElement);
-    });
-    console.log(array);
-    console.log(selectTableName.options[selectTableName.selectedIndex].dataset.isParent);
+    if (selectTableName.options[selectTableName.selectedIndex].dataset.isParent) {
+        const form = document.getElementById('form');
+        form.innerHTML = '';
+        let array = [];
+        const columns = await getSelectedValue();
+        columns.forEach(column => {
+            const inputElement = createInputElement(column);
+            form.append(inputElement);
+            array.push(inputElement);
+        });
+        console.log(array);
+        console.log(selectTableName.options[selectTableName.selectedIndex].dataset.isParent);
+    } else {
+        form.innerHTML = 'не удалось получить';
+    }
 }
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
