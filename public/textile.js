@@ -126,7 +126,9 @@ selectTableName.addEventListener('change', showTableFn);
 
 const getColumnsTypes = document.createElement("button");
 getColumnsTypes.textContent = "Получить колонки";
-getColumnsTypes.addEventListener("click", getSelectedValue);
+getColumnsTypes.addEventListener("click", getTypeKey);
+//getColumnsTypes.addEventListener("click", getSelectedValue);
+
 
 const textArea = document.createElement("textarea");
 const textAsk = document.createElement("textarea");
@@ -161,7 +163,7 @@ showTable.addEventListener("click", showTableFn);
 //main.append(drop);
 //main.append(getAllTablesNameButton);
 main.append(selectTableName);
-//main.append(getColumnsTypes);
+main.append(getColumnsTypes);
 //main.append(textArea);
 //main.append(queryButton);
 //main.append(textAsk);
@@ -809,12 +811,20 @@ async function sendData(url, dataToSend) {
 }
 
 const serverUrl = "https://worktime.up.railway.app/textile";
-
+async function getTypeKey() {
+    const form = document.getElementById('form');
+    let array = [];
+    const columns = await getSelectedValue();
+    columns.forEach(column => {
+        const inputElement = createInputElement(column);
+        form.append(inputElement);
+        array.push(inputElement);
+    });
+    console.log(array);
+}
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
-    const form = document.getElementById('form');
     formContainer.innerHTML = '';
-    const columns = await getSelectedValue();
     const join = await getSelected();
     let decodedMetadata = join.map(meta => (decodeMetadata(meta)));
     //let data = {};
@@ -822,23 +832,23 @@ async function generateForm() {
 
     let Thread_Parameters = "Thread_Parameters";
 
-    for (const meta of decodedMetadata) {
-        //console.log(meta);
-        if (meta.orgName === meta.orgTable) {
-            const sql = `SELECT * FROM \`${Thread_Parameters}\``;
-            const select = document.createElement('input');
-            select.addEventListener('change', showSelect);
-            console.log(sql);
-            (await sqlQuery(sql))[0].forEach(item => {
-                const option = document.createElement('option');
-                option.value = item.id;
-                option.textContent = item[meta.orgName];
-                select.appendChild(option);
-            })
-            form.append(select);
+    //for (const meta of decodedMetadata) {
+    //    //console.log(meta);
+    //    if (meta.orgName === meta.orgTable) {
+    //        const sql = `SELECT * FROM \`${Thread_Parameters}\``;
+    //        const select = document.createElement('input');
+    //        select.addEventListener('change', showSelect);
+    //        console.log(sql);
+    //        (await sqlQuery(sql))[0].forEach(item => {
+    //            const option = document.createElement('option');
+    //            option.value = item.id;
+    //            option.textContent = item[meta.orgName];
+    //            select.appendChild(option);
+    //        })
+    //        form.append(select);
 
-        }
-    }
+    //    }
+    //}
     //console.log(data);
 
     const selectMap = [];
@@ -990,7 +1000,7 @@ async function generateForm() {
 
     columns.forEach(column => {
         const inputElement = createInputElement(column);
-        //formContainer.append(inputElement);
+        //form.append(inputElement);
         array.push(inputElement);
     });
 }

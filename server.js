@@ -34,7 +34,7 @@ const dbConfig = {
     port: process.env.MYSQLPORT || 3306, // Укажите порт по умолчанию, если переменная не установлена
 };
 
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2/pr
 const ManualRepository = require('./src/tableManualSleeve');
 //const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
 
