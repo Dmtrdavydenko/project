@@ -318,7 +318,7 @@ async function showSelect(event) {
         value: this.value,
         target: event.target,
         //text: this.selectedOptions[0].textContent ?? this.textContent,
-        text: this.selectedOptions ? this.selectedOptions[0].textContent : this.textContent ?? this.value,
+        text: this.selectedOptions ? this.selectedOptions[0].textContent : this.textContent || this.value,
     });
     const o = {
         [this.name]: +this.value,
