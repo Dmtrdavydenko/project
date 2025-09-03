@@ -324,7 +324,7 @@ async function showSelect(event) {
         key: this.name,
     }
     console.log(o);
-    await showTableFn({ id: this.value });
+    //await showTableFn({ id: this.value });
 }
 async function showTableFn(query) {
     const result = await fetch("https://worktime.up.railway.app/textile", {
@@ -648,120 +648,7 @@ function decodeMetadata(metadata) {
         orgName: decodeSlice(data, metadata._orgNameStart, metadata._orgNameLength, metadata._clientEncoding),
     };
 }
-class ThreadInfo {
-    constructor(thread) {
-        this.thread = thread;
-    }
 
-    get density() {
-        return this.thread.thread_density;
-        //return `плотность: ${this.thread.thread_density}`;
-    }
-
-    get color() {
-        return this.thread.color;
-    }
-
-    get id() {
-        return this.thread.thread_id;
-    }
-
-    get length() {
-        return `длина: ${this.thread.thread_length}`;
-    }
-}
-class YarnInfo {
-    constructor(yarn) {
-        this.yarn = yarn;
-    }
-
-    get id() {
-        return this.yarn.yarn_id;
-    }
-
-    get name() {
-        return this.yarn.yarn_name;
-    }
-}
-class ColorInfo {
-    constructor(yarn) {
-        this.yarn = yarn;
-    }
-
-    get id() {
-        return this.yarn.color_id;
-    }
-
-    get color() {
-        return this.yarn.color;
-    }
-}
-class AdditiveInfo {
-    constructor(yarn) {
-        this.yarn = yarn;
-    }
-
-    get id() {
-        return this.yarn.id;
-    }
-
-    get name() {
-        return this.yarn.additive_name;
-    }
-
-}
-class SleeveWidthDensityInfo {
-    constructor(table) {
-        this.table = table;
-    }
-    get id() {
-        return this.table.sleeve_width_density_id;
-    }
-    get sleeve_width_id() {
-        return this.table.sleeve_width;
-    }
-
-    get sleeve_density_id() {
-        return this.table.density;
-    }
-}
-class WarpQuantityInfo {
-    constructor(table) {
-        this.table = table;
-    }
-    get id() {
-        return this.table.warp_id;
-    }
-    get warp_quantity() {
-        return this.table.warp_quantity;
-    }
-}
-class WelfQuantityInfo {
-    constructor(table) {
-        this.table = table;
-    }
-    get id() {
-        return this.table.welf_id;
-    }
-    get warp_quantity() {
-        return this.table.welf_quantity;
-    }
-}
-class QuantityInfo {
-    constructor(table, idKey, quantityKey) {
-        this.table = table;
-        this.idKey = idKey;
-        this.quantityKey = quantityKey;
-    }
-
-    get id() {
-        return this.table[this.idKey];
-    }
-
-    get quantity() {
-        return this.table[this.quantityKey];
-    }
-}
 
 async function switchYarn(select) {
     let o = {
@@ -823,7 +710,7 @@ async function sendData(url, dataToSend) {
 const serverUrl = "https://worktime.up.railway.app/textile";
 async function getTypeKey() {
     const form = document.getElementById('form');
-    if (selectTableName.options[selectTableName.selectedIndex].dataset.isParent==="true") {
+    if (selectTableName.options[selectTableName.selectedIndex].dataset.isParent === "true") {
         form.innerHTML = '';
         const columns = await getSelectedValue();
         columns.forEach(column => {
@@ -839,6 +726,79 @@ async function getTypeKey() {
         form.textContent = 'не удалось получить';
     }
 }
+class ThreadInfo {
+    constructor(thread) {
+        this.thread = thread;
+    }
+
+    get density() { return this.thread.thread_density; }
+
+    get color() { return this.thread.color; }
+
+    get id() { return this.thread.thread_id; }
+
+    get length() { return `длина: ${this.thread.thread_length}`; }
+}
+class YarnInfo {
+    constructor(yarn) {
+        this.yarn = yarn;
+    }
+
+    get id() { return this.yarn.yarn_id; }
+
+    get name() { return this.yarn.yarn_name; }
+}
+class ColorInfo {
+    constructor(yarn) {
+        this.yarn = yarn;
+    }
+
+    get id() { return this.yarn.color_id; }
+
+    get color() { return this.yarn.color; }
+}
+class AdditiveInfo {
+    constructor(yarn) {
+        this.yarn = yarn;
+    }
+
+    get id() { return this.yarn.id; }
+
+    get name() { return this.yarn.additive_name; }
+
+}
+class SleeveWidthDensityInfo {
+    constructor(table) {
+        this.table = table;
+    }
+    get id() { return this.table.sleeve_width_density_id; }
+    get sleeve_width_id() { return this.table.sleeve_width; }
+
+    get sleeve_density_id() { return this.table.density; }
+}
+class WarpQuantityInfo {
+    constructor(table) {
+        this.table = table;
+    }
+    get id() { return this.table.warp_id; }
+    get warp_quantity() { return this.table.warp_quantity; }
+}
+class WelfQuantityInfo {
+    constructor(table) {
+        this.table = table;
+    }
+    get id() { return this.table.welf_id; }
+    get warp_quantity() { return this.table.welf_quantity; }
+}
+class QuantityInfo {
+    constructor(table, idKey, quantityKey) {
+        this.table = table;
+        this.idKey = idKey;
+        this.quantityKey = quantityKey;
+    }
+    get id() { return this.table[this.idKey]; }
+    get quantity() { return this.table[this.quantityKey]; }
+}
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
@@ -846,27 +806,6 @@ async function generateForm() {
     let decodedMetadata = join.map(meta => (decodeMetadata(meta)));
     //let data = {};
     console.log(decodedMetadata);
-
-    let Thread_Parameters = "Thread_Parameters";
-
-    //for (const meta of decodedMetadata) {
-    //    //console.log(meta);
-    //    if (meta.orgName === meta.orgTable) {
-    //        const sql = `SELECT * FROM \`${Thread_Parameters}\``;
-    //        const select = document.createElement('input');
-    //        select.addEventListener('change', showSelect);
-    //        console.log(sql);
-    //        (await sqlQuery(sql))[0].forEach(item => {
-    //            const option = document.createElement('option');
-    //            option.value = item.id;
-    //            option.textContent = item[meta.orgName];
-    //            select.appendChild(option);
-    //        })
-    //        form.append(select);
-
-    //    }
-    //}
-    //console.log(data);
 
     const selectMap = [];
     {
@@ -877,14 +816,6 @@ async function generateForm() {
         select.type = "number";
         select.min = 1;
 
-        //(await slect("sleeve_width_density")).rows.forEach(obj => {
-        //    //(await slect("sleeve_width_density")).rows.forEach(obj => {
-        //    const option = document.createElement('option');
-        //    const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(obj);
-        //    option.value = sleeveWidthDensityInfo.id;
-        //    option.textContent = sleeveWidthDensityInfo.sleeve_width_id + "/" + sleeveWidthDensityInfo.sleeve_density_id;
-        //    select.appendChild(option);
-        //});
         console.log(select.valueAsNumber);
         formContainer.append(select);
         selectMap.push(select);
@@ -1008,18 +939,10 @@ async function generateForm() {
             k[item.name] = item.valueAsNumber ?? +item.value;
             k.key = item.name;
         }
-        console.log(k,o,v);
+        console.log(k, o, v);
         let resp = await sendData(serverUrl, v);
         console.log(resp);
     }
-
-    //array = [];
-
-    columns.forEach(column => {
-        const inputElement = createInputElement(column);
-        //form.append(inputElement);
-        //array.push(inputElement);
-    });
 }
 
 
@@ -1051,10 +974,10 @@ async function sendForm() {
     const fields = arrayInput.map(input => input.name);
     const values = arrayInput.map(input => input.value);
     let p = {
-                name: selectTableName.value,
-                fields: fields,
-                values: values
-            }
+        name: selectTableName.value,
+        fields: fields,
+        values: values
+    }
     console.log(p);
 
     const response = await fetch("https://worktime.up.railway.app/textile", {

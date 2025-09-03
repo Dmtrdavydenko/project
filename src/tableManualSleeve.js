@@ -51,14 +51,6 @@ class ManualRepository {
             const connection = await this.pool.getConnection();
 
             try {
-                //const query = `
-                //    INSERT INTO manual (
-                //        type_id, sleeve_w_d_id, yarn_id, quantity,
-                //        thread_densiti_id, color_id, additive_id
-                //    ) VALUES (?, ?, ?, ?, ?, ?, ?)
-                //    ON DUPLICATE KEY UPDATE quantity = VALUES(quantity)
-                //`;
-
                 const query = `
                 INSERT INTO \`manual\` (
                     \`type_id\`, \`sleeve_w_d_id\`, \`yarn_id\`, \`quantity\`,
