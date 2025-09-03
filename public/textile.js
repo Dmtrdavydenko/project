@@ -336,10 +336,11 @@ async function showTableFn(query) {
             action: "select",
             table: {
                 name: selectTableName.value,
-            },
-            wd: {
-                id: query.id
             }
+            //,
+            //wd: {
+            //    id: query.id
+            //}
         }),
     }).then((response) => response.json());
     console.log(result);
