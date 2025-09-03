@@ -317,7 +317,7 @@ async function showSelect(event) {
     console.log({
         value: this.value,
         target: event.target,
-        text: this.selectedOptions[0].textContent ?? this.textContent,
+        //text: this.selectedOptions[0].textContent ?? this.textContent,
         text: this.selectedOptions ? this.selectedOptions[0].textContent : this.textContent,
     });
     const o = {
