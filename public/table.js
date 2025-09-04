@@ -158,7 +158,7 @@ let clickEventTg = new MouseEvent('click', {
 });
 clickEventTg._isTrusted = true;
 let pin = document.querySelector('button.btn.btn-circle.btn-sm.btn-ghost');
-// pin.dispatchEvent(clickEventTg);
+ pin.dispatchEvent(clickEventTg);
 // let clickEvent = new MouseEvent('click', {
 //     bubbles: true,
 //     cancelable: true,

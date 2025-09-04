@@ -738,38 +738,29 @@ class ThreadInfo {
     }
 
     get density() { return this.thread.thread_density; }
-
     get color() { return this.thread.color; }
-
     get id() { return this.thread.thread_id; }
-
     get length() { return `длина: ${this.thread.thread_length}`; }
 }
 class YarnInfo {
     constructor(yarn) {
         this.yarn = yarn;
     }
-
     get id() { return this.yarn.yarn_id; }
-
     get name() { return this.yarn.yarn_name; }
 }
 class ColorInfo {
     constructor(yarn) {
         this.yarn = yarn;
     }
-
     get id() { return this.yarn.color_id; }
-
     get color() { return this.yarn.color; }
 }
 class AdditiveInfo {
     constructor(yarn) {
         this.yarn = yarn;
     }
-
     get id() { return this.yarn.id; }
-
     get name() { return this.yarn.additive_name; }
 
 }
@@ -779,7 +770,6 @@ class SleeveWidthDensityInfo {
     }
     get id() { return this.table.sleeve_width_density_id; }
     get sleeve_width_id() { return this.table.sleeve_width; }
-
     get sleeve_density_id() { return this.table.density; }
 }
 class WarpQuantityInfo {
@@ -944,10 +934,13 @@ async function generateForm() {
         for (const item of selectMap) {
             k[item.name] = item.valueAsNumber ?? +item.value;
             k.key = item.name;
+            manual[item.name] = item.value;
         }
         console.log(k, o, v);
-        let resp = await sendData(serverUrl, v);
-        console.log(resp);
+        //let resp = await sendData(serverUrl, v);
+        //console.log(resp);
+
+        console.log(manual);
     }
 }
 
