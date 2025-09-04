@@ -312,7 +312,10 @@ async function slect(table) {
         }),
     }).then((response) => response.json());
 }
-
+inputs.forEach(input => {
+    data[input.name] = input.value;
+});
+let manual = new Object();
 async function showSelect(event) {
     console.log({
         value: this.value,
@@ -324,7 +327,9 @@ async function showSelect(event) {
         [this.name]: +this.value,
         key: this.name,
     }
+    manual[this.name] = this.value;
     console.log(o);
+    console.log(manual);
     //await showTableFn({ id: this.value });
 }
 async function showTableFn(query) {
