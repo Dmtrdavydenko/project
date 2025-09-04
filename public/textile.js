@@ -312,9 +312,9 @@ async function slect(table) {
         }),
     }).then((response) => response.json());
 }
-inputs.forEach(input => {
-    data[input.name] = input.value;
-});
+//inputs.forEach(input => {
+//    data[input.name] = input.value;
+//});
 let manual = new Object();
 async function showSelect(event) {
     console.log({
