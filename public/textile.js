@@ -927,16 +927,8 @@ async function generateForm() {
         let o = {};
         selectMap.forEach(function (item) {
             o[item.name] = item.valueAsNumber ?? +item.value;
-            o.key = item.name;
         });
-
-        let k = {};
-        for (const item of selectMap) {
-            k[item.name] = item.valueAsNumber ?? +item.value;
-            k.key = item.name;
-            manual[item.name] = item.value;
-        }
-        console.log(k, o, v);
+        console.log(o, v);
         //let resp = await sendData(serverUrl, v);
         //console.log(resp);
 
