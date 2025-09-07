@@ -73,7 +73,7 @@ class ManualRepository {
                 const [rows] = await connection.execute(query, values);
                 return {
                     success: true,
-                    data: rows
+                    rows: rows
                 };
             } finally {
                 connection.release();
