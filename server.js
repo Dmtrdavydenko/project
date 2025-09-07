@@ -158,9 +158,9 @@ async function line(manualData) {
         console.log(o);
     } catch (error) {
         //str = 'Insert failed: ' + error.message;
-        console.log(str);
+        console.log(o);
     }
-    return o.data;
+    return o;
 }
 
 async function getPriKey(nameTable) {

@@ -911,7 +911,7 @@ async function generateForm() {
         });
         console.log(o, v);
         //let resp = await sendData(serverUrl, v);
-        let result = await find(serverUrl, v);
+        let result = await find(serverUrl, manual);
         console.log(result);
 
         console.log(manual);
