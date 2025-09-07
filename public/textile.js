@@ -771,7 +771,7 @@ async function showSelect(event) {
         [this.name]: +this.value,
         key: this.name,
     }
-    manual[this.name] = this.value;
+    manual[this.name] = +this.value;
     console.log(o);
     console.log(manual);
     //await showTableFn({ id: this.value });
