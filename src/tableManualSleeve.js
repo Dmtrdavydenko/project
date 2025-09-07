@@ -69,7 +69,7 @@ class ManualRepository {
             try {
                 const { whereClause, values } = this._buildWhereClause(filters);
                 const query = `
-                                SELECT
+                SELECT
                 t.type_id,
                 sw.sleeve_width,
                 d.density,
