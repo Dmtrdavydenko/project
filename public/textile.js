@@ -315,23 +315,7 @@ async function slect(table) {
 //inputs.forEach(input => {
 //    data[input.name] = input.value;
 //});
-let manual = new Object();
-async function showSelect(event) {
-    console.log({
-        value: this.value,
-        target: event.target,
-        //text: this.selectedOptions[0].textContent ?? this.textContent,
-        text: this.selectedOptions ? this.selectedOptions[0].textContent : this.textContent,
-    });
-    const o = {
-        [this.name]: +this.value,
-        key: this.name,
-    }
-    manual[this.name] = this.value;
-    console.log(o);
-    console.log(manual);
-    //await showTableFn({ id: this.value });
-}
+
 async function showTableFn(query) {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
@@ -775,6 +759,23 @@ class QuantityInfo {
     get id() { return this.table[this.idKey]; }
     get quantity() { return this.table[this.quantityKey]; }
 }
+let manual = new Object();
+async function showSelect(event) {
+    console.log({
+        value: this.value,
+        target: event.target,
+        //text: this.selectedOptions[0].textContent ?? this.textContent,
+        text: this.selectedOptions ? this.selectedOptions[0].textContent : this.textContent,
+    });
+    const o = {
+        [this.name]: +this.value,
+        key: this.name,
+    }
+    manual[this.name] = this.value;
+    console.log(o);
+    console.log(manual);
+    //await showTableFn({ id: this.value });
+}
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
@@ -906,11 +907,11 @@ async function generateForm() {
         let v = selectMap.map(createKeyValue);
         let o = {};
         selectMap.forEach(function (item) {
-            manual[item.name] = item.valueAsNumber ?? +item.value;
+            o[item.name] = item.valueAsNumber ?? +item.value;
         });
         console.log(o, v);
         //let resp = await sendData(serverUrl, v);
-        let result = await find(serverUrl, v);
+        let result = await find(serverUrl, manual);
         console.log(result);
 
         console.log(manual);
