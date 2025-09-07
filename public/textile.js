@@ -354,28 +354,7 @@ async function showTableFn(query) {
 
     const container = document.getElementById('table-container');
     container.innerHTML = '';
-
-    //if (true) {
     if (result.rows) {
-        const array = [
-            {
-                textile_density: 75,
-                textile_id: 1,
-                textile_number: 1,
-                textile_width: 56,
-                warp_name: null,
-                warp_quantity: 456,
-            },
-            {
-                textile_density: 68,
-                textile_id: 2,
-                textile_number: 2,
-                textile_width: 42,
-                warp_name: null,
-                warp_quantity: 312,
-            }
-        ];
-        //const table = createTable(array);
         const table = createTable(result.rows);
         table.addEventListener("click", queryTarget);
         container.appendChild(table);
@@ -950,10 +929,22 @@ async function generateForm() {
         });
         console.log(o, v);
         //let resp = await sendData(serverUrl, v);
-        let resp = await find(serverUrl, v);
+        let result = await find(serverUrl, v);
         //console.log(resp);
 
         console.log(manual);
+        const container = document.getElementById('table-container');
+        container.innerHTML = '';
+        if (result.rows) {
+            const table = createTable(result.rows);
+            table.addEventListener("click", queryTarget);
+            container.appendChild(table);
+            await getTypeTableHeder();
+            //await generateForm();
+            await getTypeKey()
+        } else {
+            container.textContent = 'U';
+        }
     }
 }
 

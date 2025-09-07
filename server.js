@@ -149,17 +149,18 @@ function transformKeys(inputObj) {
 }
 async function line(manualData) {
     let str = "";
+    let o = {};
     const manual = new ManualRepository(pool);
     try {
         //const result = await manual.insertManual(transformKeys(manualData));
-        const result = await manual.select(transformKeys(manualData));
+        o = await manual.select(transformKeys(manualData));
         str = 'Data inserted successfully: ' + result;
         console.log(str);
     } catch (error) {
         str = 'Insert failed: ' + error.message;
         console.log(str);
     }
-    return str;
+    return o.data;
 }
 
 async function getPriKey(nameTable) {
