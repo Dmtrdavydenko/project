@@ -69,6 +69,7 @@ class ManualRepository {
             try {
                 const { whereClause, values } = this._buildWhereClause(filters);
                 const query = `SELECT * FROM \`manual\` ${whereClause};`;
+                console.log(query);
                 const [rows] = await connection.execute(query, values);
                 return {
                     success: true,
