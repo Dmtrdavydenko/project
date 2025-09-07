@@ -712,6 +712,26 @@ async function sendData(url, dataToSend) {
         console.error('Error:', error);
     }
 }
+async function find(url, dataToSend) {
+    try {
+        const response = await fetch(url, {
+            method: 'POST', // Метод отправки
+            headers: {
+                'Content-Type': 'application/json' // Указываем, что отправляем JSON
+            },
+            body: JSON.stringify(dataToSend) // Преобразуем объект в строку JSON
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+
+        const responseData = await response.json(); // Получаем ответ от сервера
+        console.log('client success:', responseData);
+        return responseData;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 
 const serverUrl = "https://worktime.up.railway.app/textile";
 async function getTypeKey() {
@@ -926,10 +946,11 @@ async function generateForm() {
         let v = selectMap.map(createKeyValue);
         let o = {};
         selectMap.forEach(function (item) {
-            o[item.name] = item.valueAsNumber ?? +item.value;
+            manual[item.name] = item.valueAsNumber ?? +item.value;
         });
         console.log(o, v);
         //let resp = await sendData(serverUrl, v);
+        let resp = await find(serverUrl, v);
         //console.log(resp);
 
         console.log(manual);

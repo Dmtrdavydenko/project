@@ -149,9 +149,10 @@ function transformKeys(inputObj) {
 }
 async function line(manualData) {
     let str = "";
-    const repository = new ManualRepository(pool);
+    const manual = new ManualRepository(pool);
     try {
-        const result = await repository.insertManual(transformKeys(manualData));
+        //const result = await manual.insertManual(transformKeys(manualData));
+        const result = await manual.select(transformKeys(manualData));
         str = 'Data inserted successfully: ' + result;
         console.log(str);
     } catch (error) {

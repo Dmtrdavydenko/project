@@ -39,6 +39,50 @@ class ManualRepository {
 
         return true;
     }
+    _buildWhereClause(filters) {
+        const requiredFields = [
+            'type_id', 'sleeve_w_d_id', 'yarn_id', 'quantity',
+            'thread_densiti_id', 'color_id', 'additive_id'
+        ];
+
+        const conditions = [];
+        const values = [];
+
+        // Перебираем только разрешённые поля
+        for (const field of requiredFields) {
+            if (filters[field] !== undefined && filters[field] !== null && filters[field] !== '') {
+                // Предполагаем, что все значения числовые (как в валидации), но если есть строки — добавьте экранирование
+                conditions.push(`\`${field}\` = ?`);
+                values.push(filters[field]);
+            }
+        }
+
+        return {
+            whereClause: conditions.length ? `WHERE ${conditions.join(' AND ')}` : '',
+            values: values
+        };
+    }
+    async select(filters = {}) {
+        try {
+            const connection = await this.pool.getConnection();
+
+            try {
+                const { whereClause, values } = this._buildWhereClause(filters);
+                const query = `SELECT * FROM \`manual\` ${whereClause};`;
+                const [rows] = await connection.execute(query, values);
+                return {
+                    success: true,
+                    data: rows
+                };
+            } finally {
+                connection.release();
+            }
+        } catch (error) {
+            console.error('Error selecting manual data:', error);
+            throw new Error(`Database operation failed: ${error.message}`);
+
+        }
+    }
 
     /**
      * Вставка данных в таблицу manual
