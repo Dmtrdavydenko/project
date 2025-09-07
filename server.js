@@ -154,10 +154,10 @@ async function line(manualData) {
     try {
         //const result = await manual.insertManual(transformKeys(manualData));
         o = await manual.select(transformKeys(manualData));
-        str = 'Data inserted successfully: ' + result;
-        console.log(str);
+        //str = 'Data inserted successfully: ' + result;
+        console.log(o);
     } catch (error) {
-        str = 'Insert failed: ' + error.message;
+        //str = 'Insert failed: ' + error.message;
         console.log(str);
     }
     return o.data;
