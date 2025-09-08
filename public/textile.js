@@ -408,15 +408,6 @@ async function queryTarget(event) {
 
 
 
-    //const index = headersText.findIndex(text => text.toLowerCase().includes('id'));
-    if (index === -1) {
-        console.log('Столбец с "id" не найден');
-        return;
-    }
-
-    console.log('Заголовки:', headersText);
-    console.log('Индекс столбца "id":', index);
-
     // Получить все ячейки в строке (tr)
     const cells = Array.from(tr.children);  // td или th в строке
 
@@ -428,17 +419,14 @@ async function queryTarget(event) {
         }
     });
 
-    // Получить значение из столбца 'id'
-    const idValue = rowData[headersText[index]];
     console.log('Данные строки:', rowData);
-    console.log('Значение "id":', idValue);
 
 
-    const rowValues = Array.from(tr.children).map(cell => cell.textContent.trim());
+    const rowValues = cells.map(cell => cell.textContent.trim());
     console.log('Массив значений строки:', rowValues);
 
 
-    const tdIndex = Array.from(tr.children).indexOf(td);
+    const tdIndex = cells.indexOf(td);
     if (tdIndex === -1) return;
 
     // Получить заголовки из thead
@@ -453,6 +441,7 @@ async function queryTarget(event) {
     console.log('Кликнутая td:', td.textContent.trim());
     console.log('Индекс столбца:', tdIndex);
     console.log('Соответствующий thead (заголовок):', correspondingHeader);
+    console.log(rowData[correspondingHeader]);
 
     //td.addEventListener('blur', async () => {
     //    td.contentEditable = "false";
