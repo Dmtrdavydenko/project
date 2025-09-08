@@ -713,7 +713,7 @@ class YarnInfo {
     get id() { return this.yarn.yarn_id; }
     get name() { return this.yarn.yarn_name; }
 }
-class ColorInfo {
+class Color {
     constructor(name) {
         this.select = document.createElement('select');
         this.select.name = name;
@@ -866,12 +866,10 @@ async function generateForm() {
 
     }
     {
-
-        const myColor = new ColorInfo("color");
-        myColor.select.addEventListener('change', showSelect);
-        formContainer.append(myColor.select);
-        selectMap.push(myColor.select);
-
+        const colors = new Color("color");
+        colors.select.addEventListener('change', showSelect);
+        formContainer.append(colors.select);
+        selectMap.push(colors.select);
     }
     {
         const select = document.createElement('select');
