@@ -408,7 +408,7 @@ async function queryTarget(event) {
 
 
 
-    const index = headersText.findIndex(text => text.toLowerCase().includes('id'));
+    //const index = headersText.findIndex(text => text.toLowerCase().includes('id'));
     if (index === -1) {
         console.log('Столбец с "id" не найден');
         return;
@@ -436,6 +436,23 @@ async function queryTarget(event) {
 
     const rowValues = Array.from(tr.children).map(cell => cell.textContent.trim());
     console.log('Массив значений строки:', rowValues);
+
+
+    const tdIndex = Array.from(tr.children).indexOf(td);
+    if (tdIndex === -1) return;
+
+    // Получить заголовки из thead
+    const headers = Array.from(table.querySelectorAll('thead th'));
+    const correspondingHeader = headers[tdIndex]?.textContent.trim();
+
+    if (!correspondingHeader) {
+        console.log('Заголовок не найден');
+        return;
+    }
+
+    console.log('Кликнутая td:', td.textContent.trim());
+    console.log('Индекс столбца:', tdIndex);
+    console.log('Соответствующий thead (заголовок):', correspondingHeader);
 
     //td.addEventListener('blur', async () => {
     //    td.contentEditable = "false";
