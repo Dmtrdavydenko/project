@@ -408,7 +408,34 @@ async function queryTarget(event) {
 
 
 
+    const index = headersText.findIndex(text => text.toLowerCase().includes('id'));
+    if (index === -1) {
+        console.log('Столбец с "id" не найден');
+        return;
+    }
 
+    console.log('Заголовки:', headersText);
+    console.log('Индекс столбца "id":', index);
+
+    // Получить все ячейки в строке (tr)
+    const cells = Array.from(tr.children);  // td или th в строке
+
+    // Создать объект с данными строки: заголовок -> значение
+    const rowData = {};
+    headersText.forEach((header, i) => {
+        if (cells[i]) {
+            rowData[header] = cells[i].textContent.trim();
+        }
+    });
+
+    // Получить значение из столбца 'id'
+    const idValue = rowData[headersText[index]];
+    console.log('Данные строки:', rowData);
+    console.log('Значение "id":', idValue);
+
+
+    const rowValues = Array.from(tr.children).map(cell => cell.textContent.trim());
+    console.log('Массив значений строки:', rowValues);
 
     //td.addEventListener('blur', async () => {
     //    td.contentEditable = "false";
