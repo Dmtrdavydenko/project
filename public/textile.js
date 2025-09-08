@@ -714,11 +714,19 @@ class YarnInfo {
     get name() { return this.yarn.yarn_name; }
 }
 class ColorInfo {
-    constructor(yarn) {
-        this.yarn = yarn;
+    constructor(name) {
+        this.select = document.createElement('select');
+        this.select.name = name;
+        this.fet(name);
     }
-    get id() { return this.yarn.color_id; }
-    get color() { return this.yarn.color; }
+    async fet(name) {
+        (await slect(name)).rows.forEach(color => {
+            const option = document.createElement('option');
+            option.value = color.color_id;
+            option.textContent = color.color;
+            this.select.appendChild(option);
+        });
+    }
 }
 class AdditiveInfo {
     constructor(yarn) {
@@ -858,18 +866,11 @@ async function generateForm() {
 
     }
     {
-        const select = document.createElement('select');
-        select.addEventListener('change', showSelect);
-        select.name = "color";
-        (await slect("color")).rows.forEach(color => {
-            const option = document.createElement('option');
-            const colorInfo = new ColorInfo(color);
-            option.value = colorInfo.id;
-            option.textContent = colorInfo.color;
-            select.appendChild(option);
-        });
-        formContainer.append(select);
-        selectMap.push(select);
+
+        const myColor = new ColorInfo("color");
+        myColor.select.addEventListener('change', showSelect);
+        formContainer.append(myColor.select);
+        selectMap.push(myColor.select);
 
     }
     {
