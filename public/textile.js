@@ -442,7 +442,7 @@ async function queryTarget(event) {
     if (tdIndex === -1) return;
 
     // Получить заголовки из thead
-    const headers = Array.from(table.querySelectorAll('thead th'));
+    //const headers = Array.from(table.querySelectorAll('thead th'));
     const correspondingHeader = headers[tdIndex]?.textContent.trim();
 
     if (!correspondingHeader) {
