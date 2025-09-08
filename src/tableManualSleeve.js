@@ -85,24 +85,15 @@ class ManualRepository {
                 t.created_at,
                 t.updated_at
                 FROM \`manual\` t
-                JOIN sleeve_width_density swd
-                    ON t.sleeve_w_d_id = swd.sleeve_width_density_id
-                JOIN sleeve_width sw
-                    ON swd.sleeve_width_id = sw.sleeve_width_id
-                JOIN sleeve_density d
-                    ON swd.sleeve_density_id = d.sleeve_density_id
-                JOIN Thread_Parameters thread
-                    ON t.thread_densiti_id = thread.thread_id
-                JOIN color c
-                    ON t.color_id = c.color_id
-                JOIN additive ad
-                    ON t.additive_id = ad.id
-                LEFT JOIN warp_quantity warp
-                    ON t.quantity = warp.warp_id
-                LEFT JOIN weft_quantity weft
-                    ON t.quantity = weft.weft_id
-                JOIN yarn_type type
-                    ON t.yarn_id = type.yarn_id
+                JOIN sleeve_width_density swd                    ON t.sleeve_w_d_id = swd.sleeve_width_density_id
+                JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
+                JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
+                JOIN Thread_Parameters thread                    ON t.thread_densiti_id = thread.thread_id
+                JOIN color c                    ON t.color_id = c.color_id
+                JOIN additive ad                    ON t.additive_id = ad.id
+                LEFT JOIN warp_quantity warp                    ON t.quantity = warp.warp_id
+                LEFT JOIN weft_quantity weft                    ON t.quantity = weft.weft_id
+                JOIN yarn_type type                    ON t.yarn_id = type.yarn_id
                 ${whereClause};
                 `;
 
