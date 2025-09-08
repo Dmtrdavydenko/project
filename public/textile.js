@@ -399,43 +399,47 @@ async function queryTarget(event) {
     // Поставить фокус внутрь td
     td.focus();
 
-    // Опционально: чтобы при потере фокуса выключать редактирование
     const table = document.querySelector('table');
     const headers = Array.from(table.querySelectorAll('thead th'));
     const headersText = headers.map(th => th.textContent);
     const found = headersText.find(text => text.includes('id'));
     const index = headersText.findIndex(text => text.includes('id'));
+    console.log(headersText);
 
-    td.addEventListener('blur', async () => {
-        td.contentEditable = "false";
-        td.textContent = td.textContent.trim();
-        if (td.textContent.length > 0) {
-            console.log(td.textContent);
-            console.log(tr.sectionRowIndex);
-            console.log(selectTableName.value);
-            console.log(headers[td.cellIndex].textContent);
-            console.log("rowId: " + tr.cells[0].textContent);
-            console.log({
-                tableName: selectTableName.value,
-                rowId: tr.cells[index].textContent,
-                columnName: headers[td.cellIndex].textContent,
-                whereColum: found,
-                value: td.textContent
-            });
-            try {
-                const result = await sqlWhere({
-                    tableName: selectTableName.value,
-                    rowId: tr.cells[index].textContent,
-                    columnName: headers[td.cellIndex].textContent,
-                    whereColum: found,
-                    value: td.textContent
-                });
-                console.log('Ответ сервера:', result);
-            } catch (error) {
-                console.error('Ошибка при отправке данных:', error);
-            }
-        }
-    }, { once: true });
+
+
+
+
+    //td.addEventListener('blur', async () => {
+    //    td.contentEditable = "false";
+    //    td.textContent = td.textContent.trim();
+    //    if (td.textContent.length > 0) {
+    //        console.log(td.textContent);
+    //        console.log(tr.sectionRowIndex);
+    //        console.log(selectTableName.value);
+    //        console.log(headers[td.cellIndex].textContent);
+    //        console.log("rowId: " + tr.cells[0].textContent);
+    //        console.log({
+    //            tableName: selectTableName.value,
+    //            rowId: tr.cells[index].textContent,
+    //            columnName: headers[td.cellIndex].textContent,
+    //            whereColum: found,
+    //            value: td.textContent
+    //        });
+    //        try {
+    //            const result = await sqlWhere({
+    //                tableName: selectTableName.value,
+    //                rowId: tr.cells[index].textContent,
+    //                columnName: headers[td.cellIndex].textContent,
+    //                whereColum: found,
+    //                value: td.textContent
+    //            });
+    //            console.log('Ответ сервера:', result);
+    //        } catch (error) {
+    //            console.error('Ошибка при отправке данных:', error);
+    //        }
+    //    }
+    //}, { once: true });
 }
 async function sqlWhere({ tableName, rowId, columnName, whereColum, value }) {
     const result = await fetch("https://worktime.up.railway.app/textile", {
