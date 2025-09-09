@@ -441,7 +441,10 @@ async function queryTarget(event) {
     console.log('Кликнутая td:', td.textContent.trim());
     console.log('Индекс столбца:', tdIndex);
     console.log('Соответствующий thead (заголовок):', correspondingHeader);
-    console.log(rowData[correspondingHeader]);
+    console.log({ target: correspondingHeader, value: rowData[correspondingHeader]);
+
+
+
 
     //td.addEventListener('blur', async () => {
     //    td.contentEditable = "false";
