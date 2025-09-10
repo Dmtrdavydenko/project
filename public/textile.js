@@ -377,7 +377,8 @@ async function loadTableFn(query) {
         table.addEventListener("click", selectTable);
         container.appendChild(table);
         await getTypeTableHeder();
-        await generateForm();
+        if (selectTableName.value === "manual")
+            await generateForm();
     } else {
         container.textContent = 'U';
     }
@@ -856,7 +857,8 @@ async function getTypeKey() {
         return columns;
     } else {
         console.log(selectTableName.options[selectTableName.selectedIndex].dataset.isParent);
-        form.textContent = 'не удалось получить';
+        //form.textContent = 'не удалось получить';
+        form.innerHTML = '';
     }
 }
 class ThreadInfo {
