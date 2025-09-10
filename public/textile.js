@@ -341,6 +341,7 @@ async function showTableFn(query) {
     if (result.rows) {
         const table = createTable(result.rows);
         table.addEventListener("click", queryTarget);
+        table.addEventListener("click", selectTable);
         container.appendChild(table);
         await getTypeTableHeder();
         //await generateForm();
@@ -372,6 +373,7 @@ async function loadTableFn(query) {
     if (result.rows) {
         const table = createTable(result.rows);
         table.addEventListener("click", queryTarget);
+        table.addEventListener("click", selectTable);
         container.appendChild(table);
         await getTypeTableHeder();
         await generateForm();
@@ -379,7 +381,7 @@ async function loadTableFn(query) {
         container.textContent = 'U';
     }
 }
-async function queryTarget(event) {
+async function selectTable(event) {
     console.dir(event.target);
 
     const td = event.target.closest("td");
@@ -443,6 +445,77 @@ async function queryTarget(event) {
     console.log('Соответствующий thead (заголовок):', correspondingHeader);
     console.log({ target: correspondingHeader, value: rowData[correspondingHeader] });
 
+    const update = {
+        target: correspondingHeader,
+        value: "14"
+    };
+    const result = generateUpdateSQL(rowData, update);
+    console.log(result.sql);
+    console.log(result.values);
+}
+async function queryTarget(event) {
+    console.dir(event.target);
+
+    const td = event.target.closest("td");
+    if (!td) return;
+    //console.dir(event.target.closest("td").cellIndex);
+
+
+    const tr = td.closest("tr");
+    //if (!event.target.closest("tr")) return;
+    if (!tr) return;
+    //console.dir(event.target.closest("tr").rowIndex);
+
+
+
+    td.contentEditable = "true";
+
+    // Поставить фокус внутрь td
+    td.focus();
+
+    const table = document.querySelector('table');
+    const headers = Array.from(table.querySelectorAll('thead th'));
+    const headersText = headers.map(th => th.textContent);
+    const found = headersText.find(text => text.includes('id'));
+    const index = headersText.findIndex(text => text.includes('id'));
+    console.log(headersText);
+
+
+
+    //// Получить все ячейки в строке (tr)
+    //const cells = Array.from(tr.children);  // td или th в строке
+
+    //// Создать объект с данными строки: заголовок -> значение
+    //const rowData = {};
+    //headersText.forEach((header, i) => {
+    //    if (cells[i]) {
+    //        rowData[header] = cells[i].textContent.trim();
+    //    }
+    //});
+
+    //console.log('Данные строки:', rowData);
+
+
+    //const rowValues = cells.map(cell => cell.textContent.trim());
+    //console.log('Массив значений строки:', rowValues);
+
+
+    //const tdIndex = cells.indexOf(td);
+    //if (tdIndex === -1) return;
+
+    //// Получить заголовки из thead
+    ////const headers = Array.from(table.querySelectorAll('thead th'));
+    //const correspondingHeader = headers[tdIndex]?.textContent.trim();
+
+    //if (!correspondingHeader) {
+    //    console.log('Заголовок не найден');
+    //    return;
+    //}
+
+    //console.log('Кликнутая td:', td.textContent.trim());
+    //console.log('Индекс столбца:', tdIndex);
+    //console.log('Соответствующий thead (заголовок):', correspondingHeader);
+    //console.log({ target: correspondingHeader, value: rowData[correspondingHeader] });
 
 
 
@@ -960,6 +1033,7 @@ async function generateForm() {
         if (result.rows) {
             const table = createTable(result.rows);
             table.addEventListener("click", queryTarget);
+            table.addEventListener("click", selectTable);
             container.appendChild(table);
             await getTypeTableHeder();
             //await generateForm();
@@ -1078,3 +1152,49 @@ columns.forEach(column => {
     //formContainer.appendChild(input);
     //formContainer.appendChild(document.createElement('br')); // Добавляем перенос строки
 });
+
+
+
+
+
+
+function generateUpdateSQL(data, update) {
+    const { target, value } = update;
+
+    // SET clause with placeholder
+    const setClause = `${target} = ?`;
+
+    // WHERE clause: all fields from data except target, with placeholders
+    const whereKeys = Object.keys(data).filter(key => key !== target);
+    const whereClause = whereKeys.map(key => `${key} = ?`).join(' AND ');
+
+    // Full SQL
+    const sql = `UPDATE \`${target}\` SET ${setClause} WHERE ${whereClause};`;
+
+    // Values array: first value for SET, then values for WHERE in order of whereKeys
+    const values = [value, ...whereKeys.map(key => data[key])];
+
+    return { sql, values };
+}
+
+// Пример использования с вашими объектами
+const data = {
+    additive_id: "2",
+    color_id: "4",
+    created_at: "2025-08-29T23:08:02.000Z",
+    quantity: "14",
+    sleeve_w_d_id: "12",
+    thread_densiti_id: "2",
+    type_id: "14",
+    updated_at: "2025-09-02T22:13:53.000Z",
+    yarn_id: "1"
+};
+
+const update = {
+    target: "quantity",
+    value: "14"
+};
+
+//const result = generateUpdateSQL(data, update);
+//console.log(result.sql);
+//console.log(result.values);
