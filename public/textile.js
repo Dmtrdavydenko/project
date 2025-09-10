@@ -428,7 +428,7 @@ async function selectTable(event) {
     //console.log('Массив значений строки:', rowValues);
 
 
-    //const tdIndex = cells.indexOf(td);
+    const tdIndex = cells.indexOf(td);
     //if (tdIndex === -1) return;
 
     //// Получить заголовки из thead
