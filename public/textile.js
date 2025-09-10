@@ -383,7 +383,8 @@ async function loadTableFn(query) {
 }
 async function selectTable(event) {
     console.dir(event.target);
-
+    const tselect = event.target.closest("select");
+    if (!tselect) return;
     const td = event.target.closest("td");
     if (!td) return;
     //console.dir(event.target.closest("td").cellIndex);
@@ -463,6 +464,37 @@ async function selectTable(event) {
     });
     td.append(colors.select);
     colors.select.focus();
+
+    //td.addEventListener('blur', async () => {
+    //    td.contentEditable = "false";
+    //    td.textContent = td.textContent.trim();
+    //    if (td.textContent.length > 0) {
+    //        console.log(td.textContent);
+    //        console.log(tr.sectionRowIndex);
+    //        console.log(selectTableName.value);
+    //        console.log(headers[td.cellIndex].textContent);
+    //        console.log("rowId: " + tr.cells[0].textContent);
+    //        console.log({
+    //            tableName: selectTableName.value,
+    //            rowId: tr.cells[index].textContent,
+    //            columnName: headers[td.cellIndex].textContent,
+    //            whereColum: found,
+    //            value: td.textContent
+    //        });
+    //        try {
+    //            const result = await sqlWhere({
+    //                tableName: selectTableName.value,
+    //                rowId: tr.cells[index].textContent,
+    //                columnName: headers[td.cellIndex].textContent,
+    //                whereColum: found,
+    //                value: td.textContent
+    //            });
+    //            console.log('Ответ сервера:', result);
+    //        } catch (error) {
+    //            console.error('Ошибка при отправке данных:', error);
+    //        }
+    //    }
+    //}, { once: true });
 }
 async function queryTarget(event) {
     console.dir(event.target);
