@@ -453,28 +453,28 @@ async function selectTable(event) {
     //console.log(result.values);
 
 
-
+    const tselect = event.target.closest("select");
+    //if (!tselect) return;
     
-    const tselect = event.target.closest("tselect");
-    if (tselect) {
-        colors.select.addEventListener('change', function () {
-            const selectedValue = this.value;
-            const selectedText = this.options[this.selectedIndex].text;
-            td.innerHTML = '';
-            td.textContent = selectedValue;
-        });
-
-    } else {
+    if (!tselect) {
         td.innerHTML = ''
         const colors = new Color("color");
+        td.append(colors.select);
+        colors.select.focus();
+    } else {
         colors.select.addEventListener('change', function () {
             const selectedValue = this.value;
             const selectedText = this.options[this.selectedIndex].text;
             td.innerHTML = '';
             td.textContent = selectedValue;
         });
-        td.append(colors.select);
-        colors.select.focus();
+        colors.select.addEventListener('click', function () {
+            const selectedValue = this.value;
+            const selectedText = this.options[this.selectedIndex].text;
+            td.innerHTML = '';
+            td.textContent = selectedValue;
+        });
+
     }
     //td.addEventListener('blur', async () => {
     //    td.contentEditable = "false";
