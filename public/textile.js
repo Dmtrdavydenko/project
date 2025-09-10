@@ -421,30 +421,6 @@ async function selectTable(event) {
         }
     });
 
-    console.log('Данные строки:', rowData);
-
-
-    const rowValues = cells.map(cell => cell.textContent.trim());
-    console.log('Массив значений строки:', rowValues);
-
-
-    const tdIndex = cells.indexOf(td);
-    if (tdIndex === -1) return;
-
-    // Получить заголовки из thead
-    //const headers = Array.from(table.querySelectorAll('thead th'));
-    const correspondingHeader = headers[tdIndex]?.textContent.trim();
-
-    if (!correspondingHeader) {
-        console.log('Заголовок не найден');
-        return;
-    }
-
-    console.log('Кликнутая td:', td.textContent.trim());
-    console.log('Индекс столбца:', tdIndex);
-    console.log('Соответствующий thead (заголовок):', correspondingHeader);
-    console.log({ target: correspondingHeader, value: rowData[correspondingHeader] });
-
     const update = {
         target: correspondingHeader,
         value: "14"
@@ -452,6 +428,19 @@ async function selectTable(event) {
     const result = generateUpdateSQL(rowData, update);
     console.log(result.sql);
     console.log(result.values);
+
+
+
+    td.innerHTML = ''
+    const colors = new Color("color");
+    colors.select.addEventListener('change', function () {
+        const selectedValue = this.value;
+        const selectedText = this.options[this.selectedIndex].text;
+        td.innerHTML = '';
+        td.textContent = selectedValue;
+    });
+    td.append(colors.select);
+    colors.select.focus();
 }
 async function queryTarget(event) {
     console.dir(event.target);
@@ -895,6 +884,8 @@ async function showSelect(event) {
     manual[this.name] = +this.value;
     console.log(o);
     console.log(manual);
+    const selectedValue = this.value;
+    const selectedText = this.options[this.selectedIndex].text;
     //await showTableFn({ id: this.value });
 }
 async function generateForm() {
