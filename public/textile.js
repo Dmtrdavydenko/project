@@ -377,8 +377,13 @@ async function loadTableFn(query) {
         table.addEventListener("click", selectTable);
         container.appendChild(table);
         await getTypeTableHeder();
-        if (selectTableName.value === "manual")
+        if (selectTableName.value === "manual") {
             await generateForm();
+        }
+
+
+
+
     } else {
         container.textContent = 'U';
     }
