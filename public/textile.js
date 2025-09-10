@@ -170,13 +170,13 @@ showTable.addEventListener("click", showTableFn);
 //main.append(getAllTablesNameButton);
 main.append(label);
 main.append(selectTableName);
-main.append(getColumnsTypes);
+//main.append(getColumnsTypes);
 //main.append(textArea);
 //main.append(queryButton);
 //main.append(textAsk);
 //main.append(form);
 main.append(sendButton);
-main.append(showTable);
+//main.append(showTable);
 
 
 function Textile(inputId, inputWidth, inputDensity) {
