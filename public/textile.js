@@ -342,6 +342,7 @@ async function showTableFn(query) {
         const table = createTable(result.rows);
         table.addEventListener("click", queryTarget);
         table.addEventListener("click", selectTable);
+        //table.removeEventListener()
         container.appendChild(table);
         await getTypeTableHeder();
         //await generateForm();
@@ -452,19 +453,29 @@ async function selectTable(event) {
     //console.log(result.values);
 
 
-    td.innerHTML = ''
-    const colors = new Color("color");
-    //colors.select.addEventListener('click', (e) => e.stopPropagation());
 
-    colors.select.addEventListener('change', function () {
-        const selectedValue = this.value;
-        const selectedText = this.options[this.selectedIndex].text;
-        td.innerHTML = '';
-        td.textContent = selectedValue;
-    });
-    td.append(colors.select);
-    colors.select.focus();
+    
+    const tselect = event.target.closest("tselect");
+    if (tselect) {
+        colors.select.addEventListener('change', function () {
+            const selectedValue = this.value;
+            const selectedText = this.options[this.selectedIndex].text;
+            td.innerHTML = '';
+            td.textContent = selectedValue;
+        });
 
+    } else {
+        td.innerHTML = ''
+        const colors = new Color("color");
+        colors.select.addEventListener('change', function () {
+            const selectedValue = this.value;
+            const selectedText = this.options[this.selectedIndex].text;
+            td.innerHTML = '';
+            td.textContent = selectedValue;
+        });
+        td.append(colors.select);
+        colors.select.focus();
+    }
     //td.addEventListener('blur', async () => {
     //    td.contentEditable = "false";
     //    td.textContent = td.textContent.trim();
