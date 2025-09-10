@@ -455,10 +455,11 @@ async function selectTable(event) {
 
     const tselect = event.target.closest("select");
     //if (!tselect) return;
-    
+
+    const colors = new Color("color");
+
     if (!tselect) {
         td.innerHTML = ''
-        const colors = new Color("color");
         td.append(colors.select);
         colors.select.focus();
     } else {
