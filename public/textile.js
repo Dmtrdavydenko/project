@@ -378,7 +378,7 @@ async function loadTableFn(query) {
         container.appendChild(table);
         await getTypeTableHeder();
         //if (selectTableName.value === "manual") {
-            await generateForm();
+            //await generateForm();
         //}
 
 
