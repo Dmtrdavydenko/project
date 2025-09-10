@@ -453,30 +453,25 @@ async function selectTable(event) {
     //console.log(result.values);
 
 
-    const tselect = event.target.closest("select");
-    //if (!tselect) return;
-
+    td.innerHTML = ''
     const colors = new Color("color");
+    colors.select.addEventListener('click', (e) => e.stopPropagation());
 
-    if (!tselect) {
-        td.innerHTML = ''
-        td.append(colors.select);
-        colors.select.focus();
-    } else {
-        colors.select.addEventListener('change', function () {
-            const selectedValue = this.value;
-            const selectedText = this.options[this.selectedIndex].text;
-            td.innerHTML = '';
-            td.textContent = selectedValue;
-        });
-        colors.select.addEventListener('click', function () {
-            const selectedValue = this.value;
-            const selectedText = this.options[this.selectedIndex].text;
-            td.innerHTML = '';
-            td.textContent = selectedValue;
-        });
-
-    }
+    colors.select.addEventListener('change', function () {
+        const selectedValue = this.value;
+        const selectedText = this.options[this.selectedIndex].text;
+        td.innerHTML = '';
+        td.textContent = selectedValue;
+    });
+    colors.select.addEventListener('blur', function () {
+        const selectedValue = this.value;
+        const selectedText = this.options[this.selectedIndex].text;
+        td.innerHTML = '';
+        td.textContent = selectedValue;
+    });
+    td.append(colors.select);
+    colors.select.focus();
+    
     //td.addEventListener('blur', async () => {
     //    td.contentEditable = "false";
     //    td.textContent = td.textContent.trim();
