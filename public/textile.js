@@ -461,7 +461,7 @@ async function selectTable(event) {
     const colors = new Color("color");
     colors.select.addEventListener('click', (e) => e.stopPropagation());
 
-    colors.select.addEventListener('change', function () {
+    colors.select.addEventListener('change', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
         td.innerHTML = '';
