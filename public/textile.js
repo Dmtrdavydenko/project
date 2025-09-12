@@ -1230,14 +1230,23 @@ function generateUpdateSQL(data, update) {
     const { table, target, value } = update;
 
     // SET clause with placeholder
-    const setClause = `${target} = ?`;
+    const setClause = `t.${target} = ?`;
 
     // WHERE clause: all fields from data except target, with placeholders
     const whereKeys = Object.keys(data).filter(key => key !== target);
     const whereClause = whereKeys.map(key => `${key} = ?`).join(' AND ');
-
+    let ss = `t
+JOIN sleeve_width_density swd ON t.sleeve_w_d_id = swd.sleeve_width_density_id
+JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
+JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
+JOIN Thread_Parameters thread ON t.thread_densiti_id = thread.thread_id
+JOIN color c ON t.color_id = c.color_id
+JOIN additive ad ON t.additive_id = ad.id
+LEFT JOIN warp_quantity warp ON t.quantity = warp.warp_id
+LEFT JOIN weft_quantity weft ON t.quantity = weft.weft_id
+JOIN yarn_type type ON t.yarn_id = type.yarn_id`
     // Full SQL
-    const sql = `UPDATE \`${table}\` SET ${setClause} WHERE ${whereClause};`;
+    const sql = `UPDATE \`${table}\` ${ss} SET ${setClause} WHERE ${whereClause};`;
 
     // Values array: first value for SET, then values for WHERE in order of whereKeys
     const values = [value, ...whereKeys.map(key => data[key])];
