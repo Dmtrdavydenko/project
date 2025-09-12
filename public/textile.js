@@ -449,7 +449,7 @@ async function selectTable(event) {
     //console.log('Индекс столбца:', tdIndex);
     //console.log('Соответствующий thead (заголовок):', correspondingHeader);
     //console.log({ target: correspondingHeader, value: rowData[correspondingHeader] });
-    const correspondingHeader = headers[tdIndex]?.textContent.trim
+    const correspondingHeader = headers[tdIndex]?.textContent.trim();
     const update = {
         target: correspondingHeader,
         value: "14"
