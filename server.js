@@ -967,13 +967,13 @@ async function sql(body) {
 
     // Создаём подключение к базе данных
     const connection = await pool.getConnection();
-
+    let all
     try {
         // Выполняем переданный SQL-запрос
         if (Array.isArray(body.values))
-            const all = await connection.execute(body.query, body.values);
+            all = await connection.execute(body.query, body.values);
         else
-            const all = await connection.execute(body.query);
+            all = await connection.execute(body.query);
 
         console.log('Результаты запроса:', all);
         return all; // Возвращаем результаты запроса
