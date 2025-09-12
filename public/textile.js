@@ -427,7 +427,7 @@ async function selectTable(event) {
         }
     });
 
-    console.log('Данные строки:', rowData);
+    console.info('Данные строки:', rowData);
 
 
     //const rowValues = cells.map(cell => cell.textContent.trim());
@@ -450,13 +450,11 @@ async function selectTable(event) {
     //console.log('Соответствующий thead (заголовок):', correspondingHeader);
     //console.log({ target: correspondingHeader, value: rowData[correspondingHeader] });
     const correspondingHeader = headers[tdIndex]?.textContent.trim
-    //const update = {
-    //    target: correspondingHeader,
-    //    value: "14"
-    //};
-    //const result = generateUpdateSQL(rowData, update);
-    //console.log(result.sql);
-    //console.log(result.values);
+    const update = {
+        target: correspondingHeader,
+        value: "14"
+    };
+
 
 
     td.innerHTML = ''
@@ -468,12 +466,20 @@ async function selectTable(event) {
         const selectedText = this.options[this.selectedIndex].text;
         td.innerHTML = '';
         td.textContent = selectedValue;
+        update.value = selectedValue;
+        const result = generateUpdateSQL(rowData, update);
+        console.log(result.sql);
+        console.log(result.values);
     });
     colors.select.addEventListener('blur', function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
         td.innerHTML = '';
         td.textContent = selectedValue;
+        update.value = selectedValue;
+        const result = generateUpdateSQL(rowData, update);
+        console.log(result.sql);
+        console.log(result.values);
     });
     td.append(colors.select);
     colors.select.focus();
