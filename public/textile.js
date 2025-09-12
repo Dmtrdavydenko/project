@@ -451,8 +451,10 @@ async function selectTable(event) {
     //console.log({ target: correspondingHeader, value: rowData[correspondingHeader] });
     const correspondingHeader = headers[tdIndex]?.textContent.trim();
     const update = {
-        target: correspondingHeader,
-        value: "14"
+        //target: correspondingHeader,
+        target: selectTableName.value,
+
+        value: 0
     };
 
 
