@@ -452,8 +452,8 @@ async function selectTable(event) {
     const correspondingHeader = headers[tdIndex]?.textContent.trim();
     const update = {
         //target: correspondingHeader,
-        target: selectTableName.value,
-
+        table: selectTableName.value,
+        target: "color_id",
         value: 0
     };
 
@@ -1227,7 +1227,7 @@ columns.forEach(column => {
 
 
 function generateUpdateSQL(data, update) {
-    const { target, value } = update;
+    const { table, target, value } = update;
 
     // SET clause with placeholder
     const setClause = `${target} = ?`;
@@ -1237,7 +1237,7 @@ function generateUpdateSQL(data, update) {
     const whereClause = whereKeys.map(key => `${key} = ?`).join(' AND ');
 
     // Full SQL
-    const sql = `UPDATE \`${target}\` SET ${setClause} WHERE ${whereClause};`;
+    const sql = `UPDATE \`${table}\` SET ${setClause} WHERE ${whereClause};`;
 
     // Values array: first value for SET, then values for WHERE in order of whereKeys
     const values = [value, ...whereKeys.map(key => data[key])];
