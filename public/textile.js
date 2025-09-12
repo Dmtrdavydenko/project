@@ -1244,7 +1244,8 @@ JOIN color c ON t.color_id = c.color_id
 JOIN additive ad ON t.additive_id = ad.id
 LEFT JOIN warp_quantity warp ON t.quantity = warp.warp_id
 LEFT JOIN weft_quantity weft ON t.quantity = weft.weft_id
-JOIN yarn_type type ON t.yarn_id = type.yarn_id`
+JOIN yarn_type type ON t.yarn_id = type.yarn_id
+`
     // Full SQL
     const sql = `UPDATE \`${table}\` ${ss} SET ${setClause} WHERE ${whereClause};`;
 
