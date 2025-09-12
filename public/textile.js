@@ -461,7 +461,7 @@ async function selectTable(event) {
     const colors = new Color("color");
     colors.select.addEventListener('click', (e) => e.stopPropagation());
 
-    colors.select.addEventListener('change', function () {
+    colors.select.addEventListener('change', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
         td.innerHTML = '';
@@ -470,6 +470,7 @@ async function selectTable(event) {
         const result = generateUpdateSQL(rowData, update);
         console.log(result.sql);
         console.log(result.values);
+        await sqlQuery(result.sql, result.values);
     });
     colors.select.addEventListener('blur', function () {
         const selectedValue = this.value;
@@ -637,7 +638,7 @@ async function sqlWhere({ tableName, rowId, columnName, whereColum, value }) {
 //const sql = "SELECT * FROM your_table"; // Замените на ваш SQL-запрос
 //sqlQuery(sql);
 
-async function sqlQuery(sqlQueryString) {
+async function sqlQuery(sqlQueryString, values = null) {
     try {
         const response = await fetch("https://worktime.up.railway.app/textile", {
             method: "POST",
@@ -647,6 +648,7 @@ async function sqlQuery(sqlQueryString) {
             body: JSON.stringify({
                 action: "sql", // Измените на нужное действие, если необходимо
                 query: sqlQueryString, // Отправляем SQL-запрос
+                values: values
             }),
         });
 
@@ -1108,29 +1110,29 @@ async function generateForm() {
 }
 
 
-async function sqlQuery(sqlQueryString) {
-    try {
-        const response = await fetch("https://worktime.up.railway.app/textile", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-            },
-            body: JSON.stringify({
-                action: "sql", // Измените на нужное действие, если необходимо
-                query: sqlQueryString, // Отправляем SQL-запрос
-            }),
-        });
+//async function sqlQuery(sqlQueryString) {
+//    try {
+//        const response = await fetch("https://worktime.up.railway.app/textile", {
+//            method: "POST",
+//            headers: {
+//                "Content-Type": "application/json;charset=utf-8",
+//            },
+//            body: JSON.stringify({
+//                action: "sql", // Измените на нужное действие, если необходимо
+//                query: sqlQueryString, // Отправляем SQL-запрос
+//            }),
+//        });
 
-        // Проверка на успешный ответ
-        if (!response.ok) {
-            throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
-        }
+//        // Проверка на успешный ответ
+//        if (!response.ok) {
+//            throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+//        }
 
-        return await response.json(); // Получаем JSON-ответ
-    } catch (error) {
-        console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
-    }
-}
+//        return await response.json(); // Получаем JSON-ответ
+//    } catch (error) {
+//        console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
+//    }
+//}
 async function sendForm() {
     const arrayInput = array.filter(input => input.value.length > 0);
     const fields = arrayInput.map(input => input.name);

@@ -367,7 +367,7 @@ async function select(body) {
 
                 break;
             default:
-                sql = 'SELECT * FROM `' + body.table.name+"`";
+                sql = 'SELECT * FROM `' + body.table.name + "`";
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 select.pri = primaryKeyColumn;
@@ -535,7 +535,7 @@ async function insertGenerate(body) {
     //body.table.values
     const shape = body.table.fields.map(() => '?').join(', ');
     const sql = "INSERT INTO `" + body.table.name + "` (" + body.table.fields.join(', ') + ") VALUES (" + shape + ")";
-    console.log(body,sql);
+    console.log(body, sql);
     const connection = await pool.getConnection();
     try {
         console.log('Успешно подключено к базе данных MySQL!');
@@ -970,7 +970,10 @@ async function sql(body) {
 
     try {
         // Выполняем переданный SQL-запрос
-        const all = await connection.execute(body.query);
+        if (Array.isArray(body.values))
+            const all = await connection.execute(body.query, body.values);
+        else
+            const all = await connection.execute(body.query);
 
         console.log('Результаты запроса:', all);
         return all; // Возвращаем результаты запроса
@@ -1180,9 +1183,9 @@ server.on("request", (req, res) => {
                         // this object
                         data = parsedBody;
 
-                        if (!parsedBody.action) 
+                        if (!parsedBody.action)
                             throw new Error("The 'action' field is missing from the request");
-                        
+
                         action = parsedBody.action;
                     } else {
                         throw new Error("Invalid data format");
