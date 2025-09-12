@@ -1235,7 +1235,7 @@ function generateUpdateSQL(data, update) {
     const sql = `UPDATE \`${target}\` SET ${setClause} WHERE ${whereClause};`;
 
     // Values array: first value for SET, then values for WHERE in order of whereKeys
-    const values = [+value, ...whereKeys.map(key => +data[key])];
+    const values = [value, ...whereKeys.map(key => data[key])];
 
     return { sql, values };
 }
