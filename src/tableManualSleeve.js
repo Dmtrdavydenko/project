@@ -78,7 +78,7 @@ class ManualRepository {
                     WHEN type.yarn_name = "warp" THEN warp.warp_quantity
                     WHEN type.yarn_name = "weft" THEN weft.weft_quantity
                     ELSE NULL
-                END AS calculated_quantity,
+                END,
                 thread.thread_density,
                 c.color,
                 ad.additive_name,
@@ -91,8 +91,8 @@ class ManualRepository {
                 JOIN Thread_Parameters thread                    ON m.thread_densiti_id = thread.thread_id
                 JOIN color c                    ON m.color_id = c.color_id
                 JOIN additive ad                    ON m.additive_id = ad.id
-                LEFT JOIN warp_quantity warp                    ON m.quantity = warp.warp_id
-                LEFT JOIN weft_quantity weft                    ON m.quantity = weft.weft_id
+                LEFT JOIN warp_quantity warp                    ON m.quantity_id = warp.warp_id
+                LEFT JOIN weft_quantity weft                    ON m.quantity_id = weft.weft_id
                 JOIN yarn_type type                    ON m.yarn_id = type.yarn_id
                 ${whereClause};
                 `;
@@ -134,8 +134,8 @@ class ManualRepository {
             JOIN color c                        ON m.color_id =              c.color_id
             JOIN additive a                     ON m.additive_id =           a.id
 
-            JOIN warp_quantity waq              ON m.quantity =              waq.warp_id
-            JOIN weft_quantity weq              ON m.quantity =              weq.weft_id
+            JOIN warp_quantity waq              ON m.quantity_id =           waq.warp_id
+            JOIN weft_quantity weq              ON m.quantity_id =           weq.weft_id
 
             JOIN yarn_type yt                   ON m.yarn_id =               yt.yarn_id
 
