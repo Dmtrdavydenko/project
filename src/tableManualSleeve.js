@@ -70,7 +70,7 @@ class ManualRepository {
                 const { whereClause, values } = this._buildWhereClause(filters);
                 const query = `
                 SELECT
-                t.type_id,
+                m.type_id,
                 sw.sleeve_width,
                 d.density,
                 type.yarn_name,
@@ -82,18 +82,18 @@ class ManualRepository {
                 thread.thread_density,
                 c.color,
                 ad.additive_name,
-                t.created_at,
-                t.updated_at
-                FROM \`manual\` t
-                JOIN sleeve_width_density swd                    ON t.sleeve_w_d_id = swd.sleeve_width_density_id
+                m.created_at,
+                m.updated_at
+                FROM \`manual\` m
+                JOIN sleeve_width_density swd                    ON m.sleeve_w_d_id = swd.sleeve_width_density_id
                 JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
                 JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
-                JOIN Thread_Parameters thread                    ON t.thread_densiti_id = thread.thread_id
-                JOIN color c                    ON t.color_id = c.color_id
-                JOIN additive ad                    ON t.additive_id = ad.id
-                LEFT JOIN warp_quantity warp                    ON t.quantity = warp.warp_id
-                LEFT JOIN weft_quantity weft                    ON t.quantity = weft.weft_id
-                JOIN yarn_type type                    ON t.yarn_id = type.yarn_id
+                JOIN Thread_Parameters thread                    ON m.thread_densiti_id = thread.thread_id
+                JOIN color c                    ON m.color_id = c.color_id
+                JOIN additive ad                    ON m.additive_id = ad.id
+                LEFT JOIN warp_quantity warp                    ON m.quantity = warp.warp_id
+                LEFT JOIN weft_quantity weft                    ON m.quantity = weft.weft_id
+                JOIN yarn_type type                    ON m.yarn_id = type.yarn_id
                 ${whereClause};
                 `;
                 //const query = `
@@ -120,6 +120,40 @@ class ManualRepository {
             throw new Error(`Database operation failed: ${error.message}`);
 
         }
+    }
+    async update() {
+        try {
+            const connection = await this.pool.getConnection();
+            const query = `
+            UPDATE \`manual\` m 
+            JOIN sleeve_width_density swd       ON m.sleeve_w_d_id =         swd.sleeve_width_density_id
+            JOIN sleeve_width sw                ON swd.sleeve_width_id =     sw.sleeve_width_id
+            JOIN sleeve_density d               ON swd.sleeve_density_id =   d.sleeve_density_id
+
+            JOIN Thread_Parameters tp           ON m.thread_densiti_id =     tp.thread_id
+            JOIN color c                        ON m.color_id =              c.color_id
+            JOIN additive a                     ON m.additive_id =           a.id
+
+            JOIN warp_quantity waq              ON m.quantity =              waq.warp_id
+            JOIN weft_quantity weq              ON m.quantity =              weq.weft_id
+
+            JOIN yarn_type yt                   ON m.yarn_id =               yt.yarn_id
+
+            set m.color_id = 1
+            where type_id = 1   and
+            sleeve_width = 50   and
+            density = 65        and
+            yarn_name = "warp"  and
+            thread_density = 90 and
+            additive_name = "нет";
+            `
+
+
+        } catch (error) {
+            console.error('Error inserting manual data:', error);
+            throw new Error(`Database operation failed: ${error.message}`);
+        }
+
     }
 
 
