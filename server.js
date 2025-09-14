@@ -325,35 +325,16 @@ async function select(body) {
                 //    CASE
                 //quantity,
 
-                sql = `
-                SELECT
-                m.type_id,
-                sw.sleeve_width,
-                d.density,
-                type.yarn_name,
-                CASE
-                    WHEN type.yarn_name = "warp" THEN warp.warp_quantity
-                    WHEN type.yarn_name = "weft" THEN weft.weft_quantity
-                    ELSE NULL
-                END as quantity,
-                thread.thread_density,
-                c.color,
-                ad.additive_name,
-                m.created_at,
-                m.updated_at
-                FROM \`manual\` m
-                JOIN sleeve_width_density swd                    ON m.sleeve_w_d_id = swd.sleeve_width_density_id
-                JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
-                JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
-                JOIN Thread_Parameters thread                    ON m.thread_densiti_id = thread.thread_id
-                JOIN color c                    ON m.color_id = c.color_id
-                JOIN additive ad                    ON m.additive_id = ad.id
-                LEFT JOIN warp_quantity warp                    ON m.quantity_id = warp.warp_id
-                LEFT JOIN weft_quantity weft                    ON m.quantity_id = weft.weft_id
-                JOIN yarn_type type                    ON m.yarn_id = type.yarn_id;
-                `;
-
-                //additive
+                const manual = new ManualRepository(pool);
+                try {
+                    //const result = await manual.insertManual(transformKeys(manualData));
+                    sql = await manual.select();
+                    //str = 'Data inserted successfully: ' + result;
+                    console.log(o);
+                } catch (error) {
+                    //str = 'Insert failed: ' + error.message;
+                    console.log(o);
+                }
 
                 break;
             default:
@@ -364,10 +345,12 @@ async function select(body) {
 
 
         }
-        const all = await connection.execute(sql);
-        const [rows] = all;
+        if (!sql?.success) {
+            const all = await connection.execute(sql);
+            const [rows] = all;
+        }
 
-
+    }
         // Извлекаем информацию о колонках
         //const columnsInfo = descRows.map(row => ({
         //    Field: row.Field,
@@ -383,22 +366,22 @@ async function select(body) {
         //select.pri = primaryKeyColumn;
         //select.name = body.table.name;
         console.log("Клиент " + sql);
-        return {
-            all,
-            rows,
-            Field: select.fields,
-            F: select.sqlFields,
-            key: select.pri
-        };
+    return {
+        all,
+        rows,
+        Field: select.fields,
+        F: select.sqlFields,
+        key: select.pri
+    };
 
-    } catch (err) {
-        console.error('Ошибка:', err);
-        throw err;
-    } finally {
-        connection.release();
-        //await pool.end();
-        //console.log('Пул соединений закрыт.');
-    }
+} catch (err) {
+    console.error('Ошибка:', err);
+    throw err;
+} finally {
+    connection.release();
+    //await pool.end();
+    //console.log('Пул соединений закрыт.');
+}
 }
 async function getTable(body) {
     //const pool = mysql.createPool(dbConfig); // создаём пул подключений

@@ -78,7 +78,7 @@ class ManualRepository {
                     WHEN type.yarn_name = "warp" THEN warp.warp_quantity
                     WHEN type.yarn_name = "weft" THEN weft.weft_quantity
                     ELSE NULL
-                END,
+                END as quantity,
                 thread.thread_density,
                 c.color,
                 ad.additive_name,
