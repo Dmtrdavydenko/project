@@ -350,8 +350,7 @@ async function select(body) {
                 JOIN additive ad                    ON m.additive_id = ad.id
                 LEFT JOIN warp_quantity warp                    ON m.quantity_id = warp.warp_id
                 LEFT JOIN weft_quantity weft                    ON m.quantity_id = weft.weft_id
-                JOIN yarn_type type                    ON m.yarn_id = type.yarn_id
-                ${whereClause};
+                JOIN yarn_type type                    ON m.yarn_id = type.yarn_id;
                 `;
 
                 //additive
