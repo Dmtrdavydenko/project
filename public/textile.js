@@ -1233,7 +1233,7 @@ function generateUpdateSQL(data, update) {
     const setClause = `\`${table}\`.${target} = ?`;
 
     // WHERE clause: all fields from data except target, with placeholders
-    let whereKeys = Object.keys(data).filter(key => key !== target || key !== "quantity");
+    let whereKeys = Object.keys(data).filter(key => key !== target && key !== "quantity");
     const whereClause = whereKeys.map(key => `${key} = ?`).join(' AND ');
 
     // Full SQL
