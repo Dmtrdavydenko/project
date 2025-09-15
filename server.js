@@ -35,7 +35,7 @@ const dbConfig = {
 };
 
 const mysql = require('mysql2/promise');
-const ManualRepository = require('./src/tableManualSleeve');
+const ManualTableTextileUse = require('./src/tableManualSleeve');
 //const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
 
 
@@ -150,7 +150,7 @@ function transformKeys(inputObj) {
 async function line(manualData) {
     let str = "";
     let o = {};
-    const manual = new ManualRepository(pool);
+    const manual = new ManualTableTextileUse(pool);
     try {
         //const result = await manual.insertManual(transformKeys(manualData));
         o = await manual.select(transformKeys(manualData));
@@ -325,7 +325,7 @@ async function select(body) {
                 //    CASE
                 //quantity,
 
-                const manual = new ManualRepository(pool);
+                const manual = new ManualTableTextileUse(pool);
                 try {
                     //const result = await manual.insertManual(transformKeys(manualData));
                     return response = await manual.select();
