@@ -1248,8 +1248,8 @@ function generateUpdateSQL(data, update) {
             JOIN color                c         ON m.color_id =              c.color_id
             JOIN additive             a         ON m.additive_id =           a.id
 
-            JOIN warp_quantity        waq       ON m.quantity =              waq.warp_id
-            JOIN weft_quantity        weq       ON m.quantity =              weq.weft_id
+            JOIN warp_quantity        waq       ON m.quantity_id =           waq.warp_id
+            JOIN weft_quantity        weq       ON m.quantity_id =           weq.weft_id
 
             JOIN yarn_type            yt        ON m.yarn_id =               yt.yarn_id
 
