@@ -451,7 +451,6 @@ async function selectTable(event) {
     //console.log({ target: correspondingHeader, value: rowData[correspondingHeader] });
     const correspondingHeader = headers[tdIndex]?.textContent.trim();
     const update = {
-        //target: correspondingHeader,
         table: selectTableName.value,
         target: "color_id",
         value: 0
@@ -483,6 +482,7 @@ async function selectTable(event) {
         const result = generateUpdateSQL(rowData, update);
         console.log(result.sql);
         console.log(result.values);
+        await sqlQuery(result.sql, result.values);
     });
     td.append(colors.select);
     colors.select.focus();
