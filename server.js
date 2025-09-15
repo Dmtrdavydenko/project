@@ -348,7 +348,7 @@ async function select(body) {
         const all = await connection.execute(sql);
         const [rows] = all;
 
-    }
+
         // Извлекаем информацию о колонках
         //const columnsInfo = descRows.map(row => ({
         //    Field: row.Field,
@@ -364,22 +364,22 @@ async function select(body) {
         //select.pri = primaryKeyColumn;
         //select.name = body.table.name;
         console.log("Клиент " + sql);
-    return {
-        all,
-        rows,
-        Field: select.fields,
-        F: select.sqlFields,
-        key: select.pri
-    };
+        return {
+            all,
+            rows,
+            Field: select.fields,
+            F: select.sqlFields,
+            key: select.pri
+        };
 
-} catch (err) {
-    console.error('Ошибка:', err);
-    throw err;
-} finally {
-    connection.release();
-    //await pool.end();
-    //console.log('Пул соединений закрыт.');
-}
+    } catch (err) {
+        console.error('Ошибка:', err);
+        throw err;
+    } finally {
+        connection.release();
+        //await pool.end();
+        //console.log('Пул соединений закрыт.');
+    }
 }
 async function getTable(body) {
     //const pool = mysql.createPool(dbConfig); // создаём пул подключений
