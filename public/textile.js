@@ -473,7 +473,7 @@ async function selectTable(event) {
         console.log(result.values);
         await sqlQuery(result.sql, result.values);
     });
-    colors.select.addEventListener('blur', function () {
+    colors.select.addEventListener('blur', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
         td.innerHTML = '';
