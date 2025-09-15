@@ -328,7 +328,7 @@ async function select(body) {
                 const manual = new ManualRepository(pool);
                 try {
                     //const result = await manual.insertManual(transformKeys(manualData));
-                    sql = await manual.select();
+                    return response = await manual.select();
                     //str = 'Data inserted successfully: ' + result;
                     console.log(o);
                 } catch (error) {
@@ -345,10 +345,8 @@ async function select(body) {
 
 
         }
-        if (!sql?.success) {
-            const all = await connection.execute(sql);
-            const [rows] = all;
-        }
+        const all = await connection.execute(sql);
+        const [rows] = all;
 
     }
         // Извлекаем информацию о колонках
