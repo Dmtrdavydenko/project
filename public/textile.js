@@ -472,29 +472,15 @@ async function selectTable(event) {
         const selectedText = this.options[this.selectedIndex].text;
         savechange = selectedValue;
         update.value = selectedValue;
-        const result = generateUpdateSQL(rowData, update);
-        console.log(result.sql);
-        console.log(result.values);
-        await sqlQuery(result.sql, result.values);
     });
     colors.select.addEventListener('click', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
         update.value = selectedValue;
-        const result = generateUpdateSQL(rowData, update);
-        console.log(result.sql);
-        console.log(result.values);
-        await sqlQuery(result.sql, result.values);
     });
     colors.select.addEventListener('blur', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
-        //td.textContent = selectedValue;
-        //update.value = selectedValue;
-        //const result = generateUpdateSQL(rowData, update);
-        //console.log(result.sql);
-        //console.log(result.values);
-        //await sqlQuery(result.sql, result.values);
         update.value = selectedValue;
         const result = generateUpdateSQL(rowData, update);
         await sqlQuery(result.sql, result.values);
