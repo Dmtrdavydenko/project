@@ -480,7 +480,7 @@ async function selectTable(event) {
         console.log(update);
         //const result = generateUpdateSQL(rowData, update);
         //await sqlQuery(result.sql, result.values);
-        //await loadTableFn();
+        await loadTableFn();
     });
     td.append(colors.select);
     colors.select.focus();
