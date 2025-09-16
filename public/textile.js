@@ -373,8 +373,11 @@ async function loadTableFn(query) {
     //if (true) {
     if (result.rows) {
         const table = createTable(result.rows);
-        table.addEventListener("click", queryTarget);
-        table.addEventListener("click", selectTable);
+        //selectTableName.value === "manual" && table.addEventListener("click", selectTable);
+        if (selectTableName.value === "manual")
+            table.addEventListener("click", selectTable);
+        else
+            table.addEventListener("click", queryTarget);
         container.appendChild(table);
         await getTypeTableHeder();
         //if (selectTableName.value === "manual") {
@@ -460,8 +463,8 @@ async function selectTable(event) {
     };
 
 
-
-    //td.innerHTML = ''
+    let saveTd = td.innerHTML;
+    td.innerHTML = ''
     const colors = new Color("color");
     //colors.select.addEventListener('click', (e) => e.stopPropagation());
 
@@ -476,10 +479,10 @@ async function selectTable(event) {
         console.log(result.values);
         await sqlQuery(result.sql, result.values);
     });
-    colors.select.addEventListener('blur', async function () {
+    colors.select.addEventListener('click', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
-        td.innerHTML = '';
+        //td.innerHTML = '';
         td.textContent = selectedValue;
         update.value = selectedValue;
         const result = generateUpdateSQL(rowData, update);
@@ -487,8 +490,19 @@ async function selectTable(event) {
         console.log(result.values);
         await sqlQuery(result.sql, result.values);
     });
+    colors.select.addEventListener('blur', async function () {
+        const selectedValue = this.value;
+        const selectedText = this.options[this.selectedIndex].text;
+        td.innerHTML = saveTd;
+        //td.textContent = selectedValue;
+        //update.value = selectedValue;
+        //const result = generateUpdateSQL(rowData, update);
+        //console.log(result.sql);
+        //console.log(result.values);
+        //await sqlQuery(result.sql, result.values);
+    });
     td.append(colors.select);
-    //colors.select.focus();
+    colors.select.focus();
 }
 async function queryTarget(event) {
     console.dir(event.target);
