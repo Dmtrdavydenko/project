@@ -125,7 +125,7 @@ const selectTableName = document.createElement("select");
 selectTableName.name = "name";
 selectTableName.id = "name";
 selectTableName.autocomplete = 'off';
-selectTableName.addEventListener('change', showTableFn);
+selectTableName.addEventListener('change', loadTable);
 
 
 
@@ -316,7 +316,7 @@ async function slect(table) {
 //    data[input.name] = input.value;
 //});
 
-async function showTable(query) {
+async function showTableFn(query) {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
