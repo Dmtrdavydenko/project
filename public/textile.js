@@ -463,7 +463,6 @@ async function selectTable(event) {
     };
     td.innerHTML = ''
     const colors = new Color("color");
-    colors.select.onfocus();
     colors.select.addEventListener('change', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
@@ -483,6 +482,7 @@ async function selectTable(event) {
         await loadTableFn();
     });
     td.append(colors.select);
+    colors.select.focus();
 }
 async function queryTarget(event) {
     console.dir(event.target);
