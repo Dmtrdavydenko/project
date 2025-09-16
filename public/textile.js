@@ -418,7 +418,7 @@ async function selectTable(event) {
     const headersText = headers.map(th => th.textContent);
     const found = headersText.find(text => text.includes('id'));
     const index = headersText.findIndex(text => text.includes('id'));
-    console.log(headersText);
+    //console.log(headersText);
 
 
 
