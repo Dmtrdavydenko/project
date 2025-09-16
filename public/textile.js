@@ -460,7 +460,7 @@ async function selectTable(event) {
 
 
 
-    td.innerHTML = ''
+    //td.innerHTML = ''
     const colors = new Color("color");
     //colors.select.addEventListener('click', (e) => e.stopPropagation());
 
