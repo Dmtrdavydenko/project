@@ -503,7 +503,7 @@ async function selectTable(event) {
         //console.log(result.sql);
         //console.log(result.values);
         //await sqlQuery(result.sql, result.values);
-        await loadTableFn(query)
+        await loadTableFn()
     });
     td.append(colors.select);
     colors.select.focus();
