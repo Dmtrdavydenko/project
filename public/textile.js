@@ -351,6 +351,28 @@ async function showTableFn(query) {
         container.textContent = 'U';
     }
 }
+async function getTable() {
+    const result = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "select",
+            table: {
+                name: selectTableName.value,
+            }
+        }),
+    }).then((response) => response.json());
+    const container = document.getElementById('table-container');
+    container.innerHTML = '';
+    if (result.rows) {
+        const table = createTable(result.rows);
+        container.appendChild(table);
+    } else {
+        container.textContent = 'U';
+    }
+}
 async function loadTableFn(query) {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
@@ -480,7 +502,7 @@ async function selectTable(event) {
         console.log(update);
         const result = generateUpdateSQL(rowData, update);
         await sqlQuery(result.sql, result.values);
-        await loadTableFn();
+        await getTable();
     });
     td.append(colors.select);
     colors.select.focus();
