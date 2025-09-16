@@ -461,16 +461,11 @@ async function selectTable(event) {
         target: "color_id",
         value: 0
     };
-
-
-    let saveTd = td.innerHTML;
-    let savechange = 0;
     td.innerHTML = ''
     const colors = new Color("color");
     colors.select.addEventListener('change', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
-        savechange = selectedValue;
         update.value = selectedValue;
     });
     colors.select.addEventListener('click', async function () {
