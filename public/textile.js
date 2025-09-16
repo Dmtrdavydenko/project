@@ -399,8 +399,10 @@ async function loadTable() {
             table.addEventListener("click", selectTable);
         else
             table.addEventListener("click", queryTarget);
+
         container.appendChild(table);
         await getTypeTableHeder();
+        await getTypeKey();
     } else {
         container.textContent = 'U';
     }
@@ -1095,7 +1097,7 @@ async function generateForm() {
             container.appendChild(table);
             await getTypeTableHeder();
             //await generateForm();
-            await getTypeKey()
+            await getTypeKey();
         } else {
             container.textContent = 'U';
         }
