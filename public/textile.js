@@ -462,7 +462,7 @@ async function selectTable(event) {
     //});
     colors.select.addEventListener('blur', async function () {
         const selectedValue = this.value;
-        //const selectedText = this.options[this.selectedIndex].text;
+        td.textContent = this.options[this.selectedIndex].text;
         update.value = +selectedValue;
         console.log(update);
         const result = generateUpdateSQL(rowData, update);
