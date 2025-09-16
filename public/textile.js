@@ -505,10 +505,10 @@ async function queryTarget(event) {
 
 
 
-    td.contentEditable = "true";
+    //td.contentEditable = "true";
 
     // Поставить фокус внутрь td
-    td.focus();
+    //td.focus();
 
     const table = document.querySelector('table');
     const headers = Array.from(table.querySelectorAll('thead th'));
