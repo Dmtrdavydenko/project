@@ -406,72 +406,74 @@ async function loadTable() {
     }
 }
 async function selectTable(event) {
-    const ts = event.target.closest("select");
-    console.log(ts);
-    if (ts) return;
-    console.dir("element",event.target);
-    const td = event.target.closest("td");
-
-    if (!td) return;
+    try {
 
 
-    const tr = td.closest("tr");
-    if (!tr) return;
+        const ts = event.target.closest("select");
+        console.log(ts);
+        if (ts) return;
+        console.dir("element", event.target);
+        const td = event.target.closest("td");
 
-    const table = document.querySelector('table');
-    const headers = Array.from(table.querySelectorAll('thead th'));
-    const headersText = headers.map(th => th.textContent);
-    const found = headersText.find(text => text.includes('id'));
-    const index = headersText.findIndex(text => text.includes('id'));
-    //console.log(headersText);
+        if (!td) return;
 
 
+        const tr = td.closest("tr");
+        if (!tr) return;
 
-    // Получить все ячейки в строке (tr)
-    const cells = Array.from(tr.children);  // td или th в строке
-
-    // Создать объект с данными строки: заголовок -> значение
-    const rowData = {};
-    headersText.forEach((header, i) => {
-        if (cells[i]) {
-            rowData[header] = cells[i].textContent.trim();
-        }
-    });
-
-    console.info('Данные строки:', rowData);
+        const table = document.querySelector('table');
+        const headers = Array.from(table.querySelectorAll('thead th'));
+        const headersText = headers.map(th => th.textContent);
+        const found = headersText.find(text => text.includes('id'));
+        const index = headersText.findIndex(text => text.includes('id'));
+        //console.log(headersText);
 
 
 
-    const tdIndex = cells.indexOf(td);
-    const correspondingHeader = headers[tdIndex]?.textContent.trim();
-    const update = {
-        table: selectTableName.value,
-        target: "color_id",
-        value: 0
-    };
-    td.innerHTML = ''
-    const colors = new Color("color");
-    colors.select.addEventListener('change', async function () {
-        const selectedValue = this.value;
-        //const selectedText = this.options[this.selectedIndex].text;
-        update.value = +selectedValue;
-    });
-    //colors.select.addEventListener('click', async function () {
-    //    const selectedValue = this.value;
-    //    const selectedText = this.options[this.selectedIndex].text;
-    //    update.value = +selectedValue;
-    //});
-    colors.select.addEventListener('blur', async function () {
-        const selectedValue = this.value;
-        td.textContent = this.options[this.selectedIndex].text;
-        update.value = +selectedValue;
-        console.log(update);
-        const result = generateUpdateSQL(rowData, update);
-        await sqlQuery(result.sql, result.values);
-        //await loadTable();
-    });
-    td.append(colors.select);
-    colors.select.focus();
+        // Получить все ячейки в строке (tr)
+        const cells = Array.from(tr.children);  // td или th в строке
+
+        // Создать объект с данными строки: заголовок -> значение
+        const rowData = {};
+        headersText.forEach((header, i) => {
+            if (cells[i]) {
+                rowData[header] = cells[i].textContent.trim();
+            }
+        });
+
+        console.info('Данные строки:', rowData);
+
+
+
+        const tdIndex = cells.indexOf(td);
+        const correspondingHeader = headers[tdIndex]?.textContent.trim();
+        const update = {
+            table: selectTableName.value,
+            target: "color_id",
+            value: 0
+        };
+        td.innerHTML = ''
+        const colors = new Color("color");
+        colors.select.addEventListener('change', async function () {
+            const selectedValue = this.value;
+            //const selectedText = this.options[this.selectedIndex].text;
+            update.value = +selectedValue;
+        });
+        colors.select.addEventListener('blur', async function () {
+            const selectedValue = this.value;
+            td.innerHTML = ''
+            td.textContent = this.options[this.selectedIndex].text;
+            update.value = +selectedValue;
+            console.log(update);
+            const result = generateUpdateSQL(rowData, update);
+            await sqlQuery(result.sql, result.values);
+            //await loadTable();
+        });
+        td.append(colors.select);
+        colors.select.focus();
+    } catch (error) {
+        console.error('Ошибка в selectTable:', error);
+    }
 
 
 
@@ -1101,7 +1103,7 @@ async function generateForm() {
 }
 
 
-async function sqlQuery(sqlQueryString,values=null) {
+async function sqlQuery(sqlQueryString, values = null) {
     try {
         const response = await fetch("https://worktime.up.railway.app/textile", {
             method: "POST",
@@ -1111,7 +1113,7 @@ async function sqlQuery(sqlQueryString,values=null) {
             body: JSON.stringify({
                 action: "sql", // Измените на нужное действие, если необходимо
                 query: sqlQueryString, // Отправляем SQL-запрос
-                values:values
+                values: values
             }),
         });
 
