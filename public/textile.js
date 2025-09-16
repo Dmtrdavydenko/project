@@ -459,7 +459,7 @@ async function selectTable(event) {
     const update = {
         table: selectTableName.value,
         target: "color_id",
-        value: 1
+        value: 0
     };
     td.innerHTML = ''
     const colors = new Color("color");
