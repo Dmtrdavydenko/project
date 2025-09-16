@@ -478,9 +478,9 @@ async function selectTable(event) {
         //const selectedText = this.options[this.selectedIndex].text;
         update.value = +selectedValue;
         console.log(update);
-        const result = generateUpdateSQL(rowData, update);
-        await sqlQuery(result.sql, result.values);
-        await loadTableFn();
+        //const result = generateUpdateSQL(rowData, update);
+        //await sqlQuery(result.sql, result.values);
+        //await loadTableFn();
     });
     td.append(colors.select);
     colors.select.focus();
