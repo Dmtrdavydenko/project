@@ -455,11 +455,11 @@ async function selectTable(event) {
         //const selectedText = this.options[this.selectedIndex].text;
         update.value = +selectedValue;
     });
-    colors.select.addEventListener('click', async function () {
-        const selectedValue = this.value;
-        //const selectedText = this.options[this.selectedIndex].text;
-        update.value = +selectedValue;
-    });
+    //colors.select.addEventListener('click', async function () {
+    //    const selectedValue = this.value;
+    //    const selectedText = this.options[this.selectedIndex].text;
+    //    update.value = +selectedValue;
+    //});
     colors.select.addEventListener('blur', async function () {
         const selectedValue = this.value;
         //const selectedText = this.options[this.selectedIndex].text;
@@ -467,6 +467,7 @@ async function selectTable(event) {
         console.log(update);
         const result = generateUpdateSQL(rowData, update);
         await sqlQuery(result.sql, result.values);
+        //await loadTable();
     });
     td.append(colors.select);
     colors.select.focus();
@@ -1117,7 +1118,7 @@ async function sqlQuery(sqlQueryString,values=null) {
         if (!response.ok) {
             throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
         }
-        await loadTable();
+
         return await response.json(); // Получаем JSON-ответ
     } catch (error) {
         console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
