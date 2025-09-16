@@ -477,6 +477,7 @@ async function selectTable(event) {
         const selectedValue = this.value;
         //const selectedText = this.options[this.selectedIndex].text;
         update.value = selectedValue;
+        update.value = +update.value
         const result = generateUpdateSQL(rowData, update);
         await sqlQuery(result.sql, result.values);
         await loadTableFn();
