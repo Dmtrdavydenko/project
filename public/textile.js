@@ -464,6 +464,7 @@ async function selectTable(event) {
 
 
     let saveTd = td.innerHTML;
+    let savechange = 0;
     td.innerHTML = ''
     const colors = new Color("color");
     //colors.select.addEventListener('click', (e) => e.stopPropagation());
@@ -472,7 +473,8 @@ async function selectTable(event) {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
         //td.innerHTML = '';
-        td.textContent = selectedValue;
+        //td.textContent = selectedValue;
+        savechange = selectedValue;
         update.value = selectedValue;
         const result = generateUpdateSQL(rowData, update);
         console.log(result.sql);
@@ -494,6 +496,7 @@ async function selectTable(event) {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
         td.innerHTML = saveTd;
+        td.innerHTML = '';
         //td.textContent = selectedValue;
         //update.value = selectedValue;
         //const result = generateUpdateSQL(rowData, update);
