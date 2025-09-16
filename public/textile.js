@@ -468,7 +468,7 @@ async function selectTable(event) {
     colors.select.addEventListener('change', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
-        td.innerHTML = '';
+        //td.innerHTML = '';
         td.textContent = selectedValue;
         update.value = selectedValue;
         const result = generateUpdateSQL(rowData, update);
@@ -479,7 +479,7 @@ async function selectTable(event) {
     colors.select.addEventListener('blur', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
-        td.innerHTML = '';
+        //td.innerHTML = '';
         td.textContent = selectedValue;
         update.value = selectedValue;
         const result = generateUpdateSQL(rowData, update);
