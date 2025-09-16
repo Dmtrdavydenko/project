@@ -392,7 +392,7 @@ async function loadTableFn(query) {
     }
 }
 async function selectTable(event) {
-    console.dir(event.target);
+    console.dir("element",event.target);
     const td = event.target.closest("td");
     const ts = event.target.closest("select");
     console.log(ts);
