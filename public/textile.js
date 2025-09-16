@@ -459,25 +459,25 @@ async function selectTable(event) {
     const update = {
         table: selectTableName.value,
         target: "color_id",
-        value: 0
+        value: 1
     };
     td.innerHTML = ''
     const colors = new Color("color");
     colors.select.addEventListener('change', async function () {
         const selectedValue = this.value;
         //const selectedText = this.options[this.selectedIndex].text;
-        update.value = selectedValue;
+        update.value = +selectedValue;
     });
     colors.select.addEventListener('click', async function () {
         const selectedValue = this.value;
         //const selectedText = this.options[this.selectedIndex].text;
-        update.value = selectedValue;
+        update.value = +selectedValue;
     });
     colors.select.addEventListener('blur', async function () {
         const selectedValue = this.value;
         //const selectedText = this.options[this.selectedIndex].text;
-        update.value = selectedValue;
-        update.value = +update.value
+        update.value = +selectedValue;
+        console.log(update);
         const result = generateUpdateSQL(rowData, update);
         await sqlQuery(result.sql, result.values);
         await loadTableFn();
