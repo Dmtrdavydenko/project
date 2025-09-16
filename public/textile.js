@@ -125,7 +125,7 @@ const selectTableName = document.createElement("select");
 selectTableName.name = "name";
 selectTableName.id = "name";
 selectTableName.autocomplete = 'off';
-selectTableName.addEventListener('change', loadTable);
+selectTableName.addEventListener('change', load);
 
 
 
