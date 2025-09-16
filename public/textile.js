@@ -316,7 +316,7 @@ async function slect(table) {
 //    data[input.name] = input.value;
 //});
 
-async function showTableFn(query) {
+async function showTable(query) {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
@@ -467,7 +467,7 @@ async function selectTable(event) {
         console.log(update);
         const result = generateUpdateSQL(rowData, update);
         await sqlQuery(result.sql, result.values);
-        await getTable();
+        await loadTable();
     });
     td.append(colors.select);
     colors.select.focus();
