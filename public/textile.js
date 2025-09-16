@@ -392,6 +392,7 @@ async function selectTable(event) {
     console.dir(event.target);
     const td = event.target.closest("td");
     const ts = event.target.closest("select");
+    console.log(ts);
     if (ts) return;
     if (!td) return;
     //console.dir(event.target.closest("td").cellIndex);
