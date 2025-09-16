@@ -412,20 +412,10 @@ async function selectTable(event) {
     console.log(ts);
     if (ts) return;
     if (!td) return;
-    //console.dir(event.target.closest("td").cellIndex);
 
 
     const tr = td.closest("tr");
-    //if (!event.target.closest("tr")) return;
     if (!tr) return;
-    //console.dir(event.target.closest("tr").rowIndex);
-
-
-
-    //td.contentEditable = "true";
-
-    // Поставить фокус внутрь td
-    //td.focus();
 
     const table = document.querySelector('table');
     const headers = Array.from(table.querySelectorAll('thead th'));
@@ -450,25 +440,8 @@ async function selectTable(event) {
     console.info('Данные строки:', rowData);
 
 
-    //const rowValues = cells.map(cell => cell.textContent.trim());
-    //console.log('Массив значений строки:', rowValues);
-
 
     const tdIndex = cells.indexOf(td);
-    //if (tdIndex === -1) return;
-
-    //// Получить заголовки из thead
-    ////const headers = Array.from(table.querySelectorAll('thead th'));
-
-    //if (!correspondingHeader) {
-    //    console.log('Заголовок не найден');
-    //    return;
-    //}
-
-    //console.log('Кликнутая td:', td.textContent.trim());
-    //console.log('Индекс столбца:', tdIndex);
-    //console.log('Соответствующий thead (заголовок):', correspondingHeader);
-    //console.log({ target: correspondingHeader, value: rowData[correspondingHeader] });
     const correspondingHeader = headers[tdIndex]?.textContent.trim();
     const update = {
         table: selectTableName.value,
