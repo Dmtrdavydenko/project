@@ -405,10 +405,10 @@ async function selectTable(event) {
 
 
 
-    td.contentEditable = "true";
+    //td.contentEditable = "true";
 
     // Поставить фокус внутрь td
-    td.focus();
+    //td.focus();
 
     const table = document.querySelector('table');
     const headers = Array.from(table.querySelectorAll('thead th'));
@@ -488,7 +488,7 @@ async function selectTable(event) {
         await sqlQuery(result.sql, result.values);
     });
     td.append(colors.select);
-    colors.select.focus();
+    //colors.select.focus();
 }
 async function queryTarget(event) {
     console.dir(event.target);
