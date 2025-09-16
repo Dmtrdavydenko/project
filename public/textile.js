@@ -465,17 +465,17 @@ async function selectTable(event) {
     const colors = new Color("color");
     colors.select.addEventListener('change', async function () {
         const selectedValue = this.value;
-        const selectedText = this.options[this.selectedIndex].text;
+        //const selectedText = this.options[this.selectedIndex].text;
         update.value = selectedValue;
     });
     colors.select.addEventListener('click', async function () {
         const selectedValue = this.value;
-        const selectedText = this.options[this.selectedIndex].text;
+        //const selectedText = this.options[this.selectedIndex].text;
         update.value = selectedValue;
     });
     colors.select.addEventListener('blur', async function () {
         const selectedValue = this.value;
-        const selectedText = this.options[this.selectedIndex].text;
+        //const selectedText = this.options[this.selectedIndex].text;
         update.value = selectedValue;
         const result = generateUpdateSQL(rowData, update);
         await sqlQuery(result.sql, result.values);
