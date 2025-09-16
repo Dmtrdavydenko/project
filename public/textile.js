@@ -483,7 +483,7 @@ async function selectTable(event) {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
         //td.innerHTML = '';
-        td.textContent = selectedValue;
+        //td.textContent = selectedValue;
         update.value = selectedValue;
         const result = generateUpdateSQL(rowData, update);
         console.log(result.sql);
