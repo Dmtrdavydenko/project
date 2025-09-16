@@ -1230,7 +1230,7 @@ function generateUpdateSQL(data, update) {
     const { table, target, value } = update;
 
     // SET clause with placeholder
-    const setClause = `${table}.${target} = ?`;
+    const setClause = `${target} = ?`;
 
     // WHERE clause: all fields from data except target, with placeholders
     let whereKeys = Object.keys(data).filter(key => key !== target && key !== "quantity");
@@ -1253,7 +1253,7 @@ function generateUpdateSQL(data, update) {
 
             JOIN yarn_type            yt        ON m.yarn_id =               yt.yarn_id
 
-            set ${setClause}
+            set m.${setClause}
             where ${whereClause};
             `
 
