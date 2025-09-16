@@ -467,10 +467,43 @@ async function selectTable(event) {
         console.log(update);
         const result = generateUpdateSQL(rowData, update);
         await sqlQuery(result.sql, result.values);
-        await loadTable();
     });
     td.append(colors.select);
     colors.select.focus();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 async function queryTarget(event) {
     console.dir(event.target);
@@ -1084,7 +1117,7 @@ async function sqlQuery(sqlQueryString,values=null) {
         if (!response.ok) {
             throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
         }
-
+        await loadTable();
         return await response.json(); // Получаем JSON-ответ
     } catch (error) {
         console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
