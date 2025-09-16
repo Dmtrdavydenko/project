@@ -373,7 +373,7 @@ async function getTable() {
         container.textContent = 'U';
     }
 }
-async function loadTableFn(query) {
+async function loadTable() {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
@@ -395,20 +395,12 @@ async function loadTableFn(query) {
     //if (true) {
     if (result.rows) {
         const table = createTable(result.rows);
-        //selectTableName.value === "manual" && table.addEventListener("click", selectTable);
         if (selectTableName.value === "manual")
             table.addEventListener("click", selectTable);
         else
             table.addEventListener("click", queryTarget);
         container.appendChild(table);
         await getTypeTableHeder();
-        //if (selectTableName.value === "manual") {
-            //await generateForm();
-        //}
-
-
-
-
     } else {
         container.textContent = 'U';
     }
@@ -1170,7 +1162,7 @@ async function sendForm() {
 (async () => {
     const tableName = await getTableName();
     console.log(tableName);
-    await loadTableFn();
+    await loadTable();
 })();
 
 
