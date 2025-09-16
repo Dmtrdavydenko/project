@@ -392,20 +392,22 @@ async function loadTable() {
     const container = document.getElementById('table-container');
     container.innerHTML = '';
 
-    //if (true) {
-    if (result.rows) {
+
+    if (result.rows && Array.isArray(result.rows) && result.rows.length > 0) {
         const table = createTable(result.rows);
-        if (selectTableName.value === "manual")
+        if (selectTableName.value === "manual") {
             table.addEventListener("click", selectTable);
-        else
+        } else {
             table.addEventListener("click", queryTarget);
+        }
 
         container.appendChild(table);
         await getTypeTableHeder();
         await getTypeKey();
     } else {
-        container.textContent = 'U';
+        container.textContent = "Empty";
     }
+
 }
 async function selectTable(event) {
     try {
