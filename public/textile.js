@@ -467,13 +467,9 @@ async function selectTable(event) {
     let savechange = 0;
     td.innerHTML = ''
     const colors = new Color("color");
-    //colors.select.addEventListener('click', (e) => e.stopPropagation());
-
     colors.select.addEventListener('change', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
-        //td.innerHTML = '';
-        //td.textContent = selectedValue;
         savechange = selectedValue;
         update.value = selectedValue;
         const result = generateUpdateSQL(rowData, update);
@@ -484,8 +480,6 @@ async function selectTable(event) {
     colors.select.addEventListener('click', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
-        //td.innerHTML = '';
-        //td.textContent = selectedValue;
         update.value = selectedValue;
         const result = generateUpdateSQL(rowData, update);
         console.log(result.sql);
@@ -495,18 +489,18 @@ async function selectTable(event) {
     colors.select.addEventListener('blur', async function () {
         const selectedValue = this.value;
         const selectedText = this.options[this.selectedIndex].text;
-        td.innerHTML = saveTd;
-        td.innerHTML = '';
         //td.textContent = selectedValue;
         //update.value = selectedValue;
         //const result = generateUpdateSQL(rowData, update);
         //console.log(result.sql);
         //console.log(result.values);
         //await sqlQuery(result.sql, result.values);
-        await loadTableFn()
+        update.value = selectedValue;
+        const result = generateUpdateSQL(rowData, update);
+        await sqlQuery(result.sql, result.values);
+        await loadTableFn();
     });
     td.append(colors.select);
-    colors.select.focus();
 }
 async function queryTarget(event) {
     console.dir(event.target);
