@@ -406,11 +406,12 @@ async function loadTable() {
     }
 }
 async function selectTable(event) {
-    console.dir("element",event.target);
-    const td = event.target.closest("td");
     const ts = event.target.closest("select");
     console.log(ts);
     if (ts) return;
+    console.dir("element",event.target);
+    const td = event.target.closest("td");
+
     if (!td) return;
 
 
