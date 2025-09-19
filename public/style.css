@@ -105,8 +105,19 @@ body {
 
 .about {
     padding: 60px 0;
+    background: url("https://i.ytimg.com/vi/V7Kxz6RR7WY/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGDggJCh_MA8=&rs=AOn4CLBukOTFqD3WV-Zq6pQTZAyIR3LxJA") no-repeat center center;
+    background-size: cover;
+    overflow: auto;
 }
 
+/*
+.banner {
+    background: url("https://i.ytimg.com/vi/V7Kxz6RR7WY/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGDggJCh_MA8=&rs=AOn4CLBukOTFqD3WV-Zq6pQTZAyIR3LxJA") no-repeat center center;
+    background-size: cover;
+    color: white;
+    text-align: center;
+    overflow: auto;
+}*/
 .footer {
     background: rgba(27, 78, 155, 1);
     color: white;
