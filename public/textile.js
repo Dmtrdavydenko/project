@@ -411,8 +411,6 @@ async function loadTable() {
 }
 async function selectTable(event) {
     try {
-
-
         const ts = event.target.closest("select");
         console.log(ts);
         if (ts) return;
