@@ -65,7 +65,7 @@ body {
     background-size: cover;
     color: white;
     text-align: center;
-    overflow: auto;
+    overflow: hidden;
 }
 
     .banner h1 {
@@ -107,7 +107,8 @@ body {
     padding: 60px 0;
     background: url("https://avatars.mds.yandex.net/i?id=9bb054dadbd3c9227aa65ba902d7ae66_l-5530893-images-thumbs&n=13") no-repeat center center;
     background-size: cover;
-    overflow: auto;
+    color: white;
+    overflow: hidden;
 }
 
 /*
