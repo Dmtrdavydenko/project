@@ -12,7 +12,7 @@ body {
 .container {
     width: 90%;
     margin: 0 auto;
-    max-width: 1900px
+    max-width: 1900px;
 }
 
 .btn {
@@ -61,7 +61,7 @@ body {
 }
 
 .banner {
-    background: url("https://www.atomic-energy.ru/files/images/2022/11/4_2.jpg")no-repeat center center;
+    background: url("https://www.atomic-energy.ru/files/images/2022/11/4_2.jpg") no-repeat center center;
     background-size: cover;
     color: white;
     text-align: center;
