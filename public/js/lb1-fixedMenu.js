@@ -15,6 +15,7 @@ console.log(pageYOffset,etop);
         copy.style.left = distance.left+"px";
         copy.style.background = "transparent";
         copy.style.backdropFilter = "blur(3px)";
+        copy.style.width = "100%";
         }
 
 	}else{

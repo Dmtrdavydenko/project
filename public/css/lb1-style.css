@@ -35,6 +35,14 @@ body {
     color: white;
     padding: 20px 0px;
 }
+.position {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    display:inline;
+}
 
 .logo img {
     height: 50px;
@@ -112,14 +120,6 @@ body {
     overflow: hidden;
 }
 
-/*
-.banner {
-    background: url("https://i.ytimg.com/vi/V7Kxz6RR7WY/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGDggJCh_MA8=&rs=AOn4CLBukOTFqD3WV-Zq6pQTZAyIR3LxJA") no-repeat center center;
-    background-size: cover;
-    color: white;
-    text-align: center;
-    overflow: auto;
-}*/
 .footer {
     background: rgba(23, 18, 54, 1);
 
