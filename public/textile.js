@@ -524,6 +524,8 @@ async function queryTarget(event) {
     if (!tr) return;
     //console.dir(event.target.closest("tr").rowIndex);
 
+    const targetTable = td.closest("table");
+    console.log(targetTable);
 
 
     //td.contentEditable = "true";
