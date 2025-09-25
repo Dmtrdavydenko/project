@@ -131,8 +131,8 @@ function transformKeys(inputObj) {
         'type': 'type_id',
         'sleeve_width_density': 'sleeve_w_d_id',
         'yarn_type': 'yarn_id',
-        'warp_quantity': 'quantity',
-        'weft_quantity': 'quantity',
+        'warp_quantity': 'quantity_id',
+        'weft_quantity': 'quantity_id',
         'Thread_Parameters': 'thread_densiti_id',
         'color': 'color_id',
         'additive': 'additive_id'

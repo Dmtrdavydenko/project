@@ -18,7 +18,7 @@ class ManualRepository {
      */
     validateManualData(data) {
         const requiredFields = [
-            'type_id', 'sleeve_w_d_id', 'yarn_id', 'quantity',
+            'type_id', 'sleeve_w_d_id', 'yarn_id', 'quantity_id',
             'thread_densiti_id', 'color_id', 'additive_id'
         ];
 
@@ -170,17 +170,17 @@ class ManualRepository {
             try {
                 const query = `
                 INSERT INTO \`manual\` (
-                    \`type_id\`, \`sleeve_w_d_id\`, \`yarn_id\`, \`quantity\`,
+                    \`type_id\`, \`sleeve_w_d_id\`, \`yarn_id\`, \`quantity_id\`,
                     \`thread_densiti_id\`, \`color_id\`, \`additive_id\`
                 ) VALUES (?, ?, ?, ?, ?, ?, ?)
-                    ON DUPLICATE KEY UPDATE quantity = VALUES(quantity)
+                    ON DUPLICATE KEY UPDATE quantity_id = VALUES(quantity_id)
                 `;
 
                 const values = [
                     data.type_id,
                     data.sleeve_w_d_id,
                     data.yarn_id,
-                    data.quantity,
+                    data.quantity_id,
                     data.thread_densiti_id,
                     data.color_id,
                     data.additive_id
