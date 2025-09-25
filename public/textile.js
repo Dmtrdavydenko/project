@@ -556,7 +556,7 @@ async function queryTarget(event) {
                 tableName: selectTableName.value,
                 rowId: cells[index].textContent,
                 columnName: headers[td.cellIndex].textContent,
-                whereColum: name_id,
+                whereColum: colum_id,
                 value: td.textContent
             });
             //try {
