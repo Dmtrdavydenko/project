@@ -513,7 +513,6 @@ async function selectTable(event) {
 }
 async function queryTarget(event) {
     console.dir(event.target);
-
     const td = event.target.closest("td");
     if (!td) return;
     //console.dir(event.target.closest("td").cellIndex);
@@ -533,14 +532,20 @@ async function queryTarget(event) {
     // Поставить фокус внутрь td
     //td.focus();
 
-    const table = document.querySelector('table');
-    const headers = Array.from(table.querySelectorAll('thead th'));
+    const table = targetTable;
+    //const headers = Array.from(table.querySelectorAll('thead th'));
     const headersText = headers.map(th => th.textContent);
     const found = headersText.find(text => text.includes('id'));
     const index = headersText.findIndex(text => text.includes('id'));
     console.log(headersText);
 
-
+    const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
+    const cells = tr.querySelectorAll('td');
+    const obj = {};
+    cells.forEach((cell, i) => {
+        obj[headers[i]] = cell.textContent.trim();
+    });
+    console.log(obj);
 
     //// Получить все ячейки в строке (tr)
     //const cells = Array.from(tr.children);  // td или th в строке
