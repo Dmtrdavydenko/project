@@ -1059,8 +1059,8 @@ async function generateForm() {
         container.innerHTML = '';
         if (result.rows) {
             const table = createTable(result.rows);
-            table.addEventListener("click", queryTarget);
-            table.addEventListener("click", selectTable);
+            //table.addEventListener("click", queryTarget);
+            //table.addEventListener("click", selectTable);
             container.appendChild(table);
             await getTypeTableHeder();
             //await generateForm();
