@@ -519,86 +519,50 @@ async function queryTarget(event) {
 
 
     const tr = td.closest("tr");
-    //if (!event.target.closest("tr")) return;
     if (!tr) return;
-    //console.dir(event.target.closest("tr").rowIndex);
 
     const targetTable = td.closest("table");
     console.log(targetTable);
 
 
-    //td.contentEditable = "true";
+    td.contentEditable = "true";
 
     // Поставить фокус внутрь td
-    //td.focus();
+    td.focus();
 
     const table = targetTable;
     const headers = Array.from(table.querySelectorAll('thead th'));
     const headersText = headers.map(th => th.textContent.trim());
-    const found = headersText.find(text => text.includes('id'));
+
+    const colum_id = headersText.find(text => text.includes('id'));
     const index = headersText.findIndex(text => text.includes('id'));
     console.log(headersText);
 
     const theaders = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
     console.log(theaders);
     const cells = tr.querySelectorAll('td');
-    const obj = {};
+    const target = {};
     cells.forEach((cell, i) => {
-        obj[headersText[i]] = cell.textContent.trim();
+        target[headersText[i]] = cell.textContent.trim();
     });
-    console.log(obj);
-
-    //// Получить все ячейки в строке (tr)
-    //const cells = Array.from(tr.children);  // td или th в строке
-
-    //// Создать объект с данными строки: заголовок -> значение
-    //const rowData = {};
-    //headersText.forEach((header, i) => {
-    //    if (cells[i]) {
-    //        rowData[header] = cells[i].textContent.trim();
-    //    }
-    //});
-
-    //console.log('Данные строки:', rowData);
-
-
-    //const rowValues = cells.map(cell => cell.textContent.trim());
-    //console.log('Массив значений строки:', rowValues);
-
-
-    //const tdIndex = cells.indexOf(td);
-    //if (tdIndex === -1) return;
-
-    //// Получить заголовки из thead
-    ////const headers = Array.from(table.querySelectorAll('thead th'));
-    //const correspondingHeader = headers[tdIndex]?.textContent.trim();
-
-    //if (!correspondingHeader) {
-    //    console.log('Заголовок не найден');
-    //    return;
-    //}
-
-    //console.log('Кликнутая td:', td.textContent.trim());
-    //console.log('Индекс столбца:', tdIndex);
-    //console.log('Соответствующий thead (заголовок):', correspondingHeader);
-    //console.log({ target: correspondingHeader, value: rowData[correspondingHeader] });
-
-
+    console.log(target);
     
     td.addEventListener('blur', async () => {
         td.contentEditable = "false";
         td.textContent = td.textContent.trim();
         if (td.textContent.length > 0) {
-            console.log(td.textContent);
-            console.log(tr.sectionRowIndex);
-            console.log(selectTableName.value);
-            console.log(headers[td.cellIndex].textContent);
-            console.log("rowId: " + tr.cells[0].textContent);
             console.log({
                 tableName: selectTableName.value,
-                rowId: tr.cells[index].textContent,
+                rowId: cells[index].textContent,
                 columnName: headers[td.cellIndex].textContent,
-                whereColum: found,
+                whereColum: name_id,
+                value: td.textContent
+            });
+            console.log({
+                tableName: selectTableName.value,
+                rowId: cells[index].textContent,
+                columnName: headers[td.cellIndex].textContent,
+                whereColum: colum_id,
                 value: td.textContent
             });
             //try {
@@ -606,7 +570,7 @@ async function queryTarget(event) {
             //        tableName: selectTableName.value,
             //        rowId: tr.cells[index].textContent,
             //        columnName: headers[td.cellIndex].textContent,
-            //        whereColum: found,
+            //        whereColum: colum_id,
             //        value: td.textContent
             //    });
             //    console.log('Ответ сервера:', result);
