@@ -512,6 +512,7 @@ async function selectTable(event) {
 
 }
 async function queryTarget(event) {
+    console.log("cell target");
     console.dir(event.target);
     const td = event.target.closest("td");
     if (!td) return;
@@ -556,13 +557,6 @@ async function queryTarget(event) {
                 rowId: cells[index].textContent,
                 columnName: headers[td.cellIndex].textContent,
                 whereColum: name_id,
-                value: td.textContent
-            });
-            console.log({
-                tableName: selectTableName.value,
-                rowId: cells[index].textContent,
-                columnName: headers[td.cellIndex].textContent,
-                whereColum: colum_id,
                 value: td.textContent
             });
             //try {
