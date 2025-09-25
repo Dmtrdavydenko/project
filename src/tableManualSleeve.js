@@ -52,7 +52,7 @@ class ManualRepository {
         for (const field of requiredFields) {
             if (filters[field] !== undefined && filters[field] !== null && filters[field] !== '') {
                 // Предполагаем, что все значения числовые (как в валидации), но если есть строки — добавьте экранирование
-                conditions.push(`\`${field}\` = ?`);
+                conditions.push(`m.\`${field}\` = ?`);
                 values.push(filters[field]);
             }
         }

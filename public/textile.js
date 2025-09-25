@@ -934,16 +934,14 @@ async function generateForm() {
 
     const selectMap = [];
     {
-        const select = document.createElement('input');
+        const input = document.createElement('input');
         //const select = document.createElement('select');
-        select.addEventListener('change', showSelect);
-        select.name = "type";
-        select.type = "number";
-        select.min = 1;
-
-        console.log(select.valueAsNumber);
-        formContainer.append(select);
-        selectMap.push(select);
+        input.addEventListener('change', showSelect);
+        input.name = "type";
+        input.type = "number";
+        input.min = 1;
+        formContainer.append(input);
+        selectMap.push(input);
     }
     {
         const select = document.createElement('select');
@@ -1052,7 +1050,6 @@ async function generateForm() {
         //let resp = await sendData(serverUrl, v);
         manual.action = "processData";
         let result = await find(serverUrl, manual);
-        console.log(result);
 
         console.log(manual);
         const container = document.getElementById('table-container');
