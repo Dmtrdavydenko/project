@@ -533,17 +533,18 @@ async function queryTarget(event) {
     //td.focus();
 
     const table = targetTable;
-    //const headers = Array.from(table.querySelectorAll('thead th'));
-    const headersText = headers.map(th => th.textContent);
+    const headers = Array.from(table.querySelectorAll('thead th'));
+    const headersText = headers.map(th => th.textContent.trim());
     const found = headersText.find(text => text.includes('id'));
     const index = headersText.findIndex(text => text.includes('id'));
     console.log(headersText);
 
-    const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
+    const theaders = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
+    console.log(theaders);
     const cells = tr.querySelectorAll('td');
     const obj = {};
     cells.forEach((cell, i) => {
-        obj[headers[i]] = cell.textContent.trim();
+        obj[headersText[i]] = cell.textContent.trim();
     });
     console.log(obj);
 
