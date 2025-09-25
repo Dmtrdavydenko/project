@@ -397,6 +397,7 @@ async function loadTable() {
         const table = createTable(result.rows);
         if (selectTableName.value === "manual") {
             table.addEventListener("click", selectTable);
+            await generateForm();
         } else {
             table.addEventListener("click", queryTarget);
         }
