@@ -173,8 +173,8 @@ class ManualRepository {
                     \`type_id\`, \`sleeve_w_d_id\`, \`yarn_id\`, \`quantity_id\`,
                     \`thread_densiti_id\`, \`color_id\`, \`additive_id\`
                 ) VALUES (?, ?, ?, ?, ?, ?, ?)
-                    ON DUPLICATE KEY UPDATE quantity_id = VALUES(quantity_id)
                 `;
+                //ON DUPLICATE KEY UPDATE quantity_id = VALUES(quantity_id)
 
                 const values = [
                     data.type_id,
