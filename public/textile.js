@@ -559,18 +559,18 @@ async function queryTarget(event) {
                 whereColum: colum_id,
                 value: td.textContent
             });
-            //try {
-            //    const result = await sqlWhere({
-            //        tableName: selectTableName.value,
-            //        rowId: tr.cells[index].textContent,
-            //        columnName: headers[td.cellIndex].textContent,
-            //        whereColum: colum_id,
-            //        value: td.textContent
-            //    });
-            //    console.log('Ответ сервера:', result);
-            //} catch (error) {
-            //    console.error('Ошибка при отправке данных:', error);
-            //}
+            try {
+                const result = await sqlWhere({
+                    tableName: selectTableName.value,
+                    rowId: tr.cells[index].textContent,
+                    columnName: headers[td.cellIndex].textContent,
+                    whereColum: colum_id,
+                    value: td.textContent
+                });
+                console.log('Ответ сервера:', result);
+            } catch (error) {
+                console.error('Ошибка при отправке данных:', error);
+            }
         }
     }, { once: true });
 }
