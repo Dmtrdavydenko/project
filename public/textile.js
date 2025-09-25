@@ -1047,9 +1047,9 @@ async function generateForm() {
             o[item.name] = item.valueAsNumber ?? +item.value;
         });
         console.log(o, v);
-        //let resp = await sendData(serverUrl, v);
+        let resp = await sendData(serverUrl, v);
         manual.action = "processData";
-        let result = await find(serverUrl, manual);
+        //let result = await find(serverUrl, manual);
 
         console.log(manual);
         const container = document.getElementById('table-container');

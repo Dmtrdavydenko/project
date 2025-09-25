@@ -152,8 +152,8 @@ async function line(manualData) {
     let o = {};
     const manual = new ManualTableTextileUse(pool);
     try {
-        //const result = await manual.insertManual(transformKeys(manualData));
-        o = await manual.select(transformKeys(manualData));
+        const result = await manual.insertManual(transformKeys(manualData));
+        //o = await manual.select(transformKeys(manualData));
         //str = 'Data inserted successfully: ' + result;
         console.log(o);
     } catch (error) {
