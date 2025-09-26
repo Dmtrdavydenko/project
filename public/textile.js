@@ -924,6 +924,8 @@ async function showSelect(event) {
     console.log(manual);
     manual.action = "processData";
     let result = await find(serverUrl, manual);
+    const container = document.getElementById('table-container');
+    container.innerHTML = '';
     if (result.rows) {
         const table = createTable(result.rows);
         container.appendChild(table);
