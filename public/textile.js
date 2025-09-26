@@ -1047,7 +1047,7 @@ async function generateForm() {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
         select.name = "additive";
-        colors.select.appendChild(svoid());
+        select.appendChild(svoid());
         (await slect("additive")).rows.forEach(color => {
             const option = document.createElement('option');
             const additiveInfo = new AdditiveInfo(color);
