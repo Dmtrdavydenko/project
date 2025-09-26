@@ -920,6 +920,17 @@ async function showSelect(event) {
         key: this.name,
     }
     manual[this.name] = +this.value;
+
+
+    const keysToDelete = [];
+    for (const key in manual) {
+        if (manual[key] === 0 || manual[key] === "") {
+            keysToDelete.push(key);
+        }
+    }
+
+    // Удаляем ключи
+    keysToDelete.forEach(key => delete manual[key]);
     console.log(o);
     console.log(manual);
     manual.action = "processData";

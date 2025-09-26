@@ -150,6 +150,19 @@ function transformKeys(inputObj) {
 async function line(manualData) {
     let str = "";
     let o = {};
+
+
+    // Собираем ключи для удаления
+    const keysToDelete = [];
+    for (const key in manualData) {
+        if (manualData[key] === 0 || manualData[key] === "") {
+            keysToDelete.push(key);
+        }
+    }
+
+    // Удаляем ключи
+    keysToDelete.forEach(key => delete manualData[key]);
+
     const manual = new ManualTableTextileUse(pool);
     try {
         //const result = await manual.insertManual(transformKeys(manualData));
