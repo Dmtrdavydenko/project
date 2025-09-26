@@ -953,9 +953,14 @@ async function generateForm() {
     console.log(decodedMetadata);
 
     const selectMap = [];
-    const svoid = document.createElement('option');
-    svoid.value = "";
-    svoid.textContent = "Все";
+
+
+    const svoid = () => {
+        const svoid = document.createElement('option');
+        svoid.value = "";
+        svoid.textContent = "Все";
+        return svoid;
+    }
     {
         const input = document.createElement('input');
         //const select = document.createElement('select');
@@ -970,7 +975,7 @@ async function generateForm() {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
         select.name = "sleeve_width_density";
-        select.appendChild(svoid);
+        select.appendChild(svoid());
         (await slect("sleeve_width_density")).rows.forEach(obj => {
             const option = document.createElement('option');
             const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(obj);
@@ -988,7 +993,7 @@ async function generateForm() {
             switchYarn.call(this, selectType);
         });
         select.name = "yarn_type";
-        select.appendChild(svoid);
+        select.appendChild(svoid());
         (await slect("yarn_type")).rows.forEach(thread => {
             const option = document.createElement('option');
             const yarnInfo = new YarnInfo(thread);
@@ -1001,7 +1006,7 @@ async function generateForm() {
         const selectType = document.createElement('select');
         selectType.addEventListener('change', showSelect);
         selectType.name = "warp_quantity";
-        select.appendChild(svoid);
+        select.appendChild(svoid());
         (await slect("warp_quantity")).rows.forEach(thread => {
             const option = document.createElement('option');
             const warpQuantityInfo = new WarpQuantityInfo(thread);
@@ -1018,7 +1023,7 @@ async function generateForm() {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
         select.name = "Thread_Parameters";
-        select.appendChild(svoid);
+        select.appendChild(svoid());
         (await slect("Thread_Parameters")).rows.forEach(thread => {
             const option = document.createElement('option');
             const threadInfo = new ThreadInfo(thread);
@@ -1032,7 +1037,7 @@ async function generateForm() {
     }
     {
         const colors = new Color("color");
-        colors.select.appendChild(svoid);
+        colors.select.appendChild(svoid());
         colors.fet("color");
         colors.select.addEventListener('change', showSelect);
         formContainer.append(colors.select);
@@ -1042,7 +1047,7 @@ async function generateForm() {
         const select = document.createElement('select');
         select.addEventListener('change', showSelect);
         select.name = "additive";
-        colors.select.appendChild(svoid);
+        colors.select.appendChild(svoid());
         (await slect("additive")).rows.forEach(color => {
             const option = document.createElement('option');
             const additiveInfo = new AdditiveInfo(color);
