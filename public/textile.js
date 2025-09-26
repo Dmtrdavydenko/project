@@ -922,7 +922,14 @@ async function showSelect(event) {
     manual[this.name] = +this.value;
     console.log(o);
     console.log(manual);
-    //await showTableFn({ id: this.value });
+    manual.action = "processData";
+    let result = await find(serverUrl, manual);
+    if (result.rows) {
+        const table = createTable(result.rows);
+        container.appendChild(table);
+    } else {
+        container.textContent = 'U';
+    }
 }
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
@@ -1049,7 +1056,6 @@ async function generateForm() {
         console.log(o, v);
         let resp = await sendData(serverUrl, v);
         manual.action = "processData";
-        //let result = await find(serverUrl, manual);
 
         console.log(manual);
         const container = document.getElementById('table-container');

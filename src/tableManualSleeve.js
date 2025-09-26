@@ -39,7 +39,7 @@ class ManualRepository {
 
         return true;
     }
-    _buildWhereClause(filters) {
+    buildWhereClause(filters) {
         const requiredFields = [
             'type_id', 'sleeve_w_d_id', 'yarn_id', 'quantity',
             'thread_densiti_id', 'color_id', 'additive_id'
@@ -67,7 +67,7 @@ class ManualRepository {
             const connection = await this.pool.getConnection();
 
             try {
-                const { whereClause, values } = this._buildWhereClause(filters);
+                const { whereClause, values } = this.buildWhereClause(filters);
                 const query = `
                 SELECT
                 m.type_id,
