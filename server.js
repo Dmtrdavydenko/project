@@ -148,21 +148,15 @@ function transformKeys(inputObj) {
     return result;
 }
 async function line(manualData) {
-    let str = "";
     let o = {};
-
-
-    // Собираем ключи для удаления
+    manualData
     const keysToDelete = [];
     for (const key in manualData) {
         if (manualData[key] === 0 || manualData[key] === "") {
             keysToDelete.push(key);
         }
     }
-
-    // Удаляем ключи
     keysToDelete.forEach(key => delete manualData[key]);
-
     const manual = new ManualTableTextileUse(pool);
     try {
         //const result = await manual.insertManual(transformKeys(manualData));
@@ -338,12 +332,21 @@ async function select(body) {
                 //    CASE
                 //quantity,
 
+
+                const keysToDelete = [];
+                for (const key in body) {
+                    if (body[key] === 0 || body[key] === "") {
+                        keysToDelete.push(key);
+                    }
+                }
+                keysToDelete.forEach(key => delete body[key]);
                 const manual = new ManualTableTextileUse(pool);
                 try {
-                    //const result = await manual.insertManual(transformKeys(manualData));
-                    return response = await manual.select();
+                    //const result = await manual.insertManual(transformKeys(body));
+                    o = await manual.select(transformKeys(body));
                     //str = 'Data inserted successfully: ' + result;
                     console.log(o);
+                    return o;
                 } catch (error) {
                     //str = 'Insert failed: ' + error.message;
                     console.log(o);

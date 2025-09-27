@@ -933,7 +933,7 @@ async function showSelect(event) {
     keysToDelete.forEach(key => delete manual[key]);
     console.log(o);
     console.log(manual);
-    manual.action = "processData";
+    manual.action = "select";
     let result = await find(serverUrl, manual);
     const container = document.getElementById('table-container');
     container.innerHTML = '';
