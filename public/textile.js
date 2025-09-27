@@ -934,6 +934,7 @@ async function showSelect(event) {
     console.log(o);
     console.log(manual);
     manual.action = "select";
+    manual.table.name = selectTableName.value;
     let result = await find(serverUrl, manual);
     const container = document.getElementById('table-container');
     container.innerHTML = '';
