@@ -21,7 +21,6 @@ const functionDB = {
     "ping": ping,
     "getColumnsJoin": getColumnsJoin,
     "getTable": getTable,
-    "processData": line,
 }
 
 
@@ -146,28 +145,6 @@ function transformKeys(inputObj) {
     }
 
     return result;
-}
-async function line(manualData) {
-    let o = {};
-    manualData
-    const keysToDelete = [];
-    for (const key in manualData) {
-        if (manualData[key] === 0 || manualData[key] === "") {
-            keysToDelete.push(key);
-        }
-    }
-    keysToDelete.forEach(key => delete manualData[key]);
-    const manual = new ManualTableTextileUse(pool);
-    try {
-        //const result = await manual.insertManual(transformKeys(manualData));
-        o = await manual.select(transformKeys(manualData));
-        //str = 'Data inserted successfully: ' + result;
-        console.log(o);
-        return o;
-    } catch (error) {
-        //str = 'Insert failed: ' + error.message;
-        console.log(o);
-    }
 }
 
 async function getPriKey(nameTable) {
@@ -308,31 +285,17 @@ async function select(body) {
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 break;
+            case "warp_quantity":
+                sql = `
+                SELECT *, 'warp_quantity' AS type
+                FROM warp_quantity;`;
+                break;
+            case "weft_quantity":
+                sql = `
+                SELECT *, 'weft_quantity' AS type
+                FROM weft_quantity;`;
+                break;
             case "manual":
-
-
-                //type_id	sleeve_w_d_id	yarn_id	quantity	thread_densiti_id	color_id	additive_id
-                //sql = "SELECT * " +
-                //    "FROM `manual` t " +
-                //    "JOIN sleeve_width_density  swd ON t.sleeve_w_d_id = swd.sleeve_width_density_id " +
-                //    "JOIN sleeve_width           sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
-                //    "JOIN sleeve_density                 d ON swd.sleeve_density_id = d.sleeve_density_id " +
-                //    "JOIN warp_quantity                 warp ON t.quantity = warp.warp_id " +
-                //    "JOIN weft_quantity                 weft ON t.quantity = weft.weft_id " +
-                //    "JOIN yarn_type                     type ON t.yarn_id = type.yarn_id "
-                //sql += ";";
-
-
-                //SELECT
-                //t.*,
-                //    swd.*,
-                //    sw.*,
-                //    d.*,
-                //    type.yarn_name,
-                //    CASE
-                //quantity,
-
-
                 const keysToDelete = [];
                 for (const key in body) {
                     if (body[key] === 0 || body[key] === "") {
@@ -343,13 +306,10 @@ async function select(body) {
                 const manual = new ManualTableTextileUse(pool);
                 try {
                     //const result = await manual.insertManual(transformKeys(body));
-                    o = await manual.select(transformKeys(body));
-                    //str = 'Data inserted successfully: ' + result;
-                    console.log(o);
+                    return await manual.select(transformKeys(body));
                     return o;
                 } catch (error) {
-                    //str = 'Insert failed: ' + error.message;
-                    console.log(o);
+                    console.log('select failed: ' + error.message;);
                 }
 
                 break;
