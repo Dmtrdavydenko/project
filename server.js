@@ -302,7 +302,11 @@ async function select(body) {
                 weft_id AS id,
                 weft_quantity AS quantity,
                 'weft_quantity' AS type
-                FROM weft_quantity;`
+                FROM weft_quantity
+
+                where type = "warp_quantity"
+                
+                `
 
                 break;
             case "manual":
