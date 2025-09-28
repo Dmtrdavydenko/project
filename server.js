@@ -299,7 +299,7 @@ async function select(body) {
                 FROM warp_quantity
                 UNION ALL
                 SELECT
-                eft_id AS id,
+                weft_id AS id,
                 weft_quantity AS quantity,
                 'weft_quantity' AS type
                 FROM weft_quantity;`
