@@ -298,16 +298,16 @@ FROM (
     SELECT
         warp_id AS id,
         warp_quantity AS quantity,
-        'warp_quantity' AS type
+        '1' AS type
     FROM warp_quantity
     UNION ALL
     SELECT
         weft_id AS id,
         weft_quantity AS quantity,
-        'weft_quantity' AS type
+        '2' AS type
     FROM weft_quantity
 ) AS combined
-WHERE type = "warp_quantity";
+WHERE type = "1";
 
 
                 `
