@@ -292,20 +292,20 @@ async function select(body) {
             case "weft_quantity":
                 sql = `SELECT *, 'weft_quantity' AS type FROM weft_quantity`;
 
-                sql = `SELECT
-                warp_id AS id,
-                warp_quantity AS quantity,
-                'warp_quantity' AS type
-                FROM warp_quantity
-                UNION ALL
+                sql = `
                 SELECT
-                weft_id AS id,
-                weft_quantity AS quantity,
-                'weft_quantity' AS type
-                FROM weft_quantity
+    warp_id AS id,
+    warp_quantity AS quantity,
+    'warp_quantity' AS type
+FROM warp_quantity
+UNION ALL
+SELECT
+    weft_id AS id,
+    weft_quantity AS quantity,
+    'weft_quantity' AS type
+FROM weft_quantity
+WHERE type = "warp_quantity";
 
-                where type = "warp_quantity"
-                
                 `
 
                 break;
