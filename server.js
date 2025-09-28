@@ -285,6 +285,13 @@ async function select(body) {
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 break;
+
+            case "warp_quantity":
+                sql = `SELECT *, 'warp_quantity' AS type FROM warp_quantity`;
+                break;
+            case "weft_quantity":
+                sql = `SELECT *, 'weft_quantity' AS type FROM weft_quantity`;
+                break;
             case "manual":
 
 
@@ -303,7 +310,7 @@ async function select(body) {
                     return await manual.select(transformKeys(body));
                     return o;
                 } catch (error) {
-                    console.log('select failed: ' + error.message;);
+                    console.log('select failed: ' + error.message);
                 }
 
                 break;
