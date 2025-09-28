@@ -293,18 +293,19 @@ async function select(body) {
                 sql = `SELECT *, 'weft_quantity' AS type FROM weft_quantity`;
 
                 sql = `
-                SELECT
+(SELECT
     warp_id AS id,
     warp_quantity AS quantity,
     'warp_quantity' AS type
-FROM warp_quantity
+FROM warp_quantity)
 UNION ALL
-SELECT
+(SELECT
     weft_id AS id,
     weft_quantity AS quantity,
     'weft_quantity' AS type
-FROM weft_quantity
+FROM weft_quantity)
 WHERE type = "warp_quantity";
+
 
                 `
 
