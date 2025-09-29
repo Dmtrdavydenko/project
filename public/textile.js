@@ -900,8 +900,8 @@ class WarpQuantityInfo {
     constructor(table) {
         this.table = table;
     }
-    get id() { return this.table.warp_id; }
-    get warp_quantity() { return this.table.warp_quantity; }
+    get id() { return this.table.id; }
+    get quantity() { return this.table.quantity; }
 }
 class WelfQuantityInfo {
     constructor(table) {
@@ -1021,13 +1021,13 @@ async function generateForm() {
         selectType.addEventListener('change', showSelect);
         selectType.name = "warp_quantity";
         //select.appendChild(svoid());
-        //(await slect("warp_quantity")).rows.forEach(thread => {
-        //    const option = document.createElement('option');
-        //    const warpQuantityInfo = new WarpQuantityInfo(thread);
-        //    option.value = warpQuantityInfo.id;
-        //    option.textContent = warpQuantityInfo.warp_quantity;
-        //    selectType.appendChild(option);
-        //});
+        (await getQuan())[0].forEach(thread => {
+            const option = document.createElement('option');
+            const warpQuantityInfo = new WarpQuantityInfo(thread);
+            option.value = warpQuantityInfo.id;
+            option.textContent = warpQuantityInfo.quantity;
+            selectType.appendChild(option);
+        });
         formContainer.append(selectType);
         selectMap.push(select);
         selectMap.push(selectType);
