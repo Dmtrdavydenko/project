@@ -213,7 +213,7 @@ async function getQuntity(body) {
     keysToDelete.forEach(key => delete body[key]);
 
     const requiredFields = [
-        '1', '2'
+        'type'
     ];
 
     const conditions = [];

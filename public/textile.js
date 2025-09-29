@@ -782,7 +782,7 @@ async function getQuan(where) {
         },
         body: JSON.stringify({
             action: "getQuntity",
-            where: where
+            type: where
         }),
     }).then((response) => response.json());
 }
