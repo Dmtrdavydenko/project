@@ -1002,7 +1002,7 @@ async function generateForm() {
     }
     {
         const select = document.createElement('select');
-        //select.addEventListener('change', showSelect);
+        select.addEventListener('change', showSelect);
         select.addEventListener('change', function () {
             switchYarn.call(this, selectType);
         });
