@@ -1007,7 +1007,7 @@ async function generateForm() {
             switchYarn.call(this, selectType);
         });
         select.name = "yarn_type";
-        //select.appendChild(svoid());
+        select.appendChild(svoid());
         (await slect("yarn_type")).rows.forEach(thread => {
             const option = document.createElement('option');
             const yarnInfo = new YarnInfo(thread);
