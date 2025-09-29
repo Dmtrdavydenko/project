@@ -250,6 +250,11 @@ ${whereClause};`;
     console.log(sql);
 
     return await connection.execute(sql, values);
+    //const [rows] = await connection.execute(query, values);
+    //return {
+    //    success: true,
+    //    rows: rows
+    //};
 }
 async function select(body) {
     //const pool = mysql.createPool(dbConfig); // создаём пул подключений
