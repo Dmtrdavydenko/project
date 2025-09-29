@@ -229,10 +229,9 @@ async function getQuntity(body) {
     }
 
 
-    let whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '',
+    let whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
 
-        let sql = `
-SELECT id, quantity, type
+        let sql = `SELECT id, quantity, type
 FROM (
     SELECT
         warp_id AS id,
