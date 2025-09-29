@@ -21,6 +21,7 @@ const functionDB = {
     "ping": ping,
     "getColumnsJoin": getColumnsJoin,
     "getTable": getTable,
+    "getQuntity": getQuntity,
 }
 
 
@@ -200,6 +201,55 @@ async function slt() {
 
 
 }
+async function getQuntity(body) {
+    const connection = await pool.getConnection();
+
+    const keysToDelete = [];
+    for (const key in body) {
+        if (body[key] === 0 || body[key] === "") {
+            keysToDelete.push(key);
+        }
+    }
+    keysToDelete.forEach(key => delete body[key]);
+
+    const requiredFields = [
+        '1', '2'
+    ];
+
+    const conditions = [];
+    const values = [];
+
+    // Перебираем только разрешённые поля
+    for (const field of requiredFields) {
+        if (filters[field] !== undefined && filters[field] !== null && filters[field] !== '') {
+            // Предполагаем, что все значения числовые (как в валидации), но если есть строки — добавьте экранирование
+            conditions.push(`\`${field}\` = ?`);
+            values.push(filters[field]);
+        }
+    }
+
+
+    let whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '',
+
+        let sql = `
+SELECT id, quantity, type
+FROM (
+    SELECT
+        warp_id AS id,
+        warp_quantity AS quantity,
+        '1' AS type
+    FROM warp_quantity
+    UNION ALL
+    SELECT
+        weft_id AS id,
+        weft_quantity AS quantity,
+        '2' AS type
+    FROM weft_quantity
+) AS combined
+${whereClause};`;
+
+    return await connection.execute(sql, values);
+}
 async function select(body) {
     //const pool = mysql.createPool(dbConfig); // создаём пул подключений
     const connection = await pool.getConnection();
@@ -292,26 +342,6 @@ async function select(body) {
             case "weft_quantity":
                 sql = `SELECT *, 'weft_quantity' AS type FROM weft_quantity`;
 
-                sql = `
-SELECT id, quantity, type
-FROM (
-    SELECT
-        warp_id AS id,
-        warp_quantity AS quantity,
-        '1' AS type
-    FROM warp_quantity
-    UNION ALL
-    SELECT
-        weft_id AS id,
-        weft_quantity AS quantity,
-        '2' AS type
-    FROM weft_quantity
-) AS combined
-WHERE type = "1";
-
-
-                `
-
                 break;
             case "manual":
 
@@ -369,7 +399,6 @@ WHERE type = "1";
             F: select.sqlFields,
             key: select.pri
         };
-
     } catch (err) {
         console.error('Ошибка:', err);
         throw err;

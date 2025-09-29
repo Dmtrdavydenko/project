@@ -752,18 +752,19 @@ async function switchYarn(select) {
     select.innerHTML = '';
 
     // Получаем выбранный тип пряжи
-    let threads;
-    if (+this.value === 2) {
-        threads = (await slect("weft_quantity")).rows;
-        select.name = "weft_quantity";
-    } else if (+this.value === 1) {
-        threads = (await slect("warp_quantity")).rows;
-        select.name = "warp_quantity";
-    }
+    let threads = (await getQuan(this.value)).rows
+
+    //if (+this.value === 2) {
+    //    threads = (await slect("weft_quantity")).rows;
+    //    select.name = "weft_quantity";
+    //} else if (+this.value === 1) {
+    //    threads = (await slect("warp_quantity")).rows;
+    //    select.name = "warp_quantity";
+    //}
 
     // Заполняем select новыми опциями
     threads.forEach(thread => {
-        const quantityInfo = new QuantityInfo(thread, +this.value === 2 ? 'weft_id' : 'warp_id', +this.value === 2 ? 'weft_quantity' : 'warp_quantity');
+        const quantityInfo = new QuantityInfo(thread, "id", "quantity");
         //const quantityInfo = new QuantityInfo(thread, o.text === 'weft' ? 'welf_id' : 'warp_id', o.text === 'weft' ? 'weft_quantity' : 'warp_quantity');
         const option = document.createElement('option');
         option.value = quantityInfo.id;
@@ -772,7 +773,18 @@ async function switchYarn(select) {
     });
     console.log(threads);
 }
-
+async function getQuan(where) {
+    return await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "getQuntity",
+            where: where
+        }),
+    }).then((response) => response.json());
+}
 
 
 async function sendData(url, dataToSend) {
