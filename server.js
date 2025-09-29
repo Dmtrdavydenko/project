@@ -218,6 +218,7 @@ async function getQuntity(body) {
 
     const conditions = [];
     const values = [];
+    const filters = body;
 
     // Перебираем только разрешённые поля
     for (const field of requiredFields) {
