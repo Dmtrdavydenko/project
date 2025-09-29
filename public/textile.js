@@ -753,6 +753,7 @@ async function switchYarn(select) {
 
     // Получаем выбранный тип пряжи
     let threads = (await getQuan(this.value)).rows
+    console.log(threads);
 
     //if (+this.value === 2) {
     //    threads = (await slect("weft_quantity")).rows;
@@ -1002,7 +1003,7 @@ async function generateForm() {
     }
     {
         const select = document.createElement('select');
-        select.addEventListener('change', showSelect);
+        //select.addEventListener('change', showSelect);
         select.addEventListener('change', function () {
             switchYarn.call(this, selectType);
         });
@@ -1020,14 +1021,14 @@ async function generateForm() {
         const selectType = document.createElement('select');
         selectType.addEventListener('change', showSelect);
         selectType.name = "warp_quantity";
-        select.appendChild(svoid());
-        (await slect("warp_quantity")).rows.forEach(thread => {
-            const option = document.createElement('option');
-            const warpQuantityInfo = new WarpQuantityInfo(thread);
-            option.value = warpQuantityInfo.id;
-            option.textContent = warpQuantityInfo.warp_quantity;
-            selectType.appendChild(option);
-        });
+        //select.appendChild(svoid());
+        //(await slect("warp_quantity")).rows.forEach(thread => {
+        //    const option = document.createElement('option');
+        //    const warpQuantityInfo = new WarpQuantityInfo(thread);
+        //    option.value = warpQuantityInfo.id;
+        //    option.textContent = warpQuantityInfo.warp_quantity;
+        //    selectType.appendChild(option);
+        //});
         formContainer.append(selectType);
         selectMap.push(select);
         selectMap.push(selectType);
