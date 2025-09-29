@@ -753,7 +753,7 @@ async function switchYarn(select) {
 
     // Получаем выбранный тип пряжи
     let threads = (await getQuan(this.value)).rows
-    console.log(threads);
+    console.log(await getQuan(this.value));
 
     //if (+this.value === 2) {
     //    threads = (await slect("weft_quantity")).rows;

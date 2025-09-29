@@ -247,6 +247,7 @@ FROM (
     FROM weft_quantity
 ) AS combined
 ${whereClause};`;
+    console.log(sql);
 
     return await connection.execute(sql, values);
 }
@@ -359,7 +360,6 @@ async function select(body) {
                 try {
                     //const result = await manual.insertManual(transformKeys(body));
                     return await manual.select(transformKeys(body));
-                    return o;
                 } catch (error) {
                     console.log('select failed: ' + error.message);
                 }
