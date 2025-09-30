@@ -165,6 +165,13 @@ const showTable = document.createElement("button");
 showTable.textContent = "Показать таблицу";
 showTable.addEventListener("click", showTableFn);
 
+
+
+
+const sourceTable = document.createElement("button");
+sourceTable.textContent = "Показать источник таблицу";
+sourceTable.addEventListener("click", createSourceTable);
+
 //main.append(dropInput);
 //main.append(drop);
 //main.append(getAllTablesNameButton);
@@ -176,6 +183,7 @@ main.append(selectTableName);
 //main.append(textAsk);
 //main.append(form);
 main.append(sendButton);
+main.append(sourceTable);
 //main.append(showTable);
 
 
@@ -308,6 +316,32 @@ async function slect(table) {
             action: "getTable",
             table: {
                 name: table,
+            }
+        }),
+    }).then((response) => response.json());
+}
+async function createSourceTable(name) {
+
+    
+
+    const container = document.getElementById('table-container');
+    container.innerHTML = '';
+    const table = createTable((await getSourceTable(name))[0]);
+    container.appendChild(table);
+
+}
+
+
+async function getSourceTable(name) {
+    return await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "getSourceTable",
+            table: {
+                name: name,
             }
         }),
     }).then((response) => response.json());
@@ -548,7 +582,7 @@ async function queryTarget(event) {
         target[headersText[i]] = cell.textContent.trim();
     });
     console.log(target);
-    
+
     td.addEventListener('blur', async () => {
         td.contentEditable = "false";
         td.textContent = td.textContent.trim();

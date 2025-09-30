@@ -22,6 +22,7 @@ const functionDB = {
     "getColumnsJoin": getColumnsJoin,
     "getTable": getTable,
     "getQuntity": getQuntity,
+    "getSourceTable": getSourceTable,
 }
 
 
@@ -232,7 +233,7 @@ async function getQuntity(body) {
 
     let whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
 
-        let sql = `SELECT id, quantity, type
+    let sql = `SELECT id, quantity, type
 FROM (
     SELECT
         warp_id AS id,
@@ -256,6 +257,26 @@ ${whereClause};`;
     //    rows: rows
     //};
 }
+async function getSourceTable(body) {
+
+    //const allowedTables = ['users', 'products', 'orders']; // Список разрешённых таблиц
+    //if (!allowedTables.includes(body.table.name)) {
+    //    throw new Error('Недопустимое имя таблицы');
+    //}    
+    try {
+        const connection = await pool.getConnection();
+        console.log('Подключение к MySQL успешно установлено');
+        try {
+            const request = 'SELECT * FROM ' + body.table.name;
+            return await connection.execute(request);
+        } catch (error) {
+            console.error('Error request MySQL:', error.message);
+        }
+    } catch (error) {
+        console.error('Error connection MySQL:', error.message);
+    }
+}
+
 async function select(body) {
     //const pool = mysql.createPool(dbConfig); // создаём пул подключений
     const connection = await pool.getConnection();
