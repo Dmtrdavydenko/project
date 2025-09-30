@@ -267,7 +267,7 @@ async function getSourceTable(body) {
         const connection = await pool.getConnection();
         console.log('Подключение к MySQL успешно установлено');
         try {
-            const request = `SELECT * FROM + \`${body.table.name}\`;`
+            const request = `SELECT * FROM \`${body.table.name}\`;`
             console.log(request);
             return await connection.execute(request);
         } catch (error) {
