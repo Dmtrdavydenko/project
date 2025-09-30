@@ -268,6 +268,7 @@ async function getSourceTable(body) {
         console.log('Подключение к MySQL успешно установлено');
         try {
             const request = 'SELECT * FROM ' + body.table.name;
+            console.log(request);
             return await connection.execute(request);
         } catch (error) {
             console.error('Error request MySQL:', error.message);

@@ -323,6 +323,7 @@ async function slect(table) {
 async function createSourceTable(name = selectTableName.value) {
     const container = document.getElementById('table-container');
     container.innerHTML = '';
+    console.log(name);
     const table = createTable((await getSourceTable(name))[0]);
     container.appendChild(table);
 }
