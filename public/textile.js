@@ -170,7 +170,9 @@ showTable.addEventListener("click", showTableFn);
 
 const sourceTable = document.createElement("button");
 sourceTable.textContent = "Показать источник таблицу";
-sourceTable.addEventListener("click", createSourceTable);
+sourceTable.addEventListener("click", () => {
+    createSourceTable();
+});
 
 //main.append(dropInput);
 //main.append(drop);
@@ -323,7 +325,6 @@ async function slect(table) {
 async function createSourceTable(name = selectTableName.value) {
     const container = document.getElementById('table-container');
     container.innerHTML = '';
-    console.log(name);
     const table = createTable((await getSourceTable(name))[0]);
     container.appendChild(table);
 }
