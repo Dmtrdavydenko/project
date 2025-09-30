@@ -320,15 +320,11 @@ async function slect(table) {
         }),
     }).then((response) => response.json());
 }
-async function createSourceTable(name) {
-
-    
-
+async function createSourceTable(name = selectTableName.value) {
     const container = document.getElementById('table-container');
     container.innerHTML = '';
     const table = createTable((await getSourceTable(name))[0]);
     container.appendChild(table);
-
 }
 
 
