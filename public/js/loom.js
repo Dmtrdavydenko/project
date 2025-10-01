@@ -110,18 +110,20 @@ function getLocalDateTimeForMySQL() {
 /**
  * Загружает номера из базы, распределяет по блокам и создаёт кнопки
  */
-async function loadAndRenderButtons(field = "textile_number") {
+async function loadAndRenderButtons(field = "loom_number") {
     try {
         const response = await fetch('https://worktime.up.railway.app/textile', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json;charset=utf-8' },
             body: JSON.stringify({
                 action: "sql",
+                //query: "SELECT " + field + " " +
+                //    "FROM textile t " +
+                //    "JOIN sleeve_width_density swd ON t.wd_id = swd.sleeve_width_density_id " +
+                //    "JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
+                //    "JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id;",
                 query: "SELECT " + field + " " +
-                    "FROM textile t " +
-                    "JOIN sleeve_width_density swd ON t.wd_id = swd.sleeve_width_density_id " +
-                    "JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
-                    "JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id;"
+                    "FROM looms;"
 
             }),
         });
@@ -194,7 +196,7 @@ async function getSelectedValue() {
             action: "select",
             //action: "getColumnsAndTypesForTable",
             table: {
-                name: "textile",
+                name: "looms",
             }
         }),
     }).then((response) => response.json());
