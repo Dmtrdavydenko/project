@@ -242,14 +242,28 @@ async function select(event) {
 
 
 (async () => {
-    console.log((await getSelectedValueT()));
+    //console.log((await getSelectedValueT()));
 
     //const field = (await getSelectedValue()).map(item => item.Field);
-    const field = (await getSelectedValue()).F.map(item => {
-        const parts = item.split('.');
-        return parts[parts.length - 1];
-    });;
-    console.log(field);
-    field.forEach(item => nav.append(createA(item)));
+    //const field = (await getSelectedValue()).F.map(item => {
+    //    const parts = item.split('.');
+    //    return parts[parts.length - 1];
+    //});;
+    //console.log(field);
+    //field.forEach(item => nav.append(createA(item)));
+    {
+        const select = document.createElement('select');
+        select.addEventListener('change', showSelect);
+        select.name = "sleeve_width_density";
+        select.appendChild(svoid());
+        (await slect("sleeve_width_density")).rows.forEach(obj => {
+            const option = document.createElement('option');
+            const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(obj);
+            option.value = sleeveWidthDensityInfo.id;
+            option.textContent = sleeveWidthDensityInfo.sleeve_width_id + "/" + sleeveWidthDensityInfo.sleeve_density_id;
+            select.appendChild(option);
+        });
+        document.body.append(select);
+    }
 })();
 
