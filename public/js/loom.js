@@ -242,6 +242,8 @@ async function select(event) {
 
 
 (async () => {
+    console.log((await getSelectedValueT()));
+
     //const field = (await getSelectedValue()).map(item => item.Field);
     const field = (await getSelectedValue()).F.map(item => {
         const parts = item.split('.');
@@ -249,6 +251,5 @@ async function select(event) {
     });;
     console.log(field);
     field.forEach(item => nav.append(createA(item)));
-    console.log((await getSelectedValueT()));
 })();
 
