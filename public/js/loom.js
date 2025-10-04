@@ -245,6 +245,23 @@ async function select(event) {
 const inputSS = document.createElement('input');
 inputSS.type = "number";
 const update = {};
+
+
+
+async function sendUpdateTextileId(update) {
+    try {
+        const response = await fetch('https://worktime.up.railway.app/textile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json;charset=utf-8' },
+            body: JSON.stringify({
+                action: "sql",
+                query: `UPDATE looms set type_id = ${update.type_id} where loom_number = ${update.loom_number}`
+            }),
+        });
+    } catch (error) {
+
+    }
+}
 (async () => {
     //console.log((await getSelectedValueT()));
 
@@ -278,12 +295,14 @@ const update = {};
             li.textContent = sleeveWidthDensityInfo.sleeve_width_id + "/" + sleeveWidthDensityInfo.sleeve_density_id;
             ul.appendChild(li);
         });
-        div.append(input,ul);
+        div.append(input, ul);
     }
     const buttonSend = document.createElement('button');
     buttonSend.textContent = "send";
-    buttonSend.addEventListener("click", () => {
+    buttonSend.addEventListener("click", async () => {
         console.log(update);
+        const logme = await sendUpdateTextileId(update);
+        console.log(logme);
 
     });
     document.body.append(inputSS);
