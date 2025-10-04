@@ -304,8 +304,11 @@ async function select(event) {
         const query = e.target.value.toLowerCase();
         options.forEach(option => {
             const text = option.textContent.toLowerCase();
+
+
+            const normalizedText = text.replace(/\//g, '');
             //option.style.display = text.includes(query) ? 'block' : 'none';
-            option.style.display = text.startsWith(query) ? 'block' : 'none';
+            option.style.display = normalizedText.startsWith(query) ? 'block' : 'none';
         });
     });
 
