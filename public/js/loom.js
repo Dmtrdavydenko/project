@@ -290,6 +290,7 @@ async function select(event) {
 
     // Toggle dropdown on input click
     selectInput.addEventListener('click', () => {
+        selectInput.type = "number";
         selectContainer.classList.toggle('active');
         if (selectContainer.classList.contains('active')) {
             selectInput.removeAttribute('readonly'); // Allow typing when open
@@ -315,6 +316,7 @@ async function select(event) {
     // Select an option
     options.forEach(option => {
         option.addEventListener('click', () => {
+            selectInput.type = "text";
             selectInput.value = option.textContent;
             selectContainer.classList.remove('active');
             selectInput.setAttribute('readonly', ''); // Lock after selection
