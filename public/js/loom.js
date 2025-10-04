@@ -303,7 +303,8 @@ async function select(event) {
         const query = e.target.value.toLowerCase();
         options.forEach(option => {
             const text = option.textContent.toLowerCase();
-            option.style.display = text.includes(query) ? 'block' : 'none';
+            //option.style.display = text.includes(query) ? 'block' : 'none';
+            option.style.display = text.startsWith(query) ? 'block' : 'none';
         });
     });
 
