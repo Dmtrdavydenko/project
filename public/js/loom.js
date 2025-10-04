@@ -251,20 +251,77 @@ async function select(event) {
     //});;
     //console.log(field);
     //field.forEach(item => nav.append(createA(item)));
+    const div = document.createElement('div');
+    div.classList.add("custom-select");
     {
-        const select = document.createElement('select');
-        //select.addEventListener('change', showSelect);
-        select.name = "sleeve_width_density";
-        //select.appendChild(svoid());
+        const input = document.createElement('input');
+        input.classList.add("select-input");
+        input.type = "text";
+        input.placeholder = "Search and select an item...";
+        input.readOnly = true;
+
+
+        const ul = document.createElement('ul');
+        ul.classList.add("select-options");
+        //ul.addEventListener('change', showSelect);
+        ul.name = "sleeve_width_density";
+        //ul.appendChild(svoid());
         (await slect("sleeve_width_density")).rows.forEach(obj => {
-            const option = document.createElement('option');
+            const li = document.createElement('li');
             const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(obj);
-            option.value = sleeveWidthDensityInfo.id;
-            option.textContent = sleeveWidthDensityInfo.sleeve_width_id + "/" + sleeveWidthDensityInfo.sleeve_density_id;
-            select.appendChild(option);
+            li.value = sleeveWidthDensityInfo.id;
+            li.textContent = sleeveWidthDensityInfo.sleeve_width_id + "/" + sleeveWidthDensityInfo.sleeve_density_id;
+            ul.appendChild(li);
         });
-        document.body.append(select);
     }
+    document.body.append(div);
+
+
+
+
+
+
+    const selectContainer = document.querySelector('.custom-select');
+    const selectInput = document.querySelector('.select-input');
+    const optionsList = document.querySelector('.select-options');
+    const options = Array.from(optionsList.children);
+
+    // Toggle dropdown on input click
+    selectInput.addEventListener('click', () => {
+        selectContainer.classList.toggle('active');
+        if (selectContainer.classList.contains('active')) {
+            selectInput.removeAttribute('readonly'); // Allow typing when open
+            selectInput.focus();
+        } else {
+            selectInput.setAttribute('readonly', ''); // Lock when closed
+        }
+    });
+
+    // Filter options as user types
+    selectInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        options.forEach(option => {
+            const text = option.textContent.toLowerCase();
+            option.style.display = text.includes(query) ? 'block' : 'none';
+        });
+    });
+
+    // Select an option
+    options.forEach(option => {
+        option.addEventListener('click', () => {
+            selectInput.value = option.textContent;
+            selectContainer.classList.remove('active');
+            selectInput.setAttribute('readonly', ''); // Lock after selection
+        });
+    });
+
+    // Close dropdown if clicked outside
+    document.addEventListener('click', (e) => {
+        if (!selectContainer.contains(e.target)) {
+            selectContainer.classList.remove('active');
+            selectInput.setAttribute('readonly', '');
+        }
+    });
 })();
 
 
