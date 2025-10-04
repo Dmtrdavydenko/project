@@ -93,6 +93,7 @@ function toggle() {
     console.log(localDateTime);
     console.log(toggle.sum);
     inputSS.value = this.textContent;
+    update.loom_number = this.textContent;
 }
 function getLocalDateTimeForMySQL() {
     const now = new Date();
@@ -243,7 +244,7 @@ async function select(event) {
 
 const inputSS = document.createElement('input');
 inputSS.type = "number";
-
+const update = {};
 (async () => {
     //console.log((await getSelectedValueT()));
 
@@ -279,8 +280,15 @@ inputSS.type = "number";
         });
         div.append(input,ul);
     }
+    const buttonSend = document.createElement('button');
+    buttonSend.textContent = "send";
+    buttonSend.addEventListener("click", () => {
+        console.log(update);
+
+    });
     document.body.append(inputSS);
     document.body.append(div);
+    document.body.append(buttonSend);
 
 
 
@@ -321,6 +329,7 @@ inputSS.type = "number";
     options.forEach(option => {
         option.addEventListener('click', () => {
             selectInput.type = "text";
+            update.type_id = option.value;
             selectInput.value = option.textContent;
             selectContainer.classList.remove('active');
             selectInput.setAttribute('readonly', ''); // Lock after selection
