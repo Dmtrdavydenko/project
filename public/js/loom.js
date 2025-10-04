@@ -273,6 +273,7 @@ async function select(event) {
             li.textContent = sleeveWidthDensityInfo.sleeve_width_id + "/" + sleeveWidthDensityInfo.sleeve_density_id;
             ul.appendChild(li);
         });
+        div.append(input,ul);
     }
     document.body.append(div);
 
