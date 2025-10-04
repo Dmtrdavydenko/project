@@ -267,3 +267,27 @@ async function select(event) {
     }
 })();
 
+
+
+async function slect(table) {
+    return await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "getTable",
+            table: {
+                name: table,
+            }
+        }),
+    }).then((response) => response.json());
+}
+class SleeveWidthDensityInfo {
+    constructor(table) {
+        this.table = table;
+    }
+    get id() { return this.table.sleeve_width_density_id; }
+    get sleeve_width_id() { return this.table.sleeve_width; }
+    get sleeve_density_id() { return this.table.density; }
+}
