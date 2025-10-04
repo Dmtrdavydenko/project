@@ -194,9 +194,25 @@ async function getSelectedValue() {
         },
         body: JSON.stringify({
             action: "select",
-            //action: "getColumnsAndTypesForTable",
             table: {
                 name: "looms",
+            }
+        }),
+    }).then((response) => response.json());
+    console.log(result);
+    return await result;
+    //return await [{ "Field": "textile_id", "Type": "smallint unsigned", "Null": "NO", "Key": "PRI", "Default": null, "Extra": "auto_increment" }, { "Field": "textile_width", "Type": "tinyint unsigned", "Null": "YES", "Key": "", "Default": null, "Extra": "" }, { "Field": "textile_density", "Type": "tinyint unsigned", "Null": "YES", "Key": "", "Default": null, "Extra": "" }, { "Field": "warp_quantity", "Type": "smallint unsigned", "Null": "YES", "Key": "", "Default": null, "Extra": "" }, { "Field": "warp_name", "Type": "varchar(100)", "Null": "YES", "Key": "", "Default": null, "Extra": "" }, { "Field": "textile_number", "Type": "tinyint unsigned", "Null": "YES", "Key": "", "Default": null, "Extra": "" }]
+}
+async function getSelectedValueT() {
+    const result = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "select",
+            table: {
+                name: "textile",
             }
         }),
     }).then((response) => response.json());
@@ -233,5 +249,6 @@ async function select(event) {
     });;
     console.log(field);
     field.forEach(item => nav.append(createA(item)));
+    console.log((await getSelectedValueT()));
 })();
 
