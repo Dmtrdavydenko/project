@@ -92,6 +92,7 @@ function toggle() {
     toggle.sum += 1;
     console.log(localDateTime);
     console.log(toggle.sum);
+    inputSS.value = this.textContent;
 }
 function getLocalDateTimeForMySQL() {
     const now = new Date();
@@ -240,6 +241,8 @@ async function select(event) {
 }
 
 
+const inputSS = document.createElement('input');
+inputSS.type = "number";
 
 (async () => {
     //console.log((await getSelectedValueT()));
@@ -276,6 +279,7 @@ async function select(event) {
         });
         div.append(input,ul);
     }
+    document.body.append(inputSS);
     document.body.append(div);
 
 
