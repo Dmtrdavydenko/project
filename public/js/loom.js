@@ -256,7 +256,8 @@ async function select(event) {
     {
         const input = document.createElement('input');
         input.classList.add("select-input");
-        input.type = "text";
+        //input.type = "text";
+        input.type = "number";
         input.placeholder = "Search and select an item...";
         input.readOnly = true;
 
