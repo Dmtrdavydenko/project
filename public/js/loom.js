@@ -255,7 +255,7 @@ async function select(event) {
         const select = document.createElement('select');
         //select.addEventListener('change', showSelect);
         select.name = "sleeve_width_density";
-        select.appendChild(svoid());
+        //select.appendChild(svoid());
         (await slect("sleeve_width_density")).rows.forEach(obj => {
             const option = document.createElement('option');
             const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(obj);
