@@ -127,8 +127,8 @@ async function loadAndRenderButtons(field = "loom_number") {
                 query: "SELECT " + field + " " +
                     "FROM looms " +
                     "LEFT JOIN sleeve_width_density swd ON looms.type_id = swd.sleeve_width_density_id " +
-                    "JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
-                    "JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id;",
+                    "LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
+                    "LEFT JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id;",
             }),
         });
         console.log(response);
