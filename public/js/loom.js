@@ -124,11 +124,12 @@ async function loadAndRenderButtons(field = "loom_number") {
                 //    "JOIN sleeve_width_density swd ON t.wd_id = swd.sleeve_width_density_id " +
                 //    "JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
                 //    "JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id;",
-                query: "SELECT CONCAT(sw.sleeve_width, '/', sd.density) AS sleeve_width_density, " + field + " " +
+                query: "SELECT " + field + " FROM " +
+                    "(SELECT CONCAT(sw.sleeve_width, '/', sd.density) AS sleeve_width_density " +
                     "FROM looms " +
                     "LEFT JOIN sleeve_width_density swd ON looms.type_id = swd.sleeve_width_density_id " +
                     "LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
-                    "LEFT JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id;",
+                    "LEFT JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id) AS combo;",
             }),
         });
         console.log(response);
