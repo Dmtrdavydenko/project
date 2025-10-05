@@ -247,6 +247,8 @@ async function select(event) {
 
 const inputSS = document.createElement('input');
 inputSS.type = "number";
+inputSS.classList.add("select-input");
+
 const update = {};
 
 
@@ -282,7 +284,7 @@ async function sendUpdateTextileId(update) {
         input.classList.add("select-input");
         //input.type = "text";
         input.type = "number";
-        input.placeholder = "Search and select an item...";
+        //input.placeholder = "Search and select an item...";
         input.readOnly = true;
 
 
