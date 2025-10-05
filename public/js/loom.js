@@ -247,7 +247,8 @@ async function select(event) {
 
 const inputSS = document.createElement('input');
 inputSS.type = "number";
-inputSS.classList.add("select-input");
+inputSS.classList.add("custom-select");
+
 
 const update = {};
 
