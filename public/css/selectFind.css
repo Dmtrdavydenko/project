@@ -1,13 +1,14 @@
 /* Container for the select */
 .custom-select {
     position: relative;
-    width: 300px;
+/*    width: 300px;*/
     font-family: Arial, sans-serif;
+    display: inline-block;
 }
 
 /* Input field (acts as the select trigger) */
 .select-input {
-    width: 100%;
+/*    width: 100%;*/
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
