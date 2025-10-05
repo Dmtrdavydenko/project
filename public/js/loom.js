@@ -125,8 +125,10 @@ async function loadAndRenderButtons(field = "loom_number") {
                 //    "JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
                 //    "JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id;",
                 query: "SELECT " + field + " " +
-                    "FROM looms;"
-
+                    "FROM looms " +
+                    "JOIN sleeve_width_density swd ON looms.type_id = swd.sleeve_width_density_id " +
+                    "JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
+                    "JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id;",
             }),
         });
         console.log(response);
@@ -265,7 +267,7 @@ async function sendUpdateTextileId(update) {
 (async () => {
     //console.log((await getSelectedValueT()));
 
-    const field = ["type_id"];
+    const field = ["type_id", "density","sleeve_width"];
     //const field = (await getSelectedValue()).F.map(item => {
     //    const parts = item.split('.');
     //    return parts[parts.length - 1];
