@@ -265,13 +265,13 @@ async function sendUpdateTextileId(update) {
 (async () => {
     //console.log((await getSelectedValueT()));
 
-    //const field = (await getSelectedValue()).map(item => item.Field);
+    const field = ["type_id"];
     //const field = (await getSelectedValue()).F.map(item => {
     //    const parts = item.split('.');
     //    return parts[parts.length - 1];
     //});;
     //console.log(field);
-    //field.forEach(item => nav.append(createA(item)));
+    field.forEach(item => nav.append(createA(item)));
     const div = document.createElement('div');
     div.classList.add("custom-select");
     {

@@ -327,6 +327,16 @@ async function createSourceTable(name = selectTableName.value) {
     container.innerHTML = '';
     const table = createTable((await getSourceTable(name))[0]);
     container.appendChild(table);
+
+
+    const form = document.getElementById('form');
+    form.innerHTML = '';
+    const columns = await getSelectedValue();
+    columns.forEach(column => {
+        const inputElement = createInputElement(column);
+        form.append(inputElement);
+    });
+    console.log(columns);
 }
 
 
