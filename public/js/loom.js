@@ -299,10 +299,18 @@ async function sendUpdateTextileId(update) {
 
         dataRow.forEach(obj => {
             const li = document.createElement('li');
-            const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(obj);
-            li.value = sleeveWidthDensityInfo.id;
-            li.textContent = sleeveWidthDensityInfo.sleeve_width_id + "/" + sleeveWidthDensityInfo.sleeve_density_id;
+            const sleeve = new SleeveWidthDensityInfo(obj);
+            li.value = sleeve.id;
+            li.textContent = sleeve.width + "/" + sleeve.density;
             ul.appendChild(li);
+        });
+        dataRow.forEach(obj => {
+            const li = document.createElement('button');
+            const sleeve = new SleeveWidthDensityInfo(obj);
+            li.value = sleeve.id;
+            li.textContent = sleeve.width;
+            ul.appendChild(li);
+            document.body.append(buttonSend);
         });
         div.append(input, ul);
     }
@@ -410,6 +418,8 @@ class SleeveWidthDensityInfo {
         this.table = table;
     }
     get id() { return this.table.sleeve_width_density_id; }
-    get sleeve_width_id() { return this.table.sleeve_width; }
-    get sleeve_density_id() { return this.table.density; }
+    get sleeve_width_id() { return this.table.sleeve_width_id; }
+    get sleeve_density_id() { return this.table.sleeve_density_id; }
+    get width() { return this.table.sleeve_width; }
+    get density() { return this.table.density; }
 }
