@@ -236,8 +236,8 @@ function createA(item) {
 }
 
 const nav = document.body.querySelector("nav");
-nav.addEventListener("click", select)
-async function select(event) {
+nav.addEventListener("click", nv)
+async function nv(event) {
     const nav = event.target.closest("nav");
     if (!nav) return;
     console.log(event.target.textContent);
@@ -294,7 +294,10 @@ async function sendUpdateTextileId(update) {
         //ul.addEventListener('change', showSelect);
         ul.name = "sleeve_width_density";
         //ul.appendChild(svoid());
-        (await slect("sleeve_width_density")).rows.forEach(obj => {
+        const dataRow = (await select("sleeve_width_density")).rows;
+        console.log(dataRow);
+
+        dataRow.forEach(obj => {
             const li = document.createElement('li');
             const sleeveWidthDensityInfo = new SleeveWidthDensityInfo(obj);
             li.value = sleeveWidthDensityInfo.id;
@@ -372,16 +375,32 @@ async function sendUpdateTextileId(update) {
 
 
 
-async function slect(table) {
+async function select(tableNmae) {
     return await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
         },
         body: JSON.stringify({
-            action: "getTable",
+            action: "select",
             table: {
-                name: table,
+                name: tableNmae,
+                where: "",
+            }
+        }),
+    }).then((response) => response.json());
+}
+async function selectWidth(tableNmae) {
+    return await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "select",
+            table: {
+                name: tableNmae,
+                where: "sleeve_width",
             }
         }),
     }).then((response) => response.json());
