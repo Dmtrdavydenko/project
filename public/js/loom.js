@@ -309,8 +309,7 @@ async function sendUpdateTextileId(update) {
             const sleeve = new SleeveWidthDensityInfo(obj);
             li.value = sleeve.id;
             li.textContent = sleeve.width;
-            ul.appendChild(li);
-            document.body.append(buttonSend);
+            document.body.append(li);
         });
         div.append(input, ul);
     }
