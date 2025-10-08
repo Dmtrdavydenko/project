@@ -401,12 +401,12 @@ async function select(body) {
                 // textile_id	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
 
 
-                const where = body.table?.where.length ? `WHERE ${body.table.where}` : '';
+                //const where = body.table?.where.length ? `WHERE ${body.table.where}` : '';
                 sql = "SELECT swd.sleeve_width_density_id, swd.sleeve_width_id, swd.sleeve_density_id, sleeve_width, density " +
                     "FROM sleeve_width_density swd " +
                     "JOIN sleeve_width sw   ON swd.sleeve_width_id = sw.sleeve_width_id " +
                     "JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id "+
-                    where+
+                    //where+
                     " ";
 
                 //[descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
