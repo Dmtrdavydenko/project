@@ -402,7 +402,7 @@ async function select(body) {
 
 
 
-                sql = "SELECT sleeve_width_density_id, sleeve_width_id, sleeve_density_id, sleeve_width, density " +
+                sql = "SELECT swd.sleeve_width_density_id, swd.sleeve_width_id, swd.sleeve_density_id, sleeve_width, density " +
                     "FROM sleeve_width_density swd " +
                     "JOIN sleeve_width sw   ON swd.sleeve_width_id = sw.sleeve_width_id " +
                     "JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id";
