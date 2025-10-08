@@ -271,7 +271,7 @@ async function sendUpdateTextileId(update) {
 (async () => {
     //console.log((await getSelectedValueT()));
 
-    const field = ["type_id", "density", "sleeve_width","sleeve_width_density"];
+    const field = ["loom_number", "type_id", "density", "sleeve_width", "sleeve_width_density"];
     //const field = (await getSelectedValue()).F.map(item => {
     //    const parts = item.split('.');
     //    return parts[parts.length - 1];
