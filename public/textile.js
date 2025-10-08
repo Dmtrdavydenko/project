@@ -450,7 +450,6 @@ async function loadTable() {
     } else {
         container.textContent = "Empty";
     }
-
 }
 async function selectTable(event) {
     try {
