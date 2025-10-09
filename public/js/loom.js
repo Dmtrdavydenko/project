@@ -320,7 +320,7 @@ async function sendUpdateTextileId(update) {
             btn.id = sleeve.id;
             btn.textContent = sleeve.width;
             btn.addEventListener("click", () => {
-                const filteredByWidth = dataRow.filter(item => item.sleeve_width === btn.textContent);
+                const filteredByWidth = dataRow.filter(item => item.sleeve_width === +btn.textContent);
                 console.log(filteredByWidth);
             })
             grid.append(btn);
