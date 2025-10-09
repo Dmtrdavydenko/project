@@ -310,7 +310,6 @@ async function sendUpdateTextileId(update) {
         const grid = document.createElement('div');
         grid.classList.add("container-grid");
 
-        //о
 
 
         dataRow.forEach(obj => {
