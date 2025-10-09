@@ -319,6 +319,7 @@ async function sendUpdateTextileId(update) {
             }
         }
         console.log(uniqueSleeveWidths);
+
         uniqueSleeveWidths.forEach(obj => {
             const btn = document.createElement("button");
             btn.classList.add("select-button");
@@ -332,15 +333,15 @@ async function sendUpdateTextileId(update) {
                 console.log(filteredByWidth);
                 grid.innerHTML = "";
 
-                const btn = document.createElement("button");
-                btn.classList.add("select-button");
+                const density = document.createElement("button");
+                density.classList.add("select-button");
 
                 const sleeve = new SleeveWidthDensityInfo(obj);
-                btn.id = sleeve.id;
-                btn.textContent = sleeve.density;
+                density.id = sleeve.id;
+                density.textContent = sleeve.density;
 
 
-                grid.append(btn);
+                grid.append(density);
 
             })
             grid.append(btn);
