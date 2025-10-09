@@ -314,19 +314,19 @@ async function sendUpdateTextileId(update) {
 
 
         dataRow.forEach(obj => {
-            const sleeve = new SleeveWidthDensityInfo(obj);
-
             const btn = document.createElement("button");
             btn.classList.add("select-button");
+
+            const sleeve = new SleeveWidthDensityInfo(obj);
             btn.id = sleeve.id;
             btn.textContent = sleeve.width;
-            //btn.addEventListener("click", () => {
-            //    const filteredByWidth = dataRow.filter(item => item.sleeve_width === btn.textContent);
-            //    console.log(filteredByWidth);
-            //})
-            btn.addEventListener("click", (e) => {
-                console.log("click");
-            });
+            btn.addEventListener("click", () => {
+                const filteredByWidth = dataRow.filter(item => item.sleeve_width === btn.textContent);
+                console.log(filteredByWidth);
+            })
+            //btn.addEventListener("click", (e) => {
+            //    console.log("click");
+            //});
             grid.append(btn);
         });
 
