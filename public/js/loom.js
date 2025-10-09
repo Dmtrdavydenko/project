@@ -314,10 +314,13 @@ async function sendUpdateTextileId(update) {
             const sleeve = new SleeveWidthDensityInfo(obj);
             button.id = sleeve.id;
             button.textContent = sleeve.width;
+            //button.addEventListener("click", () => {
+            //    const filteredByWidth = dataRow.filter(item => item.sleeve_width === button.textContent);
+            //    console.log(filteredByWidth);
+            //})
             button.addEventListener("click", () => {
-                const filteredByWidth = dataRow.filter(item => item.sleeve_width === button.textContent);
-                console.log(filteredByWidth);
-            })
+                console.log("click");
+            });
             grid.append(button);
         });
 
