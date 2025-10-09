@@ -307,6 +307,7 @@ async function sendUpdateTextileId(update) {
         div.append(input, ul);
         dataRow.forEach(obj => {
             const button = document.createElement('button');
+            button.classList.add("select-button");
             const sleeve = new SleeveWidthDensityInfo(obj);
             button.value = sleeve.id;
             button.textContent = sleeve.width;
