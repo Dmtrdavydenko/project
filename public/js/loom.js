@@ -311,19 +311,20 @@ async function sendUpdateTextileId(update) {
         grid.classList.add("container-grid");
 
         dataRow.forEach(obj => {
-            const button = document.createElement('button');
-            button.classList.add("select-button");
             const sleeve = new SleeveWidthDensityInfo(obj);
-            button.id = sleeve.id;
-            button.textContent = sleeve.width;
-            //button.addEventListener("click", () => {
-            //    const filteredByWidth = dataRow.filter(item => item.sleeve_width === button.textContent);
+
+            const btn = document.createElement("button");
+            btn.classList.add("select-button");
+            btn.id = sleeve.id;
+            btn.textContent = sleeve.width;
+            //btn.addEventListener("click", () => {
+            //    const filteredByWidth = dataRow.filter(item => item.sleeve_width === btn.textContent);
             //    console.log(filteredByWidth);
             //})
-            button.addEventListener("click", () => {
-                console.log("click", button.textContent);
+            btn.addEventListener("click", () => {
+                console.log("btn.textContent");
             });
-            grid.append(button);
+            grid.append(btn);
         });
 
 
