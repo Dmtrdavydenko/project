@@ -310,15 +310,29 @@ async function sendUpdateTextileId(update) {
         const grid = document.createElement('div');
         grid.classList.add("container-grid");
 
+        const uniqueSleeveWidths = [];
 
+        const seen = new Set();
 
-        dataRow.forEach(obj => {
+        for (const item of dataRow) {
+            if (!seen.has(item.sleeve_width)) {
+                seen.add(item.sleeve_width);
+                uniqueSleeveWidths.push(item);
+            }
+        }
+
+        console.log(uniqueSleeveWidths);
+
+        uniqueSleeveWidths.forEach(obj => {
             const btn = document.createElement("button");
             btn.classList.add("select-button");
 
             const sleeve = new SleeveWidthDensityInfo(obj);
             btn.id = sleeve.id;
             btn.textContent = sleeve.width;
+
+
+
             btn.addEventListener("click", () => {
                 const filteredByWidth = dataRow.filter(item => item.sleeve_width === +btn.textContent);
                 console.log(filteredByWidth);
