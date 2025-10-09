@@ -247,7 +247,7 @@ async function nv(event) {
 
 const inputSS = document.createElement('input');
 inputSS.type = "number";
-inputSS.classList.add("custom-select");
+//inputSS.classList.add("custom-select");
 
 
 const update = {};
@@ -337,14 +337,14 @@ async function sendUpdateTextileId(update) {
 
     // Toggle dropdown on input click
     selectInput.addEventListener('click', () => {
-        //selectInput.type = "number";
+        selectInput.type = "number";
         selectContainer.classList.toggle('active');
-        //if (selectContainer.classList.contains('active')) {
-        //    selectInput.removeAttribute('readonly'); // Allow typing when open
-        //    selectInput.focus();
-        //} else {
-        //    selectInput.setAttribute('readonly', ''); // Lock when closed
-        //}
+        if (selectContainer.classList.contains('active')) {
+            selectInput.removeAttribute('readonly'); // Allow typing when open
+            selectInput.focus();
+        } else {
+            selectInput.setAttribute('readonly', ''); // Lock when closed
+        }
     });
 
     // Filter options as user types
@@ -363,7 +363,7 @@ async function sendUpdateTextileId(update) {
     // Select an option
     options.forEach(option => {
         option.addEventListener('click', () => {
-            //selectInput.type = "text";
+            selectInput.type = "text";
             update.type_id = option.value;
             selectInput.value = option.textContent;
             selectContainer.classList.remove('active');
