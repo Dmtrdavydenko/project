@@ -305,6 +305,8 @@ async function sendUpdateTextileId(update) {
             ul.appendChild(li);
         });
         div.append(input, ul);
+
+
         const grid = document.createElement('div');
         grid.classList.add("container-grid");
 
