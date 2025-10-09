@@ -330,6 +330,56 @@ async function sendUpdateTextileId(update) {
 
 
 
+    //const selectContainer = document.querySelector('.custom-select');
+    //const selectInput = document.querySelector('.select-input');
+    //const optionsList = document.querySelector('.select-options');
+    //const options = Array.from(optionsList.children);
+
+    //// Toggle dropdown on input click
+    //selectInput.addEventListener('click', () => {
+    //    selectInput.type = "number";
+    //    selectContainer.classList.toggle('active');
+    //    if (selectContainer.classList.contains('active')) {
+    //        selectInput.removeAttribute('readonly'); // Allow typing when open
+    //        selectInput.focus();
+    //    } else {
+    //        selectInput.setAttribute('readonly', ''); // Lock when closed
+    //    }
+    //});
+
+    //// Filter options as user types
+    //selectInput.addEventListener('input', (e) => {
+    //    const query = e.target.value.toLowerCase();
+    //    options.forEach(option => {
+    //        const text = option.textContent.toLowerCase();
+
+
+    //        const normalizedText = text.replace(/\//g, '');
+    //        //option.style.display = text.includes(query) ? 'block' : 'none';
+    //        option.style.display = normalizedText.startsWith(query) ? 'block' : 'none';
+    //    });
+    //});
+
+    //// Select an option
+    //options.forEach(option => {
+    //    option.addEventListener('click', () => {
+    //        selectInput.type = "text";
+    //        update.type_id = option.value;
+    //        selectInput.value = option.textContent;
+    //        selectContainer.classList.remove('active');
+    //        selectInput.setAttribute('readonly', ''); // Lock after selection
+    //    });
+    //});
+
+    //// Close dropdown if clicked outside
+    //document.addEventListener('click', (e) => {
+    //    if (!selectContainer.contains(e.target)) {
+    //        selectContainer.classList.remove('active');
+    //        selectInput.setAttribute('readonly', '');
+    //    }
+    //});
+
+
     const selectContainer = document.querySelector('.custom-select');
     const selectInput = document.querySelector('.select-input');
     const optionsList = document.querySelector('.select-options');
@@ -337,7 +387,6 @@ async function sendUpdateTextileId(update) {
 
     // Toggle dropdown on input click
     selectInput.addEventListener('click', () => {
-        selectInput.type = "number";
         selectContainer.classList.toggle('active');
         if (selectContainer.classList.contains('active')) {
             selectInput.removeAttribute('readonly'); // Allow typing when open
@@ -352,19 +401,13 @@ async function sendUpdateTextileId(update) {
         const query = e.target.value.toLowerCase();
         options.forEach(option => {
             const text = option.textContent.toLowerCase();
-
-
-            const normalizedText = text.replace(/\//g, '');
-            //option.style.display = text.includes(query) ? 'block' : 'none';
-            option.style.display = normalizedText.startsWith(query) ? 'block' : 'none';
+            option.style.display = text.includes(query) ? 'block' : 'none';
         });
     });
 
     // Select an option
     options.forEach(option => {
         option.addEventListener('click', () => {
-            selectInput.type = "text";
-            update.type_id = option.value;
             selectInput.value = option.textContent;
             selectContainer.classList.remove('active');
             selectInput.setAttribute('readonly', ''); // Lock after selection
