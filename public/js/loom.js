@@ -310,6 +310,9 @@ async function sendUpdateTextileId(update) {
         const grid = document.createElement('div');
         grid.classList.add("container-grid");
 
+
+
+
         dataRow.forEach(obj => {
             const sleeve = new SleeveWidthDensityInfo(obj);
 
@@ -322,7 +325,7 @@ async function sendUpdateTextileId(update) {
             //    console.log(filteredByWidth);
             //})
             btn.addEventListener("click", (e) => {
-                console.log(e,btn.textContent);
+                console.log("click");
             });
             grid.append(btn);
         });
