@@ -311,18 +311,14 @@ async function sendUpdateTextileId(update) {
         grid.classList.add("container-grid");
 
         const uniqueSleeveWidths = [];
-
         const seen = new Set();
-
         for (const item of dataRow) {
             if (!seen.has(item.sleeve_width)) {
                 seen.add(item.sleeve_width);
                 uniqueSleeveWidths.push(item);
             }
         }
-
         console.log(uniqueSleeveWidths);
-
         uniqueSleeveWidths.forEach(obj => {
             const btn = document.createElement("button");
             btn.classList.add("select-button");
@@ -331,11 +327,21 @@ async function sendUpdateTextileId(update) {
             btn.id = sleeve.id;
             btn.textContent = sleeve.width;
 
-
-
             btn.addEventListener("click", () => {
                 const filteredByWidth = dataRow.filter(item => item.sleeve_width === +btn.textContent);
                 console.log(filteredByWidth);
+                grid.innerHTML = "";
+
+                const btn = document.createElement("button");
+                btn.classList.add("select-button");
+
+                const sleeve = new SleeveWidthDensityInfo(obj);
+                btn.id = sleeve.id;
+                btn.textContent = sleeve.density;
+
+
+                grid.append(btn);
+
             })
             grid.append(btn);
         });
