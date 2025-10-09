@@ -347,7 +347,7 @@ async function sendUpdateTextileId(update) {
 
 
                     grid.append(density);
-                }
+                })
 
             })
             grid.append(btn);
