@@ -1,9 +1,8 @@
 /* Container for the select */
 .custom-select {
     position: relative;
-    width: 105px;
+    width: 300px;
     font-family: Arial, sans-serif;
-    display: inline-block;
 }
 
 /* Input field (acts as the select trigger) */
