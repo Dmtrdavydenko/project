@@ -305,13 +305,13 @@ async function sendUpdateTextileId(update) {
             ul.appendChild(li);
         });
         div.append(input, ul);
-        //dataRow.forEach(obj => {
-        //    const button = document.createElement('button');
-        //    const sleeve = new SleeveWidthDensityInfo(obj);
-        //    button.value = sleeve.id;
-        //    button.textContent = sleeve.width;
-        //    document.body.append(button);
-        //});
+        dataRow.forEach(obj => {
+            const button = document.createElement('button');
+            const sleeve = new SleeveWidthDensityInfo(obj);
+            button.value = sleeve.id;
+            button.textContent = sleeve.width;
+            document.body.append(button);
+        });
     }
     const buttonSend = document.createElement('button');
     buttonSend.textContent = "send";
@@ -391,8 +391,7 @@ async function select(tableNmae) {
         body: JSON.stringify({
             action: "select",
             table: {
-                name: tableNmae,
-                where: "",
+                name: tableNmae
             }
         }),
     }).then((response) => response.json());

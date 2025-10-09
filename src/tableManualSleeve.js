@@ -47,7 +47,6 @@ class ManualRepository {
 
         const conditions = [];
         const values = [];
-
         // Перебираем только разрешённые поля
         for (const field of requiredFields) {
             if (filters[field] !== undefined && filters[field] !== null && filters[field] !== '') {

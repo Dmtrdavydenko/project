@@ -277,6 +277,33 @@ async function getSourceTable(body) {
         console.error('Error connection MySQL:', error.message);
     }
 }
+async function where(filters = {}) {
+    console.log(filters);
+    //const requiredFields = [
+    //    'width', 'density',
+    //];
+    const conditions = [];
+    const values = [];
+    // Перебираем только разрешённые поля
+    //for (const field of requiredFields) {
+    //    if (filters[field] !== undefined && filters[field] !== null && filters[field] !== '') {
+    //        // Предполагаем, что все значения числовые (как в валидации), но если есть строки — добавьте экранирование
+    //        conditions.push(`\`${field}\` = ?`);
+    //        values.push(filters[field]);
+    //    }
+    //}
+    for (let field in filters) {
+        console.log("key: " + field, "value " + filters[field]);
+        if (filters[field] !== undefined && filters[field] !== null && filters[field] !== '') {
+            conditions.push(`\`${field}\` = ?`);
+            values.push(filters[field]);
+        }
+    }
+    return {
+        whereClause: conditions.length ? `WHERE ${conditions.join(' AND ')}` : '',
+        whereValues: values
+    };
+}
 
 async function select(body) {
     //const pool = mysql.createPool(dbConfig); // создаём пул подключений
@@ -405,8 +432,8 @@ async function select(body) {
                 sql = "SELECT swd.sleeve_width_density_id, swd.sleeve_width_id, swd.sleeve_density_id, sleeve_width, density " +
                     "FROM sleeve_width_density swd " +
                     "JOIN sleeve_width sw   ON swd.sleeve_width_id = sw.sleeve_width_id " +
-                    "JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id "+
-                    //where+
+                    "JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id " +
+                    where(body.table.where);
                     " ";
 
                 //[descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
