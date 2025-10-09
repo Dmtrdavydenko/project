@@ -333,15 +333,21 @@ async function sendUpdateTextileId(update) {
                 console.log(filteredByWidth);
                 grid.innerHTML = "";
 
-                const density = document.createElement("button");
-                density.classList.add("select-button");
-
-                const sleeve = new SleeveWidthDensityInfo(obj);
-                density.id = sleeve.id;
-                density.textContent = sleeve.density;
+                filteredByWidth.forEach(obj => {
 
 
-                grid.append(density);
+                    const density = document.createElement("button");
+                    density.classList.add("select-button");
+
+                    const sleeve = new SleeveWidthDensityInfo(obj);
+                    density.id = sleeve.id;
+                    density.textContent = sleeve.density;
+
+
+
+
+                    grid.append(density);
+                }
 
             })
             grid.append(btn);
