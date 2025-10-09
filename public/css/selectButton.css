@@ -1,21 +1,21 @@
 /*.select-button {
     font-family: Arial, sans-serif;
 }*/
-/*.container-grid {
+.container-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-    gap: 8px;*/ /* расстояние между кнопками */
-    /*max-width: 400px;*/ /* можно задать ширину контейнера */
-/*}
+    gap: 8px; /* расстояние между кнопками */
+    max-width: 400px; /* можно задать ширину контейнера */
+}
 
 .select-button {
     padding: 10px;
     font-size: 14px;
     text-align: center;
-    border: 1px solid #ccc;*/
+    border: 1px solid #ccc;
 /*    background: #fff;*/
-    /*cursor: pointer;
+    cursor: pointer;
     border-radius: 4px;
     width: 100%;
     box-sizing: border-box;
-}*/
+}
