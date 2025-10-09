@@ -312,10 +312,18 @@ async function sendUpdateTextileId(update) {
             const button = document.createElement('button');
             button.classList.add("select-button");
             const sleeve = new SleeveWidthDensityInfo(obj);
-            button.value = sleeve.id;
+            button.id = sleeve.id;
             button.textContent = sleeve.width;
+            button.addEventListener("click", () => {
+                const filteredByWidth = dataRow.filter(item => item.sleeve_width === button.textContent);
+                console.log(filteredByWidth);
+            })
             grid.append(button);
         });
+
+
+
+
         document.body.append(grid);
     }
     const buttonSend = document.createElement('button');
