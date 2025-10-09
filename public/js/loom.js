@@ -83,7 +83,7 @@ function createButtonsInBlockFromArray(field, containerId, numbersArray, reverse
         const btn = document.createElement('button');
         btn.addEventListener("click", toggle);
         btn.textContent = item[field];
-        //container.appendChild(btn);
+        container.appendChild(btn);
     });
 }
 function toggle() {
@@ -326,9 +326,9 @@ async function sendUpdateTextileId(update) {
         console.log(logme);
 
     });
-    //document.body.append(inputSS);
-    //document.body.append(div);
-    //document.body.append(buttonSend);
+    document.body.append(inputSS);
+    document.body.append(div);
+    document.body.append(buttonSend);
 
 
 
