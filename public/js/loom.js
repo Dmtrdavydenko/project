@@ -319,7 +319,7 @@ async function sendUpdateTextileId(update) {
             //    console.log(filteredByWidth);
             //})
             button.addEventListener("click", () => {
-                console.log("click");
+                console.log("click", button.textContent);
             });
             grid.append(button);
         });
