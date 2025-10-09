@@ -83,7 +83,7 @@ function createButtonsInBlockFromArray(field, containerId, numbersArray, reverse
         const btn = document.createElement('button');
         btn.addEventListener("click", toggle);
         btn.textContent = item[field];
-        container.appendChild(btn);
+        //container.appendChild(btn);
     });
 }
 function toggle() {
@@ -305,14 +305,18 @@ async function sendUpdateTextileId(update) {
             ul.appendChild(li);
         });
         div.append(input, ul);
+        const grid = document.createElement('div');
+        grid.classList.add("container-grid");
+
         dataRow.forEach(obj => {
             const button = document.createElement('button');
             button.classList.add("select-button");
             const sleeve = new SleeveWidthDensityInfo(obj);
             button.value = sleeve.id;
             button.textContent = sleeve.width;
-            document.body.append(button);
+            grid.append(button);
         });
+        document.body.append(grid);
     }
     const buttonSend = document.createElement('button');
     buttonSend.textContent = "send";
@@ -322,9 +326,9 @@ async function sendUpdateTextileId(update) {
         console.log(logme);
 
     });
-    document.body.append(inputSS);
-    document.body.append(div);
-    document.body.append(buttonSend);
+    //document.body.append(inputSS);
+    //document.body.append(div);
+    //document.body.append(buttonSend);
 
 
 
