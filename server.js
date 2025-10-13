@@ -341,7 +341,7 @@ async function select(body) {
                         l.loom_nameId,
                         s.speed AS loom_speed,
                         l.weft,
-                        type.yarn_name
+                        type.yarn_name,
                         thread.thread_density,
                         c.color,
                         thread.thread_length,
