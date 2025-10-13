@@ -342,6 +342,11 @@ async function select(body) {
                         s.speed AS loom_speed,
                         l.weft,
                         type.yarn_name,
+                        CASE
+                            WHEN type.yarn_name = "warp" THEN warp.warp_quantity
+                            WHEN type.yarn_name = "weft" THEN weft.weft_quantity
+                            ELSE NULL
+                            END as quantity,
                         thread.thread_density,
                         c.color,
                         thread.thread_length,
@@ -354,7 +359,8 @@ async function select(body) {
                      LEFT JOIN additive ad ON m.additive_id = ad.id
                      LEFT JOIN color c ON m.color_id = c.color_id
                      LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
-
+                     LEFT JOIN warp_quantity warp                    ON m.quantity_id = warp.warp_id
+                     LEFT JOIN weft_quantity weft                    ON m.quantity_id = weft.weft_id
                      `;
                 break;
             case "Thread_Parameters":
