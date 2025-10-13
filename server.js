@@ -324,19 +324,19 @@ async function select(body) {
                 //    loom_number,
                 //    type_id
                 //    FROM looms;`;
-                let msn = `                JOIN sleeve_width_density swd                    ON m.sleeve_w_d_id = swd.sleeve_width_density_id
-                JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
-                JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
-                JOIN Thread_Parameters thread                    ON m.thread_densiti_id = thread.thread_id
-                JOIN color c                    ON m.color_id = c.color_id
-                JOIN additive ad                    ON m.additive_id = ad.id
+                let msn = `LEFT JOIN sleeve_width_density swd                    ON m.sleeve_w_d_id = swd.sleeve_width_density_id
+                LEFT JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
+                LEFT JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
+                LEFT JOIN Thread_Parameters thread                    ON m.thread_densiti_id = thread.thread_id
+                LEFT JOIN color c                    ON m.color_id = c.color_id
+                LEFT JOIN additive ad                    ON m.additive_id = ad.id
                 LEFT JOIN warp_quantity warp                    ON m.quantity_id = warp.warp_id
                 LEFT JOIN weft_quantity weft                    ON m.quantity_id = weft.weft_id
-                JOIN yarn_type type                    ON m.yarn_id = type.yarn_id`;
+                LEFT JOIN yarn_type type                    ON m.yarn_id = type.yarn_id`;
 
                 sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l " +
-                    "JOIN speed s ON l.loom_speed = s.speed_id ";
-                //+                    "LEFT JOIN `manual` m ON l.type_id = m.sleeve_w_d_id " + msn;
+                    "JOIN speed s ON l.loom_speed = s.speed_id "+
+                    "LEFT JOIN `manual` m ON l.type_id = m.sleeve_w_d_id " + msn;
                 break;
             case "Thread_Parameters":
                 const field = ["thread_id", "thread_density", "thread_length"];
