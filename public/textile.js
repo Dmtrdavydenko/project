@@ -1213,6 +1213,7 @@ async function sendForm() {
         }),
     }).then((response) => response.json());
     console.log(response);
+    alert(response);
     await showTableFn();
     return await response;
 }

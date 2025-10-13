@@ -654,12 +654,12 @@ async function insertGenerate(body) {
         console.log('Успешно подключено к базе данных MySQL!');
 
         // Вставка новой записи
-        //const [insertResult] = await connection.execute(sql, body.table.values);
+        const [insertResult] = await connection.execute(sql, body.table.values);
 
-        //console.log('Inserted ID:', insertResult.insertId);
+        console.log('Inserted ID:', insertResult.insertId);
 
         return {
-            //insertId: insertResult.insertId,
+            insertId: insertResult.insertId,
             //rows // все данные таблицы
             body: body,
             sql: sql,
