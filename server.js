@@ -336,7 +336,7 @@ async function select(body) {
 
                 sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l " +
                     "JOIN speed s ON l.loom_speed = s.speed_id "+
-                    "LEFT JOIN `manual` m ON l.type_id = m.sleeve_w_d_id " + msn;
+                    "LEFT JOIN `manual` m ON l.type_id = m.sleeve_w_d_id ";
                 break;
             case "Thread_Parameters":
                 const field = ["thread_id", "thread_density", "thread_length"];
