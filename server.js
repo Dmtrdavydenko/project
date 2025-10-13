@@ -659,7 +659,7 @@ async function insertGenerate(body) {
         console.log('Inserted ID:', insertResult.insertId);
 
         return {
-            insertId: insertResult.insertId,
+            //insertId: insertResult.insertId,
             //rows // все данные таблицы
             body: body,
             sql: sql,
