@@ -342,15 +342,16 @@ async function select(body) {
                         -- s.speed AS loom_speed,
                         -- l.weft,
                         type.yarn_name,
-                        sw.sleeve_width,
+                        sw.sleeve_width as s_width,
+                        d.density as s_density,
                         CASE
                             WHEN type.yarn_name = "warp" THEN warp.warp_quantity
                             WHEN type.yarn_name = "weft" THEN weft.weft_quantity
                             ELSE NULL
                             END as quantity,
-                        thread.thread_density,
+                        thread.thread_density as t_density,
                         c.color,
-                        thread.thread_length,
+                        thread.thread_length as t_length,
                         ad.additive_name,
                         m.*
                      FROM looms l 
