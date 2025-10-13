@@ -327,16 +327,7 @@ async function createSourceTable(name = selectTableName.value) {
     container.innerHTML = '';
     const table = createTable((await getSourceTable(name))[0]);
     container.appendChild(table);
-
-
-    const form = document.getElementById('form');
-    form.innerHTML = '';
-    const columns = await getSelectedValue();
-    columns.forEach(column => {
-        const inputElement = createInputElement(column);
-        form.append(inputElement);
-    });
-    console.log(columns);
+    await getTypeMySqlForm();
 }
 
 
@@ -874,6 +865,7 @@ async function getTypeKey() {
     const form = document.getElementById('form');
     if (selectTableName.options[selectTableName.selectedIndex].dataset.isParent === "true") {
         form.innerHTML = '';
+        array.length = 0;
         const columns = await getSelectedValue();
         columns.forEach(column => {
             const inputElement = createInputElement(column);
@@ -888,6 +880,19 @@ async function getTypeKey() {
         //form.textContent = 'не удалось получить';
         form.innerHTML = '';
     }
+}
+async function getTypeMySqlForm() {
+    const form = document.getElementById('form');
+    form.innerHTML = '';
+    array.length = 0;
+    const columns = await getSelectedValue();
+    columns.forEach(column => {
+        const inputElement = createInputElement(column);
+        form.append(inputElement);
+        array.push(inputElement);
+    });
+    console.log(array);
+    console.log(selectTableName.options[selectTableName.selectedIndex].dataset.isParent);
 }
 class ThreadInfo {
     constructor(thread) {
