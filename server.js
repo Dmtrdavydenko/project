@@ -656,7 +656,7 @@ async function insertGenerate(body) {
         // Вставка новой записи
         //const [insertResult] = await connection.execute(sql, body.table.values);
 
-        console.log('Inserted ID:', insertResult.insertId);
+        //console.log('Inserted ID:', insertResult.insertId);
 
         return {
             //insertId: insertResult.insertId,
