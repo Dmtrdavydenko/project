@@ -334,7 +334,7 @@ async function select(body) {
                 LEFT JOIN weft_quantity weft                    ON m.quantity_id = weft.weft_id
                 LEFT JOIN yarn_type type                    ON m.yarn_id = type.yarn_id`;
 
-                sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l " +
+                sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft, m.*FROM looms l " +
                     "JOIN speed s ON l.loom_speed = s.speed_id "+
                     "LEFT JOIN `manual` m ON l.type_id = m.sleeve_w_d_id ";
                 break;
