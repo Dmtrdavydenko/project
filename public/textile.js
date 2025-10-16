@@ -329,6 +329,7 @@ async function createSourceTable(name = selectTableName.value) {
     table.addEventListener("click", queryTarget);
     container.appendChild(table);
     await getTypeMySqlForm();
+    await getTypeTableHeder();
 }
 
 
