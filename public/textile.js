@@ -326,6 +326,7 @@ async function createSourceTable(name = selectTableName.value) {
     const container = document.getElementById('table-container');
     container.innerHTML = '';
     const table = createTable((await getSourceTable(name))[0]);
+    table.addEventListener("click", queryTarget);
     container.appendChild(table);
     await getTypeMySqlForm();
 }
