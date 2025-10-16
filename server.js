@@ -383,6 +383,7 @@ async function select(body) {
                      LEFT JOIN sleeve_width_density swd                    ON l.type_id = swd.sleeve_width_density_id
                      LEFT JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
                      LEFT JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
+                     ORDER BY width ASC, density ASC
                      `;
                 break;
             case "Thread_Parameters":
