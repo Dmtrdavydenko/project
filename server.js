@@ -716,6 +716,9 @@ async function insert(body) {
         //const [rows] = await connection.execute(
         //    'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
         //);
+        delete body.action;
+        delete body.table.name;
+        delete body.table;
         return await manual.insertManual(transformKeys(body))
 
         //return {
