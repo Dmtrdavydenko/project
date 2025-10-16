@@ -373,7 +373,7 @@ async function select(body) {
                         l.loom_number,
                         sw.sleeve_width as width,
                         d.density as density,
-                        l.modifier_id
+                        l.modifier_id,
                         -- l.loom_name_str,
                         -- l.loom_nameId,
                         -- s.speed AS loom_speed,
