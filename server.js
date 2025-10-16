@@ -371,8 +371,8 @@ async function select(body) {
                 sql = `SELECT 
                         -- l.loom_id,
                         l.loom_number,
-                        sw.sleeve_width as s_width,
-                        d.density as s_density
+                        sw.sleeve_width as width,
+                        d.density as density
                         -- l.loom_name_str,
                         -- l.loom_nameId,
                         -- s.speed AS loom_speed,
