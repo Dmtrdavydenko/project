@@ -335,7 +335,7 @@ async function select(body) {
                 LEFT JOIN yarn_type type                    ON m.yarn_id = type.yarn_id`;
 
                 sql = `SELECT 
-                        -- l.loom_id,
+                        l.loom_id,
                         l.loom_number,
                         -- l.loom_name_str,
                         -- l.loom_nameId,
