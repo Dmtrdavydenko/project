@@ -477,10 +477,10 @@ async function select(body) {
                     }
                 }
                 keysToDelete.forEach(key => delete body[key]);
-                const manual = new ManualTableTextileUse(pool);
+                //const manual = new ManualTableTextileUse(pool);
                 try {
-                    return await manual.insertManual(transformKeys(body));
-                    //return await manual.select(transformKeys(body));
+                    //return await manual.insertManual(transformKeys(body));
+                    return await manual.select(transformKeys(body));
                 } catch (error) {
                     console.log('select failed: ' + error.message);
                 }
@@ -696,7 +696,7 @@ async function insertGenerate(body) {
         //console.log('Пул соединений закрыт.');
     }
 }
-
+const manual = new ManualTableTextileUse(pool);
 async function insert(body) {
     const pool = mysql.createPool(dbConfig); // создаём пул подключений
     const connection = await pool.getConnection();
@@ -705,22 +705,23 @@ async function insert(body) {
         console.log('Успешно подключено к базе данных MySQL!');
 
         // Вставка новой записи
-        const [insertResult] = await connection.execute(
-            'INSERT INTO ' + body.table.name + ' (id, width, density) VALUES (?, ?, ?)',
-            [body.data.id, body.data.width, body.data.density]
-        );
+        //const [insertResult] = await connection.execute(
+        //    'INSERT INTO ' + body.table.name + ' (id, width, density) VALUES (?, ?, ?)',
+        //    [body.data.id, body.data.width, body.data.density]
+        //);
 
-        console.log('Inserted ID:', insertResult.insertId);
+        //console.log('Inserted ID:', insertResult.insertId);
 
         // Получаем все данные из таблицы после вставки
-        const [rows] = await connection.execute(
-            'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
-        );
+        //const [rows] = await connection.execute(
+        //    'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
+        //);
+        return await manual.insertManual(transformKeys(body))
 
-        return {
-            insertId: insertResult.insertId,
-            rows // все данные таблицы
-        };
+        //return {
+        //    insertId: insertResult.insertId,
+        //    rows // все данные таблицы
+        //};
 
     } catch (err) {
         console.error('Ошибка:', err);
