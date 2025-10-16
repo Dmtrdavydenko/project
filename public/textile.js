@@ -587,19 +587,19 @@ async function queryTarget(event) {
         if (td.textContent.length > 0) {
             console.log({
                 tableName: selectTableName.value,
-                rowId: cells[index].textContent,
+                rowId: tr.cells[index].textContent,
                 columnName: headers[td.cellIndex].textContent,
                 whereColum: colum_id,
                 value: td.textContent
-            });
-            try {
-                const result = await sqlWhere({
-                    tableName: selectTableName.value,
-                    rowId: tr.cells[index].textContent,
-                    columnName: headers[td.cellIndex].textContent,
-                    whereColum: colum_id,
-                    value: td.textContent
                 });
+            try {
+                //const result = await sqlWhere({
+                //    tableName: selectTableName.value,
+                //    rowId: tr.cells[index].textContent,
+                //    columnName: headers[td.cellIndex].textContent,
+                //    whereColum: colum_id,
+                //    value: td.textContent
+                //});
                 console.log('Ответ сервера:', result);
             } catch (error) {
                 console.error('Ошибка при отправке данных:', error);
@@ -607,6 +607,9 @@ async function queryTarget(event) {
         }
     }, { once: true });
 }
+
+
+
 async function sqlWhere({ tableName, rowId, columnName, whereColum, value }) {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
