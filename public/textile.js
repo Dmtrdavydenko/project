@@ -1002,12 +1002,12 @@ async function showSelect(event) {
     //let result = await find(serverUrl, manual);
     const container = document.getElementById('table-container');
     container.innerHTML = '';
-    if (result.rows) {
-        const table = createTable(result.rows);
-        container.appendChild(table);
-    } else {
-        container.textContent = 'U';
-    }
+    //if (result.rows) {
+        //const table = createTable(result.rows);
+        //container.appendChild(table);
+    //} else {
+        //container.textContent = 'U';
+    //}
 }
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
