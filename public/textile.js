@@ -1147,7 +1147,7 @@ async function generateForm() {
             o[item.name] = item.valueAsNumber ?? +item.value;
         });
         console.log(o, v);
-        //let resp = await sendData(serverUrl, v);
+        let result = await sendData(serverUrl, v);
         //manual.action = "processData";
 
         console.log(manual);
