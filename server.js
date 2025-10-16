@@ -479,8 +479,8 @@ async function select(body) {
                 keysToDelete.forEach(key => delete body[key]);
                 const manual = new ManualTableTextileUse(pool);
                 try {
-                    //const result = await manual.insertManual(transformKeys(body));
-                    return await manual.select(transformKeys(body));
+                    return await manual.insertManual(transformKeys(body));
+                    //return await manual.select(transformKeys(body));
                 } catch (error) {
                     console.log('select failed: ' + error.message);
                 }
