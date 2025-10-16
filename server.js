@@ -383,6 +383,9 @@ async function select(body) {
                      LEFT JOIN sleeve_width_density swd                    ON l.type_id = swd.sleeve_width_density_id
                      LEFT JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
                      LEFT JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
+
+                     LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
+
                      ORDER BY width ASC, density ASC
                      `;
                 break;
@@ -391,7 +394,7 @@ async function select(body) {
                 //sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
                 sql = "SELECT * FROM Thread_Parameters";
 
-
+                
                 break;
             case "textile":
                 //const field = ["textile_id", "textile_number", "circular_width", "density", "weft_quantity", "warp_quantity", "warp_name", "warp_name2", "weft_name1", "weft_name2"];
