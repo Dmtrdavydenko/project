@@ -378,6 +378,7 @@ async function select(body) {
                         -- l.loom_nameId,
                         -- s.speed AS loom_speed,
                         -- l.weft
+                        m.*
                      FROM looms l
                      JOIN speed s ON l.loom_speed = s.speed_id 
                      LEFT JOIN sleeve_width_density swd                    ON l.type_id = swd.sleeve_width_density_id
