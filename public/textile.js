@@ -999,7 +999,7 @@ async function showSelect(event) {
     manual.action = "select";
     manual.table = new Object();
     manual.table.name = selectTableName.value;
-    let result = await find(serverUrl, manual);
+    //let result = await find(serverUrl, manual);
     const container = document.getElementById('table-container');
     container.innerHTML = '';
     if (result.rows) {
@@ -1147,7 +1147,7 @@ async function generateForm() {
             o[item.name] = item.valueAsNumber ?? +item.value;
         });
         console.log(o, v);
-        let result = await sendData(serverUrl, v);
+        let result = await sendData(serverUrl, manual);
         //manual.action = "processData";
 
         console.log(manual);
