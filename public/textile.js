@@ -572,8 +572,8 @@ async function queryTarget(event) {
     const index = headersText.findIndex(text => text.includes('id'));
     console.log(headersText);
 
-    const theaders = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
-    console.log(theaders);
+    //const theaders = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
+    //console.log(theaders);
     const cells = tr.querySelectorAll('td');
     const target = {};
     cells.forEach((cell, i) => {

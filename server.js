@@ -369,7 +369,7 @@ async function select(body) {
                 //     `;
 
                 sql = `SELECT 
-                        -- l.loom_id,
+                        l.loom_id,
                         l.loom_number,
                         sw.sleeve_width as width,
                         d.density as density,
