@@ -79,7 +79,8 @@ async function getColumnsJoin(body) {
         throw err;
 
     } finally {
-        connection.release();
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
     }
 }
 
@@ -121,7 +122,8 @@ async function getTableColumns(body) {
         console.error('Ошибка при получении колонок таблицы:', err);
         throw err;
     } finally {
-        connection.release();
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
     }
 }
 async function ping() {
@@ -195,9 +197,8 @@ async function slt() {
         console.error('Ошибка:', err);
         throw err;
     } finally {
-        connection.release();
-        //await pool.end();
-        //console.log('Пул соединений закрыт.');
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
     }
 
 
@@ -306,7 +307,6 @@ async function where(filters = {}) {
 }
 
 async function select(body) {
-    //const pool = mysql.createPool(dbConfig); // создаём пул подключений
     const connection = await pool.getConnection();
 
     try {
@@ -540,13 +540,11 @@ async function select(body) {
         console.error('Ошибка:', err);
         throw err;
     } finally {
-        connection.release();
-        //await pool.end();
-        //console.log('Пул соединений закрыт.');
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
     }
 }
 async function getTable(body) {
-    //const pool = mysql.createPool(dbConfig); // создаём пул подключений
     const connection = await pool.getConnection();
 
     try {
@@ -657,9 +655,8 @@ async function getTable(body) {
         console.error('Ошибка:', err);
         throw err;
     } finally {
-        connection.release();
-        //await pool.end();
-        //console.log('Пул соединений закрыт.');
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
     }
 }
 
@@ -691,14 +688,11 @@ async function insertGenerate(body) {
         throw err;
     } finally {
         if (connection) connection.release();
-        //connection.release();
-        //await pool.end();
-        //console.log('Пул соединений закрыт.');
+        console.log("Соединение возвращено.");
     }
 }
 const manual = new ManualTableTextileUse(pool);
 async function insert(body) {
-    const pool = mysql.createPool(dbConfig); // создаём пул подключений
     const connection = await pool.getConnection();
 
     try {
@@ -719,27 +713,19 @@ async function insert(body) {
         delete body.action;
         delete body.table.name;
         delete body.table;
-        return await manual.insertManual(transformKeys(body))
-
-        //return {
-        //    insertId: insertResult.insertId,
-        //    rows // все данные таблицы
-        //};
-
+        return await manual.insertManual(transformKeys(body));
     } catch (err) {
         console.error('Ошибка:', err);
         throw err;
     } finally {
-        connection.release();
-        //await pool.end();
-        //console.log('Пул соединений закрыт.');
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
     }
 }
 
 
 
 async function createTable() {
-    const pool = mysql.createPool(dbConfig); // создаём пул подключений
     const connection = await pool.getConnection();
 
 
@@ -808,8 +794,7 @@ async function setWhere(body) {
         throw err;
     } finally {
         if (connection) connection.release();
-        //await pool.end();
-        //console.log('Пул соединений закрыт.');
+        console.log("Соединение возвращено.");
     }
 
 
@@ -891,7 +876,6 @@ async function main() {
 
 
     try {
-        const pool = mysql.createPool(dbConfig); // создаём пул подключений
         const conn = await pool.getConnection();
 
         // Создание таблиц
@@ -931,7 +915,7 @@ async function main() {
     }
 }
 
-main();
+//main();
 
 async function dropTable(body) {
     const dropTableQuery = `DROP TABLE IF EXISTS ??`;
@@ -994,7 +978,8 @@ async function getAllTableNames() {
         console.error('Ошибка при получении таблиц:', err);
         throw err
     } finally {
-        await connection.release();
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
     }
 }
 //getAllTableNames();
@@ -1031,7 +1016,8 @@ async function getAllColumnsAndTypes() {
         console.error('Ошибка при получении информации о столбцах:', err);
         throw err;
     } finally {
-        await connection.release();
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
     }
 }
 
@@ -1068,7 +1054,8 @@ async function getTableColumnsAndTypes() {
         console.error('Ошибка при получении информации о столбцах:', err);
         throw err;
     } finally {
-        await connection.release();
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
     }
 }
 
@@ -1122,7 +1109,8 @@ async function sql(body) {
         console.error('Ошибка при выполнении запроса:', err);
         throw err; // Пробрасываем ошибку дальше
     } finally {
-        await connection.release(); // Освобождаем соединение
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
     }
 }
 
@@ -1169,7 +1157,8 @@ async function getColumnsAndTypesForTable(body) {
         console.error(`Ошибка при получении информации о столбцах для таблицы ${body.table.name}:`, err);
         throw err;
     } finally {
-        await connection.release();
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
     }
 }
 
