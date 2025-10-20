@@ -373,7 +373,13 @@ async function select(body) {
                         l.loom_number,
                         sw.sleeve_width as width,
                         d.density as density,
-                        l.modifier_id,
+                        -- l.modifier_id,
+                        type.yarn_name,
+                        CASE
+                            WHEN type.yarn_name = "warp" THEN warp.warp_quantity
+                            WHEN type.yarn_name = "weft" THEN weft.weft_quantity
+                            ELSE NULL
+                        END as quantity,
                         thread.thread_density,
                         c.color,
                         ad.additive_name,
@@ -384,14 +390,19 @@ async function select(body) {
                         m.*
                      FROM looms l
                      JOIN speed s ON l.loom_speed = s.speed_id 
-                     LEFT JOIN sleeve_width_density swd                    ON l.type_id = swd.sleeve_width_density_id
-                     LEFT JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
-                     LEFT JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
+                     LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
+                     LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
+                     LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
 
                      LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
                      LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
                      LEFT JOIN color c ON m.color_id = c.color_id
                      LEFT JOIN additive ad ON m.additive_id = ad.id
+
+
+                     LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
+                     LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
+                     LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
 
 
                      ORDER BY width ASC, density ASC
