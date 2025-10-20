@@ -447,13 +447,13 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                      LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
                      LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
 
-                     WHERE type.yarn_name = "warp" and thread.thread_density = "105" and ad.additive_name = "светостабилизатор"
+                     -- WHERE type.yarn_name = "warp" and thread.thread_density = "105" and ad.additive_name = "светостабилизатор"
 
 
                      ORDER BY width ASC, density ASC
 
 
-                     ${total}
+                     -- ${total}
                      `;
                 break;
             case "Thread_Parameters":
