@@ -374,6 +374,9 @@ async function select(body) {
                         sw.sleeve_width as width,
                         d.density as density,
                         l.modifier_id,
+                        m.thread_density,
+                        c.color,
+                        ad.additive_name,
                         -- l.loom_name_str,
                         -- l.loom_nameId,
                         -- s.speed AS loom_speed,
@@ -386,6 +389,10 @@ async function select(body) {
                      LEFT JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
 
                      LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
+                     LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
+                     LEFT JOIN color c ON m.color_id = c.color_id
+                     LEFT JOIN additive ad ON m.additive_id = ad.id
+
 
                      ORDER BY width ASC, density ASC
                      `;
