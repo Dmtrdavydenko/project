@@ -452,8 +452,6 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
                      ORDER BY width ASC, density ASC
 
-
-                     -- ${total}
                      `;
                 break;
             case "Thread_Parameters":
