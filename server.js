@@ -374,7 +374,7 @@ async function select(body) {
                         sw.sleeve_width as width,
                         d.density as density,
                         l.modifier_id,
-                        m.thread_density,
+                        thread.thread_density,
                         c.color,
                         ad.additive_name,
                         -- l.loom_name_str,
