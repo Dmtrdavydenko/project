@@ -367,6 +367,49 @@ async function select(body) {
                 //     LEFT JOIN warp_quantity warp                    ON m.quantity_id = warp.warp_id
                 //     LEFT JOIN weft_quantity weft                    ON m.quantity_id = weft.weft_id
                 //     `;
+                const total = `
+                
+                UNION ALL
+
+-- Итоговая строка с суммой quantity
+SELECT
+    NULL AS loom_id,
+    NULL AS loom_number,
+    NULL AS width,
+    NULL AS density,
+    'Total' AS yarn_name,
+    SUM(CASE
+        WHEN type.yarn_name = 'warp' THEN warp.warp_quantity
+        WHEN type.yarn_name = 'weft' THEN weft.weft_quantity
+        ELSE NULL
+    END) AS quantity,
+    NULL AS thread_density,
+    NULL AS color,
+    NULL AS additive_name,
+    NULL AS type_id,
+    NULL AS sleeve_w_d_id,
+    NULL AS yarn_id,
+    NULL AS quantity_id,
+    NULL AS thread_densiti_id,
+    NULL AS color_id,
+    NULL AS additive_id,
+    NULL AS created_at,
+    NULL AS updated_at
+FROM looms l
+JOIN speed s ON l.loom_speed = s.speed_id
+LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
+LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
+LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
+LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
+LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
+LEFT JOIN color c ON m.color_id = c.color_id
+LEFT JOIN additive ad ON m.additive_id = ad.id
+LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
+LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
+LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
+WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_name = 'светостабилизатор';
+                
+                `;
 
                 sql = `SELECT 
                         l.loom_id,
@@ -408,6 +451,9 @@ async function select(body) {
 
 
                      ORDER BY width ASC, density ASC
+
+
+                     ${total}
                      `;
                 break;
             case "Thread_Parameters":
