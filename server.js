@@ -450,6 +450,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                      -- WHERE type.yarn_name = "warp" and thread.thread_density = "105" and ad.additive_name = "светостабилизатор"
 
 
+
                      ORDER BY width ASC, density ASC
 
                      `;
