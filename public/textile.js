@@ -999,15 +999,15 @@ async function showSelect(event) {
     manual.action = "select";
     manual.table = new Object();
     manual.table.name = selectTableName.value;
-    //let result = await find(serverUrl, manual);
+    let result = await find(serverUrl, manual);
     const container = document.getElementById('table-container');
     container.innerHTML = '';
-    //if (result.rows) {
-        //const table = createTable(result.rows);
-        //container.appendChild(table);
-    //} else {
-        //container.textContent = 'U';
-    //}
+    if (result.rows) {
+        const table = createTable(result.rows);
+        container.appendChild(table);
+    } else {
+        container.textContent = 'U';
+    }
 }
 async function generateForm() {
     const formContainer = document.getElementById('form-container');

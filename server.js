@@ -561,7 +561,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                     "FROM sleeve_width_density swd " +
                     "JOIN sleeve_width sw   ON swd.sleeve_width_id = sw.sleeve_width_id " +
                     "JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id " +
-                    " ";
+                    "ORDER BY sleeve_width ASC, density ASC ";
 
                 //[descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 //select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
