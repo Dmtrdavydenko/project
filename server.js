@@ -423,6 +423,11 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                             WHEN type.yarn_name = "weft" THEN weft.weft_quantity
                             ELSE NULL
                         END as quantity,
+
+                        CASE
+                            WHEN type.yarn_name = "weft" THEN weft.weft_quantity * 0.1 * width * 2 * 2500
+                            ELSE NULL
+                        END as weft_lenth,
                         thread.thread_density,
                         c.color,
                         ad.additive_name,
