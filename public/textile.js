@@ -411,6 +411,7 @@ async function getTable() {
 function myfilter(arr) {
     const filteredThreadType = arr.filter(item => item.yarn_name === "warp" && item.thread_density === 78 && item.color === "белая" && item.additive_name === "нет");
     const sum = filteredThreadType.reduce((sum, current) => sum + (+current.quantity));
+    console.log(filteredThreadType);
     console.log(sum);
 }
 async function loadTable() {
@@ -438,6 +439,9 @@ async function loadTable() {
 
     if (result.rows && Array.isArray(result.rows) && result.rows.length > 0) {
         const table = createTable(result.rows);
+        if (selectTableName.value === "looms") {
+            myfilter(result.rows);
+        }
         if (selectTableName.value === "manual") {
             table.addEventListener("click", selectTable);
             await generateForm();
