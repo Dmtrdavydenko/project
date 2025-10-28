@@ -408,9 +408,11 @@ async function getTable() {
         container.textContent = 'U';
     }
 }
+let dev = [];
 function myfilter(arr) {
     const filteredThreadType = arr.filter(item => item.yarn_name === "warp" && item.thread_density === 78 && item.color === "белая" && item.additive_name === "нет");
     const sum = filteredThreadType.reduce((sum, current) => sum + (+current.quantity));
+    dev = filteredThreadType;
     console.log(filteredThreadType);
     console.log(sum);
 }
