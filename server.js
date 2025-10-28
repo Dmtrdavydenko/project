@@ -456,48 +456,50 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                      -- WHERE type.yarn_name = "warp" and thread.thread_density = "105" and ad.additive_name = "светостабилизатор"
 
 
-                     -- ORDER BY width ASC, density ASC
+                     ORDER BY width ASC, density ASC
 
 
 
-                     UNION ALL
 
--- Итоговая строка: суммируем quantity только для группы "warp 78 белая нет"
-SELECT 
-    NULL AS loom_id,
-    NULL AS loom_speed,
-    NULL AS weft,
-    NULL AS loom_number,
-    'Итого warp 78 белая нет' AS width,  -- Текст для идентификации итога
-    NULL AS density,
-    "warp" AS yarn_name,
-    SUM(CASE
-        WHEN type.yarn_name = "warp" THEN warp.warp_quantity
-        WHEN type.yarn_name = "weft" THEN weft.weft_quantity
-        ELSE 0
-    END) AS quantity,  -- Сумма quantity для группы
-    NULL AS weft_length,  -- Не суммируем, так как не указано
-    "78" AS thread_density,
-    "белая" AS color,
-    "нет" AS additive_name,
-    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL  -- NULL для всех полей m.* (замените на конкретные, если знаете)
-FROM looms l
-JOIN speed s ON l.loom_speed = s.speed_id 
-LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
-LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
-LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
-LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
-LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
-LEFT JOIN color c ON m.color_id = c.color_id
-LEFT JOIN additive ad ON m.additive_id = ad.id
-LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
-LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
-LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
-WHERE type.yarn_name = 'warp' AND thread.thread_density = 78 AND c.color = 'белая' AND ad.additive_name = 'нет'  -- Фильтр для группы
-
-ORDER BY width ASC, density ASC
 
                      `;
+
+//                                          UNION ALL
+
+//                --Итоговая строка: суммируем quantity только для группы "warp 78 белая нет"
+//                SELECT 
+//    NULL AS loom_id,
+//                    NULL AS loom_speed,
+//                        NULL AS weft,
+//                            NULL AS loom_number,
+//                                'Итого warp 78 белая нет' AS width, --Текст для идентификации итога
+//    NULL AS density,
+//                    "warp" AS yarn_name,
+//                        SUM(CASE
+//        WHEN type.yarn_name = "warp" THEN warp.warp_quantity
+//        WHEN type.yarn_name = "weft" THEN weft.weft_quantity
+//        ELSE 0
+//    END) AS quantity, --Сумма quantity для группы
+//    NULL AS weft_length, --Не суммируем, так как не указано
+//                "78" AS thread_density,
+//                    "белая" AS color,
+//                        "нет" AS additive_name,
+//                            NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL-- NULL для всех полей m.* (замените на конкретные, если знаете)
+//FROM looms l
+//JOIN speed s ON l.loom_speed = s.speed_id 
+//LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
+//LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
+//LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
+//LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
+//LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
+//LEFT JOIN color c ON m.color_id = c.color_id
+//LEFT JOIN additive ad ON m.additive_id = ad.id
+//LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
+//LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
+//LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
+//WHERE type.yarn_name = 'warp' AND thread.thread_density = 78 AND c.color = 'белая' AND ad.additive_name = 'нет'  -- Фильтр для группы
+
+//ORDER BY width ASC, density ASC
                 break;
             case "Thread_Parameters":
                 const field = ["thread_id", "thread_density", "thread_length"];
