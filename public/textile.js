@@ -408,6 +408,11 @@ async function getTable() {
         container.textContent = 'U';
     }
 }
+function myfilter(arr) {
+    const filteredThreadType = arr.filter(item => item.yarn_name === "warp" && item.thread_density === 78 && item.color === "белая" && item.additive_name === "нет");
+    const sum = filteredThreadType.reduce((sum, current) => sum + (+current.quantity));
+    console.log(sum);
+}
 async function loadTable() {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
@@ -426,6 +431,9 @@ async function loadTable() {
 
     const container = document.getElementById('table-container');
     container.innerHTML = '';
+
+
+
 
 
     if (result.rows && Array.isArray(result.rows) && result.rows.length > 0) {
