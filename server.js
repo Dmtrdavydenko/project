@@ -473,7 +473,7 @@ SELECT
     NULL AS yarn_name,
     SUM(CASE
         WHEN type.yarn_name = "warp" THEN warp.warp_quantity
-        WHEN type.yarn_name = "weft" THEN weft.weft_quantity
+        -- WHEN type.yarn_name = "weft" THEN weft.weft_quantity
         ELSE 0
     END) AS quantity,  -- Сумма quantity только для группы
     NULL AS weft_length,  -- Не суммируем, так как не указано
