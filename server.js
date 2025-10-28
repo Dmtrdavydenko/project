@@ -480,7 +480,7 @@ SELECT
     NULL AS thread_density,
     NULL AS color,
     NULL AS additive_name,
-    NULL, NULL, NULL  -- NULL для всех полей m.* (замените на конкретные, если знаете)
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL  -- NULL для всех полей m.* (замените на конкретные, если знаете)
 FROM looms l
 JOIN speed s ON l.loom_speed = s.speed_id 
 LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
