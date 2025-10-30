@@ -318,6 +318,16 @@ async function select(body) {
         let descRows;
         console.log("Запрос от клиента имя таблицы " + body.table.name);
         switch (body.table.name) {
+            case "machine":
+                //const field = ["thread_id", "thread_density", "thread_length"];
+                sql = `
+                SELECT machine.*, s.* FROM machine
+                LEFT JOIN speed s ON machine.speed_id = s.speed_id
+
+
+                `;
+                //sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
+                break;
             case "looms":
                 //const field = ["thread_id", "thread_density", "thread_length"];
                 //sql = `SELECT
