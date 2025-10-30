@@ -423,10 +423,10 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
                 sql = `SELECT 
                         l.loom_id,
+                        l.loom_number,
                         machine.machine_name,
                         s.speed,
                         l.weft,
-                        l.loom_number,
                         sw.sleeve_width as width,
                         d.density as density,
                         -- l.modifier_id,
