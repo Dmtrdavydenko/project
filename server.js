@@ -424,7 +424,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                 sql = `SELECT 
                         l.loom_id,
                         machine.machine_name,
-                        s.speed AS loom_speed,
+                        machine.speed,
                         l.weft,
                         l.loom_number,
                         sw.sleeve_width as width,
@@ -449,8 +449,9 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         -- l.weft
                         m.*
                      FROM looms l
-                     JOIN speed s ON l.loom_speed = s.speed_id 
-                     JOIN machine ON l.loom_nameId = machine.machine_id
+                     -- JOIN speed s ON l.loom_speed = s.speed_id 
+                     JOIN machine ON l.machine_id = machine.machine_id
+                     LEFT JOIN speed s ON machine.speed_id = s.speed_id
 
 
                      LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
