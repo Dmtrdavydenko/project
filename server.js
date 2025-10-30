@@ -447,8 +447,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         -- l.loom_name_str,
                         -- l.loom_nameId,
                         -- l.weft
-                        m.*,
-                        l.*
+                        m.*
                      FROM looms l
                      -- JOIN speed s ON l.loom_speed = s.speed_id 
                      JOIN machine ON l.machine_id = machine.machine_id
@@ -685,7 +684,7 @@ async function getTable(body) {
         switch (body.table.name) {
             case "looms":
                 //const field = ["thread_id", "thread_density", "thread_length"];
-                sql = "SELECT l.loom_id, l.loom_number, m.machine_name AS loom_name, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id JOIN machine m ON l.loom_nameId = m.machine_id";
+                sql = "SELECT l.loom_id, l.loom_number, m.machine_name AS loom_name, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id JOIN machine m ON l.machine_id = m.machine_id";
                 //sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
                 break;
             case "Thread_Parameters":
