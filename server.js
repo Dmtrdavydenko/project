@@ -442,9 +442,11 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         END as weft_lenth,
 
                         CASE
-                            WHEN type.yarn_name = "weft" THEN CEIL(s.speed * 720 / (weft.weft_quantity * 10) * 0.89)
+                            WHEN type.yarn_name = "weft" AND weft.weft_quantity > 25 THEN CEIL(s.speed * 720 / (weft.weft_quantity * 10) * 0.89)
+                            WHEN type.yarn_name = "weft" AND weft.weft_quantity < 25 THEN CEIL(s.speed * 720 / (weft.weft_quantity * 20) * 0.89)
                             ELSE NULL
                         END as productivity,
+
                         thread.thread_density,
                         c.color,
                         ad.additive_name,
