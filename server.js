@@ -442,10 +442,6 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         END as weft_lenth,
 
                         CASE
-                            WHEN type.yarn_name = "weft" THEN weft.weft_quantity * 0.1 * sw.sleeve_width * 2 * 2000
-                            ELSE NULL
-                        END as weft_lenth2,
-                        CASE
                             WHEN type.yarn_name = "weft" THEN s.speed * 720 / (weft.weft_quantity * 10) * 0.89
                             ELSE NULL
                         END as productivity,
