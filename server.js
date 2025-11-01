@@ -449,6 +449,14 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
                         thread.thread_density,
                         thread.thread_length,
+
+
+                        CASE
+                            WHEN type.yarn_name = "weft" THEN weft_lenth / thread.thread_length
+                            ELSE NULL
+                        END as quantity_weft,
+
+
                         c.color,
                         ad.additive_name
                         -- l.loom_nameId,
