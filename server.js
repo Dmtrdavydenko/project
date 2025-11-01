@@ -449,7 +449,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
                         thread.thread_density,
                         c.color,
-                        ad.additive_name,
+                        ad.additive_name
                         -- l.loom_nameId,
                         -- l.weft
                         -- m.*
