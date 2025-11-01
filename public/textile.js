@@ -1358,3 +1358,15 @@ const update = {
 //const result = generateUpdateSQL(data, update);
 //console.log(result.sql);
 //console.log(result.values);
+
+
+function predictThreadLength(x) {
+    // Кубическая модель для предсказания thread_length по thread_density
+    const a = -1.23e-07;  // Коэффициент при x^3
+    const b = 0.000028;   // Коэффициент при x^2
+    const c = -0.0015;    // Коэффициент при x
+    const d = 25000;      // Свободный член
+
+    // Расчёт: y = a*x^3 + b*x^2 + c*x + d
+    return a * Math.pow(x, 3) + b * Math.pow(x, 2) + c * x + d;
+}
