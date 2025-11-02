@@ -448,8 +448,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                             ELSE NULL
                         END as productivity,
 
-                        thread.thread_density,
-                        thread.thread_length,
+                        -- thread.thread_length,
 
 
                         CASE
@@ -458,7 +457,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                             ELSE NULL
                         END as quantity_weft,
 
-
+                        thread.thread_density,
                         c.color,
                         ad.additive_name
                         -- l.loom_nameId,
