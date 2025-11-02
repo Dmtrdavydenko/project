@@ -1370,3 +1370,13 @@ function predictThreadLength(x) {
     // Расчёт: y = a*x^3 + b*x^2 + c*x + d
     return a * Math.pow(x, 3) + b * Math.pow(x, 2) + c * x + d;
 }
+function predictThreadLengthRational(x) {
+    // Рациональная модель: y = (a*x + b) / (c*x + d)
+    const a = 0.00045;    // Коэффициент при x в числителе
+    const b = 25;         // Свободный член в числителе
+    const c = 0.000000018; // Коэффициент при x в знаменателе
+    const d = 0.001;      // Свободный член в знаменателе
+
+    // Расчёт: y = (a*x + b) / (c*x + d)
+    return (a * x + b) / (c * x + d);
+}
