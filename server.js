@@ -575,7 +575,7 @@ LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
 LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
 LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id  -- Источник density
 LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
-LEFT JOIN Thread_Parameters thread ON m.thread_density_id = thread.thread_id
+LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
 LEFT JOIN color c ON m.color_id = c.color_id
 LEFT JOIN additive ad ON m.additive_id = ad.id
 LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
