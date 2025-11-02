@@ -492,6 +492,57 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
 
                      `;
+                sql = `SELECT 
+    MAX(l.loom_id) as loom_id,  -- Агрегируем, так как в группе один станок
+    MAX(l.loom_number) as loom_number,
+    MAX(machine.machine_name) as machine_name,
+    -- MAX(s.speed) as speed,  -- Если нужно, раскомментируй
+    -- MAX(machine.shuttle) as shuttle,
+    MAX(sw.sleeve_width) as width,
+    MAX(d.density) as density,
+    -- MAX(l.modifier_id) as modifier_id,
+    type.yarn_name,  -- Оставляем без агрегации, если группируем по yarn_name (но см. ниже)
+    CASE
+        WHEN type.yarn_name = "warp" THEN SUM(warp.warp_quantity)
+        WHEN type.yarn_name = "weft" THEN SUM(weft.weft_quantity)
+        ELSE NULL
+    END as quantity,
+    CASE
+        WHEN type.yarn_name = "weft" AND SUM(weft.weft_quantity) > 25 THEN CEIL(SUM(weft.weft_quantity) * 0.1 * MAX(sw.sleeve_width) * 2 * MAX(s.speed) * 720 / (SUM(weft.weft_quantity) * 10) * 0.89)
+        WHEN type.yarn_name = "weft" AND SUM(weft.weft_quantity) < 25 THEN CEIL(SUM(weft.weft_quantity) * 0.1 * MAX(sw.sleeve_width) * 2 * MAX(s.speed) * 720 / (SUM(weft.weft_quantity) * 20) * 0.89)
+        ELSE NULL
+    END as weft_lenth,
+    CASE
+        WHEN type.yarn_name = "weft" AND SUM(weft.weft_quantity) > 25 THEN CEIL(MAX(s.speed) * 720 / (SUM(weft.weft_quantity) * 10) * 0.89)
+        WHEN type.yarn_name = "weft" AND SUM(weft.weft_quantity) < 25 THEN CEIL(MAX(s.speed) * 720 / (SUM(weft.weft_quantity) * 20) * 0.89)
+        ELSE NULL
+    END as productivity,
+    -- MAX(thread.thread_length) as thread_length,  -- Если нужно
+    CASE
+        WHEN type.yarn_name = "weft" AND SUM(weft.weft_quantity) > 25 THEN CEIL(SUM(weft.weft_quantity) * 0.1 * MAX(sw.sleeve_width) * 2 * MAX(s.speed) * 720 / (SUM(weft.weft_quantity) * 10) * 0.89 / MAX(thread.thread_length))
+        WHEN type.yarn_name = "weft" AND SUM(weft.weft_quantity) < 25 THEN CEIL(SUM(weft.weft_quantity) * 0.1 * MAX(sw.sleeve_width) * 2 * MAX(s.speed) * 720 / (SUM(weft.weft_quantity) * 20) * 0.89 / MAX(thread.thread_length))
+        ELSE NULL
+    END as quantity_weft,
+    MAX(thread.thread_density) as thread_density,
+    MAX(c.color) as color,
+    MAX(ad.additive_name) as additive_name
+    -- Остальные поля, если нужно
+FROM looms l
+JOIN machine ON l.machine_id = machine.machine_id
+LEFT JOIN speed s ON machine.speed_id = s.speed_id
+LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
+LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
+LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
+LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
+LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
+LEFT JOIN color c ON m.color_id = c.color_id
+LEFT JOIN additive ad ON m.additive_id = ad.id
+LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
+LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
+LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
+-- WHERE type.yarn_name = "warp" and thread.thread_density = "105" and ad.additive_name = "светостабилизатор"  -- Раскомментируй, если нужно
+GROUP BY l.loom_id, type.yarn_name  -- Группируем по станку И yarn_name, чтобы разделить warp/weft
+ORDER BY width ASC, density ASC;`
 
 //                                          UNION ALL
 
