@@ -422,7 +422,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                 `;
 
                 sql = `SELECT 
-                        l.loom_id,
+                        -- l.loom_id,
                         l.loom_number,
                         machine.machine_name,
                         -- s.speed,
@@ -492,57 +492,6 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
 
                      `;
-                sql = `SELECT 
-    type.yarn_name,
-    SUM(CASE
-        WHEN type.yarn_name = "warp" THEN COALESCE(warp.warp_quantity, 0)
-        WHEN type.yarn_name = "weft" THEN COALESCE(weft.weft_quantity, 0)
-        ELSE 0
-    END) AS total_quantity,  -- Суммарный расход quantity по группе
-    SUM(CASE
-        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
-            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89)
-        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
-            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89)
-        ELSE 0
-    END) AS total_weft_lenth,  -- Суммарный расход weft_lenth по группе
-    SUM(CASE
-        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
-            CEIL(COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89)
-        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
-            CEIL(COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89)
-        ELSE 0
-    END) AS total_productivity,  -- Суммарный расход productivity по группе
-    SUM(CASE
-        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
-            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89 / NULLIF(thread.thread_length, 0))
-        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
-            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89 / NULLIF(thread.thread_length, 0))
-        ELSE 0
-    END) AS total_quantity_weft,  -- Суммарный расход quantity_weft по группе
-    thread.thread_density,
-    c.color,
-    ad.additive_name,
-    COUNT(*) AS count_looms  -- Подсчёт станков в группе (добавил на всякий случай)
-FROM looms l
-JOIN machine ON l.machine_id = machine.machine_id
-LEFT JOIN speed s ON machine.speed_id = s.speed_id
-LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
-LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
-LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
-LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
-LEFT JOIN Thread_Parameters thread ON m.thread_density_id = thread.thread_id
-LEFT JOIN color c ON m.color_id = c.color_id
-LEFT JOIN additive ad ON m.additive_id = ad.id
-LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
-LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
-LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
--- WHERE type.yarn_name = "warp" AND thread.thread_density = "105" AND ad.additive_name = "светостабилизатор"  -- Раскомментируй для фильтрации
-GROUP BY type.yarn_name, thread.thread_density, c.color, ad.additive_name
-ORDER BY yarn_name, thread_density;
-
-
-`
 
 //                                          UNION ALL
 
