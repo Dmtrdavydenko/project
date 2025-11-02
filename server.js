@@ -425,8 +425,8 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         l.loom_id,
                         l.loom_number,
                         machine.machine_name,
-                        s.speed,
-                        machine.shuttle,
+                        -- s.speed,
+                        -- machine.shuttle,
                         sw.sleeve_width as width,
                         d.density as density,
                         -- l.modifier_id,
@@ -487,8 +487,6 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
 
                      ORDER BY width ASC, density ASC
-
-
 
 
 
