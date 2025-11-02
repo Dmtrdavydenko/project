@@ -520,7 +520,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
             WHEN type.yarn_name = "weft" AND SUM(weft.weft_quantity) < 25 THEN CEIL(SUM(weft.weft_quantity) * 0.1 * MAX(sw.sleeve_width) * 2 * MAX(s.speed) * 720 / (SUM(weft.weft_quantity) * 20) * 0.89 / MAX(thread.thread_length))
             ELSE NULL
         END as quantity_weft,
-        MAX(thread.thread_density) as thread_density,  -- Это поле с типами нитей (90, 78 и т.д.)
+        MAX(thread.thread_density) as thread_density,  -- Тип нити (90, 78, 105 и т.д.)
         MAX(c.color) as color,
         MAX(ad.additive_name) as additive_name
     FROM looms l
@@ -540,6 +540,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 )
 SELECT 
     yarn_name,
+    thread_density,  -- Теперь группируем по этому полю тоже
     SUM(quantity) as total_quantity,
     SUM(weft_lenth) as total_weft_lenth,
     SUM(productivity) as total_productivity,
@@ -547,12 +548,12 @@ SELECT
     GROUP_CONCAT(DISTINCT machine_name ORDER BY machine_name) as machines,
     GROUP_CONCAT(DISTINCT width ORDER BY width) as widths,
     GROUP_CONCAT(DISTINCT density ORDER BY density) as densities,
-    GROUP_CONCAT(DISTINCT thread_density ORDER BY thread_density) as thread_densities,  -- Здесь сохраняются уникальные типы нитей (90, 78 и т.д.)
     GROUP_CONCAT(DISTINCT color ORDER BY color) as colors,
     GROUP_CONCAT(DISTINCT additive_name ORDER BY additive_name) as additives
 FROM aggregated
-GROUP BY yarn_name
-ORDER BY yarn_name;
+GROUP BY yarn_name, thread_density  -- Изменено: группировка по yarn_name + thread_density
+ORDER BY yarn_name, thread_density;
+
 `
 
 //                                          UNION ALL
