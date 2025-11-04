@@ -1564,7 +1564,7 @@ server.on("request", (req, res) => {
                         .then((resolve) => res.end(resolve))
                         .catch(error => {
                             res.end(error.message);
-                            console.log(error);
+                            console.log("Er",error);
                         })
 
                 } catch (error) {
