@@ -218,6 +218,7 @@ main.append(DeviceMotionEvent);
         const time = document.createElement("input");
         time.name = i;
         time.type = "time";
+        time.placeholder = "с";
         t.append(time);
 
         infoTime.push(time);
