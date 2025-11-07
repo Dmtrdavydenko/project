@@ -163,9 +163,9 @@ main.append(DeviceMotionEvent);
     const ltrv = document.createElement("td");
     const ltrt = document.createElement("td");
 
-    //ltrm.append(labelm);
-    //ltrv.append(labelv);
-    //ltrt.append(labelt);
+    ltrm.append(labelm);
+    ltrv.append(labelv);
+    ltrt.append(labelt);
 
     const table = document.createElement("table");
 
@@ -209,11 +209,9 @@ main.append(DeviceMotionEvent);
         //  calc
         const distance = document.createElement("input");
         distance.type = "number";
-        distance.placeholder = "m";
         m.append(distance);
         const speed = document.createElement("input");
         speed.type = "number";
-        speed.placeholder = "m/s";
         v.append(speed);
         const time = document.createElement("input");
         time.name = i;

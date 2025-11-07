@@ -1,0 +1,348 @@
+input[type="number"] {
+  /*   width: 66px; */
+}
+table {
+  display: inline;
+}
+
+tbody tr:hover {
+  background: #65994c;
+  color: #ffffff;
+}
+
+li:after {
+  /*   content: "==="; */
+}
+li:hover:before {
+  /*   content: ">"; */
+}
+ul li:hover {
+  /*   background: #65994c; */
+}
+ul li:hover::marker {
+  /*   content: ">"; */
+}
+ul li::marker {
+  content: "";
+}
+/* ol li:nth-child(2n) {
+  background: #65994c;  
+} */
+ol {
+  /*   padding: 0px 20px 0px; */
+  padding-left: 20px;
+}
+/* .s::marker {
+  content: "секунда";
+} */
+/* .m::marker {
+  content: "метр";
+} */
+/* .v::marker {
+  content: "скорость";
+} */
+/* .time::marker {
+  content: "время";
+} */
+
+/* .s::before {
+  content: "секунда";
+} */
+/* .m::before {
+  content: "метр";
+} */
+/* .v::before {
+  content: "скорость";
+} */
+/* .time::before {
+   content: "время"; 
+} */
+/* .s,
+.m,
+.v,
+.time {
+  padding-left: 6px;
+} */
+/* section ul {
+  padding: 0px;
+} */
+
+
+* {
+  border-radius: 0;
+  border-width: .1px;
+  border-color: black;
+/*   padding: 0px; */
+}
+main {
+  color: black;
+}
+
+
+
+:root {
+/*   --color-bg: #FFE6F8; */
+/*   --color-text-main: #000000; */
+/*   --color-primary: #D7F5EF; */
+/*   --wrapper-height: 87vh; */
+/*   --image-max-width: 300px; */
+/*   --image-margin: 3rem; */
+/*   --font-family: "HK Grotesk"; */
+/*   --font-family-header: "HK Grotesk"; */
+
+
+
+    --shift-from-edges:8px;
+    --controls-width:40px;
+}
+
+
+/* @media only screen and (max-width: 600px) { */
+  html {
+    background: rgb(170, 170, 170); /*      серый*/
+    /*     background: green; */
+  }
+  input[type="number"] {
+    width: 65px;
+  }
+
+  main > button,
+  section > button {
+    padding: 5px;
+    margin: 0px 0px 25px;
+/*     font-size: 18pt; */
+    font-size: 11pt;
+  }
+  
+  div>button {
+    padding: 5px;
+    margin: 0px 0px 25px;
+/*     font-size: 12pt; */
+    font-size: 11pt;
+  }
+  .tap {
+    font-size: 13pt;
+  }
+
+
+  input::-webkit-calendar-picker-indicator {
+    margin-left: 0px;
+  }
+  input[type="time"] {
+    width: 62.2px;    
+    /*     width: 67px; */
+    /*     width: 55px; */
+  }
+  .tg {
+    background: deepskyblue;
+  }
+  li {
+    white-space: nowrap;
+  }
+  main > section {
+    /*         display: flex; */
+    align-items: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .block tr {
+    white-space: nowrap;
+  }
+  .block table {
+/*     width: 100%; */
+    /* Занимаем всю ширину родителя */
+    border-collapse: collapse;
+    /* Убираем двойные границы */
+  }
+  .block section {
+  }
+  .block label {
+    min-width: 70px; /* Минимальная ширина метки для лучшего выравнивания */
+/*     display: inline-block; */
+    /* Чтобы метка была на одной линии с полем ввода */
+    margin-right: 10px; /* Отступ между меткой и полем ввода */
+    min-width: 70px; /* Минимальная ширина метки для лучшего выравнивания */
+  }
+  .block input[type="time"] {
+    /*     margin-right: 5px; */
+    width: 60px;
+    /* Фиксированная ширина для полей ввода */
+  }
+  .block input[type="number"] {
+    /*     margin-right: 5px; */
+    width: 57px;
+    /* Фиксированная ширина для полей ввода */
+  }
+  .tap {
+/*     padding: 1px 18px 1px; */
+  }
+  label{
+    margin-right: 10px;
+    /* Отступ между меткой и полем ввода */    
+  }
+  
+  .tail{
+/*     border: 2px solid black; */
+/*     padding: 10px; */
+/*     margin: 37px; */
+  }
+  .test {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  } 
+  
+  
+  
+  .android .block input[type="time"] {
+    width: 62.2px;
+  }
+  .android .block input {
+    width: 62.2px;
+  }
+  .android .block input::-webkit-calendar-picker-indicator {
+/*     margin-left: 0px; */
+/*     padding-left: 0px; */
+  }
+  
+  
+  
+/*   
+  .pin{
+    --shift-from-edges: 8px;
+    --controls-width: 40px;
+}
+  
+  
+  .pin{
+    position: absolute;
+    display: flex;
+    z-index: 4;
+    pointer-events: none
+}
+
+. {
+    right: var(--shift-from-edges);
+    left: unset;
+    flex-direction: column;
+    top: calc(50% - 30px);
+    transform: translateY(-50%);
+    width: var(--controls-width);
+}
+ */
+  
+  
+  
+  
+  .pin{
+/*             position: fixed; */
+    /* Фиксированное положение */
+/*             top: 20px; */
+    /* Отступ сверху */
+/*             left: 20px; */
+    /* Отступ слева */
+/*             width: 200px; */
+    /* Ширина элемента */
+/*             padding: 10px; */
+/*             background-color: #007BFF; */
+    /* Цвет фона */
+/*             color: white; */
+    /* Цвет текста */
+/*             border-radius: 5px; */
+    /* Скругление углов */
+/*             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); */
+    /* Тень */
+        }
+
+    .pin {
+    position: fixed;
+    left: 0px;
+    right: 40px;
+    height: 50px;
+
+    background: rgb(120, 120, 120);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    /* Изначально фиксируем внизу */
+    bottom: 0;
+/*     transition: bottom 0.6s; */
+  }
+
+
+/* 
+  body{
+    height:4000px;
+    width:4000px;
+  }
+
+ */
+
+
+
+
+
+
+
+
+  p {
+    display: inline;
+    margin: 15px;
+  }
+
+  input:disabled{
+    background:white;
+    color:black;
+  }
+  button:active{
+    background: deepskyblue;    
+  }
+
+
+
+
+
+
+
+
+
+/* } */
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+/* @media only screen and (min-width: 600px) { */
+/*   html { */
+/*     background: rgb(163, 158, 127); */
+/*     background: red; */
+/*     input[type="range"] { */
+/*       margin-left: 10px; */
+/*       width: 40%; */
+/*     } */
+/*   } */
+/* } */
+
+/* Medium devices (landscape tablets, 768px and up) */
+/* @media only screen and (min-width: 768px) { */
+/*   html { */
+/*     background: rgb(131, 177, 120); */
+/*   } */
+/* } */
+
+/* Large devices (laptops/desktops, 992px and up) */
+/* @media only screen and (min-width: 992px) { */
+/*   html { */
+/*     background: rgb(136, 255, 255); */
+/*   } */
+/* } */
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+/* @media only screen and (min-width: 1200px) { */
+/*   html { */
+/*     background: rgb(157, 152, 233); */
+/*   } */
+/* } */
+
+
+
