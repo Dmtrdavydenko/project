@@ -167,7 +167,7 @@ main {
 .block input[type="time"] {
     /*     margin-right: 5px; */
     width: 60px;
-    padding: 5px;
+    padding: 3px;
     /* Фиксированная ширина для полей ввода */
 }
   .block input[type="number"] {
