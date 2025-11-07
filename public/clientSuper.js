@@ -204,7 +204,7 @@ main.append(DeviceMotionEvent);
     }
 
     const btn = [];
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 5; i++) {
         buttonRow.push([]);
         //  calc
         const distance = document.createElement("input");

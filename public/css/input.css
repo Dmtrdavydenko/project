@@ -164,11 +164,12 @@ main {
     margin-right: 10px; /* Отступ между меткой и полем ввода */
     min-width: 70px; /* Минимальная ширина метки для лучшего выравнивания */
   }
-  .block input[type="time"] {
+.block input[type="time"] {
     /*     margin-right: 5px; */
     width: 60px;
+    padding: 5px;
     /* Фиксированная ширина для полей ввода */
-  }
+}
   .block input[type="number"] {
     /*     margin-right: 5px; */
     width: 57px;
