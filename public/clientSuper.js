@@ -498,16 +498,16 @@ const DeviceMotionEvent = document.createElement("div");
 
 const button = document.createElement("button");
 button.textContent = "Вычислить";
-//main.append(button);
+main.append(button);
 const send = document.createElement("button");
 send.textContent = "Сохранить";
-// main.append(send);
+ main.append(send);
 const get = document.createElement("button");
 get.textContent = "Загрузить";
-//main.append(get);
+main.append(get);
 
 const section = document.createElement("section");
-//main.append(section);
+main.append(section);
 
 let list = [];
 let listMS = [];
