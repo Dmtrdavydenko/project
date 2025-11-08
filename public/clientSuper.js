@@ -119,10 +119,10 @@ function handleInput2(event) {
 }
 
 const DeviceOrientationEvent = document.createElement("div");
-main.append(DeviceOrientationEvent);
+//main.append(DeviceOrientationEvent);
 
 const DeviceMotionEvent = document.createElement("div");
-main.append(DeviceMotionEvent);
+//main.append(DeviceMotionEvent);
 
 {
     function handleInputTime(event) {
@@ -174,15 +174,15 @@ main.append(DeviceMotionEvent);
         cancelable: true, // Позволяет событию быть отменяемым
     });
 
-    const ol = document.createElement("ol");
+    const ol = document.createElement("tbody");
 
     // ol.append(start, end);
 
     for (let i = 0; i < 23; i++) {
-        const li = document.createElement("li");
-        li.id = i;
+        const line = document.createElement("tr");
+        line.id = i;
         // loatd
-        li.addEventListener("click", function (e) {
+        line.addEventListener("click", function (e) {
             if (!e.target.closest("button")) return;
             if (list[this.id] === e.target) {
                 e.target.classList.remove("tg");
@@ -200,7 +200,7 @@ main.append(DeviceMotionEvent);
             // dx.value = (end.valueAsNumber - sum - start.valueAsNumber) / 60000;
             // console.log(end.valueAsNumber - sum - start.valueAsNumber);
         });
-        ol.append(li);
+        ol.append(line);
     }
 
     const btn = [];
@@ -216,11 +216,13 @@ main.append(DeviceMotionEvent);
         speed.placeholder = "m/s";
         v.append(speed);
         const time = document.createElement("input");
+        const td = document.createElement("td");
         time.name = i;
         time.type = "time";
         time.placeholder = "с";
-        t.append(time);
-
+        td.append(time);
+        //t.append(td);
+        trt.append(td);
         infoTime.push(time);
 
         distance.addEventListener("calc", function (e) {
@@ -262,6 +264,7 @@ main.append(DeviceMotionEvent);
         //     panel button tap
         for (let j = 0; j < 23; j++) {
             const btn0 = document.createElement("button");
+            const cell = document.createElement("td");
             btn0.classList.add("tap");
 
             buttonLine[j].push(btn0);
@@ -269,7 +272,8 @@ main.append(DeviceMotionEvent);
 
             btn0.coll = i;
 
-            ol.childNodes[j].append(btn0);
+            cell.append(btn0);
+            ol.childNodes[j].append(cell);
         }
 
         time.addEventListener("input", handleInputTime);
@@ -284,12 +288,12 @@ main.append(DeviceMotionEvent);
 
     trm.append(ltrm, m);
     trv.append(ltrv, v);
-    trt.append(t);
+    //trt.append(td);
     //trt.append(ltrt, t);
 
     //table.append(trm);
     //table.append(trv);
-    table.append(trt);
+    //table.append(trt);
 
     const diw = document.createElement("section");
 
@@ -324,9 +328,12 @@ main.append(DeviceMotionEvent);
     dx.classList.add("resolve");
     timeDx.classList.add("resolve");
 
-    main.append(table);
-    main.append(calculateButton);
-    main.append(diw);
+
+    const thead = document.createElement("thead");
+    thead.append(trt);
+    main.append(thead);
+    //main.append(calculateButton);
+    //main.append(diw);
     main.append(ol);
     main.append(diwend);
 }
@@ -339,7 +346,7 @@ main.append(DeviceMotionEvent);
     // max-height: inherit
     pin.append(summaFix);
     pin.classList.add("pin");
-    main.append(pin);
+    //main.append(pin);
 
     // Добавляем клонированный элемент в контейнер
 
@@ -491,16 +498,16 @@ main.append(DeviceMotionEvent);
 
 const button = document.createElement("button");
 button.textContent = "Вычислить";
-main.append(button);
+//main.append(button);
 const send = document.createElement("button");
 send.textContent = "Сохранить";
 // main.append(send);
 const get = document.createElement("button");
 get.textContent = "Загрузить";
-main.append(get);
+//main.append(get);
 
 const section = document.createElement("section");
-main.append(section);
+//main.append(section);
 
 let list = [];
 let listMS = [];
