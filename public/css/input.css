@@ -2,7 +2,7 @@ input[type="number"] {
   /*   width: 66px; */
 }
 table {
-  display: inline;
+/*  display: inline;*/
 }
 
 tbody tr:hover {
@@ -78,7 +78,9 @@ main {
   color: black;
 }
 
-
+body {
+/*    margin:0px;*/
+}
 
 :root {
 /*   --color-bg: #FFE6F8; */
@@ -149,6 +151,9 @@ main {
   .block tr {
     white-space: nowrap;
   }
+.block td {
+    padding: 0px;
+}
   .block table {
 /*     width: 100%; */
     /* Занимаем всю ширину родителя */

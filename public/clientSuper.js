@@ -284,10 +284,11 @@ main.append(DeviceMotionEvent);
 
     trm.append(ltrm, m);
     trv.append(ltrv, v);
-    trt.append(ltrt, t);
+    trt.append(t);
+    //trt.append(ltrt, t);
 
-    table.append(trm);
-    table.append(trv);
+    //table.append(trm);
+    //table.append(trv);
     table.append(trt);
 
     const diw = document.createElement("section");
