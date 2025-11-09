@@ -2,7 +2,8 @@ input[type="number"] {
   /*   width: 66px; */
 }
 table {
-/*  display: inline;*/
+    /*  display: inline;*/
+    margin: 0 auto;
 }
 
 tbody tr:hover {
