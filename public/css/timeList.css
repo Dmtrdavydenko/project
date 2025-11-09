@@ -42,7 +42,7 @@ li {
 input[type="time"] {
     width: 100px;
     padding: 4px;
-    font-size: 20px;
+    font-size: 19px;
     /* Крупнее для монитора */
     border: none;
     background: transparent;

@@ -56,7 +56,7 @@ const schedule = [31200000
         return 43200000;
     }
 
-    const currentTime = 43200000;
+    const currentTime = 55200000;
 
     // Заполнение списка с input type="time"
     schedule.forEach(time => {
