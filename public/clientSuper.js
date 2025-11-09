@@ -751,10 +751,8 @@ send.addEventListener("click", async function (e) {
     let currentValue = 0; // Переменная для хранения текущего значения
     let count = 0;
 
-    let run = dtinput.valueAsNumber + start.valueAsNumber;
+    let сс = dtinput.valueAsNumber + start.valueAsNumber;
     list.forEach((item, i) => {
-        console.log(run);
-        run += +item.value;
         if (item.value === currentValue) {
             count++;
         } else {
@@ -766,6 +764,10 @@ send.addEventListener("click", async function (e) {
             currentValue = item.value;
             count = 1;
         }
+    });
+    list.forEach((item, i) => {
+        console.log(сс);
+        сс += +item.value;
     });
 
     if (currentValue !== null) {
@@ -813,7 +815,7 @@ send.addEventListener("click", async function (e) {
         //    body: JSON.stringify({
         //        action: "save",
         //        table: {
-        //            name: "diary_ref",
+        //            name: "timestamps",
         //        },
         //        data: dat,
         //        key: {
@@ -822,7 +824,7 @@ send.addEventListener("click", async function (e) {
         //        },
         //    }),
         //}).then((response) => response.json());
-        response = await fetch("https://worktime.up.railway.app/", {
+        response = await fetch(document.location.href, {
             //response = await fetch(document.location.href, {
             method: "POST",
             headers: {
@@ -922,6 +924,7 @@ function handleCalculation(event) {
         time.type = "time";
         sum2 += +item.value;
         time.valueAsNumber = time12(sum2);
+        //time.valueAsNumber = sum2;
 
         time.setAttribute("disabled", true);
         box.append(time);
