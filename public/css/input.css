@@ -1,37 +1,41 @@
 input[type="number"] {
-  /*   width: 66px; */
+    /*   width: 66px; */
 }
+
 table {
     /*  display: inline;*/
-    margin: 0 auto;
 }
 
 tbody tr:hover {
-  background: #65994c;
-  color: #ffffff;
+    background: #65994c;
+    color: #ffffff;
 }
 
 li:after {
-  /*   content: "==="; */
+    /*   content: "==="; */
 }
+
 li:hover:before {
-  /*   content: ">"; */
+    /*   content: ">"; */
 }
+
 ul li:hover {
-  /*   background: #65994c; */
+    /*   background: #65994c; */
 }
-ul li:hover::marker {
-  /*   content: ">"; */
-}
+
+    ul li:hover::marker {
+        /*   content: ">"; */
+    }
+
 ul li::marker {
-  content: "";
+    content: "";
 }
 /* ol li:nth-child(2n) {
   background: #65994c;  
 } */
 ol {
-  /*   padding: 0px 20px 0px; */
-  padding-left: 28px;
+    /*   padding: 0px 20px 0px; */
+    padding-left: 28px;
 }
 /* .s::marker {
   content: "секунда";
@@ -70,151 +74,173 @@ ol {
 
 
 * {
-  border-radius: 0;
-  border-width: .1px;
-  border-color: black;
-/*   padding: 0px; */
+    border-radius: 0;
+    border-width: .1px;
+    border-color: black;
+    /*   padding: 0px; */
 }
+
 main {
-  color: black;
+    color: black;
 }
 
 body {
-    margin:0px;
+    margin: 0px;
 }
 
 :root {
-/*   --color-bg: #FFE6F8; */
-/*   --color-text-main: #000000; */
-/*   --color-primary: #D7F5EF; */
-/*   --wrapper-height: 87vh; */
-/*   --image-max-width: 300px; */
-/*   --image-margin: 3rem; */
-/*   --font-family: "HK Grotesk"; */
-/*   --font-family-header: "HK Grotesk"; */
+    /*   --color-bg: #FFE6F8; */
+    /*   --color-text-main: #000000; */
+    /*   --color-primary: #D7F5EF; */
+    /*   --wrapper-height: 87vh; */
+    /*   --image-max-width: 300px; */
+    /*   --image-margin: 3rem; */
+    /*   --font-family: "HK Grotesk"; */
+    /*   --font-family-header: "HK Grotesk"; */
 
 
 
-    --shift-from-edges:8px;
-    --controls-width:40px;
+    --shift-from-edges: 8px;
+    --controls-width: 40px;
 }
 
 
 /* @media only screen and (max-width: 600px) { */
-  html {
+html {
     background: rgb(170, 170, 170); /*      серый*/
     /*     background: green; */
-  }
-  input[type="number"] {
+}
+
+input[type="number"] {
     width: 65px;
-  }
+}
 
-  main > button,
-  section > button {
+main > button,
+section > button {
     padding: 5px;
     margin: 0px 0px 25px;
-/*     font-size: 18pt; */
+    /*     font-size: 18pt; */
     font-size: 11pt;
-  }
-  
-  div>button {
+}
+
+div > button {
     padding: 5px;
     margin: 0px 0px 25px;
-/*     font-size: 12pt; */
+    /*     font-size: 12pt; */
     font-size: 11pt;
-  }
-  .tap {
+}
+
+.tap {
     font-size: 13pt;
-  }
+}
 
 
-  input::-webkit-calendar-picker-indicator {
+input::-webkit-calendar-picker-indicator {
     margin-left: 0px;
-  }
-  input[type="time"] {
-    width: 62.2px;    
+}
+
+input[type="time"] {
+    width: 62.2px;
     /*     width: 67px; */
     /*     width: 55px; */
-  }
-  .tg {
+}
+
+.tg {
     background: deepskyblue;
-  }
-  li {
+}
+
+li {
     white-space: nowrap;
-  }
-  main > section {
+}
+
+main > section {
     /*         display: flex; */
     align-items: flex-start;
     flex-direction: column;
     align-items: flex-start;
-  }
+}
 
-  .block tr {
+.block tr {
     white-space: nowrap;
-  }
+}
+
 .block td {
     padding: 0px;
 }
-  .block table {
-/*     width: 100%; */
+
+.block table {
+    /*     width: 100%; */
     /* Занимаем всю ширину родителя */
     border-collapse: collapse;
     /* Убираем двойные границы */
-  }
-  .block section {
-  }
-  .block label {
+}
+
+.block section {
+}
+
+.block label {
     min-width: 70px; /* Минимальная ширина метки для лучшего выравнивания */
-/*     display: inline-block; */
+    /*     display: inline-block; */
     /* Чтобы метка была на одной линии с полем ввода */
     margin-right: 10px; /* Отступ между меткой и полем ввода */
     min-width: 70px; /* Минимальная ширина метки для лучшего выравнивания */
-  }
+}
+
 .block input[type="time"] {
     /*     margin-right: 5px; */
     width: 60px;
     padding: 3px;
     /* Фиксированная ширина для полей ввода */
 }
-  .block input[type="number"] {
+
+.block input[type="number"] {
     /*     margin-right: 5px; */
     width: 57px;
     /* Фиксированная ширина для полей ввода */
-  }
-  .tap {
-/*     padding: 1px 18px 1px; */
-  }
-  label{
+}
+
+.tap {
+    /*     padding: 1px 18px 1px; */
+}
+
+label {
     margin-right: 10px;
-    /* Отступ между меткой и полем ввода */    
-  }
-  
-  .tail{
-/*     border: 2px solid black; */
-/*     padding: 10px; */
-/*     margin: 37px; */
-  }
-  .test {
+    /* Отступ между меткой и полем ввода */
+}
+
+.tail {
+    /*     border: 2px solid black; */
+    /*     padding: 10px; */
+    /*     margin: 37px; */
+}
+
+.test {
     position: absolute;
     top: 10px;
     left: 10px;
-  } 
-  
-  
-  
-  .android .block input[type="time"] {
+}
+
+
+
+.android .block input[type="time"] {
     width: 62.2px;
-  }
-  .android .block input {
+}
+
+.android .block input {
     width: 62.2px;
-  }
-  .android .block input::-webkit-calendar-picker-indicator {
-/*     margin-left: 0px; */
-/*     padding-left: 0px; */
-  }
-  
-  
-  
+}
+
+    .android .block input::-webkit-calendar-picker-indicator {
+        /*     margin-left: 0px; */
+        /*     padding-left: 0px; */
+    }
+
+.android body{
+    display: flex;
+    justify-content: center;
+}
+
+
 /*   
   .pin{
     --shift-from-edges: 8px;
@@ -238,36 +264,35 @@ body {
     width: var(--controls-width);
 }
  */
-  
-  
-  
-  
-  .pin{
-/*             position: fixed; */
-    /* Фиксированное положение */
-/*             top: 20px; */
-    /* Отступ сверху */
-/*             left: 20px; */
-    /* Отступ слева */
-/*             width: 200px; */
-    /* Ширина элемента */
-/*             padding: 10px; */
-/*             background-color: #007BFF; */
-    /* Цвет фона */
-/*             color: white; */
-    /* Цвет текста */
-/*             border-radius: 5px; */
-    /* Скругление углов */
-/*             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); */
-    /* Тень */
-        }
 
-    .pin {
+
+
+
+.pin {
+    /*             position: fixed; */
+    /* Фиксированное положение */
+    /*             top: 20px; */
+    /* Отступ сверху */
+    /*             left: 20px; */
+    /* Отступ слева */
+    /*             width: 200px; */
+    /* Ширина элемента */
+    /*             padding: 10px; */
+    /*             background-color: #007BFF; */
+    /* Цвет фона */
+    /*             color: white; */
+    /* Цвет текста */
+    /*             border-radius: 5px; */
+    /* Скругление углов */
+    /*             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); */
+    /* Тень */
+}
+
+.pin {
     position: fixed;
     left: 0px;
     right: 40px;
     height: 50px;
-
     background: rgb(120, 120, 120);
     color: white;
     display: flex;
@@ -276,8 +301,8 @@ body {
     font-size: 18px;
     /* Изначально фиксируем внизу */
     bottom: 0;
-/*     transition: bottom 0.6s; */
-  }
+    /*     transition: bottom 0.6s; */
+}
 
 
 /* 
@@ -295,18 +320,19 @@ body {
 
 
 
-  p {
+p {
     display: inline;
     margin: 15px;
-  }
+}
 
-  input:disabled{
-    background:white;
-    color:black;
-  }
-  button:active{
-    background: deepskyblue;    
-  }
+input:disabled {
+    background: white;
+    color: black;
+}
+
+button:active {
+    background: deepskyblue;
+}
 
 
 
