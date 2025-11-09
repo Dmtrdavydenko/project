@@ -132,8 +132,13 @@ const DeviceMotionEvent = document.createElement("div");
 
 
 
+let list = [];
+const section = document.createElement("section");
+const select = document.createElement("select");
+const send = document.createElement("button");
 
-
+let dtinput = null;
+let dateSave = 0;
 
 
 
@@ -155,7 +160,7 @@ const DeviceMotionEvent = document.createElement("div");
         //summa.dispatchEvent(getSum);
         //dx.dispatchEvent(getSum);
         //timeDx.dispatchEvent(getSum);
-        //handleCalculation();
+        handleCalculation();
 
 
     }
@@ -537,21 +542,16 @@ const DeviceMotionEvent = document.createElement("div");
 const button = document.createElement("button");
 button.textContent = "Вычислить";
 //main.append(button);
-const send = document.createElement("button");
 send.textContent = "Сохранить";
  main.append(send);
 const get = document.createElement("button");
 get.textContent = "Загрузить";
 main.append(get);
 
-const section = document.createElement("section");
 main.append(section);
 
-let list = [];
 let listMS = [];
 
-const select = document.createElement("select");
-let dateSave = 0;
 
 
 
@@ -872,7 +872,6 @@ function dropListSelect(array, select) {
     });
     return select;
 }
-let dtinput = null;
 function handleCalculation(event) {
     section.innerHTML = "";
     select.innerHTML = "";
