@@ -235,7 +235,7 @@ label {
         /*     padding-left: 0px; */
     }
 
-.android body{
+.android {
     display: flex;
     justify-content: center;
 }
