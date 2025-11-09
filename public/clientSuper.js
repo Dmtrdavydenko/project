@@ -96,8 +96,8 @@ const dx = INIT_INPUT_DATA.dx1;
 const summa = INIT_INPUT_DATA.sum;
 const summaFix = INIT_INPUT_DATA.fix;
 const quantity = INIT_INPUT_DATA.quan;
-// main.append(start);
-// main.append(end);
+//main.append(start);
+//main.append(end);
 const buttonLine = [];
 const buttonRow = [];
 
@@ -123,6 +123,23 @@ const DeviceOrientationEvent = document.createElement("div");
 
 const DeviceMotionEvent = document.createElement("div");
 //main.append(DeviceMotionEvent);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {
     function handleInputTime(event) {
@@ -193,6 +210,7 @@ const DeviceMotionEvent = document.createElement("div");
                 e.target.classList.add("tg");
             }
             handleInput2(event);
+            handleCalculation(event);
             // let sum = getListTimeSum();
 
             // timeDx.valueAsNumber = end.valueAsNumber - sum - start.valueAsNumber;
@@ -206,7 +224,7 @@ const DeviceMotionEvent = document.createElement("div");
     const btn = [];
     for (let i = 0; i < 5; i++) {
         buttonRow.push([]);
-        //  calc
+        //######################################################################### calc
         const distance = document.createElement("input");
         distance.type = "number";
         distance.placeholder = "m";
@@ -264,6 +282,8 @@ const DeviceMotionEvent = document.createElement("div");
         //     panel button tap
         for (let j = 0; j < 23; j++) {
             const btn0 = document.createElement("button");
+
+
             const cell = document.createElement("td");
             btn0.classList.add("tap");
 
@@ -297,7 +317,7 @@ const DeviceMotionEvent = document.createElement("div");
 
     const diw = document.createElement("section");
 
-    diw.append(start);
+    main.append(start);
 
     const diwend = document.createElement("section");
     const labelSum = document.createElement("label");
@@ -331,11 +351,12 @@ const DeviceMotionEvent = document.createElement("div");
 
     const thead = document.createElement("thead");
     thead.append(trt);
-    main.append(thead);
+    table.append(thead, ol);
+    main.append(table);
     //main.append(calculateButton);
     //main.append(diw);
-    main.append(ol);
-    main.append(diwend);
+    //main.append(ol);
+        
 }
 
 {
@@ -498,7 +519,7 @@ const DeviceMotionEvent = document.createElement("div");
 
 const button = document.createElement("button");
 button.textContent = "Вычислить";
-main.append(button);
+//main.append(button);
 const send = document.createElement("button");
 send.textContent = "Сохранить";
  main.append(send);
@@ -697,23 +718,29 @@ get.addEventListener("click", async function (e) {
 });
 
 function Task(millisecond, quantity, time, data, run) {
-    this.millisecond = millisecond;
+    this.millisecond = +millisecond;
+    this.second = millisecond / 1000;
+    this.minute = millisecond / 60000;
     this.quantity = quantity;
     this.time = time;
     this.data = data;
     this.run = run;
+    this.runMinute = run / 60000;
 }
 
 send.addEventListener("click", async function (e) {
     const dat = [];
     const dateSave = dtinput.valueAsNumber;
-    console.log("data " + dateSave);
-    console.log("time " + select.value);
-    console.log("run " + start.valueAsNumber);
+    console.log("data ", dateSave);
+    console.log("time ", select.value);
+    console.log("run ", start.valueAsNumber);
     let currentValue = 0; // Переменная для хранения текущего значения
     let count = 0;
 
+    let run = dtinput.valueAsNumber + start.valueAsNumber;
     list.forEach((item, i) => {
+        console.log(run);
+        run += +item.value;
         if (item.value === currentValue) {
             count++;
         } else {
@@ -832,8 +859,7 @@ function dropListSelect(array, select) {
     return select;
 }
 let dtinput = null;
-
-button.addEventListener("click", function (e) {
+function handleCalculation(event) {
     section.innerHTML = "";
     select.innerHTML = "";
     console.log(list);
@@ -873,6 +899,7 @@ button.addEventListener("click", function (e) {
     const time = document.createElement("input");
     time.type = "time";
     time.valueAsNumber = sum2;
+    time.setAttribute("disabled", true);
     box.append(time);
     ol.append(box);
     list.forEach((item) => {
@@ -882,14 +909,19 @@ button.addEventListener("click", function (e) {
         time.type = "time";
         sum2 += +item.value;
         time.valueAsNumber = time12(sum2);
+
+        time.setAttribute("disabled", true);
         box.append(time);
         ol.append(box);
     });
-
+    console.log(list);
     section.append(send);
 
     console.log(sum2);
-});
+
+}
+
+button.addEventListener("click", handleCalculation);
 
 const color = [
     "#E7C697",
