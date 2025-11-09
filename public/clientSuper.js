@@ -545,8 +545,8 @@ button.textContent = "Вычислить";
 send.textContent = "Сохранить";
  main.append(send);
 const get = document.createElement("button");
-get.textContent = "Загрузить";
-main.append(get);
+//get.textContent = "Загрузить";
+//main.append(get);
 
 main.append(section);
 
@@ -926,6 +926,7 @@ function handleCalculation(event) {
         time.setAttribute("disabled", true);
         box.append(time);
         ol.append(box);
+        console.log(sum2);
     });
     console.log(list);
     section.append(send);
