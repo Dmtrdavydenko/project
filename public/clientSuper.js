@@ -16,6 +16,10 @@ if (isAndroid()) {
 } else {
     console.log("This device is not an Android.");
 }
+const event = new PointerEvent("pointerdown", {
+    bubbles: true, // Allows the event to bubble up
+    cancelable: true, // Allows the event to be cancelable
+});
 function create3() {
     const TimeStart = document.createElement("input");
     TimeStart.type = "time";
@@ -143,15 +147,17 @@ const DeviceMotionEvent = document.createElement("div");
 
 {
     function handleInputTime(event) {
-        // console.log("event");
         const buttons = buttonRow[this.name];
         for (let button of buttons) {
             button.textContent = this.value;
             button.value = this.valueAsNumber;
         }
-        summa.dispatchEvent(getSum);
-        dx.dispatchEvent(getSum);
-        timeDx.dispatchEvent(getSum);
+        //summa.dispatchEvent(getSum);
+        //dx.dispatchEvent(getSum);
+        //timeDx.dispatchEvent(getSum);
+        //handleCalculation();
+
+
     }
 
     const ul = document.createElement("ul");
@@ -222,6 +228,7 @@ const DeviceMotionEvent = document.createElement("div");
     }
 
     const btn = [];
+    let dataTime = [1980000, 2100000, 2400000];
     for (let i = 0; i < 5; i++) {
         buttonRow.push([]);
         //######################################################################### calc
@@ -238,6 +245,7 @@ const DeviceMotionEvent = document.createElement("div");
         time.name = i;
         time.type = "time";
         time.placeholder = "с";
+        time.valueAsNumber = dataTime[i] || 0;
         td.append(time);
         //t.append(td);
         trt.append(td);
@@ -295,11 +303,16 @@ const DeviceMotionEvent = document.createElement("div");
             cell.append(btn0);
             ol.childNodes[j].append(cell);
         }
-
         time.addEventListener("input", handleInputTime);
         time.addEventListener("pointerdown", handleInputTime);
         time.addEventListener("change", handleInputTime);
+
+
+        time.dispatchEvent(eve);
+
     }
+
+    
 
     table.classList.add("block");
     trm.classList.add("block");
@@ -356,6 +369,10 @@ const DeviceMotionEvent = document.createElement("div");
     //main.append(calculateButton);
     //main.append(diw);
     //main.append(ol);
+
+
+    //infoTime.forEach((item) => item.dispatchEvent(event));
+
         
 }
 
@@ -536,10 +553,7 @@ let listMS = [];
 const select = document.createElement("select");
 let dateSave = 0;
 
-const event = new PointerEvent("pointerdown", {
-    bubbles: true, // Allows the event to bubble up
-    cancelable: true, // Allows the event to be cancelable
-});
+
 
 async function load(e) {
     if (!e.target.closest("button")) return;
