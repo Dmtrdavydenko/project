@@ -65,6 +65,33 @@ input[type="time"] {
         border-radius: 3px;
     }
 
+
+input[type="datetime-local"] {
+/*    width: 100px;*/
+    padding: 4px;
+    font-size: 19px;
+    /* Крупнее для монитора */
+    border: none;
+    background: transparent;
+    text-align: center;
+    cursor: default;
+}
+
+    input[type="datetime-local"]:disabled {
+        color: #999;
+        text-decoration: line-through;
+        background-color: #f0f0f0;
+        cursor: not-allowed;
+    }
+
+    input[type="datetime-local"].active {
+        color: #2e7d32;
+        font-weight: bold;
+        background-color: #e8f5e8;
+        border: 1px solid #4caf50;
+        border-radius: 3px;
+    }
+
 .info {
     font-size: 14px;
     color: #666;

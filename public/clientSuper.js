@@ -757,7 +757,7 @@ send.addEventListener("click", async function (e) {
     let currentValue = 0; // Переменная для хранения текущего значения
     let count = 0;
 
-    let сс = dtinput.valueAsNumber + start.valueAsNumber;
+    let cc = dtinput.valueAsNumber + start.valueAsNumber;
     list.forEach((item, i) => {
         if (item.value === currentValue) {
             count++;
@@ -774,7 +774,7 @@ send.addEventListener("click", async function (e) {
     const timeData = [];
     list.forEach((item, i) => {
         timeData.push(cc);
-        сс += +item.value;
+        cc += +item.value;
     });
 
     if (currentValue !== null) {
@@ -784,7 +784,7 @@ send.addEventListener("click", async function (e) {
         );
     }
     console.log(list);
-    console.log(dat);
+    console.log(timeData);
 
 
     try {
@@ -893,24 +893,19 @@ function handleCalculation(event) {
     const ol = document.createElement("ol");
 
     dtinput.type = "date";
-    const today = new Date();
+  
+    // Получаем текущую дату
+    const now = new Date();
 
-    // Добавляем смещение к текущему времени
-    const adjustedTime = new Date(today.getTime());
+    // Создаём дату для начала сегодняшнего дня: год, месяц, день, 0 часов, 0 минут, 0 секунд, 0 миллисекунд
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
 
-    // Получаем год, месяц и день
-    const year = adjustedTime.getFullYear();
-    const month = adjustedTime.getMonth(); // Месяцы начинаются с 0 (январь)
-    const day = adjustedTime.getDate();
+    // Получаем timestamp в миллисекундах
+    const timestampInMs = startOfDay.getTime() + 3600000 * 7;
 
-    // Создаем новую дату без времени и получаем её в миллисекундах
-    const dateWithoutTimeInMs =
-        new Date(year, month, day).getTime() + 3600000 * 7;
 
-    // console.log("Дата без времени в миллисекундах:", dateWithoutTimeInMs +3600000 * 7); // Выводит дату без времени в миллисекундах
-
-    dtinput.valueAsNumber = dateWithoutTimeInMs;
-    dateSave = dateWithoutTimeInMs;
+    dtinput.valueAsNumber = timestampInMs;
+    dateSave = timestampInMs;
     section.append(dtinput);
 
     section.append(dropListSelect([{ name: "День" }, { name: "Ночь" }], select));
