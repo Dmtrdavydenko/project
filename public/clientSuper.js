@@ -337,6 +337,12 @@ let dateSave = 0;
 
     main.append(start);
 
+
+    const aViewTime = document.createElement("a");
+    aViewTime.href = "/viewTime";
+    aViewTime.textContent = "Просмотр";
+    main.append(aViewTime);
+
     const diwend = document.createElement("section");
     const labelSum = document.createElement("label");
     labelSum.textContent = "Сумма";
@@ -765,8 +771,9 @@ send.addEventListener("click", async function (e) {
             count = 1;
         }
     });
+    const timeData = [];
     list.forEach((item, i) => {
-        console.log(сс);
+        timeData.push(cc);
         сс += +item.value;
     });
 
@@ -824,7 +831,7 @@ send.addEventListener("click", async function (e) {
         //        },
         //    }),
         //}).then((response) => response.json());
-        response = await fetch(document.location.href, {
+        response = await fetch("https://worktime.up.railway.app/textile", {
             //response = await fetch(document.location.href, {
             method: "POST",
             headers: {
