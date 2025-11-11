@@ -35,7 +35,7 @@ class viewTime {
 
 
 
-{
+(async () => {
     const response = await fetch("https://worktime.up.railway.app/textile", {
         //response = await fetch(document.location.href, {
         method: "POST",
@@ -115,4 +115,12 @@ class viewTime {
         li.appendChild(currentT);
         timeList.appendChild(li);
     });
-}
+}) ();
+
+
+
+//(async () => {
+//    const tableName = await getTableName();
+//    console.log(tableName);
+//    await loadTable();
+//})();
