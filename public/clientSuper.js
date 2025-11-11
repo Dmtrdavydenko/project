@@ -840,7 +840,7 @@ send.addEventListener("click", async function (e) {
                 "Content-Type": "application/json;charset=utf-8",
             },
             body: JSON.stringify({
-                action: "insertTime"
+                action: "insertTime",
                 data: timeData
             }),
         }).then((response) => response.json());
