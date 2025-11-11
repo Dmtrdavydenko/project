@@ -48,7 +48,7 @@ class viewTime {
     }).then((response) => response.json());
     console.log(response);
 
-    const schedule = response[0].map(item => item.time_seconds);
+    const schedule = response[0].map(item => item.time_seconds*1000);
 
 
 
