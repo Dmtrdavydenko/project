@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 const functionDB = {
     "insert": insert,
     "insertTime": insertTime,
+    "getTime": getTime,
     "select": select,
     "drop": dropTable,
     "getAllTableNames": getAllTableNames,
@@ -970,6 +971,43 @@ async function insertTime(body) {
 
         // Вставка новой записи
         return await connection.execute(sql, times);
+
+
+
+        //console.log('Inserted ID:', insertResult.insertId);
+
+        // Получаем все данные из таблицы после вставки
+        //const [rows] = await connection.execute(
+        //    'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
+        //);
+        //delete body.action;
+        //delete body.table.name;
+        //delete body.table;
+        //return await manual.insertManual(transformKeys(body));
+    } catch (err) {
+        console.error('Ошибка:', err);
+        throw err;
+    } finally {
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
+    }
+}
+
+async function getTime() {
+    const connection = await pool.getConnection();
+
+    try {
+        console.log('Успешно подключено к базе данных MySQL!');
+
+
+        const sql = `SELECT id, 
+       UNIX_TIMESTAMP(task_time) AS time_seconds
+FROM timestamps 
+WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 18 HOUR);
+`;
+
+        // Вставка новой записи
+        return await connection.execute(sql);
 
 
 

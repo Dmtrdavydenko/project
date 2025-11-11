@@ -13,29 +13,47 @@ class viewTime {
 }
 
 
-const schedule = [1762934400000
-    , 1762936800000
-    , 1762939200000
-    , 1762941600000
-    , 1762944000000
-    , 1762946400000
-    , 1762948800000
-    , 1762951200000
-    , 1762953600000
-    , 1762956000000
-    , 1762958400000
-    , 1762960800000
-    , 1762963200000
-    , 1762965600000
-    , 1762968000000
-    , 1762970400000
-    , 1762972800000];
+//const schedule = [1762934400000
+//    , 1762936800000
+//    , 1762939200000
+//    , 1762941600000
+//    , 1762944000000
+//    , 1762946400000
+//    , 1762948800000
+//    , 1762951200000
+//    , 1762953600000
+//    , 1762956000000
+//    , 1762958400000
+//    , 1762960800000
+//    , 1762963200000
+//    , 1762965600000
+//    , 1762968000000
+//    , 1762970400000
+//    , 1762972800000];
 
 
 
 
 
 {
+    const response = await fetch("https://worktime.up.railway.app/textile", {
+        //response = await fetch(document.location.href, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "getTime"
+        }),
+    }).then((response) => response.json());
+    console.log(response);
+
+    const schedule = response.map(item => item.time_seconds);
+
+
+
+
+
     const timeList = document.createElement("ol");
     //main.classList.add("container");
     //timeList.classList.add("time-list");
