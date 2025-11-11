@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 // const db = require("./src/sqlite.js");
 const functionDB = {
     "insert": insert,
+    "insertTime": insertTime,
     "select": select,
     "drop": dropTable,
     "getAllTableNames": getAllTableNames,
@@ -948,6 +949,40 @@ async function insert(body) {
         delete body.table.name;
         delete body.table;
         return await manual.insertManual(transformKeys(body));
+    } catch (err) {
+        console.error('Ошибка:', err);
+        throw err;
+    } finally {
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
+    }
+}
+async function insertTime(body) {
+    const connection = await pool.getConnection();
+
+    try {
+        console.log('Успешно подключено к базе данных MySQL!');
+
+
+        const times = body.data.map(time => time / 1000);
+        const placeholders = body.data.map(() => '(FROM_UNIXTIME(?))').join(', ');
+        const sql = `INSERT INTO timestamps (task_time) VALUES ${placeholders}`;
+
+        // Вставка новой записи
+        return await connection.execute(sql, times);
+
+
+
+        //console.log('Inserted ID:', insertResult.insertId);
+
+        // Получаем все данные из таблицы после вставки
+        //const [rows] = await connection.execute(
+        //    'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
+        //);
+        //delete body.action;
+        //delete body.table.name;
+        //delete body.table;
+        //return await manual.insertManual(transformKeys(body));
     } catch (err) {
         console.error('Ошибка:', err);
         throw err;

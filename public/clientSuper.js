@@ -233,7 +233,7 @@ let dateSave = 0;
     }
 
     const btn = [];
-    let dataTime = [1980000, 2100000, 2400000];
+    let dataTime = [1980000, 2100000, 2400000,80*60*1000];
     for (let i = 0; i < 5; i++) {
         buttonRow.push([]);
         //######################################################################### calc
@@ -831,6 +831,22 @@ send.addEventListener("click", async function (e) {
         //        },
         //    }),
         //}).then((response) => response.json());
+
+
+        response = await fetch("https://worktime.up.railway.app/textile", {
+            //response = await fetch(document.location.href, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify({
+                action: "insertTime"
+                data: timeData
+            }),
+        }).then((response) => response.json());
+        console.log(response);
+
+
         response = await fetch("https://worktime.up.railway.app/textile", {
             //response = await fetch(document.location.href, {
             method: "POST",
