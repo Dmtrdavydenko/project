@@ -7,13 +7,54 @@ class viewTime {
 
         timeInput.readOnly = true; // readonly для просмотра на мониторе
         timeInput.valueAsNumber = time;
-        console.log(timeInput.valueAsNumber);
+        //console.log(timeInput.valueAsNumber);
         return timeInput;
     }
 }
 
 
 const schedule = [0
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
+    , 2100000
     , 2100000
     , 2100000
     , 2100000
@@ -54,7 +95,7 @@ const schedule = [0
     // Функция для получения текущего времени в минутах с начала дня
     function getCurrentMinutes() {
         const now = new Date();
-        //const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 7, 0, 0, 0);
+        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 7, 0, 0, 0);
         //const startOfDay = new Date(7, 0, 0, 0);
         //const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 7 + 8, 0, 0, 0);
         //const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 7, 0, 0, 0);
@@ -63,8 +104,8 @@ const schedule = [0
         //return now.getHours() * 60 + now.getMinutes()*60*1000;
         //return startOfDay.getTime() + 3600000 * 7;
         //return 28800000;
-        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 7+8, 0, 0, 0);
         //const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 7, now.getMinutes(), 0, 0);
+        //const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 7 + 8, 0, 0, 0);
         return startOfDay.getTime();
     }
 
@@ -72,25 +113,29 @@ const schedule = [0
 
     const now = new Date();
 
-    const startOfDay2 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 7, 0, 0, 0);
+    const startOfDay2 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 7, now.getMinutes(), 0, 0);
 
-    const currentTime = getCurrentMinutes() - startOfDay2.getTime();
+    const currentTime = startOfDay2.getTime();
 
     // Заполнение списка с input type="time"
+    const stTime = getCurrentMinutes();
     schedule.forEach((time,i) => {
         //console.log(time);
         const li = document.createElement('li');
         //const timeInput = new viewTime(time);
-        const timeInput = new viewTime(getCurrentMinutes() + time * i);
+        const timeInput = new viewTime(stTime + time * i);
+        const currentT = new viewTime(currentTime);
         const slotMinutes = time;
-        console.log(currentTime);
-        if (timeInput.valueAsNumber < currentTime) {
+        console.log(stTime + time * i, "<", currentTime);
+        let sum = stTime + time * i;
+        if (sum < currentTime) {
             timeInput.disabled = true;
         } else {
             timeInput.classList.add('active');
         }
 
         li.appendChild(timeInput);
+        li.appendChild(currentT);
         timeList.appendChild(li);
     });
 }
