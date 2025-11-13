@@ -776,6 +776,8 @@ send.addEventListener("click", async function (e) {
         timeData.push(cc);
         cc += +item.value;
     });
+    timeData.push(cc);
+
 
     if (currentValue !== null) {
         console.log("millisecond " + currentValue, "quantity " + count);
