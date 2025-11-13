@@ -101,7 +101,7 @@ class viewTime {
         const li = document.createElement('li');
         //const timeInput = new viewTime(time);
         const timeInput = new viewTime(time);
-        const currentT = new viewTime(currentTime);
+        //const currentT = new viewTime(currentTime);
         const slotMinutes = time;
         console.log(time, "<", currentTime);
         let sum = time;
@@ -112,7 +112,7 @@ class viewTime {
         }
 
         li.appendChild(timeInput);
-        li.appendChild(currentT);
+        //li.appendChild(currentT);
         timeList.appendChild(li);
     });
 }) ();
