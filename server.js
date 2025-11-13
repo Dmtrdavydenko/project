@@ -964,7 +964,7 @@ async function insertTime(body) {
     try {
         console.log('Успешно подключено к базе данных MySQL!');
 
-
+        connection.execute("TRUNCATE TABLE timestamps");
         const times = body.data.map(time => time / 1000);
         const placeholders = body.data.map(() => '(FROM_UNIXTIME(?))').join(', ');
         const sql = `INSERT INTO timestamps (task_time) VALUES ${placeholders}`;
