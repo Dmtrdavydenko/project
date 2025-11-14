@@ -13,7 +13,7 @@ const functionDB = {
     "insert": insert,
     "insertTime": insertTime,
     "getTime": getTime,
-    "getThread": getThread,
+    "getThreads": getThreads,
     "select": select,
     "drop": dropTable,
     "getAllTableNames": getAllTableNames,
@@ -1019,7 +1019,7 @@ WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERV
 }
 
 
-async function getThread() {
+async function getThreads() {
     const connection = await pool.getConnection();
 
     try {
