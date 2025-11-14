@@ -73,12 +73,15 @@ class viewText {
     let dataLength = [0];
 
     for (let i = 1; i < task[0].length; i++) {
-        dataLength.push((task[0][i].time_seconds - task[0][i - 1].time_seconds)*400);
+        dataLength.push((task[0][i].time_seconds - task[0][i - 1].time_seconds)*400/60);
 
     }
     let nameThread = [0];
     for (var i = 0; i < dataLength.length; i++) {
-        nameThread.push(thread[0].find(item => item.length === dataLength[i] ? item.density + " уток" : "основа"));
+        //nameThread.push(thread[0].find(item => item.length === dataLength[i] ? item.density + " уток" : "основа"));
+        const foundItem = thread[0].find(item => item.length === dataLength[i]);
+        nameThread.push(foundItem ? foundItem.density + " уток" : "основа");
+
 
     }
     
