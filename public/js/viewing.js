@@ -13,7 +13,7 @@ class viewTime {
 }
 class viewText {
     constructor(name) {
-        const timeInput = document.createElement('span');
+        const timeInput = document.createElement('label');
         //timeInput.type = 'text';
         //timeInput.type = 'datetime-local';
 
@@ -76,7 +76,7 @@ class viewText {
         dataLength.push((task[0][i].time_seconds - task[0][i - 1].time_seconds)*400/60);
 
     }
-    let nameThread = [0];
+    let nameThread = [];
     for (var i = 0; i < dataLength.length; i++) {
         //nameThread.push(thread[0].find(item => item.length === dataLength[i] ? item.density + " уток" : "основа"));
         const foundItem = thread[0].find(item => item.length === dataLength[i]);
