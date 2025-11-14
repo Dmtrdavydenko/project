@@ -11,7 +11,7 @@ class viewTime {
         return timeInput;
     }
 }
-class viewTime {
+class viewText {
     constructor(name) {
         const timeInput = document.createElement('span');
         //timeInput.type = 'text';
