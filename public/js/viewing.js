@@ -52,7 +52,7 @@ class viewTime {
     let deldaTime = [0];
 
     for (let i = 1; i < response[0].length; i++) {
-        deldaTime.push(response[0][i].time_seconds - response[0][i - 1].time_seconds);
+        deldaTime.push((response[0][i].time_seconds - response[0][i - 1].time_seconds)*1000);
 
     }
 
