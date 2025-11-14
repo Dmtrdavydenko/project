@@ -51,7 +51,7 @@ class viewTime {
     const schedule = response[0].map(item => item.time_seconds * 1000);
     let deldaTime = [0];
 
-    for (let i = 1; i < length; i++) {
+    for (let i = 1; i < response[0].length; i++) {
         deldaTime.push(response[0][i].time_seconds - response[0][i - 1].time_seconds);
 
     }
