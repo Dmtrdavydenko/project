@@ -11,6 +11,18 @@ class viewTime {
         return timeInput;
     }
 }
+class viewTime {
+    constructor(name) {
+        const timeInput = document.createElement('span');
+        //timeInput.type = 'text';
+        //timeInput.type = 'datetime-local';
+
+        //timeInput.readOnly = true; // readonly для просмотра на мониторе
+        timeInput.textContent = name;
+        //console.log(timeInput.valueAsNumber);
+        return timeInput;
+    }
+}
 
 
 //const schedule = [1762934400000
@@ -36,8 +48,17 @@ class viewTime {
 
 
 (async () => {
-    const response = await fetch("https://worktime.up.railway.app/textile", {
-        //response = await fetch(document.location.href, {
+    const thread = await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "getThreds"
+        }),
+    }).then((thread) => thread.json());
+    console.log(thread);
+    const task = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -45,19 +66,23 @@ class viewTime {
         body: JSON.stringify({
             action: "getTime"
         }),
-    }).then((response) => response.json());
-    console.log(response);
+    }).then((task) => task.json());
+    console.log(task);
 
-    const schedule = response[0].map(item => item.time_seconds * 1000);
-    let deldaTime = [0];
+    const schedule = task[0].map(item => item.time_seconds * 1000);
+    let dataLength = [0];
 
-    for (let i = 1; i < response[0].length; i++) {
-        deldaTime.push((response[0][i].time_seconds - response[0][i - 1].time_seconds)*1000);
+    for (let i = 1; i < task[0].length; i++) {
+        dataLength.push((task[0][i].time_seconds - task[0][i - 1].time_seconds)*400);
 
     }
+    let nameThread = [0];
+    for (var i = 0; i < dataLength.length; i++) {
+        nameThread.push(thread[0].find(item => item.length === dataLength[i] ? item.density + " уток" : "основа"));
 
-
-
+    }
+    
+    console.log(dataLength);
 
     const timeList = document.createElement("ol");
     //main.classList.add("container");
@@ -106,7 +131,7 @@ class viewTime {
         const li = document.createElement('li');
         //const timeInput = new viewTime(time);
         const timeInput = new viewTime(time);
-        const currentT = new viewTime(deldaTime[i]);
+        const threadName = new viewText(nameThread[i]);
         const slotMinutes = time;
         console.log(time, "<", currentTime);
         let sum = time;
@@ -117,7 +142,7 @@ class viewTime {
         }
 
         li.appendChild(timeInput);
-        li.appendChild(currentT);
+        li.appendChild(threadName);
         timeList.appendChild(li);
     });
 }) ();

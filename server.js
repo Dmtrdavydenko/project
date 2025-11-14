@@ -1008,19 +1008,27 @@ WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERV
 
         // Вставка новой записи
         return await connection.execute(sql);
+    } catch (err) {
+        console.error('Ошибка:', err);
+        throw err;
+    } finally {
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
+    }
+}
 
 
+async function getThread() {
+    const connection = await pool.getConnection();
 
-        //console.log('Inserted ID:', insertResult.insertId);
+    try {
+        console.log('Успешно подключено к базе данных MySQL!');
 
-        // Получаем все данные из таблицы после вставки
-        //const [rows] = await connection.execute(
-        //    'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
-        //);
-        //delete body.action;
-        //delete body.table.name;
-        //delete body.table;
-        //return await manual.insertManual(transformKeys(body));
+
+        const sql = `SELECT thread_density as density, thread_length as length FROM Thread_Parameters`;
+
+        // Вставка новой записи
+        return await connection.execute(sql);
     } catch (err) {
         console.error('Ошибка:', err);
         throw err;
