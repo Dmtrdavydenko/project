@@ -13,6 +13,7 @@ const functionDB = {
     "insert": insert,
     "insertTime": insertTime,
     "getTime": getTime,
+    "getThread": getThread,
     "select": select,
     "drop": dropTable,
     "getAllTableNames": getAllTableNames,
