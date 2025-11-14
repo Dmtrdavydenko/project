@@ -54,7 +54,7 @@ class viewText {
             "Content-Type": "application/json;charset=utf-8",
         },
         body: JSON.stringify({
-            action: "getThreds"
+            action: "getThreads"
         }),
     }).then((thread) => thread.json());
     console.log(thread);
