@@ -48,8 +48,13 @@ class viewTime {
     }).then((response) => response.json());
     console.log(response);
 
-    const schedule = response[0].map(item => item.time_seconds*1000);
+    const schedule = response[0].map(item => item.time_seconds * 1000);
+    let deldaTime = [0];
 
+    for (let i = 1; i < length; i++) {
+        deldaTime.push(response[0][i].time_seconds - response[0][i - 1].time_seconds);
+
+    }
 
 
 
@@ -101,7 +106,7 @@ class viewTime {
         const li = document.createElement('li');
         //const timeInput = new viewTime(time);
         const timeInput = new viewTime(time);
-        //const currentT = new viewTime(currentTime);
+        const currentT = new viewTime(deldaTime[i]);
         const slotMinutes = time;
         console.log(time, "<", currentTime);
         let sum = time;
@@ -112,7 +117,7 @@ class viewTime {
         }
 
         li.appendChild(timeInput);
-        //li.appendChild(currentT);
+        li.appendChild(currentT);
         timeList.appendChild(li);
     });
 }) ();
