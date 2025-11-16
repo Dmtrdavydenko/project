@@ -1169,6 +1169,7 @@ async function generateForm() {
         let result = await sendData(serverUrl, formData);
         //form.action = "processData";
 
+        console.log(result);
         console.log(formData);
         const container = document.getElementById('table-container');
         container.innerHTML = '';
