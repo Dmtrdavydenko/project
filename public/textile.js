@@ -855,7 +855,7 @@ async function sendData(url, dataToSend) {
         }
 
         const responseData = await response.json(); // Получаем ответ от сервера
-        console.log('client success:', responseData);
+        console.log('client success:', sendData.name, responseData);
         return responseData;
     } catch (error) {
         console.error('Error:', error);
@@ -987,7 +987,7 @@ class QuantityInfo {
     get id() { return this.table[this.idKey]; }
     get quantity() { return this.table[this.quantityKey]; }
 }
-let manual = new Object();
+let form = new Object();
 async function showSelect(event) {
     console.log({
         value: this.value,
@@ -999,24 +999,24 @@ async function showSelect(event) {
         [this.name]: +this.value,
         key: this.name,
     }
-    manual[this.name] = +this.value;
+    form[this.name] = +this.value;
 
 
     const keysToDelete = [];
-    for (const key in manual) {
-        if (manual[key] === 0 || manual[key] === "") {
+    for (const key in form) {
+        if (form[key] === 0 || form[key] === "") {
             keysToDelete.push(key);
         }
     }
 
     // Удаляем ключи
-    keysToDelete.forEach(key => delete manual[key]);
+    keysToDelete.forEach(key => delete form[key]);
     console.log(o);
-    console.log(manual);
-    manual.action = "select";
-    manual.table = new Object();
-    manual.table.name = selectTableName.value;
-    let result = await find(serverUrl, manual);
+    console.log(form);
+    form.action = "select";
+    form.table = new Object();
+    form.table.name = selectTableName.value;
+    let result = await find(serverUrl, form);
     const container = document.getElementById('table-container');
     container.innerHTML = '';
     if (result.rows) {
@@ -1165,11 +1165,11 @@ async function generateForm() {
             o[item.name] = item.valueAsNumber ?? +item.value;
         });
         console.log(o, v);
-        manual.action = "insert";
-        let result = await sendData(serverUrl, manual);
-        //manual.action = "processData";
+        form.action = "insert";
+        //let result = await sendData(serverUrl, form);
+        //form.action = "processData";
 
-        console.log(manual);
+        console.log(form);
         const container = document.getElementById('table-container');
         container.innerHTML = '';
         if (result.rows) {
@@ -1266,11 +1266,11 @@ async function generateFormTape() {
             o[item.name] = item.valueAsNumber ?? +item.value;
         });
         console.log(o, v);
-        manual.action = "insert";
-        let result = await sendData(serverUrl, manual);
-        //manual.action = "processData";
+        form.action = "insert";
+        let result = await sendData(serverUrl, form);
+        //form.action = "processData";
 
-        console.log(manual);
+        console.log(form);
         const container = document.getElementById('table-container');
         container.innerHTML = '';
         if (result.rows) {

@@ -946,10 +946,10 @@ async function insert(body) {
         console.log('Успешно подключено к базе данных MySQL!');
 
         // Вставка новой записи
-        //const [insertResult] = await connection.execute(
-        //    'INSERT INTO ' + body.table.name + ' (id, width, density) VALUES (?, ?, ?)',
-        //    [body.data.id, body.data.width, body.data.density]
-        //);
+        const [insertResult] = await connection.execute(
+            'INSERT INTO ' + body.table.name + ' (id, width, density) VALUES (?, ?, ?)',
+            [body.data.id, body.data.width, body.data.density]
+        );
 
         //console.log('Inserted ID:', insertResult.insertId);
 
@@ -957,10 +957,11 @@ async function insert(body) {
         //const [rows] = await connection.execute(
         //    'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
         //);
-        delete body.action;
-        delete body.table.name;
-        delete body.table;
-        return await manual.insertManual(transformKeys(body));
+
+        //delete body.action;
+        //delete body.table.name;
+        //delete body.table;
+        //return await manual.insertManual(transformKeys(body));
     } catch (err) {
         console.error('Ошибка:', err);
         throw err;
