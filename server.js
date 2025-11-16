@@ -495,144 +495,144 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
 
                      `;
-//                sql = `SELECT 
-//    d.density,  -- Поле для группировки
-//    SUM(CASE
-//        WHEN type.yarn_name = "warp" THEN COALESCE(warp.warp_quantity, 0)
-//        WHEN type.yarn_name = "weft" THEN COALESCE(weft.weft_quantity, 0)
-//        ELSE 0
-//    END) AS total_quantity,  -- Общий расход quantity по density
-//    SUM(CASE
-//        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
-//            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89)
-//        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
-//            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89)
-//        ELSE 0
-//    END) AS total_weft_lenth,  -- Общий расход weft_lenth по density
-//    SUM(CASE
-//        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
-//            CEIL(COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89)
-//        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
-//            CEIL(COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89)
-//        ELSE 0
-//    END) AS total_productivity,  -- Общий расход productivity по density
-//    SUM(CASE
-//        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
-//            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89 / NULLIF(thread.thread_length, 0))
-//        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
-//            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89 / NULLIF(thread.thread_length, 0))
-//        ELSE 0
-//    END) AS total_quantity_weft,  -- Общий расход quantity_weft по density
-//    COUNT(*) AS count_looms  -- Количество станков в каждой группе density
-//FROM looms l
-//JOIN machine ON l.machine_id = machine.machine_id
-//LEFT JOIN speed s ON machine.speed_id = s.speed_id
-//LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
-//LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
-//LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id  -- Источник density
-//LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
-//LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
-//LEFT JOIN color c ON m.color_id = c.color_id
-//LEFT JOIN additive ad ON m.additive_id = ad.id
-//LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
-//LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
-//LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
-//-- WHERE d.density IN (60, 75)  -- Раскомментируй для фильтрации по конкретным density
-//GROUP BY d.density
-//ORDER BY d.density;
-//`
-//                sql = `SELECT 
-//    type.yarn_name,  -- Разделение по warp/weft
-//    thread.thread_density,  -- Плотность нити для подгруппировки
-//    SUM(CASE
-//        WHEN type.yarn_name = "warp" THEN COALESCE(warp.warp_quantity, 0)
-//        WHEN type.yarn_name = "weft" THEN COALESCE(weft.weft_quantity, 0)
-//        ELSE 0
-//    END) AS total_quantity,  -- Общий расход quantity по группам
-//    SUM(CASE
-//        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
-//            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89)
-//        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
-//            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89)
-//        ELSE 0
-//    END) AS total_weft_lenth,  -- Общий расход weft_lenth (только для weft)
-//    SUM(CASE
-//        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
-//            CEIL(COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89)
-//        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
-//            CEIL(COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89)
-//        ELSE 0
-//    END) AS total_productivity,  -- Общий расход productivity (только для weft)
-//    SUM(CASE
-//        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
-//            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89 / NULLIF(thread.thread_length, 0))
-//        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
-//            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89 / NULLIF(thread.thread_length, 0))
-//        ELSE 0
-//    END) AS total_quantity_weft,  -- Общий расход quantity_weft (только для weft)
-//    COUNT(*) AS count_looms  -- Количество станков в каждой группе
-//FROM looms l
-//JOIN machine ON l.machine_id = machine.machine_id
-//LEFT JOIN speed s ON machine.speed_id = s.speed_id
-//LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
-//LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
-//LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id  -- Пока оставил JOIN, но density не используется в выводе
-//LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
-//LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
-//LEFT JOIN color c ON m.color_id = c.color_id
-//LEFT JOIN additive ad ON m.additive_id = ad.id
-//LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
-//LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
-//LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
-//-- WHERE type.yarn_name = 'weft' AND thread.thread_density > 100  -- Пример фильтра
-//GROUP BY type.yarn_name, thread.thread_density
-//ORDER BY type.yarn_name, thread.thread_density;
+                //                sql = `SELECT 
+                //    d.density,  -- Поле для группировки
+                //    SUM(CASE
+                //        WHEN type.yarn_name = "warp" THEN COALESCE(warp.warp_quantity, 0)
+                //        WHEN type.yarn_name = "weft" THEN COALESCE(weft.weft_quantity, 0)
+                //        ELSE 0
+                //    END) AS total_quantity,  -- Общий расход quantity по density
+                //    SUM(CASE
+                //        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
+                //            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89)
+                //        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
+                //            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89)
+                //        ELSE 0
+                //    END) AS total_weft_lenth,  -- Общий расход weft_lenth по density
+                //    SUM(CASE
+                //        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
+                //            CEIL(COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89)
+                //        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
+                //            CEIL(COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89)
+                //        ELSE 0
+                //    END) AS total_productivity,  -- Общий расход productivity по density
+                //    SUM(CASE
+                //        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
+                //            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89 / NULLIF(thread.thread_length, 0))
+                //        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
+                //            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89 / NULLIF(thread.thread_length, 0))
+                //        ELSE 0
+                //    END) AS total_quantity_weft,  -- Общий расход quantity_weft по density
+                //    COUNT(*) AS count_looms  -- Количество станков в каждой группе density
+                //FROM looms l
+                //JOIN machine ON l.machine_id = machine.machine_id
+                //LEFT JOIN speed s ON machine.speed_id = s.speed_id
+                //LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
+                //LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
+                //LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id  -- Источник density
+                //LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
+                //LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
+                //LEFT JOIN color c ON m.color_id = c.color_id
+                //LEFT JOIN additive ad ON m.additive_id = ad.id
+                //LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
+                //LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
+                //LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
+                //-- WHERE d.density IN (60, 75)  -- Раскомментируй для фильтрации по конкретным density
+                //GROUP BY d.density
+                //ORDER BY d.density;
+                //`
+                //                sql = `SELECT 
+                //    type.yarn_name,  -- Разделение по warp/weft
+                //    thread.thread_density,  -- Плотность нити для подгруппировки
+                //    SUM(CASE
+                //        WHEN type.yarn_name = "warp" THEN COALESCE(warp.warp_quantity, 0)
+                //        WHEN type.yarn_name = "weft" THEN COALESCE(weft.weft_quantity, 0)
+                //        ELSE 0
+                //    END) AS total_quantity,  -- Общий расход quantity по группам
+                //    SUM(CASE
+                //        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
+                //            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89)
+                //        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
+                //            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89)
+                //        ELSE 0
+                //    END) AS total_weft_lenth,  -- Общий расход weft_lenth (только для weft)
+                //    SUM(CASE
+                //        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
+                //            CEIL(COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89)
+                //        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
+                //            CEIL(COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89)
+                //        ELSE 0
+                //    END) AS total_productivity,  -- Общий расход productivity (только для weft)
+                //    SUM(CASE
+                //        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) > 25 THEN 
+                //            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 10, 0) * 0.89 / NULLIF(thread.thread_length, 0))
+                //        WHEN type.yarn_name = "weft" AND COALESCE(weft.weft_quantity, 0) < 25 THEN 
+                //            CEIL(COALESCE(weft.weft_quantity, 0) * 0.1 * COALESCE(sw.sleeve_width, 0) * 2 * COALESCE(s.speed, 0) * 720 / NULLIF(weft.weft_quantity * 20, 0) * 0.89 / NULLIF(thread.thread_length, 0))
+                //        ELSE 0
+                //    END) AS total_quantity_weft,  -- Общий расход quantity_weft (только для weft)
+                //    COUNT(*) AS count_looms  -- Количество станков в каждой группе
+                //FROM looms l
+                //JOIN machine ON l.machine_id = machine.machine_id
+                //LEFT JOIN speed s ON machine.speed_id = s.speed_id
+                //LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
+                //LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
+                //LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id  -- Пока оставил JOIN, но density не используется в выводе
+                //LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
+                //LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
+                //LEFT JOIN color c ON m.color_id = c.color_id
+                //LEFT JOIN additive ad ON m.additive_id = ad.id
+                //LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
+                //LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
+                //LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
+                //-- WHERE type.yarn_name = 'weft' AND thread.thread_density > 100  -- Пример фильтра
+                //GROUP BY type.yarn_name, thread.thread_density
+                //ORDER BY type.yarn_name, thread.thread_density;
 
-//`
+                //`
 
-//                                          UNION ALL
+                //                                          UNION ALL
 
-//                --Итоговая строка: суммируем quantity только для группы "warp 78 белая нет"
-//                SELECT 
-//    NULL AS loom_id,
-//                    NULL AS loom_speed,
-//                        NULL AS weft,
-//                            NULL AS loom_number,
-//                                'Итого warp 78 белая нет' AS width, --Текст для идентификации итога
-//    NULL AS density,
-//                    "warp" AS yarn_name,
-//                        SUM(CASE
-//        WHEN type.yarn_name = "warp" THEN warp.warp_quantity
-//        WHEN type.yarn_name = "weft" THEN weft.weft_quantity
-//        ELSE 0
-//    END) AS quantity, --Сумма quantity для группы
-//    NULL AS weft_length, --Не суммируем, так как не указано
-//                "78" AS thread_density,
-//                    "белая" AS color,
-//                        "нет" AS additive_name,
-//                            NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL-- NULL для всех полей m.* (замените на конкретные, если знаете)
-//FROM looms l
-//JOIN speed s ON l.loom_speed = s.speed_id 
-//LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
-//LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
-//LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
-//LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
-//LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
-//LEFT JOIN color c ON m.color_id = c.color_id
-//LEFT JOIN additive ad ON m.additive_id = ad.id
-//LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
-//LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
-//LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
-//WHERE type.yarn_name = 'warp' AND thread.thread_density = 78 AND c.color = 'белая' AND ad.additive_name = 'нет'  -- Фильтр для группы
+                //                --Итоговая строка: суммируем quantity только для группы "warp 78 белая нет"
+                //                SELECT 
+                //    NULL AS loom_id,
+                //                    NULL AS loom_speed,
+                //                        NULL AS weft,
+                //                            NULL AS loom_number,
+                //                                'Итого warp 78 белая нет' AS width, --Текст для идентификации итога
+                //    NULL AS density,
+                //                    "warp" AS yarn_name,
+                //                        SUM(CASE
+                //        WHEN type.yarn_name = "warp" THEN warp.warp_quantity
+                //        WHEN type.yarn_name = "weft" THEN weft.weft_quantity
+                //        ELSE 0
+                //    END) AS quantity, --Сумма quantity для группы
+                //    NULL AS weft_length, --Не суммируем, так как не указано
+                //                "78" AS thread_density,
+                //                    "белая" AS color,
+                //                        "нет" AS additive_name,
+                //                            NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL-- NULL для всех полей m.* (замените на конкретные, если знаете)
+                //FROM looms l
+                //JOIN speed s ON l.loom_speed = s.speed_id 
+                //LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
+                //LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
+                //LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
+                //LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
+                //LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
+                //LEFT JOIN color c ON m.color_id = c.color_id
+                //LEFT JOIN additive ad ON m.additive_id = ad.id
+                //LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
+                //LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
+                //LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
+                //WHERE type.yarn_name = 'warp' AND thread.thread_density = 78 AND c.color = 'белая' AND ad.additive_name = 'нет'  -- Фильтр для группы
 
-//ORDER BY width ASC, density ASC
+                //ORDER BY width ASC, density ASC
                 break;
             case "Thread_Parameters":
                 const field = ["thread_id", "thread_density", "thread_length"];
                 //sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
                 sql = "SELECT * FROM Thread_Parameters";
 
-                
+
                 break;
             case "textile":
                 //const field = ["textile_id", "textile_number", "circular_width", "density", "weft_quantity", "warp_quantity", "warp_name", "warp_name2", "weft_name1", "weft_name2"];
@@ -759,7 +759,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
         const [rows] = all;
 
 
-        
+
 
         // Извлекаем информацию о колонках
         //const columnsInfo = descRows.map(row => ({
@@ -943,14 +943,15 @@ async function insert(body) {
     const connection = await pool.getConnection();
 
     try {
-        console.log("data server",body);
+        console.log("data server", body);
         console.log('Успешно подключено к базе данных MySQL!');
 
         // Вставка новой записи
-        //const [insertResult] = await connection.execute(
-        //    'INSERT INTO ' + body.table.name + ' (thread_id, color_id, additive_id) VALUES (?, ?, ?)',
-        //    [body.data.Thread_Parameters, body.data.color, body.data.additive]
-        //);
+        return await connection.execute(
+            'INSERT INTO ' + body.table.name + ' (thread_id, color_id, additive_id) VALUES (?, ?, ?)',
+            [body.Thread_Parameters, body.color, body.additive]
+        );
+        //const [insertResult] =
         //INSERT INTO TapeExtrusion (thread_id, color_id, additive_id) VALUES(1, 1, 2)
         //console.log('Inserted ID:', insertResult.insertId);
 
@@ -962,7 +963,20 @@ async function insert(body) {
         //delete body.action;
         //delete body.table.name;
         //delete body.table;
-        return body;
+
+
+
+        let body = {        
+            Thread_Parameters: 2,
+            action: 'insert',
+            table: { name: 'TapeExtrusion' },
+            color: 1,
+            additive: 2
+        }
+
+
+
+        //return body;
     } catch (err) {
         console.error('Ошибка:', err);
         throw err;
@@ -1658,7 +1672,7 @@ server.on("request", (req, res) => {
                         .then((resolve) => res.end(resolve))
                         .catch(error => {
                             res.end(error.message);
-                            console.log("Er",error);
+                            console.log("Er", error);
                         })
 
                 } catch (error) {
