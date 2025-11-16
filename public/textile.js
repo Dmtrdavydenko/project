@@ -1271,9 +1271,13 @@ async function generateFormTape() {
         let result = await sendData(serverUrl, formData);
         //form.action = "processData";
 
+
+        //await loadTable();
+
         console.log(formData);
         const container = document.getElementById('table-container');
         container.innerHTML = '';
+        console.log(result);
         if (result.rows) {
             const table = createTable(result.rows);
             //table.addEventListener("click", queryTarget);
