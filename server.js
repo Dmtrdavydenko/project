@@ -947,10 +947,10 @@ async function insert(body) {
         console.log('Успешно подключено к базе данных MySQL!');
 
         // Вставка новой записи
-        const [insertResult] = await connection.execute(
-            'INSERT INTO ' + body.table.name + ' (thread_id, color_id, additive_id) VALUES (?, ?, ?)',
-            [body.data.Thread_Parameters, body.data.color, body.data.additive]
-        );
+        //const [insertResult] = await connection.execute(
+        //    'INSERT INTO ' + body.table.name + ' (thread_id, color_id, additive_id) VALUES (?, ?, ?)',
+        //    [body.data.Thread_Parameters, body.data.color, body.data.additive]
+        //);
         //INSERT INTO TapeExtrusion (thread_id, color_id, additive_id) VALUES(1, 1, 2)
         //console.log('Inserted ID:', insertResult.insertId);
 
@@ -962,7 +962,7 @@ async function insert(body) {
         //delete body.action;
         //delete body.table.name;
         //delete body.table;
-        //return await manual.insertManual(transformKeys(body));
+        return body;
     } catch (err) {
         console.error('Ошибка:', err);
         throw err;
