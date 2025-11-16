@@ -947,10 +947,10 @@ async function insert(body) {
 
         // Вставка новой записи
         const [insertResult] = await connection.execute(
-            'INSERT INTO ' + body.table.name + ' (id, width, density) VALUES (?, ?, ?)',
-            [body.data.id, body.data.width, body.data.density]
+            'INSERT INTO ' + body.table.name + ' (thread_id, color_id, additive_id) VALUES (?, ?, ?)',
+            [body.data.Thread_Parameters, body.data.color, body.data.additive]
         );
-
+        //INSERT INTO TapeExtrusion (thread_id, color_id, additive_id) VALUES(1, 1, 2)
         //console.log('Inserted ID:', insertResult.insertId);
 
         // Получаем все данные из таблицы после вставки
