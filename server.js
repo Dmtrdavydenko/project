@@ -863,15 +863,6 @@ async function getTable(body) {
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 break;
-            case "sleeve_width_density":
-                //const field = ["textile_id", "textile_number", "circular_width", "density", "weft_quantity", "warp_quantity", "warp_name", "warp_name2", "weft_name1", "weft_name2"];
-                // textile_id	textile_width	textile_density	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
-                // textile_id	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
-
-
-
-                sql = 
-                break;
             default:
                 sql = 'SELECT * FROM ' + body.table.name;
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
@@ -975,13 +966,13 @@ async function insert(body) {
 
 
 
-        //let body = {        
-        //    Thread_Parameters: 2,
-        //    action: 'insert',
-        //    table: { name: 'TapeExtrusion' },
-        //    color: 1,
-        //    additive: 2
-        //}
+        let body = {        
+            Thread_Parameters: 2,
+            action: 'insert',
+            table: { name: 'TapeExtrusion' },
+            color: 1,
+            additive: 2
+        }
 
 
 
