@@ -1272,23 +1272,23 @@ async function generateFormTape() {
         //form.action = "processData";
 
 
-        //await loadTable();
 
         console.log(formData);
         const container = document.getElementById('table-container');
         container.innerHTML = '';
         console.log(result);
-        if (result.rows) {
-            const table = createTable(result.rows);
-            //table.addEventListener("click", queryTarget);
-            //table.addEventListener("click", selectTable);
-            container.appendChild(table);
-            await getTypeTableHeder();
-            //await generateForm();
-            await getTypeKey();
-        } else {
-            container.textContent = 'U';
-        }
+        await loadTable();
+        //if (result.rows) {
+        //    const table = createTable(result.rows);
+        //    //table.addEventListener("click", queryTarget);
+        //    //table.addEventListener("click", selectTable);
+        //    container.appendChild(table);
+        //    await getTypeTableHeder();
+        //    //await generateForm();
+        //    await getTypeKey();
+        //} else {
+        //    container.textContent = 'U';
+        //}
     }
 }
 
