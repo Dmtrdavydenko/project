@@ -943,6 +943,7 @@ async function insert(body) {
     const connection = await pool.getConnection();
 
     try {
+        console.log("data server",body);
         console.log('Успешно подключено к базе данных MySQL!');
 
         // Вставка новой записи
