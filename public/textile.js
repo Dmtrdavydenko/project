@@ -875,7 +875,7 @@ async function find(url, dataToSend) {
         }
 
         const responseData = await response.json(); // Получаем ответ от сервера
-        console.log('client success:', responseData);
+        console.log("client success:", find.name, responseData);
         return responseData;
     } catch (error) {
         console.error('Error:', error);
