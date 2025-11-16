@@ -949,7 +949,7 @@ class AdditiveInfo {
     constructor(yarn) {
         this.yarn = yarn;
     }
-    get id() { return this.yarn.id; }
+    get id() { return this.yarn.additive_id; }
     get name() { return this.yarn.additive_name; }
 
 }

@@ -89,7 +89,7 @@ class ManualRepository {
                 JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
                 JOIN Thread_Parameters thread                    ON m.thread_densiti_id = thread.thread_id
                 JOIN color c                    ON m.color_id = c.color_id
-                JOIN additive ad                    ON m.additive_id = ad.id
+                JOIN additive ad                    ON m.additive_id = ad.additive_id
                 LEFT JOIN warp_quantity warp                    ON m.quantity_id = warp.warp_id
                 LEFT JOIN weft_quantity weft                    ON m.quantity_id = weft.weft_id
                 JOIN yarn_type type                    ON m.yarn_id = type.yarn_id
