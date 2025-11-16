@@ -1267,7 +1267,7 @@ async function generateFormTape() {
         });
         console.log(o, v);
         formData.action = "insert";
-        let result = await sendData(serverUrl, form);
+        let result = await sendData(serverUrl, formData);
         //form.action = "processData";
 
         console.log(formData);
