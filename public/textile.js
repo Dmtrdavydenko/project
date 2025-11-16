@@ -987,7 +987,7 @@ class QuantityInfo {
     get id() { return this.table[this.idKey]; }
     get quantity() { return this.table[this.quantityKey]; }
 }
-let form = new Object();
+let formData = new Object();
 async function showSelect(event) {
     console.log({
         value: this.value,
@@ -999,24 +999,24 @@ async function showSelect(event) {
         [this.name]: +this.value,
         key: this.name,
     }
-    form[this.name] = +this.value;
+    formData[this.name] = +this.value;
 
 
     const keysToDelete = [];
-    for (const key in form) {
-        if (form[key] === 0 || form[key] === "") {
+    for (const key in formData) {
+        if (formData[key] === 0 || formData[key] === "") {
             keysToDelete.push(key);
         }
     }
 
     // Удаляем ключи
-    keysToDelete.forEach(key => delete form[key]);
+    keysToDelete.forEach(key => delete formData[key]);
     console.log(o);
-    console.log(form);
-    form.action = "select";
-    form.table = new Object();
-    form.table.name = selectTableName.value;
-    let result = await find(serverUrl, form);
+    console.log(formData);
+    formData.action = "select";
+    formData.table = new Object();
+    formData.table.name = selectTableName.value;
+    let result = await find(serverUrl, formData);
     const container = document.getElementById('table-container');
     container.innerHTML = '';
     if (result.rows) {
@@ -1165,11 +1165,11 @@ async function generateForm() {
             o[item.name] = item.valueAsNumber ?? +item.value;
         });
         console.log(o, v);
-        form.action = "insert";
+        formData.action = "insert";
         //let result = await sendData(serverUrl, form);
         //form.action = "processData";
 
-        console.log(form);
+        console.log(formData);
         const container = document.getElementById('table-container');
         container.innerHTML = '';
         if (result.rows) {
@@ -1266,11 +1266,11 @@ async function generateFormTape() {
             o[item.name] = item.valueAsNumber ?? +item.value;
         });
         console.log(o, v);
-        form.action = "insert";
+        formData.action = "insert";
         let result = await sendData(serverUrl, form);
         //form.action = "processData";
 
-        console.log(form);
+        console.log(formData);
         const container = document.getElementById('table-container');
         container.innerHTML = '';
         if (result.rows) {
