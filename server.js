@@ -740,21 +740,12 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                 //select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 break;
             case "TapeExtrusion":
-                //const field = ["textile_id", "textile_number", "circular_width", "density", "weft_quantity", "warp_quantity", "warp_name", "warp_name2", "weft_name1", "weft_name2"];
-                // textile_id	textile_width	textile_density	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
-                // textile_id	weft_quantity	warp_quantity	warp_name	warp_name2	weft_name1	weft_name2	textile_number	id	circular_width	density
-
-                const { whereClause, whereValues } = where(body.table.where);
-                //const where = body.table?.where.length ? `WHERE ${body.table.where}` : '';
                 sql = "SELECT * " +
                     "FROM TapeExtrusion " +
                     "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
                     "JOIN color ON TapeExtrusion.color_id = color.color_id " +
                     "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
                     "ORDER BY thread_density ASC";
-
-                //[descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
-                //select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 break;
             default:
                 sql = 'SELECT * FROM `' + body.table.name + "`";
