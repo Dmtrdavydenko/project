@@ -144,7 +144,7 @@ const schedule = [
         }
 
         li.appendChild(timeInput);
-        li.appendChild(threadName);
+        //li.appendChild(threadName);
         timeList.appendChild(li);
     });
 }) ();

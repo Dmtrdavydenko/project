@@ -444,6 +444,9 @@ async function loadTable() {
         if (selectTableName.value === "looms") {
             myfilter(result.rows);
         }
+        if (selectTableName.value === "TapeExtrusion") {
+            await generateFormTape();
+        }
         if (selectTableName.value === "manual") {
             table.addEventListener("click", selectTable);
             await generateForm();
@@ -1023,6 +1026,7 @@ async function showSelect(event) {
         container.textContent = 'U';
     }
 }
+
 async function generateForm() {
     const formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
@@ -1097,6 +1101,107 @@ async function generateForm() {
         selectMap.push(select);
         selectMap.push(selectType);
 
+    }
+    {
+        const select = document.createElement('select');
+        select.addEventListener('change', showSelect);
+        select.name = "Thread_Parameters";
+        select.appendChild(svoid());
+        (await slect("Thread_Parameters")).rows.forEach(thread => {
+            const option = document.createElement('option');
+            const threadInfo = new ThreadInfo(thread);
+            option.value = threadInfo.id;
+            option.textContent = threadInfo.density;
+            select.appendChild(option);
+        });
+        formContainer.append(select);
+        selectMap.push(select);
+
+    }
+    {
+        const colors = new Color("color");
+        colors.select.appendChild(svoid());
+        colors.fet("color");
+        colors.select.addEventListener('change', showSelect);
+        formContainer.append(colors.select);
+        selectMap.push(colors.select);
+    }
+    {
+        const select = document.createElement('select');
+        select.addEventListener('change', showSelect);
+        select.name = "additive";
+        select.appendChild(svoid());
+        (await slect("additive")).rows.forEach(color => {
+            const option = document.createElement('option');
+            const additiveInfo = new AdditiveInfo(color);
+            option.value = additiveInfo.id;
+            option.textContent = additiveInfo.name;
+            select.appendChild(option);
+        });
+        formContainer.append(select);
+        selectMap.push(select);
+
+    }
+    {
+        const button = document.createElement('button');
+        button.addEventListener('click', showButton);
+        button.name = "send";
+        button.textContent = "send";
+        formContainer.append(button);
+    }
+    selectMap.forEach(select => {
+        console.log(select.name, select.value, select.id)
+    })
+
+    const createKeyValue = ({ name, valueAsNumber, value }) => ({
+        key: name,
+        value: valueAsNumber ?? +value
+    });
+
+    async function showButton() {
+        let v = selectMap.map(createKeyValue);
+        let o = {};
+        selectMap.forEach(function (item) {
+            o[item.name] = item.valueAsNumber ?? +item.value;
+        });
+        console.log(o, v);
+        manual.action = "insert";
+        let result = await sendData(serverUrl, manual);
+        //manual.action = "processData";
+
+        console.log(manual);
+        const container = document.getElementById('table-container');
+        container.innerHTML = '';
+        if (result.rows) {
+            const table = createTable(result.rows);
+            //table.addEventListener("click", queryTarget);
+            //table.addEventListener("click", selectTable);
+            container.appendChild(table);
+            await getTypeTableHeder();
+            //await generateForm();
+            await getTypeKey();
+        } else {
+            container.textContent = 'U';
+        }
+    }
+}
+
+async function generateFormTape() {
+    const formContainer = document.getElementById('form-container');
+    formContainer.innerHTML = '';
+    const join = await getSelected();
+    let decodedMetadata = join.map(meta => (decodeMetadata(meta)));
+    //let data = {};
+    console.log(decodedMetadata);
+
+    const selectMap = [];
+
+
+    const svoid = () => {
+        const svoid = document.createElement('option');
+        svoid.value = "";
+        svoid.textContent = "Все";
+        return svoid;
     }
     {
         const select = document.createElement('select');

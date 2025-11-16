@@ -342,7 +342,7 @@ async function select(body) {
                 LEFT JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
                 LEFT JOIN Thread_Parameters thread                    ON m.thread_densiti_id = thread.thread_id
                 LEFT JOIN color c                    ON m.color_id = c.color_id
-                LEFT JOIN additive ad                    ON m.additive_id = ad.id
+                LEFT JOIN additive ad                    ON m.additive_id = ad.additive_id
                 LEFT JOIN warp_quantity warp                    ON m.quantity_id = warp.warp_id
                 LEFT JOIN weft_quantity weft                    ON m.quantity_id = weft.weft_id
                 LEFT JOIN yarn_type type                    ON m.yarn_id = type.yarn_id`;
@@ -479,7 +479,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                      LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
                      LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
                      LEFT JOIN color c ON m.color_id = c.color_id
-                     LEFT JOIN additive ad ON m.additive_id = ad.id
+                     LEFT JOIN additive ad ON m.additive_id = ad.additive_id
 
 
                      LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
