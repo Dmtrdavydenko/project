@@ -1052,7 +1052,7 @@ async function getThreads() {
         console.log('Успешно подключено к базе данных MySQL!');
 
 
-        const sql = `SELECT thread_density as density, thread_length as length FROM Thread_Parameters`;
+        const sql = `SELECT thread_density as density, thread_length as length, thread_time * 60 as time_seconds FROM Thread_Parameters`;
 
         // Вставка новой записи
         return await connection.execute(sql);

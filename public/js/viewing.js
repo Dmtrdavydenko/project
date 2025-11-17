@@ -69,22 +69,21 @@ class viewText {
     console.log(task);
 
     const schedule = task[0].map(item => item.time_seconds * 1000);
-    let dataLength = [0];
+    let intervalSecondsJob = [0];
 
     for (let i = 1; i < task[0].length; i++) {
-        dataLength.push((task[0][i].time_seconds - task[0][i - 1].time_seconds)*400/60);
+        intervalSecondsJob.push(task[0][i].time_seconds - task[0][i - 1].time_seconds);
 
     }
     let nameThread = [];
-    for (var i = 0; i < dataLength.length; i++) {
-        //nameThread.push(thread[0].find(item => item.length === dataLength[i] ? item.density + " уток" : "основа"));
-        const foundItem = thread[0].find(item => item.length === dataLength[i]);
+    for (var i = 0; i < intervalSecondsJob.length; i++) {
+        const foundItem = thread[0].find(item => item.time_seconds === intervalSecondsJob[i]);
         nameThread.push(foundItem ? foundItem.density + " уток" : "основа");
 
 
     }
     
-    console.log(dataLength);
+    console.log(intervalSecondsJob);
 
     const timeList = document.createElement("ol");
     //main.classList.add("container");
