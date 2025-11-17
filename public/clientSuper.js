@@ -937,6 +937,15 @@ function handleCalculation(event) {
     time.setAttribute("disabled", true);
     box.append(time);
     ol.append(box);
+
+
+    let intervalSecondsJob = [0];
+
+    for (let i = 1; i < list.length; i++) {
+        intervalSecondsJob.push((+list[i].value - +list[i - 1].value)/1000/60);
+
+    }
+    console.log(intervalSecondsJob);
     list.forEach((item) => {
         const box = document.createElement("li");
         updateColor(box, +item.value);
@@ -953,9 +962,6 @@ function handleCalculation(event) {
     });
     console.log(list);
     section.append(send);
-
-    console.log(sum2);
-
 }
 
 button.addEventListener("click", handleCalculation);
