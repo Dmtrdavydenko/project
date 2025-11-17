@@ -863,6 +863,14 @@ async function getTable(body) {
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 break;
+            case "TapeExtrusion":
+                sql = "SELECT * " +
+                    "FROM TapeExtrusion " +
+                    "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
+                    "JOIN color ON TapeExtrusion.color_id = color.color_id " +
+                    "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
+                    "ORDER BY thread_density ASC";
+                break;
             default:
                 sql = 'SELECT * FROM ' + body.table.name;
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
