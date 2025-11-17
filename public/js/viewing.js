@@ -23,7 +23,7 @@ class viewText {
         return timeInput;
     }
 }
-class DataTable {
+class DataTape {
     constructor(apiUrl) {
         this.apiUrl = apiUrl;
         this.data = [];
@@ -128,7 +128,7 @@ class DataTable {
 }
 
 
-const Tape = new DataTable("https://worktime.up.railway.app/textile");
+const Tape = new DataTape("https://worktime.up.railway.app/textile");
 
 (async () => {
     const thread = await Tape.loadData("getThreads");
