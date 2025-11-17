@@ -877,10 +877,6 @@ send.addEventListener("click", async function (e) {
     }
 });
 
-// let newStart = {};
-// newStart.value = start.valueAsNumber;
-
-// list[0] = newStart;
 function dropListSelectS(array, select) {
     let option = document.createElement("option");
     array.forEach((data) => {
@@ -942,8 +938,7 @@ function handleCalculation(event) {
     let intervalSecondsJob = [0];
 
     for (let i = 1; i < list.length; i++) {
-        intervalSecondsJob.push((+list[i].value - +list[i - 1].value)/1000/60);
-
+        intervalSecondsJob.push(list[i].value/60000);
     }
     console.log(intervalSecondsJob);
     list.forEach((item) => {
