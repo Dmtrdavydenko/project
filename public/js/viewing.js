@@ -141,16 +141,6 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
     console.log(Time);
     console.log(task);
 
-    const task = await fetch("https://worktime.up.railway.app/textile", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "getTime"
-        }),
-    }).then((task) => task.json());
-    console.log(task);
 
     const schedule = task[0].map(item => item.time_seconds * 1000);
     let intervalSecondsJob = [0];
