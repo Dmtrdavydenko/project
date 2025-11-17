@@ -133,6 +133,7 @@ const Table = new DataTable("https://worktime.up.railway.app/textile");
 (async () => {
     const thread = await Table.loadData("getThreads");
 
+    console.log(Table);
     console.log(thread);
 
 
