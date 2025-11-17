@@ -1046,22 +1046,21 @@ WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERV
 
 
 async function getThreads() {
-    const connection = await pool.getConnection();
-
     try {
-        console.log('Успешно подключено к базе данных MySQL!');
-
-
-        const sql = `SELECT thread_density as density, thread_length as length, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds FROM Thread_Parameters`;
-
-        // Вставка новой записи
-        return await connection.execute(sql);
-    } catch (err) {
-        console.error('Ошибка:', err);
-        throw err;
-    } finally {
-        if (connection) connection.release();
-        console.log("Соединение возвращено.");
+        const connection = await pool.getConnection();
+        try {
+            console.log('Успешно подключено к базе данных MySQL!');
+            const sql = `SELECT thread_density as density, thread_length as length, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds FROM Thread_Parameters`;
+            return await connection.execute(sql);
+        } catch (err) {
+            console.error('Ошибка:', err);
+            throw err;
+        } finally {
+            if (connection) connection.release();
+            console.log("Соединение возвращено.");
+        }
+    } catch (error) {
+        console.error('Error connection MySQL:', error.message);
     }
 }
 
