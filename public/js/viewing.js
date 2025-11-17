@@ -129,14 +129,17 @@ class DataTape {
 
 
 const Tape = new DataTape("https://worktime.up.railway.app/textile");
+const Time = new DataTape("https://worktime.up.railway.app/textile");
 
 (async () => {
     const thread = await Tape.loadData("getThreads");
+    const task = await Time.loadData("getTime");
 
     console.log(Tape);
     console.log(thread);
 
-
+    console.log(Time);
+    console.log(task);
 
     const task = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
