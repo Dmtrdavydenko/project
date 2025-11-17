@@ -213,7 +213,6 @@ const Tape = new DataTape("https://worktime.up.railway.app/textile");
         const timeInput = new viewTime(time);
         const threadName = new viewText(nameThread[i]);
         const slotMinutes = time;
-        console.log(time, "<", currentTime);
         let sum = time;
         if (sum < currentTime) {
             timeInput.disabled = true;
