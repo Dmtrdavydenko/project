@@ -128,12 +128,12 @@ class DataTable {
 }
 
 
-const Table = new DataTable("https://worktime.up.railway.app/textile");
+const Tape = new DataTable("https://worktime.up.railway.app/textile");
 
 (async () => {
-    const thread = await Table.loadData("getThreads");
+    const thread = await Tape.loadData("getThreads");
 
-    console.log(Table);
+    console.log(Tape);
     console.log(thread);
 
 
