@@ -1030,7 +1030,7 @@ async function getTime() {
         const sql = `SELECT id, 
        UNIX_TIMESTAMP(task_time) AS time_seconds
 FROM timestamps 
-WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 18 HOUR);
+WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 1800 HOUR);
 `;
 
         // Вставка новой записи
