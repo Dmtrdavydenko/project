@@ -900,9 +900,6 @@ function handleCalculation(event) {
     select.innerHTML = "";
     console.log(list);
     console.log(buttonLine);
-    // buttonLine.forEach(item=>item.forEach(item=>console.log(item.value)))
-
-    let sum = 0;
     dtinput = document.createElement("input");
     const ol = document.createElement("ol");
 
@@ -935,7 +932,7 @@ function handleCalculation(event) {
     ol.append(box);
 
 
-    let intervalSecondsJob = [0];
+    let intervalSecondsJob = [start.valueAsNumber / 60000];
 
     for (let i = 1; i < list.length; i++) {
         intervalSecondsJob.push(list[i].value/60000);
@@ -955,7 +952,6 @@ function handleCalculation(event) {
         ol.append(box);
         console.log(sum2);
     });
-    console.log(list);
     section.append(send);
 }
 
