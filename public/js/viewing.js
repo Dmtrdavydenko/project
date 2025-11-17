@@ -158,7 +158,7 @@ const Table = new DataTable("https://worktime.up.railway.app/textile");
     }
     let nameThread = [];
     for (var i = 0; i < intervalSecondsJob.length; i++) {
-        const foundItem = thread.data[0].find(item => item.time_seconds === intervalSecondsJob[i]);
+        const foundItem = thread[0].find(item => item.time_seconds === intervalSecondsJob[i]);
         nameThread.push(foundItem ? foundItem.density + " уток" : "основа");
 
 
