@@ -149,8 +149,10 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
     console.log(Time);
     console.log(task);
 
+    console.log(task[0]);
 
-    const schedule = task[0].map(item => item.time_seconds * 1000);
+
+    const schedule = task[0].map(item => item.time_milliseconds);
     let intervalSecondsJob = [0];
 
     for (let i = 1; i < task[0].length; i++) {
@@ -159,7 +161,7 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
     }
     let nameThread = [];
     for (var i = 0; i < intervalSecondsJob.length; i++) {
-        const foundItem = thread[0].find(item => item.time_seconds === intervalSecondsJob[i]);
+        const foundItem = tape[0].find(item => item.time_seconds === intervalSecondsJob[i]);
         nameThread.push(foundItem ? foundItem.density + " уток" : "основа");
 
 
