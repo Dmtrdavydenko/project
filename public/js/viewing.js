@@ -136,7 +136,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 const Time = new DataTape("https://worktime.up.railway.app/textile");
 
 (async () => {
-    const tape = await Tape.loadData("select", { table: { name: "TapeExtrusion" } });
+    const tape = await Tape.loadData("getTape");
     const thread = await Thread.loadData("getThreads");
     const task = await Time.loadData("getTime");
 

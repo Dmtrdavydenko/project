@@ -14,6 +14,7 @@ const functionDB = {
     "insertTime": insertTime,
     "getTime": getTime,
     "getThreads": getThreads,
+    "getTape": getTape,
     "select": select,
     "drop": dropTable,
     "getAllTableNames": getAllTableNames,
@@ -1028,27 +1029,54 @@ async function insertTime(body) {
     }
 }
 
-async function getTime() {
-    const connection = await pool.getConnection();
 
+async function getTape() {
     try {
-        console.log('Успешно подключено к базе данных MySQL!');
+        const connection = await pool.getConnection();
+        try {
+            console.log('Успешно подключено к базе данных MySQL!');
 
+            const sql = "SELECT * " +
+                "FROM TapeExtrusion " +
+                "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
+                "JOIN color ON TapeExtrusion.color_id = color.color_id " +
+                "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
+                "ORDER BY thread_density ASC";
 
-        const sql = `SELECT id, 
-       UNIX_TIMESTAMP(task_time) AS time_seconds
-FROM timestamps 
-WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 1800 HOUR);
+            // Вставка новой записи
+            return await connection.execute(sql);
+        } catch (err) {
+            console.error('Ошибка:', err);
+            throw err;
+        } finally {
+            if (connection) connection.release();
+            console.log("Соединение возвращено.");
+        }
+    } catch (error) {
+        console.error('Error connection MySQL:', error.message);
+    }
+}
+async function getTime() {
+    try {
+        const connection = await pool.getConnection();
+        try {
+            console.log('Успешно подключено к базе данных MySQL!');
+
+            const sql = `SELECT id, UNIX_TIMESTAMP(task_time) AS time_seconds FROM timestamps 
+            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 1800 HOUR);
 `;
 
-        // Вставка новой записи
-        return await connection.execute(sql);
-    } catch (err) {
-        console.error('Ошибка:', err);
-        throw err;
-    } finally {
-        if (connection) connection.release();
-        console.log("Соединение возвращено.");
+            // Вставка новой записи
+            return await connection.execute(sql);
+        } catch (err) {
+            console.error('Ошибка:', err);
+            throw err;
+        } finally {
+            if (connection) connection.release();
+            console.log("Соединение возвращено.");
+        }
+    } catch (error) {
+        console.error('Error connection MySQL:', error.message);
     }
 }
 
