@@ -23,40 +23,120 @@ class viewText {
         return timeInput;
     }
 }
+class DataTable {
+    constructor(apiUrl) {
+        this.apiUrl = apiUrl;
+        this.data = [];
+    }
+    async loadData(action, params = {}) {
+        try {
+            const response = await fetch(this.apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: action, // Например, "getThreads", "getTasks"
+                    ...params
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Ошибка HTTP: ${response.status}`);
+            }
+
+            this.data = await response.json(); // Предполагаем, что API возвращает массив объектов
+            return this.data;
+        } catch (error) {
+            console.error("Ошибка при загрузке данных:", error);
+            throw error;
+        }
+    }
+    getAll() {
+        return [...this.data];
+    }
+    getByIndex(index) {
+        if (index < 0 || index >= this.data.length) {
+            throw new Error("Индекс вне диапазона");
+        }
+        return { ...this.data[index] }; // Возвращаем копию объекта
+    }
+    getById(id) {
+        const item = this.data.find(item => item.id === id);
+        if (!item) {
+            throw new Error(`Элемент с ID ${id} не найден`);
+        }
+        return { ...item }; // Возвращаем копию
+    }
+    filter(callback) {
+        return this.data.filter(callback);
+    }
+    add(item) {
+        if (!item || typeof item !== 'object') {
+            throw new Error("Неверный элемент для добавления");
+        }
+        this.data.push({ ...item }); // Добавляем копию
+        return this.data.length - 1; // Возвращаем индекс нового элемента
+    }
+    updateById(id, updates) {
+        const index = this.data.findIndex(item => item.id === id);
+        if (index === -1) {
+            throw new Error(`Элемент с ID ${id} не найден`);
+        }
+        this.data[index] = { ...this.data[index], ...updates }; // Обновляем объект
+        return { ...this.data[index] }; // Возвращаем обновленный элемент
+    }
+    removeById(id) {
+        const index = this.data.findIndex(item => item.id === id);
+        if (index === -1) {
+            throw new Error(`Элемент с ID ${id} не найден`);
+        }
+        const removed = this.data.splice(index, 1)[0];
+        return removed; // Возвращаем удаленный элемент
+    }
+    async syncInsert(action, item) {
+        try {
+            const response = await fetch(this.apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: action, // Например, "insertTask"
+                    data: item
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Ошибка HTTP: ${response.status}`);
+            }
+
+            const result = await response.json();
+            // После успешной синхронизации можно обновить локальные данные, если сервер вернул новый ID и т.д.
+            return result;
+        } catch (error) {
+            console.error("Ошибка при синхронизации вставки:", error);
+            throw error;
+        }
+    }
+    getCount() {
+        return this.data.length;
+    }
+    sort(compareFunction) {
+        return [...this.data].sort(compareFunction);
+    }
+}
 
 
-//const schedule = [
-//1763150400000 
-//,1763152380000 
-//,1763154360000 
-//,1763156340000 
-//,1763158320000 
-//,1763160300000 
-//,1763162280000 
-//,1763164260000 
-//,1763169600000 
-//,1763172000000 
-//,1763174400000 
-//,1763176800000 
-//,1763179200000 
-//,1763181600000 
-//,1763184000000 
-//,1763186400000 
-//,1763188800000];
-
-
+const Table = new DataTable("https://worktime.up.railway.app/textile");
 
 (async () => {
-    const thread = await fetch("https://worktime.up.railway.app/textile", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "getThreads"
-        }),
-    }).then((thread) => thread.json());
-    console.log(thread);
+    const thread = await Table.loadData("getThreads");
+
+    console.log(thread.data);
+
+
+
     const task = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
         headers: {
@@ -77,7 +157,7 @@ class viewText {
     }
     let nameThread = [];
     for (var i = 0; i < intervalSecondsJob.length; i++) {
-        const foundItem = thread[0].find(item => item.time_seconds === intervalSecondsJob[i]);
+        const foundItem = thread.data[0].find(item => item.time_seconds === intervalSecondsJob[i]);
         nameThread.push(foundItem ? foundItem.density + " уток" : "основа");
 
 
@@ -128,9 +208,7 @@ class viewText {
     // Заполнение списка с input type="time"
     const stTime = getCurrentMinutes();
     schedule.forEach((time,i) => {
-        //console.log(time);
         const li = document.createElement('li');
-        //const timeInput = new viewTime(time);
         const timeInput = new viewTime(time);
         const threadName = new viewText(nameThread[i]);
         const slotMinutes = time;
@@ -143,7 +221,7 @@ class viewText {
         }
 
         li.appendChild(timeInput);
-        li.appendChild(threadName);
+        //li.appendChild(threadName);
         timeList.appendChild(li);
     });
 }) ();
