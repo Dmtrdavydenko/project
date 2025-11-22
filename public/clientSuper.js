@@ -1,3 +1,117 @@
+class DataTape {
+    constructor(apiUrl) {
+        this.apiUrl = apiUrl;
+        this.data = [];
+    }
+    async loadData(action, params = {}) {
+        try {
+            const response = await fetch(this.apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: action, // Например, "getThreads", "getTasks"
+                    ...params
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Ошибка HTTP: ${response.status}`);
+            }
+
+            this.data = await response.json(); // Предполагаем, что API возвращает массив объектов
+            return this.data;
+        } catch (error) {
+            console.error("Ошибка при загрузке данных:", error);
+            throw error;
+        }
+    }
+    getAll() {
+        return [...this.data];
+    }
+    getByIndex(index) {
+        if (index < 0 || index >= this.data.length) {
+            throw new Error("Индекс вне диапазона");
+        }
+        return { ...this.data[index] }; // Возвращаем копию объекта
+    }
+    getById(id) {
+        const item = this.data.find(item => item.id === id);
+        if (!item) {
+            throw new Error(`Элемент с ID ${id} не найден`);
+        }
+        return { ...item }; // Возвращаем копию
+    }
+    filter(callback) {
+        return this.data.filter(callback);
+    }
+    add(item) {
+        if (!item || typeof item !== 'object') {
+            throw new Error("Неверный элемент для добавления");
+        }
+        this.data.push({ ...item }); // Добавляем копию
+        return this.data.length - 1; // Возвращаем индекс нового элемента
+    }
+    updateById(id, updates) {
+        const index = this.data.findIndex(item => item.id === id);
+        if (index === -1) {
+            throw new Error(`Элемент с ID ${id} не найден`);
+        }
+        this.data[index] = { ...this.data[index], ...updates }; // Обновляем объект
+        return { ...this.data[index] }; // Возвращаем обновленный элемент
+    }
+    removeById(id) {
+        const index = this.data.findIndex(item => item.id === id);
+        if (index === -1) {
+            throw new Error(`Элемент с ID ${id} не найден`);
+        }
+        const removed = this.data.splice(index, 1)[0];
+        return removed; // Возвращаем удаленный элемент
+    }
+    async syncInsert(action, item) {
+        try {
+            const response = await fetch(this.apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: action, // Например, "insertTask"
+                    data: item
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Ошибка HTTP: ${response.status}`);
+            }
+
+            const result = await response.json();
+            // После успешной синхронизации можно обновить локальные данные, если сервер вернул новый ID и т.д.
+            return result;
+        } catch (error) {
+            console.error("Ошибка при синхронизации вставки:", error);
+            throw error;
+        }
+    }
+    getCount() {
+        return this.data.length;
+    }
+    sort(compareFunction) {
+        return [...this.data].sort(compareFunction);
+    }
+}
+const Tape = new DataTape("https://worktime.up.railway.app/textile");
+
+(async (cmd) => {
+    //const tape = await Tape.loadData("getTape");
+    const tape = [[0]];
+
+
+    console.log(tape[0]);
+    console.log(cmd);
+})("test");
+
 function isAndroid() {
     return /Android/i.test(navigator.userAgent);
 }
@@ -25,9 +139,8 @@ function create3() {
     TimeStart.type = "time";
     TimeStart.valueAsNumber = 28800000;
 
-    TimeStart.addEventListener("input", handleInput2);
-    TimeStart.addEventListener("pointerdown", handleInput2);
-    TimeStart.addEventListener("change", handleInput2);
+    TimeStart.addEventListener("input", handleCalculation);
+    TimeStart.addEventListener("change", handleCalculation);
 
     const TimeEnd = document.createElement("input");
     TimeEnd.type = "time";
@@ -152,48 +265,16 @@ let dateSave = 0;
 
 {
     function handleInputTime(event) {
+        console.log("handleInputTime");
         const buttons = buttonRow[this.name];
         for (let button of buttons) {
             button.textContent = this.value;
             button.value = this.valueAsNumber;
         }
-        //summa.dispatchEvent(getSum);
-        //dx.dispatchEvent(getSum);
-        //timeDx.dispatchEvent(getSum);
         handleCalculation();
-
-
     }
+    const timeLine = document.createElement("tr");
 
-    const ul = document.createElement("ul");
-    const m = document.createElement("td");
-    const v = document.createElement("td");
-    const t = document.createElement("td");
-    const calculateButton = document.createElement("button");
-    calculateButton.textContent = "Вычислить";
-    calculateButton.style.display = "block";
-
-    // calc.style.marginLeft = 6 + "px";
-
-    const trm = document.createElement("tr");
-    const trv = document.createElement("tr");
-    const trt = document.createElement("tr");
-
-    const labelm = document.createElement("label");
-    const labelv = document.createElement("label");
-    const labelt = document.createElement("label");
-
-    labelm.textContent = "Метр";
-    labelv.textContent = "Скорость";
-    labelt.textContent = "Время";
-
-    const ltrm = document.createElement("td");
-    const ltrv = document.createElement("td");
-    const ltrt = document.createElement("td");
-
-    //ltrm.append(labelm);
-    //ltrv.append(labelv);
-    //ltrt.append(labelt);
 
     const table = document.createElement("table");
 
@@ -202,7 +283,7 @@ let dateSave = 0;
         cancelable: true, // Позволяет событию быть отменяемым
     });
 
-    const ol = document.createElement("tbody");
+    const tbody = document.createElement("tbody");
 
     // ol.append(start, end);
 
@@ -220,31 +301,16 @@ let dateSave = 0;
                 list[this.id] = e.target;
                 e.target.classList.add("tg");
             }
-            handleInput2(event);
             handleCalculation(event);
-            // let sum = getListTimeSum();
-
-            // timeDx.valueAsNumber = end.valueAsNumber - sum - start.valueAsNumber;
-            // summa.valueAsNumber = sum + start.valueAsNumber;
-            // dx.value = (end.valueAsNumber - sum - start.valueAsNumber) / 60000;
-            // console.log(end.valueAsNumber - sum - start.valueAsNumber);
         });
-        ol.append(line);
+        tbody.append(line);
     }
 
-    const btn = [];
-    let dataTime = [1980000, 2100000, 2400000,80*60*1000];
+    let dataTime = [1980000, 2100000, 2400000, 4800000];
     for (let i = 0; i < 5; i++) {
         buttonRow.push([]);
         //######################################################################### calc
-        const distance = document.createElement("input");
-        distance.type = "number";
-        distance.placeholder = "m";
-        m.append(distance);
-        const speed = document.createElement("input");
-        speed.type = "number";
-        speed.placeholder = "m/s";
-        v.append(speed);
+
         const time = document.createElement("input");
         const td = document.createElement("td");
         time.name = i;
@@ -252,139 +318,50 @@ let dateSave = 0;
         time.placeholder = "с";
         time.valueAsNumber = dataTime[i] || 0;
         td.append(time);
-        //t.append(td);
-        trt.append(td);
+
+
+        timeLine.append(td);
         infoTime.push(time);
 
-        distance.addEventListener("calc", function (e) {
-            if (speed.valueAsNumber > 0)
-                if (time.valueAsNumber > 0)
-                    // if (!Number.isNaN(speed.valueAsNumber) && speed.valueAsNumber > 0)
-                    // if (!Number.isNaN(seconds.valueAsNumber) && time.valueAsNumber > 0)
-                    // if(Number.isNaN(distance.valueAsNumber))
-                    this.valueAsNumber = speed.valueAsNumber * (time.valueAsNumber / 60000);
-            time.dispatchEvent(new MouseEvent("change", {}));
-        });
-        speed.addEventListener("calc", function (e) {
-            if (speed.valueAsNumber > 0)
-                // if (!Number.isNaN(distance.valueAsNumber) && distance.valueAsNumber > 0)
-                // if (!Number.isNaN(time.valueAsNumber) && time.valueAsNumber > 0)
-                // if(Number.isNaN(speed.valueAsNumber))
-                // this.valueAsNumber = distance.valueAsNumber / (time.valueAsNumber / 60000);
-                time.dispatchEvent(new MouseEvent("change", {}));
-        });
-        time.addEventListener("calc", function (e) {
-            // if (!Number.isNaN(distance.valueAsNumber) && distance.valueAsNumber > 0)
-            //   if (!Number.isNaN(speed.valueAsNumber) && speed.valueAsNumber > 0)
-            //     if (Number.isNaN(time.valueAsNumber)) {
-            if (distance.valueAsNumber > 0)
-                if (speed.valueAsNumber > 0)
-                    time.valueAsNumber = (distance.valueAsNumber / speed.valueAsNumber) * 60000;
-            time.dispatchEvent(new MouseEvent("change", {}));
-            // seconds.valueAsNumber = (distance.valueAsNumber / speed.valueAsNumber) * 60;
-            // }
-        });
-
-        calculateButton.addEventListener("pointerdown", function (e) {
-            distance.dispatchEvent(eve);
-            time.dispatchEvent(eve);
-            // speed.dispatchEvent(eve);
-            console.log("Calc");
-        });
 
         //     panel button tap
         for (let j = 0; j < 23; j++) {
-            const btn0 = document.createElement("button");
+            const tapButton = document.createElement("button");
 
 
             const cell = document.createElement("td");
-            btn0.classList.add("tap");
+            tapButton.classList.add("tap");
 
-            buttonLine[j].push(btn0);
-            buttonRow[i].push(btn0);
+            buttonLine[j].push(tapButton);
+            buttonRow[i].push(tapButton);
 
-            btn0.coll = i;
+            tapButton.coll = i;
 
-            cell.append(btn0);
-            ol.childNodes[j].append(cell);
+            cell.append(tapButton);
+            tbody.childNodes[j].append(cell);
         }
+
+
         time.addEventListener("input", handleInputTime);
-        time.addEventListener("pointerdown", handleInputTime);
         time.addEventListener("change", handleInputTime);
-
-
-        time.dispatchEvent(eve);
-
+        time.dispatchEvent(new MouseEvent("change", {}));
     }
 
-    
 
     table.classList.add("block");
-    trm.classList.add("block");
-    trv.classList.add("block");
-    trt.classList.add("block");
-
-    trm.append(ltrm, m);
-    trv.append(ltrv, v);
-    //trt.append(td);
-    //trt.append(ltrt, t);
-
-    //table.append(trm);
-    //table.append(trv);
-    //table.append(trt);
-
-    const diw = document.createElement("section");
-
-    main.append(start);
 
 
     const aViewTime = document.createElement("a");
     aViewTime.href = "/viewTime";
     aViewTime.textContent = "Просмотр";
-    main.append(aViewTime);
-
-    const diwend = document.createElement("section");
-    const labelSum = document.createElement("label");
-    labelSum.textContent = "Сумма";
-    const labelQuantity = document.createElement("label");
-    labelQuantity.textContent = "Количество";
-    const labelOst = document.createElement("label");
-    labelOst.textContent = "Остаток";
-
-    const d1 = document.createElement("div");
-    const d2 = document.createElement("div");
-    const d3 = document.createElement("div");
-
-    // diwend.append(summa, timeDx, dx);
-
-    d1.append(labelSum, summa);
-    d2.append(labelQuantity, quantity);
-    d3.append(labelOst, dx, timeDx);
-    diwend.append(d1);
-    diwend.append(d2);
-    // diwend.append(labelOst,dx);
-    diwend.append(d3);
-
-    labelSum.classList.add("resolve");
-    summa.classList.add("resolve");
-
-    labelOst.classList.add("resolve");
-    dx.classList.add("resolve");
-    timeDx.classList.add("resolve");
 
 
     const thead = document.createElement("thead");
-    thead.append(trt);
-    table.append(thead, ol);
+    main.append(start);
+    main.append(aViewTime);
+    thead.append(timeLine);
+    table.append(thead, tbody);
     main.append(table);
-    //main.append(calculateButton);
-    //main.append(diw);
-    //main.append(ol);
-
-
-    //infoTime.forEach((item) => item.dispatchEvent(event));
-
-        
 }
 
 {
@@ -549,7 +526,7 @@ const button = document.createElement("button");
 button.textContent = "Вычислить";
 //main.append(button);
 send.textContent = "Сохранить";
- main.append(send);
+main.append(send);
 const get = document.createElement("button");
 //get.textContent = "Загрузить";
 //main.append(get);
@@ -895,16 +872,22 @@ function dropListSelect(array, select) {
     });
     return select;
 }
+let selectName;
+
 function handleCalculation(event) {
     section.innerHTML = "";
     select.innerHTML = "";
+
+    selectName = [];
+
+
     console.log(list);
     console.log(buttonLine);
     dtinput = document.createElement("input");
     const ol = document.createElement("ol");
 
     dtinput.type = "date";
-  
+
     // Получаем текущую дату
     const now = new Date();
 
@@ -934,9 +917,9 @@ function handleCalculation(event) {
 
     let intervalSecondsJob = [start.valueAsNumber / 60000];
 
-    for (let i = 1; i < list.length; i++) {
-        intervalSecondsJob.push(list[i].value/60000);
-    }
+    //for (let i = 1; i < list.length; i++) {
+    //    intervalSecondsJob.push(list[i].value / 60000);
+    //}
     console.log(intervalSecondsJob);
     list.forEach((item) => {
         const box = document.createElement("li");
@@ -948,7 +931,14 @@ function handleCalculation(event) {
         //time.valueAsNumber = sum2;
 
         time.setAttribute("disabled", true);
+
+        const TapeName = document.createElement("select");
+
+        dropListSelect([{ name: "Белая" }, { name: "с/ст" }], TapeName);
+        selectName.push(TapeName);
+
         box.append(time);
+        box.append(TapeName);
         ol.append(box);
         console.log(sum2);
     });
@@ -956,6 +946,17 @@ function handleCalculation(event) {
 }
 
 button.addEventListener("click", handleCalculation);
+
+
+selectName.forEach((select, index) => {
+    select.addEventListener('change', () => {
+        const selectedValue = select.value; // Значение из таргета
+        // Синхронизируем значение во всех нижних select'ах от index+1 до конца
+        for (let i = index + 1; i < selectName.length; i++) {
+            selectName[i].value = selectedValue;
+        }
+    });
+});
 
 const color = [
     "#E7C697",
