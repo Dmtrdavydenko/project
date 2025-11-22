@@ -104,7 +104,7 @@ class DataTape {
 const Tape = new DataTape("https://worktime.up.railway.app/textile");
 
 (async (cmd) => {
-    //const tape = await Tape.loadData("getTape");
+    const tape = await Tape.loadData("getTape");
     const tape = [[0]];
 
 
