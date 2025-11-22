@@ -944,7 +944,7 @@ const Tape = new DataTape("https://worktime.up.railway.app/textile");
             console.log(tape[0].find(current => current.time_milliseconds === +item.value));
             
 
-            dropListTape(tape[0].filter(item => item.time_milliseconds === +item.value), TapeName);
+            dropListTape(tape[0].filter(current => current.time_milliseconds === +item.value), TapeName);
             selectName.push(TapeName);
 
             box.append(time);
