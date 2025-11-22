@@ -105,7 +105,7 @@ const Tape = new DataTape("https://worktime.up.railway.app/textile");
 
 (async (cmd) => {
     const tape = await Tape.loadData("getTape");
-    const tape = [[0]];
+    //const tape = [[0]];
 
 
     console.log(tape[0]);
