@@ -110,1210 +110,1222 @@ const Tape = new DataTape("https://worktime.up.railway.app/textile");
 
     console.log(tape[0]);
     console.log(cmd);
-})("test");
 
-function isAndroid() {
-    return /Android/i.test(navigator.userAgent);
-}
-function isIPhone() {
-    return /iPhone/i.test(navigator.userAgent);
-}
-if (isIPhone()) {
-    document.body.classList.add("android");
-    console.log("This device is an iPhone.");
-} else {
-    console.log("This device is not an iPhone.");
-}
-if (isAndroid()) {
-    document.body.classList.add("android");
-    console.log("This device is an Android.");
-} else {
-    console.log("This device is not an Android.");
-}
-const event = new PointerEvent("pointerdown", {
-    bubbles: true, // Allows the event to bubble up
-    cancelable: true, // Allows the event to be cancelable
-});
-function create3() {
-    const TimeStart = document.createElement("input");
-    TimeStart.type = "time";
-    TimeStart.valueAsNumber = 28800000;
-
-    TimeStart.addEventListener("input", handleCalculation);
-    TimeStart.addEventListener("change", handleCalculation);
-
-    const TimeEnd = document.createElement("input");
-    TimeEnd.type = "time";
-    TimeEnd.valueAsNumber = 67200000;
-
-    const sum = document.createElement("input");
-    sum.type = "time";
-    sum.valueAsNumber = TimeStart.valueAsNumber;
-    sum.addEventListener("getSum", function (e) {
-        this.valueAsNumber = getListTimeSum(TimeStart.valueAsNumber);
-        // console.log(this,"Sum");
-    });
-    const fix = document.createElement("input");
-    fix.type = "time";
-    fix.valueAsNumber = TimeStart.valueAsNumber;
-    fix.addEventListener("getSum", function (e) {
-        this.valueAsNumber = getListTimeSum(TimeStart.valueAsNumber);
-        // console.log(this,"Sum");
-    });
-
-    let dx1 = document.createElement("input");
-    dx1.type = "number";
-    dx1.valueAsNumber = (TimeEnd.valueAsNumber - TimeStart.valueAsNumber) / 60000;
-    dx1.addEventListener("getSum", function (e) {
-        this.value =
-            quantity.value > 0
-                ? (TimeEnd.valueAsNumber - getListTimeSum(TimeStart.valueAsNumber)) /
-                60000 /
-                quantity.value
-                : (TimeEnd.valueAsNumber - getListTimeSum(TimeStart.valueAsNumber)) /
-                60000;
-        // console.log(this,"Sum");
-    });
-
-    const TimeDx = document.createElement("input");
-    TimeDx.type = "time";
-    TimeDx.valueAsNumber = TimeEnd.valueAsNumber - TimeStart.valueAsNumber;
-    TimeDx.addEventListener("getSum", function (e) {
-        this.valueAsNumber =
-            quantity.value > 0
-                ? (TimeEnd.valueAsNumber - getListTimeSum(TimeStart.valueAsNumber)) /
-                quantity.value
-                : TimeEnd.valueAsNumber - getListTimeSum(TimeStart.valueAsNumber);
-        // console.log(this,"Sum");
-    });
-
-    let quan = document.createElement("input");
-    quan.type = "number";
-    quan.value = 1;
-    quan.min = 1;
-
-    quan.addEventListener("input", handleInput2);
-    quan.addEventListener("pointerdown", handleInput2);
-    quan.addEventListener("change", handleInput2);
-    return { TimeStart, TimeEnd, TimeDx, dx1, sum, fix, quan };
-}
-function time12(time) {
-    if (time < 46800000) {
-        return time;
+    function isAndroid() {
+        return /Android/i.test(navigator.userAgent);
+    }
+    function isIPhone() {
+        return /iPhone/i.test(navigator.userAgent);
+    }
+    if (isIPhone()) {
+        document.body.classList.add("android");
+        console.log("This device is an iPhone.");
     } else {
-        return time - 43200000;
+        console.log("This device is not an iPhone.");
     }
-}
-const INIT_INPUT_DATA = create3();
-const start = INIT_INPUT_DATA.TimeStart;
-const end = INIT_INPUT_DATA.TimeEnd;
-const timeDx = INIT_INPUT_DATA.TimeDx;
-const dx = INIT_INPUT_DATA.dx1;
-// dx.classList.add("fixed-menu");
-const summa = INIT_INPUT_DATA.sum;
-const summaFix = INIT_INPUT_DATA.fix;
-const quantity = INIT_INPUT_DATA.quan;
-//main.append(start);
-//main.append(end);
-const buttonLine = [];
-const buttonRow = [];
+    if (isAndroid()) {
+        document.body.classList.add("android");
+        console.log("This device is an Android.");
+    } else {
+        console.log("This device is not an Android.");
+    }
+    const event = new PointerEvent("pointerdown", {
+        bubbles: true, // Allows the event to bubble up
+        cancelable: true, // Allows the event to be cancelable
+    });
+    function create3() {
+        const TimeStart = document.createElement("input");
+        TimeStart.type = "time";
+        TimeStart.valueAsNumber = 28800000;
 
-for (let j = 0; j < 27; j++) {
-    buttonLine.push([]);
-}
+        TimeStart.addEventListener("input", handleCalculation);
+        TimeStart.addEventListener("change", handleCalculation);
 
-let infoTime = [];
-const getSum = new CustomEvent("getSum", {
-    bubbles: true, // Позволяет событию всплывать
-    cancelable: true, // Позволяет событию быть отменяемым
-});
+        const TimeEnd = document.createElement("input");
+        TimeEnd.type = "time";
+        TimeEnd.valueAsNumber = 67200000;
 
-function handleInput2(event) {
-    summa.dispatchEvent(getSum);
-    dx.dispatchEvent(getSum);
-    timeDx.dispatchEvent(getSum);
-    summaFix.dispatchEvent(getSum);
-}
+        const sum = document.createElement("input");
+        sum.type = "time";
+        sum.valueAsNumber = TimeStart.valueAsNumber;
+        sum.addEventListener("getSum", function (e) {
+            this.valueAsNumber = getListTimeSum(TimeStart.valueAsNumber);
+            // console.log(this,"Sum");
+        });
+        const fix = document.createElement("input");
+        fix.type = "time";
+        fix.valueAsNumber = TimeStart.valueAsNumber;
+        fix.addEventListener("getSum", function (e) {
+            this.valueAsNumber = getListTimeSum(TimeStart.valueAsNumber);
+            // console.log(this,"Sum");
+        });
 
-const DeviceOrientationEvent = document.createElement("div");
-//main.append(DeviceOrientationEvent);
+        let dx1 = document.createElement("input");
+        dx1.type = "number";
+        dx1.valueAsNumber = (TimeEnd.valueAsNumber - TimeStart.valueAsNumber) / 60000;
+        dx1.addEventListener("getSum", function (e) {
+            this.value =
+                quantity.value > 0
+                    ? (TimeEnd.valueAsNumber - getListTimeSum(TimeStart.valueAsNumber)) /
+                    60000 /
+                    quantity.value
+                    : (TimeEnd.valueAsNumber - getListTimeSum(TimeStart.valueAsNumber)) /
+                    60000;
+            // console.log(this,"Sum");
+        });
 
-const DeviceMotionEvent = document.createElement("div");
-//main.append(DeviceMotionEvent);
+        const TimeDx = document.createElement("input");
+        TimeDx.type = "time";
+        TimeDx.valueAsNumber = TimeEnd.valueAsNumber - TimeStart.valueAsNumber;
+        TimeDx.addEventListener("getSum", function (e) {
+            this.valueAsNumber =
+                quantity.value > 0
+                    ? (TimeEnd.valueAsNumber - getListTimeSum(TimeStart.valueAsNumber)) /
+                    quantity.value
+                    : TimeEnd.valueAsNumber - getListTimeSum(TimeStart.valueAsNumber);
+            // console.log(this,"Sum");
+        });
 
+        let quan = document.createElement("input");
+        quan.type = "number";
+        quan.value = 1;
+        quan.min = 1;
 
-
-
-
-let list = [];
-const section = document.createElement("section");
-const select = document.createElement("select");
-const send = document.createElement("button");
-
-let dtinput = null;
-let dateSave = 0;
-
-
-
-
-
-
-
-
-
-
-
-{
-    function handleInputTime(event) {
-        console.log("handleInputTime");
-        const buttons = buttonRow[this.name];
-        for (let button of buttons) {
-            button.textContent = this.value;
-            button.value = this.valueAsNumber;
+        quan.addEventListener("input", handleInput2);
+        quan.addEventListener("pointerdown", handleInput2);
+        quan.addEventListener("change", handleInput2);
+        return { TimeStart, TimeEnd, TimeDx, dx1, sum, fix, quan };
+    }
+    function time12(time) {
+        if (time < 46800000) {
+            return time;
+        } else {
+            return time - 43200000;
         }
-        handleCalculation();
     }
-    const timeLine = document.createElement("tr");
+    const INIT_INPUT_DATA = create3();
+    const start = INIT_INPUT_DATA.TimeStart;
+    const end = INIT_INPUT_DATA.TimeEnd;
+    const timeDx = INIT_INPUT_DATA.TimeDx;
+    const dx = INIT_INPUT_DATA.dx1;
+    // dx.classList.add("fixed-menu");
+    const summa = INIT_INPUT_DATA.sum;
+    const summaFix = INIT_INPUT_DATA.fix;
+    const quantity = INIT_INPUT_DATA.quan;
+    //main.append(start);
+    //main.append(end);
+    const buttonLine = [];
+    const buttonRow = [];
 
+    for (let j = 0; j < 27; j++) {
+        buttonLine.push([]);
+    }
 
-    const table = document.createElement("table");
-
-    const eve = new CustomEvent("calc", {
+    let infoTime = [];
+    const getSum = new CustomEvent("getSum", {
         bubbles: true, // Позволяет событию всплывать
         cancelable: true, // Позволяет событию быть отменяемым
     });
 
-    const tbody = document.createElement("tbody");
-
-    // ol.append(start, end);
-
-    for (let i = 0; i < 23; i++) {
-        const line = document.createElement("tr");
-        line.id = i;
-        // loatd
-        line.addEventListener("click", function (e) {
-            if (!e.target.closest("button")) return;
-            if (list[this.id] === e.target) {
-                e.target.classList.remove("tg");
-                delete list[this.id];
-            } else {
-                list[this.id] && list[this.id].classList.remove("tg");
-                list[this.id] = e.target;
-                e.target.classList.add("tg");
-            }
-            handleCalculation(event);
-        });
-        tbody.append(line);
+    function handleInput2(event) {
+        summa.dispatchEvent(getSum);
+        dx.dispatchEvent(getSum);
+        timeDx.dispatchEvent(getSum);
+        summaFix.dispatchEvent(getSum);
     }
 
-    let dataTime = [1980000, 2100000, 2400000, 4800000];
-    for (let i = 0; i < 5; i++) {
-        buttonRow.push([]);
-        //######################################################################### calc
+    const DeviceOrientationEvent = document.createElement("div");
+    //main.append(DeviceOrientationEvent);
 
-        const time = document.createElement("input");
-        const td = document.createElement("td");
-        time.name = i;
-        time.type = "time";
-        time.placeholder = "с";
-        time.valueAsNumber = dataTime[i] || 0;
-        td.append(time);
+    const DeviceMotionEvent = document.createElement("div");
+    //main.append(DeviceMotionEvent);
 
 
-        timeLine.append(td);
-        infoTime.push(time);
 
 
-        //     panel button tap
-        for (let j = 0; j < 23; j++) {
-            const tapButton = document.createElement("button");
+
+    let list = [];
+    const section = document.createElement("section");
+    const select = document.createElement("select");
+    const send = document.createElement("button");
+
+    let dtinput = null;
+    let dateSave = 0;
 
 
-            const cell = document.createElement("td");
-            tapButton.classList.add("tap");
 
-            buttonLine[j].push(tapButton);
-            buttonRow[i].push(tapButton);
 
-            tapButton.coll = i;
 
-            cell.append(tapButton);
-            tbody.childNodes[j].append(cell);
+
+
+
+
+
+
+    {
+        function handleInputTime(event) {
+            console.log("handleInputTime");
+            const buttons = buttonRow[this.name];
+            for (let button of buttons) {
+                button.textContent = this.value;
+                button.value = this.valueAsNumber;
+            }
+            handleCalculation();
+        }
+        const timeLine = document.createElement("tr");
+
+
+        const table = document.createElement("table");
+
+        const eve = new CustomEvent("calc", {
+            bubbles: true, // Позволяет событию всплывать
+            cancelable: true, // Позволяет событию быть отменяемым
+        });
+
+        const tbody = document.createElement("tbody");
+
+        // ol.append(start, end);
+
+        for (let i = 0; i < 23; i++) {
+            const line = document.createElement("tr");
+            line.id = i;
+            // loatd
+            line.addEventListener("click", function (e) {
+                if (!e.target.closest("button")) return;
+                if (list[this.id] === e.target) {
+                    e.target.classList.remove("tg");
+                    delete list[this.id];
+                } else {
+                    list[this.id] && list[this.id].classList.remove("tg");
+                    list[this.id] = e.target;
+                    e.target.classList.add("tg");
+                }
+                handleCalculation(event);
+            });
+            tbody.append(line);
+        }
+
+        let dataTime = [1980000, 2100000, 2400000, 4800000];
+        for (let i = 0; i < 5; i++) {
+            buttonRow.push([]);
+            //######################################################################### calc
+
+            const time = document.createElement("input");
+            const td = document.createElement("td");
+            time.name = i;
+            time.type = "time";
+            time.placeholder = "с";
+            time.valueAsNumber = dataTime[i] || 0;
+            td.append(time);
+
+
+            timeLine.append(td);
+            infoTime.push(time);
+
+
+            //     panel button tap
+            for (let j = 0; j < 23; j++) {
+                const tapButton = document.createElement("button");
+
+
+                const cell = document.createElement("td");
+                tapButton.classList.add("tap");
+
+                buttonLine[j].push(tapButton);
+                buttonRow[i].push(tapButton);
+
+                tapButton.coll = i;
+
+                cell.append(tapButton);
+                tbody.childNodes[j].append(cell);
+            }
+
+
+            time.addEventListener("input", handleInputTime);
+            time.addEventListener("change", handleInputTime);
+            time.dispatchEvent(new MouseEvent("change", {}));
         }
 
 
-        time.addEventListener("input", handleInputTime);
-        time.addEventListener("change", handleInputTime);
-        time.dispatchEvent(new MouseEvent("change", {}));
+        table.classList.add("block");
+
+
+        const aViewTime = document.createElement("a");
+        aViewTime.href = "/viewTime";
+        aViewTime.textContent = "Просмотр";
+
+
+        const thead = document.createElement("thead");
+        main.append(start);
+        main.append(aViewTime);
+        thead.append(timeLine);
+        table.append(thead, tbody);
+        main.append(table);
     }
 
+    {
+        const pin = document.createElement("div");
+        // summaFix.style.height="inherit";
+        // summaFix.style.maxHeight= "min-content";
+        // summaFix.style.height= "inherit";
+        // max-height: inherit
+        pin.append(summaFix);
+        pin.classList.add("pin");
+        //main.append(pin);
 
-    table.classList.add("block");
+        // Добавляем клонированный элемент в контейнер
 
+        // clonedContainer.appendChild(clonedNode);
 
-    const aViewTime = document.createElement("a");
-    aViewTime.href = "/viewTime";
-    aViewTime.textContent = "Просмотр";
+        // console.log(rect);
 
+        function updatePosition() {
+            const rect = summa.getBoundingClientRect();
+            if (window.visualViewport) {
+                // visualViewport.height — высота видимой области
+                // window.innerHeight — полная высота окна браузера
+                // Если клавиатура открыта, visualViewport.height будет меньше
+                const bottomOffset =
+                    window.innerHeight -
+                    window.visualViewport.height -
+                    window.visualViewport.offsetTop;
+                pin.style.bottom = bottomOffset + "px";
+                pin.style.left = this.offsetLeft + "px";
+                pin.style.width = this.width + "px";
+                // pin.style.height = this.height/this.scale + 'px';
+                // button3.textContent = this.scale;
+                // console.log(window.visualViewport);
 
-    const thead = document.createElement("thead");
-    main.append(start);
-    main.append(aViewTime);
-    thead.append(timeLine);
-    table.append(thead, tbody);
-    main.append(table);
-}
+                // console.log(rect);
 
-{
-    const pin = document.createElement("div");
-    // summaFix.style.height="inherit";
-    // summaFix.style.maxHeight= "min-content";
-    // summaFix.style.height= "inherit";
-    // max-height: inherit
-    pin.append(summaFix);
-    pin.classList.add("pin");
-    //main.append(pin);
+                // Определяем позицию элемента относительно окна
+                const position = {
+                    top: rect.top + window.scrollY, // Положение сверху относительно документа
+                    left: rect.left + window.scrollX, // Положение слева относительно документа
+                    bottom: rect.bottom + window.scrollY, // Положение слева относительно документа
+                };
 
-    // Добавляем клонированный элемент в контейнер
-
-    // clonedContainer.appendChild(clonedNode);
-
-    // console.log(rect);
-
-    function updatePosition() {
-        const rect = summa.getBoundingClientRect();
+                // pageYOffset
+                // console.log(`Позиция элемента:\nСверху: ${position.top}px\nСлева: ${position.left}px`);
+                // console.log(this.offsetTop+this.height,position.bottom);
+                // console.log("Position",this.offsetTop+this.height,position.bottom);
+                if (this.offsetTop + this.height < position.bottom) {
+                    // pin.style.visibility="visible";
+                } else {
+                    pin.style.visibility = "hidden";
+                }
+            } else {
+                pin.style.bottom = "0px";
+            }
+        }
+        // Обновляем позицию при изменении viewport (например, при появлении клавиатуры)
         if (window.visualViewport) {
-            // visualViewport.height — высота видимой области
-            // window.innerHeight — полная высота окна браузера
-            // Если клавиатура открыта, visualViewport.height будет меньше
-            const bottomOffset =
-                window.innerHeight -
-                window.visualViewport.height -
-                window.visualViewport.offsetTop;
-            pin.style.bottom = bottomOffset + "px";
-            pin.style.left = this.offsetLeft + "px";
-            pin.style.width = this.width + "px";
-            // pin.style.height = this.height/this.scale + 'px';
-            // button3.textContent = this.scale;
-            // console.log(window.visualViewport);
+            window.visualViewport.addEventListener("resize", updatePosition);
+            window.visualViewport.addEventListener("scroll", updatePosition);
+        }
+        // Начальная установка
+        updatePosition();
 
-            // console.log(rect);
+        let initialDistance = 0;
+        let initialWidth1 = 100;
+        let initialHeight1 = 100;
+        let currentDistance = 0;
 
-            // Определяем позицию элемента относительно окна
-            const position = {
-                top: rect.top + window.scrollY, // Положение сверху относительно документа
-                left: rect.left + window.scrollX, // Положение слева относительно документа
-                bottom: rect.bottom + window.scrollY, // Положение слева относительно документа
-            };
+        let initialWidth2 = 100;
+        let initialHeight2 = 100;
 
-            // pageYOffset
-            // console.log(`Позиция элемента:\nСверху: ${position.top}px\nСлева: ${position.left}px`);
-            // console.log(this.offsetTop+this.height,position.bottom);
-            // console.log("Position",this.offsetTop+this.height,position.bottom);
-            if (this.offsetTop + this.height < position.bottom) {
-                // pin.style.visibility="visible";
-            } else {
-                pin.style.visibility = "hidden";
+        initialWidth1 = pin.offsetWidth;
+        initialHeight1 = pin.offsetHeight;
+
+        // initialWidth2 = summaFix.offsetWidth;
+        // initialHeight2 = summaFix.offsetHeight;
+
+        function getDistance(touches) {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        document.body.addEventListener("touchstart", (event) => {
+            if (event.touches.length === 2) {
+                // initialDistance = getDistance(event.touches);
+                // initialWidth1 = resizableElement1.offsetWidth;
+                // initialHeight1 = resizableElement1.offsetHeight;
+                // resizableElement1.textContent = initialDistance+"\n"+currentDistance;
             }
-        } else {
-            pin.style.bottom = "0px";
-        }
-    }
-    // Обновляем позицию при изменении viewport (например, при появлении клавиатуры)
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener("resize", updatePosition);
-        window.visualViewport.addEventListener("scroll", updatePosition);
-    }
-    // Начальная установка
-    updatePosition();
-
-    let initialDistance = 0;
-    let initialWidth1 = 100;
-    let initialHeight1 = 100;
-    let currentDistance = 0;
-
-    let initialWidth2 = 100;
-    let initialHeight2 = 100;
-
-    initialWidth1 = pin.offsetWidth;
-    initialHeight1 = pin.offsetHeight;
-
-    // initialWidth2 = summaFix.offsetWidth;
-    // initialHeight2 = summaFix.offsetHeight;
-
-    function getDistance(touches) {
-        const dx = touches[0].clientX - touches[1].clientX;
-        const dy = touches[0].clientY - touches[1].clientY;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    document.body.addEventListener("touchstart", (event) => {
-        if (event.touches.length === 2) {
-            // initialDistance = getDistance(event.touches);
-            // initialWidth1 = resizableElement1.offsetWidth;
-            // initialHeight1 = resizableElement1.offsetHeight;
-            // resizableElement1.textContent = initialDistance+"\n"+currentDistance;
-        }
-    });
-
-    document.body.addEventListener("touchmove", (event) => {
-        if (event.touches.length === 2) {
-            // currentDistance = getDistance(event.touches);
-            // const scaleFactor = currentDistance / initialDistance;
-
-            // Изменяем размеры первого элемента
-            // const newWidth1 = initialWidth1 / scaleFactor;
-            // const newHeight1 = initialHeight1 / scaleFactor;
-
-            const newWidth1 = initialWidth1 / window.visualViewport.scale;
-            const newHeight1 = initialHeight1 / window.visualViewport.scale;
-
-            // const newWidth2 = initialWidth2 / window.visualViewport.scale;
-            // const newHeight2 = initialHeight2 / window.visualViewport.scale;
-            // resizableElement1.textContent = currentDistance+"\n"+initialDistance+"\n"+scaleFactor+"\n"+window.visualViewport.scale;
-
-            // const newWidth1 = initialWidth1;
-            // const newHeight1 = initialHeight1;
-
-            // initialWidth1 = newWidth1;
-            // initialHeight1 = newHeight1;
-
-            // Изменяем размеры первого элемента
-            // const newWidth1 = initialWidth1 - currentDistance;
-            // const newHeight1 = initialHeight1 - currentDistance;
-
-            // Обновляем размеры первого элемента
-            pin.style.width = `${newWidth1}px`;
-            pin.style.height = `${newHeight1}px`;
-
-            // summaFix.style.width = `${newWidth2}px`;
-            // summaFix.style.height = `${newHeight2}px`;
-
-            // Уменьшаем размеры второго элемента на то же значение
-            // const widthDifference = newWidth1 - initialWidth1;
-            // const heightDifference = newHeight1 - initialHeight1;
-
-            // Уменьшаем размеры второго элемента, чтобы сохранить визуальный эффект
-        }
-    });
-
-    // Остановка изменения размера при завершении жеста
-    document.body.addEventListener("touchend", (event) => {
-        if (event.touches.length < 2) {
-            // initialDistance = getDistance(event.touches);
-            // resizableElement1.style.width = `${initialWidth1}px`;
-            // resizableElement1.style.height = `${initialHeight1}px`;
-            // let a = resizableElement1.style.width - currentDistance;
-            // let b = resizableElement1.style.height - currentDistance;
-            // resizableElement1.style.width = `${0}px`;
-            // resizableElement1.style.height = `${0}px`;
-            // resizableElement1.style.width = `${initialWidth1/window.visualViewport.scale}px`;
-            // resizableElement1.style.height = `${initialHeight1/window.visualViewport.scale}px`;
-            // resizableElement1.textContent = "End";
-            // initialWidth1 = pin.offsetWidth;
-            // initialHeight1 = pin.offsetHeight;
-            // initialWidth1 = resizableElement1.offsetWidth;
-            // initialHeight1 = resizableElement1.offsetHeight;
-        }
-    });
-
-    document.body.addEventListener("touchcancel", () => {
-        initialDistance = 0; // Сбрасываем начальное расстояние
-    });
-}
-
-const button = document.createElement("button");
-button.textContent = "Вычислить";
-//main.append(button);
-send.textContent = "Сохранить";
-main.append(send);
-const get = document.createElement("button");
-//get.textContent = "Загрузить";
-//main.append(get);
-
-main.append(section);
-
-let listMS = [];
-
-
-
-
-async function load(e) {
-    if (!e.target.closest("button")) return;
-    let task = e.target.closest("div");
-
-    infoTime.forEach((item) => (item.valueAsNumber = NaN));
-    infoTime.forEach((item) => item.dispatchEvent(event));
-    list.length &&
-        list.forEach((item, i) => {
-            item.classList.remove("tg");
-            delete list[i];
         });
 
-    const data = [];
-    console.log(this.date.valueAsNumber, this.time.textContent, this.saveId);
+        document.body.addEventListener("touchmove", (event) => {
+            if (event.touches.length === 2) {
+                // currentDistance = getDistance(event.touches);
+                // const scaleFactor = currentDistance / initialDistance;
 
-    const response = await fetch(document.location.href, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "select",
-            table: {
-                name: "diary_ref",
-            },
-            // date: this.date.valueAsNumber,
-            // time: this.time.value,
-            // time: this.time.textContent,
-            saveId: this.saveId
-        }),
-    }).then((response) => response.json());
+                // Изменяем размеры первого элемента
+                // const newWidth1 = initialWidth1 / scaleFactor;
+                // const newHeight1 = initialHeight1 / scaleFactor;
+
+                const newWidth1 = initialWidth1 / window.visualViewport.scale;
+                const newHeight1 = initialHeight1 / window.visualViewport.scale;
+
+                // const newWidth2 = initialWidth2 / window.visualViewport.scale;
+                // const newHeight2 = initialHeight2 / window.visualViewport.scale;
+                // resizableElement1.textContent = currentDistance+"\n"+initialDistance+"\n"+scaleFactor+"\n"+window.visualViewport.scale;
+
+                // const newWidth1 = initialWidth1;
+                // const newHeight1 = initialHeight1;
+
+                // initialWidth1 = newWidth1;
+                // initialHeight1 = newHeight1;
+
+                // Изменяем размеры первого элемента
+                // const newWidth1 = initialWidth1 - currentDistance;
+                // const newHeight1 = initialHeight1 - currentDistance;
+
+                // Обновляем размеры первого элемента
+                pin.style.width = `${newWidth1}px`;
+                pin.style.height = `${newHeight1}px`;
+
+                // summaFix.style.width = `${newWidth2}px`;
+                // summaFix.style.height = `${newHeight2}px`;
+
+                // Уменьшаем размеры второго элемента на то же значение
+                // const widthDifference = newWidth1 - initialWidth1;
+                // const heightDifference = newHeight1 - initialHeight1;
+
+                // Уменьшаем размеры второго элемента, чтобы сохранить визуальный эффект
+            }
+        });
+
+        // Остановка изменения размера при завершении жеста
+        document.body.addEventListener("touchend", (event) => {
+            if (event.touches.length < 2) {
+                // initialDistance = getDistance(event.touches);
+                // resizableElement1.style.width = `${initialWidth1}px`;
+                // resizableElement1.style.height = `${initialHeight1}px`;
+                // let a = resizableElement1.style.width - currentDistance;
+                // let b = resizableElement1.style.height - currentDistance;
+                // resizableElement1.style.width = `${0}px`;
+                // resizableElement1.style.height = `${0}px`;
+                // resizableElement1.style.width = `${initialWidth1/window.visualViewport.scale}px`;
+                // resizableElement1.style.height = `${initialHeight1/window.visualViewport.scale}px`;
+                // resizableElement1.textContent = "End";
+                // initialWidth1 = pin.offsetWidth;
+                // initialHeight1 = pin.offsetHeight;
+                // initialWidth1 = resizableElement1.offsetWidth;
+                // initialHeight1 = resizableElement1.offsetHeight;
+            }
+        });
+
+        document.body.addEventListener("touchcancel", () => {
+            initialDistance = 0; // Сбрасываем начальное расстояние
+        });
+    }
+
+    const button = document.createElement("button");
+    button.textContent = "Вычислить";
+    //main.append(button);
+    send.textContent = "Сохранить";
+    main.append(send);
+    const get = document.createElement("button");
+    //get.textContent = "Загрузить";
+    //main.append(get);
+
+    main.append(section);
+
+    let listMS = [];
 
 
-    response.forEach((item) => {
-        for (let i = 0; i < item.quantity; i++) {
-            data.push(item.millisecond);
-        }
-    });
 
-    let current = [];
-    data.forEach((val, i) => {
-        if (current.indexOf(val) < 0) {
-            current.push(val);
-        }
-        let c = current.indexOf(val);
-        infoTime[c].valueAsNumber = val;
-        infoTime[c].dispatchEvent(event);
-        buttonLine[i][c].classList.add("tg");
-        list[i] = buttonLine[i][c];
-    });
-    start.valueAsNumber = this.beginning.valueAsNumber;
 
-    summa.dispatchEvent(getSum);
-    dx.dispatchEvent(getSum);
-    timeDx.dispatchEvent(getSum);
-}
-function getListTimeSum(sum = 0) {
-    list.forEach((item) => {
-        sum += +item.value;
-    });
-    return sum;
-}
-async function removeRequest(e) {
-    // if (!e.target.closest("button")) return;
-    //   let g = e.target.closest("div");
-    //   console.log(g.id);
-    //   infoTime.forEach((item) => (item.valueAsNumber = NaN));
-    //   infoTime.forEach((item) => item.dispatchEvent(event));
-    //   list.length &&
-    //     list.forEach((item, i) => {
-    //       item.classList.remove("tg");
-    //       delete list[i];
-    //     });
+    async function load(e) {
+        if (!e.target.closest("button")) return;
+        let task = e.target.closest("div");
 
-    //   let sum = 0;
-    //   let current = [];
-    //   data[g.id].forEach((val, i) => {
-    //     console.log(val, i);
-    //     if (current.indexOf(val) < 0) {
-    //       current.push(val);
-    //     }
-    //     sum+=val;
-    //     let c = current.indexOf(val);
-    //     infoTime[c].valueAsNumber = val;
-    //     infoTime[c].dispatchEvent(event);
-    //     buttonLine[i][c].classList.add("tg");
-    //     list[i] = buttonLine[i][c];
-    //   });
-    //   timeDx.valueAsNumber = end.valueAsNumber - sum - start.valueAsNumber;
-    //   dx.value = (end.valueAsNumber - sum - start.valueAsNumber) / 60000;
-    //   summa.valueAsNumber = sum + start.valueAsNumber;
+        infoTime.forEach((item) => (item.valueAsNumber = NaN));
+        infoTime.forEach((item) => item.dispatchEvent(event));
+        list.length &&
+            list.forEach((item, i) => {
+                item.classList.remove("tg");
+                delete list[i];
+            });
 
-    // console.log(this.date.valueAsNumber);
-    // console.log(this.time.value);
-    let date = this.date.valueAsNumber ||
-        e.target.closest("div").querySelector("input").valueAsNumber;
-    let time = this.time.textContent ||
-        e.target.closest("div").querySelector("select").value;
-    console.log(date, time, this.saveID);
+        const data = [];
+        console.log(this.date.valueAsNumber, this.time.textContent, this.saveId);
 
-    // console.log(this.time.textContent);
-
-    try {
         const response = await fetch(document.location.href, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
             },
             body: JSON.stringify({
-                action: "remove",
+                action: "select",
                 table: {
                     name: "diary_ref",
                 },
-                key: {
-                    date: date,
-                    time: time,
-                    save_id: this.saveID,
-                },
+                // date: this.date.valueAsNumber,
+                // time: this.time.value,
+                // time: this.time.textContent,
+                saveId: this.saveId
             }),
         }).then((response) => response.json());
-        console.log(response);
 
-        if (response.success === "0") {
-            this.classList.add("success");
-            setTimeout(() => {
-                this.classList.remove("success");
-            }, 3000);
-        } else throw response;
-    } catch (error) {
-        this.classList.add("reject");
-        setTimeout(() => {
-            this.classList.remove("reject");
-        }, 3000);
-        console.warn(error);
-    }
-}
 
-function begin(ol, timeRun) {
-    // console.log(sum);
-    let sum = timeRun || 28800000;
-    // let sum = start.valueAsNumber;
-    const box = document.createElement("li");
-    const time = document.createElement("input");
-    time.type = "time";
-    time.valueAsNumber = time12(sum);
-    box.append(time);
-    ol.append(box);
-    return sum;
-}
-async function getDB() {
-    return await fetch(document.location.href, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-            action: "select",
-            table: {
-                name: "diary_ref",
-            },
-            data: null,
-        }),
-    }).then((response) => response.json());
-}
-
-let data = [];
-
-get.addEventListener("click", async function (e) {
-    const response = await getDB();
-    console.log(response);
-
-    let select = document.createElement("select");
-    section.id = "";
-    viewData(response, select);
-});
-
-function Task(millisecond, quantity, time, data, run) {
-    this.millisecond = +millisecond;
-    this.second = millisecond / 1000;
-    this.minute = millisecond / 60000;
-    this.quantity = quantity;
-    this.time = time;
-    this.data = data;
-    this.run = run;
-    this.runMinute = run / 60000;
-}
-
-send.addEventListener("click", async function (e) {
-    const dat = [];
-    const dateSave = dtinput.valueAsNumber;
-    console.log("data ", dateSave);
-    console.log("time ", select.value);
-    console.log("run ", start.valueAsNumber);
-    let currentValue = 0; // Переменная для хранения текущего значения
-    let count = 0;
-
-    let cc = dtinput.valueAsNumber + start.valueAsNumber;
-    list.forEach((item, i) => {
-        if (item.value === currentValue) {
-            count++;
-        } else {
-            if (currentValue) {
-                // Если это не первое значение, выводим результат
-                console.log("millisecond " + currentValue, "quantity " + count);
-                dat.push(new Task(currentValue, count, select.value, dateSave, start.valueAsNumber));
+        response.forEach((item) => {
+            for (let i = 0; i < item.quantity; i++) {
+                data.push(item.millisecond);
             }
-            currentValue = item.value;
-            count = 1;
-        }
-    });
-    const timeData = [];
-    list.forEach((item, i) => {
-        timeData.push(cc);
-        cc += +item.value;
-    });
-    timeData.push(cc);
+        });
 
+        let current = [];
+        data.forEach((val, i) => {
+            if (current.indexOf(val) < 0) {
+                current.push(val);
+            }
+            let c = current.indexOf(val);
+            infoTime[c].valueAsNumber = val;
+            infoTime[c].dispatchEvent(event);
+            buttonLine[i][c].classList.add("tg");
+            list[i] = buttonLine[i][c];
+        });
+        start.valueAsNumber = this.beginning.valueAsNumber;
 
-    if (currentValue !== null) {
-        console.log("millisecond " + currentValue, "quantity " + count);
-        dat.push(
-            new Task(currentValue, count, select.value, dateSave, start.valueAsNumber)
-        );
+        summa.dispatchEvent(getSum);
+        dx.dispatchEvent(getSum);
+        timeDx.dispatchEvent(getSum);
     }
-    console.log(list);
-    console.log(timeData);
+    function getListTimeSum(sum = 0) {
+        list.forEach((item) => {
+            sum += +item.value;
+        });
+        return sum;
+    }
+    async function removeRequest(e) {
+        // if (!e.target.closest("button")) return;
+        //   let g = e.target.closest("div");
+        //   console.log(g.id);
+        //   infoTime.forEach((item) => (item.valueAsNumber = NaN));
+        //   infoTime.forEach((item) => item.dispatchEvent(event));
+        //   list.length &&
+        //     list.forEach((item, i) => {
+        //       item.classList.remove("tg");
+        //       delete list[i];
+        //     });
 
+        //   let sum = 0;
+        //   let current = [];
+        //   data[g.id].forEach((val, i) => {
+        //     console.log(val, i);
+        //     if (current.indexOf(val) < 0) {
+        //       current.push(val);
+        //     }
+        //     sum+=val;
+        //     let c = current.indexOf(val);
+        //     infoTime[c].valueAsNumber = val;
+        //     infoTime[c].dispatchEvent(event);
+        //     buttonLine[i][c].classList.add("tg");
+        //     list[i] = buttonLine[i][c];
+        //   });
+        //   timeDx.valueAsNumber = end.valueAsNumber - sum - start.valueAsNumber;
+        //   dx.value = (end.valueAsNumber - sum - start.valueAsNumber) / 60000;
+        //   summa.valueAsNumber = sum + start.valueAsNumber;
 
-    try {
-        // date:13
-        // millisecond:2100000
-        // quantity:7
-        // run:28800000
-        // save_id:13
-        // time:"День"
+        // console.log(this.date.valueAsNumber);
+        // console.log(this.time.value);
+        let date = this.date.valueAsNumber ||
+            e.target.closest("div").querySelector("input").valueAsNumber;
+        let time = this.time.textContent ||
+            e.target.closest("div").querySelector("select").value;
+        console.log(date, time, this.saveID);
 
-        // await fetch(document.location.href, {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json;charset=utf-8",
-        //   },
-        //   body: JSON.stringify({
-        //     action: "todayW",
-        //     table: {
-        //       name: "diary",
-        //     },
-        //     data: dat,
-        //     key: {
-        //       date: dateSave,
-        //       time: select.value,
-        //     },
-        //   }),
-        // }).then((response) => response.json());
-        // console.log(response);
+        // console.log(this.time.textContent);
 
-        //response = await fetch(document.location.href, {
-        //    method: "POST",
-        //    headers: {
-        //        "Content-Type": "application/json;charset=utf-8",
-        //    },
-        //    body: JSON.stringify({
-        //        action: "save",
-        //        table: {
-        //            name: "timestamps",
-        //        },
-        //        data: dat,
-        //        key: {
-        //            date: dateSave,
-        //            time: select.value,
-        //        },
-        //    }),
-        //}).then((response) => response.json());
+        try {
+            const response = await fetch(document.location.href, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: "remove",
+                    table: {
+                        name: "diary_ref",
+                    },
+                    key: {
+                        date: date,
+                        time: time,
+                        save_id: this.saveID,
+                    },
+                }),
+            }).then((response) => response.json());
+            console.log(response);
 
-
-        let response = await fetch("https://worktime.up.railway.app/textile", {
-            //response = await fetch(document.location.href, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-            },
-            body: JSON.stringify({
-                action: "insertTime",
-                data: timeData
-            }),
-        }).then((response) => response.json());
-        console.log(response);
-
-
-        response = await fetch("https://worktime.up.railway.app/textile", {
-            //response = await fetch(document.location.href, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-            },
-            body: JSON.stringify({
-                action: "ping"
-            }),
-        }).then((response) => response.json());
-        console.log(response);
-
-        if (response === "pong") {
-            this.classList.add("success");
+            if (response.success === "0") {
+                this.classList.add("success");
+                setTimeout(() => {
+                    this.classList.remove("success");
+                }, 3000);
+            } else throw response;
+        } catch (error) {
+            this.classList.add("reject");
             setTimeout(() => {
-                this.classList.remove("success");
+                this.classList.remove("reject");
             }, 3000);
-        } else throw response;
-    } catch (error) {
-        this.classList.add("reject");
-        setTimeout(() => {
-            this.classList.remove("reject");
-        }, 3000);
-        console.warn(response);
-        // console.warn(error);
+            console.warn(error);
+        }
     }
-});
 
-function dropListSelectS(array, select) {
-    let option = document.createElement("option");
-    array.forEach((data) => {
-        option.value = data.name;
-        option.textContent = data.name;
-        select.append(option);
-    });
-    return option;
-}
-function dropListSelect(array, select) {
-    array.forEach((data) => {
-        let option = document.createElement("option");
-        option.value = data.name;
-        option.textContent = data.name;
-        select.append(option);
-    });
-    return select;
-}
-let selectName;
-
-function handleCalculation(event) {
-    section.innerHTML = "";
-    select.innerHTML = "";
-
-    selectName = [];
-
-
-    console.log(list);
-    console.log(buttonLine);
-    dtinput = document.createElement("input");
-    const ol = document.createElement("ol");
-
-    dtinput.type = "date";
-
-    // Получаем текущую дату
-    const now = new Date();
-
-    // Создаём дату для начала сегодняшнего дня: год, месяц, день, 0 часов, 0 минут, 0 секунд, 0 миллисекунд
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-
-    // Получаем timestamp в миллисекундах
-    const timestampInMs = startOfDay.getTime() + 3600000 * 7;
-
-
-    dtinput.valueAsNumber = timestampInMs;
-    dateSave = timestampInMs;
-    section.append(dtinput);
-
-    section.append(dropListSelect([{ name: "День" }, { name: "Ночь" }], select));
-    section.append(ol);
-
-    let sum2 = start.valueAsNumber;
-    const box = document.createElement("li");
-    const time = document.createElement("input");
-    time.type = "time";
-    time.valueAsNumber = sum2;
-    time.setAttribute("disabled", true);
-    box.append(time);
-    ol.append(box);
-
-
-    let intervalSecondsJob = [start.valueAsNumber / 60000];
-
-    //for (let i = 1; i < list.length; i++) {
-    //    intervalSecondsJob.push(list[i].value / 60000);
-    //}
-    console.log(intervalSecondsJob);
-    list.forEach((item) => {
+    function begin(ol, timeRun) {
+        // console.log(sum);
+        let sum = timeRun || 28800000;
+        // let sum = start.valueAsNumber;
         const box = document.createElement("li");
-        updateColor(box, +item.value);
         const time = document.createElement("input");
         time.type = "time";
-        sum2 += +item.value;
-        time.valueAsNumber = time12(sum2);
-        //time.valueAsNumber = sum2;
-
-        time.setAttribute("disabled", true);
-
-        const TapeName = document.createElement("select");
-
-        dropListSelect([{ name: "Белая" }, { name: "с/ст" }], TapeName);
-        selectName.push(TapeName);
-
+        time.valueAsNumber = time12(sum);
         box.append(time);
-        box.append(TapeName);
         ol.append(box);
-        console.log(sum2);
+        return sum;
+    }
+    async function getDB() {
+        return await fetch(document.location.href, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify({
+                action: "select",
+                table: {
+                    name: "diary_ref",
+                },
+                data: null,
+            }),
+        }).then((response) => response.json());
+    }
+
+    let data = [];
+
+    get.addEventListener("click", async function (e) {
+        const response = await getDB();
+        console.log(response);
+
+        let select = document.createElement("select");
+        section.id = "";
+        viewData(response, select);
     });
-    section.append(send);
-}
 
-button.addEventListener("click", handleCalculation);
+    function Task(millisecond, quantity, time, data, run) {
+        this.millisecond = +millisecond;
+        this.second = millisecond / 1000;
+        this.minute = millisecond / 60000;
+        this.quantity = quantity;
+        this.time = time;
+        this.data = data;
+        this.run = run;
+        this.runMinute = run / 60000;
+    }
+
+    send.addEventListener("click", async function (e) {
+        const dat = [];
+        const dateSave = dtinput.valueAsNumber;
+        console.log("data ", dateSave);
+        console.log("time ", select.value);
+        console.log("run ", start.valueAsNumber);
+        let currentValue = 0; // Переменная для хранения текущего значения
+        let count = 0;
+
+        let cc = dtinput.valueAsNumber + start.valueAsNumber;
+        list.forEach((item, i) => {
+            if (item.value === currentValue) {
+                count++;
+            } else {
+                if (currentValue) {
+                    // Если это не первое значение, выводим результат
+                    console.log("millisecond " + currentValue, "quantity " + count);
+                    dat.push(new Task(currentValue, count, select.value, dateSave, start.valueAsNumber));
+                }
+                currentValue = item.value;
+                count = 1;
+            }
+        });
+        const timeData = [];
+        list.forEach((item, i) => {
+            timeData.push(cc);
+            cc += +item.value;
+        });
+        timeData.push(cc);
 
 
-selectName.forEach((select, index) => {
-    select.addEventListener('change', () => {
-        const selectedValue = select.value; // Значение из таргета
-        // Синхронизируем значение во всех нижних select'ах от index+1 до конца
-        for (let i = index + 1; i < selectName.length; i++) {
-            selectName[i].value = selectedValue;
+        if (currentValue !== null) {
+            console.log("millisecond " + currentValue, "quantity " + count);
+            dat.push(
+                new Task(currentValue, count, select.value, dateSave, start.valueAsNumber)
+            );
+        }
+        console.log(list);
+        console.log(timeData);
+
+
+        try {
+            // date:13
+            // millisecond:2100000
+            // quantity:7
+            // run:28800000
+            // save_id:13
+            // time:"День"
+
+            // await fetch(document.location.href, {
+            //   method: "POST",
+            //   headers: {
+            //     "Content-Type": "application/json;charset=utf-8",
+            //   },
+            //   body: JSON.stringify({
+            //     action: "todayW",
+            //     table: {
+            //       name: "diary",
+            //     },
+            //     data: dat,
+            //     key: {
+            //       date: dateSave,
+            //       time: select.value,
+            //     },
+            //   }),
+            // }).then((response) => response.json());
+            // console.log(response);
+
+            //response = await fetch(document.location.href, {
+            //    method: "POST",
+            //    headers: {
+            //        "Content-Type": "application/json;charset=utf-8",
+            //    },
+            //    body: JSON.stringify({
+            //        action: "save",
+            //        table: {
+            //            name: "timestamps",
+            //        },
+            //        data: dat,
+            //        key: {
+            //            date: dateSave,
+            //            time: select.value,
+            //        },
+            //    }),
+            //}).then((response) => response.json());
+
+
+            let response = await fetch("https://worktime.up.railway.app/textile", {
+                //response = await fetch(document.location.href, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: "insertTime",
+                    data: timeData
+                }),
+            }).then((response) => response.json());
+            console.log(response);
+
+
+            response = await fetch("https://worktime.up.railway.app/textile", {
+                //response = await fetch(document.location.href, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: "ping"
+                }),
+            }).then((response) => response.json());
+            console.log(response);
+
+            if (response === "pong") {
+                this.classList.add("success");
+                setTimeout(() => {
+                    this.classList.remove("success");
+                }, 3000);
+            } else throw response;
+        } catch (error) {
+            this.classList.add("reject");
+            setTimeout(() => {
+                this.classList.remove("reject");
+            }, 3000);
+            console.warn(response);
+            // console.warn(error);
         }
     });
-});
 
-const color = [
-    "#E7C697",
-    "#7FC7FF",
-    "#FF7514",
-    "darkgray",
-    "pink",
-    " #FCDD76",
-    "#3EB489",
-];
-
-function updateColor(input, totalMinutes) {
-    // const timeValue = input.value; // Получаем значение времени
-    // if (timeValue) {
-    // const [hours, minutes] = timeValue.split(':').map(Number); // Разбиваем время на часы и минуты
-    // const totalMinutes = hours * 60 + minutes; // Переводим в общее количество минут
-    const color = getLinearGradientColor(totalMinutes / 60000); // Получаем цвет
-    input.style.backgroundColor = color; // Устанавливаем цвет фона ячейки
-    // input.style.paddingRight = 4*totalMinutes/60000+"px";
-    input.style.width = minutesToPixels(totalMinutes / 60000) + "px";
-    // } else {
-    // Если значение времени не задано, сбрасываем цвет
-    // input.style.backgroundColor = '';
-    // }
-}
-
-function minutesToPixels(minutes) {
-    // Нормализуем минуты от 20 до 90
-    const minMinutes = 20;
-    const maxMinutes = 90;
-
-    const minPixels = 80; // Минимальное значение в пикселях
-    const maxPixels = 200; // Максимальное значение в пикселях
-
-    // Проверяем, что минуты находятся в пределах
-    if (minutes < minMinutes || minutes > maxMinutes) {
-        // throw new Error("Minutes should be between 20 and 90.");
+    function dropListSelectS(array, select) {
+        let option = document.createElement("option");
+        array.forEach((data) => {
+            option.value = data.name;
+            option.textContent = data.name;
+            select.append(option);
+        });
+        return option;
     }
-
-    // Нормализация
-    const normalizedValue = (minutes - minMinutes) / (maxMinutes - minMinutes);
-    // console.log(normalizedValue);
-    // Используем квадратичное преобразование для увеличения различия
-    // const pixelValue = Math.pow(normalizedValue, 2) * (maxMinutes - minMinutes) * 10; // Умножаем на 10 для увеличения масштаба
-    // const pixelValue = normalizedValue * (maxMinutes - minMinutes) * 6; // Умножаем на 10 для увеличения масштаба
-    const pixelValue = minPixels + normalizedValue * (maxPixels - minPixels);
-    // console.log(pixelValue);
-
-    // Добавляем базовое значение для смещения
-    return pixelValue; // Начинаем с 20 пикселей для 20 минут
-}
-
-function getLinearGradientColor(minutes) {
-    // Нормализуем минуты от 20 до 90
-    const minMinutes = 20;
-    const maxMinutes = 90;
-    const normalizedValue = (minutes - minMinutes) / (maxMinutes - minMinutes);
-
-    // Ограничиваем значение от 0 до 1
-    const clampedValue = Math.min(Math.max(normalizedValue, 0), 1);
-
-    let red, green, blue;
-
-    if (clampedValue <= 0.5) {
-        // Переход от синего к зеленому
-        const transitionValue = clampedValue * 2; // Увеличиваем диапазон до [0, 1]
-        red = 0;
-        green = Math.floor(transitionValue * 255); // Увеличиваем зеленый
-        blue = 255 - Math.floor(transitionValue * 255); // Уменьшаем синий
-    } else {
-        // Переход от зеленого к красному
-        const transitionValue = (clampedValue - 0.5) * 2; // Увеличиваем диапазон до [0, 1]
-        red = Math.floor(transitionValue * 255); // Увеличиваем красный
-        green = 255 - Math.floor(transitionValue * 255); // Уменьшаем зеленый
-        blue = 0; // Синий всегда 0
+    function dropListSelect(array, select) {
+        array.forEach((data) => {
+            let option = document.createElement("option");
+            option.value = data.name;
+            option.textContent = data.name;
+            select.append(option);
+        });
+        return select;
     }
+    function dropListTape(array, select) {
+        array.forEach((data) => {
+            let option = document.createElement("option");
+            option.value = data.thread_density;
+            option.textContent = data.thread_density;
+            select.append(option);
+        });
+        return select;
+    }
+    let selectName;
 
-    return `rgb(${red}, ${green}, ${blue})`;
-}
+    function handleCalculation(event) {
+        section.innerHTML = "";
+        select.innerHTML = "";
 
-//(async () => {
-//    const today = new Date();
-
-//    // Добавляем смещение к текущему времени
-//    const adjustedTime = new Date(today.getTime());
-
-//    // Получаем год, месяц и день
-//    const year = adjustedTime.getFullYear();
-//    const month = adjustedTime.getMonth(); // Месяцы начинаются с 0 (январь)
-//    const day = adjustedTime.getDate();
-
-//    // Создаем новую дату без времени и получаем её в миллисекундах
-//    const dateWithoutTimeInMs = new Date(year, month, day).getTime() + 3600000 * 7;
-//    console.log(dateWithoutTimeInMs);
-
-//    const response = await fetch(document.location.href, {
-//        method: "POST",
-//        headers: {
-//            "Content-Type": "application/json;charset=utf-8",
-//        },
-//        body: JSON.stringify({
-//            action: "today",
-//            table: {
-//                name: "diary_ref",
-//            },
-//            ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
-//            // date:dateWithoutTimeInMs-47*60*60*1000,
-//        }),
-//    }).then((response) => response.json())
-//    console.log(response);
+        selectName = [];
 
 
-//    let select = document.createElement("select");
-//    section.id = "today";
+        console.log(list);
+        console.log(buttonLine);
+        dtinput = document.createElement("input");
+        const ol = document.createElement("ol");
 
-//    if (response.messeag) {
-//        const no_records = document.createElement("span");
-//        no_records.textContent = response.messeag;
-//        section.append(no_records);
-//    } else {
-//        viewData(response, select);
-//    }
+        dtinput.type = "date";
 
-//    fetch(document.location.href, {
-//        method: "POST",
-//        headers: {
-//            "Content-Type": "application/json;charset=utf-8",
-//        },
-//        body: JSON.stringify({
-//            action: "selectT",
-//            table: {
-//                name: "MyChrono",
-//            },
-//            data: null,
-//            // ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
-//            // date:dateWithoutTimeInMs-47*60*60*1000,
-//        }),
-//    })
-//        .then((response) => response.json())
-//        .then(console.log);
+        // Получаем текущую дату
+        const now = new Date();
 
-//    fetch(document.location.href, {
-//        method: "POST",
-//        headers: {
-//            "Content-Type": "application/json;charset=utf-8",
-//        },
-//        body: JSON.stringify({
-//            action: "selectT",
-//            table: {
-//                name: "diary_ref",
-//            },
-//            data: null,
-//            // ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
-//            // date:dateWithoutTimeInMs-47*60*60*1000,
-//        }),
-//    })
-//        .then((response) => response.json())
-//        .then(console.log);
+        // Создаём дату для начала сегодняшнего дня: год, месяц, день, 0 часов, 0 минут, 0 секунд, 0 миллисекунд
+        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
 
-//    // fetch(document.location.href, {
-//    //   method: "POST",
-//    //   headers: {
-//    //     "Content-Type": "application/json;charset=utf-8",
-//    //   },
-//    //   body: JSON.stringify({
-//    //     action: "selectT",
-//    //     table: {
-//    //       name: "MyСhange",
-//    //     },
-//    //     data: null
-//    //   }),
-//    // }).then((response) => response.json()).then(console.log);
+        // Получаем timestamp в миллисекундах
+        const timestampInMs = startOfDay.getTime() + 3600000 * 7;
 
-//    fetch(document.location.href, {
-//        method: "POST",
-//        headers: {
-//            "Content-Type": "application/json;charset=utf-8",
-//        },
-//        body: JSON.stringify({
-//            action: "selectT",
-//            table: {
-//                name: "MySaveTest",
-//            },
-//            data: null,
-//        }),
-//    })
-//        .then((response) => response.json())
-//        .then(console.log);
 
-//    fetch(document.location.href, {
-//        method: "POST",
-//        headers: {
-//            "Content-Type": "application/json;charset=utf-8",
-//        },
-//        body: JSON.stringify({
-//            action: "select",
-//            table: {
-//                name: "diary_ref",
-//            },
-//            data: null,
-//        }),
-//    })
-//        .then((response) => response.json())
-//        .then(console.log);
+        dtinput.valueAsNumber = timestampInMs;
+        dateSave = timestampInMs;
+        section.append(dtinput);
 
-//    // fetch(document.location.href, {
-//    //     method: "POST",
-//    //     headers: {
-//    //       "Content-Type": "application/json;charset=utf-8",
-//    //     },
-//    //     body: JSON.stringify({
-//    //       action: "getOrAddValue",
-//    //         date:1747872000000
-//    //     }),
-//    //   }).then((response) => response.json()).then(console.log);
-//})();
+        section.append(dropListSelect([{ name: "День" }, { name: "Ночь" }], select));
+        section.append(ol);
 
-let countDiv = 0;
-
-function renderPass() {
-    let div = document.createElement("div");
-
-    let date = document.createElement("input");
-    let p = document.createElement("p");
-
-    let ul = document.createElement("ul");
-    let ol = document.createElement("ol");
-
-    let buttonLoad = document.createElement("button");
-    let buttonRemove = document.createElement("button");
-
-    buttonLoad.addEventListener("pointerdown", load);
-    buttonLoad.date = date;
-    buttonLoad.time = p;
-
-    buttonRemove.addEventListener("pointerdown", removeRequest);
-    buttonRemove.date = date;
-    buttonRemove.time = p;
-
-    div.append(date);
-    div.append(p);
-    div.append(ol);
-    div.append(buttonLoad);
-    div.append(buttonRemove);
-    div.classList.add("tail");
-    section.append(div);
-    let sum = 0;
-
-    const lineData = document.createElement("li");
-    const time = document.createElement("input");
-    time.type = "time";
-    lineData.append(time);
-    ol.append(lineData);
-
-    const TimeOfDay = new Object();
-    // console.log(TimeOfDay);
-
-    const option = document.createElement("option");
-
-    div.id = countDiv;
-    countDiv++;
-    return function (database) {
-        date.type = "date";
-        date.valueAsNumber = database.date;
-        date.min = date.value;
-        date.max = date.value;
-
-        sum = sum || database.run || 28800000;
-        time.valueAsNumber = time12(database.run || 28800000);
+        let sum2 = start.valueAsNumber;
+        const box = document.createElement("li");
+        const time = document.createElement("input");
+        time.type = "time";
+        time.valueAsNumber = sum2;
         time.setAttribute("disabled", true);
-        buttonRemove.beginning = time;
-        buttonLoad.beginning = time;
+        box.append(time);
+        ol.append(box);
 
-        buttonRemove.saveID = database.save_id;
-        buttonLoad.saveId = database.save_id;
 
-        p.textContent = database.time;
+        let intervalSecondsJob = [start.valueAsNumber / 60000];
 
-        for (let i = 0; i < database.quantity; i++) {
-            const lineData = document.createElement("li");
+        //for (let i = 1; i < list.length; i++) {
+        //    intervalSecondsJob.push(list[i].value / 60000);
+        //}
+        console.log(intervalSecondsJob);
+        list.forEach((item) => {
+            const box = document.createElement("li");
+            updateColor(box, +item.value);
             const time = document.createElement("input");
-            lineData.append(time);
-            ol.append(lineData);
-
             time.type = "time";
-            // time.setAttribute('readonly', true);
+            sum2 += +item.value;
+            time.valueAsNumber = time12(sum2);
+            //time.valueAsNumber = sum2;
+
             time.setAttribute("disabled", true);
-            sum += +database.millisecond;
 
-            // console.log(sum);
-            listMS.push(database.millisecond);
-            time.valueAsNumber = time12(sum);
-            updateColor(lineData, +database.millisecond);
+            const TapeName = document.createElement("select");
+            console.log(tape[0].find(current => current.time_milliseconds === +item.value));
+            
+
+            dropListTape(tape[0].filter(item => item.time_milliseconds === +item.value), TapeName);
+            selectName.push(TapeName);
+
+            box.append(time);
+            box.append(TapeName);
+            ol.append(box);
+            console.log(sum2);
+        });
+        section.append(send);
+    }
+
+    button.addEventListener("click", handleCalculation);
+
+
+    selectName.forEach((select, index) => {
+        select.addEventListener('change', () => {
+            const selectedValue = select.value; // Значение из таргета
+            // Синхронизируем значение во всех нижних select'ах от index+1 до конца
+            for (let i = index + 1; i < selectName.length; i++) {
+                selectName[i].value = selectedValue;
+            }
+        });
+    });
+
+    const color = [
+        "#E7C697",
+        "#7FC7FF",
+        "#FF7514",
+        "darkgray",
+        "pink",
+        " #FCDD76",
+        "#3EB489",
+    ];
+
+    function updateColor(input, totalMinutes) {
+        // const timeValue = input.value; // Получаем значение времени
+        // if (timeValue) {
+        // const [hours, minutes] = timeValue.split(':').map(Number); // Разбиваем время на часы и минуты
+        // const totalMinutes = hours * 60 + minutes; // Переводим в общее количество минут
+        const color = getLinearGradientColor(totalMinutes / 60000); // Получаем цвет
+        input.style.backgroundColor = color; // Устанавливаем цвет фона ячейки
+        // input.style.paddingRight = 4*totalMinutes/60000+"px";
+        input.style.width = minutesToPixels(totalMinutes / 60000) + "px";
+        // } else {
+        // Если значение времени не задано, сбрасываем цвет
+        // input.style.backgroundColor = '';
+        // }
+    }
+
+    function minutesToPixels(minutes) {
+        // Нормализуем минуты от 20 до 90
+        const minMinutes = 20;
+        const maxMinutes = 90;
+
+        const minPixels = 80; // Минимальное значение в пикселях
+        const maxPixels = 200; // Максимальное значение в пикселях
+
+        // Проверяем, что минуты находятся в пределах
+        if (minutes < minMinutes || minutes > maxMinutes) {
+            // throw new Error("Minutes should be between 20 and 90.");
         }
-        buttonLoad.textContent = "Загрузить";
-        buttonRemove.textContent = "Удалить";
-        return div;
-    };
-}
 
-function write(database, sum, ol, list) {
-    const time = document.createElement("input");
-    time.type = "time";
+        // Нормализация
+        const normalizedValue = (minutes - minMinutes) / (maxMinutes - minMinutes);
+        // console.log(normalizedValue);
+        // Используем квадратичное преобразование для увеличения различия
+        // const pixelValue = Math.pow(normalizedValue, 2) * (maxMinutes - minMinutes) * 10; // Умножаем на 10 для увеличения масштаба
+        // const pixelValue = normalizedValue * (maxMinutes - minMinutes) * 6; // Умножаем на 10 для увеличения масштаба
+        const pixelValue = minPixels + normalizedValue * (maxPixels - minPixels);
+        // console.log(pixelValue);
 
-    for (let i = 0; i < database.quantity; i++) {
+        // Добавляем базовое значение для смещения
+        return pixelValue; // Начинаем с 20 пикселей для 20 минут
+    }
+
+    function getLinearGradientColor(minutes) {
+        // Нормализуем минуты от 20 до 90
+        const minMinutes = 20;
+        const maxMinutes = 90;
+        const normalizedValue = (minutes - minMinutes) / (maxMinutes - minMinutes);
+
+        // Ограничиваем значение от 0 до 1
+        const clampedValue = Math.min(Math.max(normalizedValue, 0), 1);
+
+        let red, green, blue;
+
+        if (clampedValue <= 0.5) {
+            // Переход от синего к зеленому
+            const transitionValue = clampedValue * 2; // Увеличиваем диапазон до [0, 1]
+            red = 0;
+            green = Math.floor(transitionValue * 255); // Увеличиваем зеленый
+            blue = 255 - Math.floor(transitionValue * 255); // Уменьшаем синий
+        } else {
+            // Переход от зеленого к красному
+            const transitionValue = (clampedValue - 0.5) * 2; // Увеличиваем диапазон до [0, 1]
+            red = Math.floor(transitionValue * 255); // Увеличиваем красный
+            green = 255 - Math.floor(transitionValue * 255); // Уменьшаем зеленый
+            blue = 0; // Синий всегда 0
+        }
+
+        return `rgb(${red}, ${green}, ${blue})`;
+    }
+
+    //(async () => {
+    //    const today = new Date();
+
+    //    // Добавляем смещение к текущему времени
+    //    const adjustedTime = new Date(today.getTime());
+
+    //    // Получаем год, месяц и день
+    //    const year = adjustedTime.getFullYear();
+    //    const month = adjustedTime.getMonth(); // Месяцы начинаются с 0 (январь)
+    //    const day = adjustedTime.getDate();
+
+    //    // Создаем новую дату без времени и получаем её в миллисекундах
+    //    const dateWithoutTimeInMs = new Date(year, month, day).getTime() + 3600000 * 7;
+    //    console.log(dateWithoutTimeInMs);
+
+    //    const response = await fetch(document.location.href, {
+    //        method: "POST",
+    //        headers: {
+    //            "Content-Type": "application/json;charset=utf-8",
+    //        },
+    //        body: JSON.stringify({
+    //            action: "today",
+    //            table: {
+    //                name: "diary_ref",
+    //            },
+    //            ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
+    //            // date:dateWithoutTimeInMs-47*60*60*1000,
+    //        }),
+    //    }).then((response) => response.json())
+    //    console.log(response);
+
+
+    //    let select = document.createElement("select");
+    //    section.id = "today";
+
+    //    if (response.messeag) {
+    //        const no_records = document.createElement("span");
+    //        no_records.textContent = response.messeag;
+    //        section.append(no_records);
+    //    } else {
+    //        viewData(response, select);
+    //    }
+
+    //    fetch(document.location.href, {
+    //        method: "POST",
+    //        headers: {
+    //            "Content-Type": "application/json;charset=utf-8",
+    //        },
+    //        body: JSON.stringify({
+    //            action: "selectT",
+    //            table: {
+    //                name: "MyChrono",
+    //            },
+    //            data: null,
+    //            // ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
+    //            // date:dateWithoutTimeInMs-47*60*60*1000,
+    //        }),
+    //    })
+    //        .then((response) => response.json())
+    //        .then(console.log);
+
+    //    fetch(document.location.href, {
+    //        method: "POST",
+    //        headers: {
+    //            "Content-Type": "application/json;charset=utf-8",
+    //        },
+    //        body: JSON.stringify({
+    //            action: "selectT",
+    //            table: {
+    //                name: "diary_ref",
+    //            },
+    //            data: null,
+    //            // ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
+    //            // date:dateWithoutTimeInMs-47*60*60*1000,
+    //        }),
+    //    })
+    //        .then((response) => response.json())
+    //        .then(console.log);
+
+    //    // fetch(document.location.href, {
+    //    //   method: "POST",
+    //    //   headers: {
+    //    //     "Content-Type": "application/json;charset=utf-8",
+    //    //   },
+    //    //   body: JSON.stringify({
+    //    //     action: "selectT",
+    //    //     table: {
+    //    //       name: "MyСhange",
+    //    //     },
+    //    //     data: null
+    //    //   }),
+    //    // }).then((response) => response.json()).then(console.log);
+
+    //    fetch(document.location.href, {
+    //        method: "POST",
+    //        headers: {
+    //            "Content-Type": "application/json;charset=utf-8",
+    //        },
+    //        body: JSON.stringify({
+    //            action: "selectT",
+    //            table: {
+    //                name: "MySaveTest",
+    //            },
+    //            data: null,
+    //        }),
+    //    })
+    //        .then((response) => response.json())
+    //        .then(console.log);
+
+    //    fetch(document.location.href, {
+    //        method: "POST",
+    //        headers: {
+    //            "Content-Type": "application/json;charset=utf-8",
+    //        },
+    //        body: JSON.stringify({
+    //            action: "select",
+    //            table: {
+    //                name: "diary_ref",
+    //            },
+    //            data: null,
+    //        }),
+    //    })
+    //        .then((response) => response.json())
+    //        .then(console.log);
+
+    //    // fetch(document.location.href, {
+    //    //     method: "POST",
+    //    //     headers: {
+    //    //       "Content-Type": "application/json;charset=utf-8",
+    //    //     },
+    //    //     body: JSON.stringify({
+    //    //       action: "getOrAddValue",
+    //    //         date:1747872000000
+    //    //     }),
+    //    //   }).then((response) => response.json()).then(console.log);
+    //})();
+
+    let countDiv = 0;
+
+    function renderPass() {
+        let div = document.createElement("div");
+
+        let date = document.createElement("input");
+        let p = document.createElement("p");
+
+        let ul = document.createElement("ul");
+        let ol = document.createElement("ol");
+
+        let buttonLoad = document.createElement("button");
+        let buttonRemove = document.createElement("button");
+
+        buttonLoad.addEventListener("pointerdown", load);
+        buttonLoad.date = date;
+        buttonLoad.time = p;
+
+        buttonRemove.addEventListener("pointerdown", removeRequest);
+        buttonRemove.date = date;
+        buttonRemove.time = p;
+
+        div.append(date);
+        div.append(p);
+        div.append(ol);
+        div.append(buttonLoad);
+        div.append(buttonRemove);
+        div.classList.add("tail");
+        section.append(div);
+        let sum = 0;
+
         const lineData = document.createElement("li");
         const time = document.createElement("input");
         time.type = "time";
         lineData.append(time);
         ol.append(lineData);
 
-        sum += +database.millisecond;
-        listMS.push(database.millisecond);
-        time.valueAsNumber = time12(sum);
-        updateColor(lineData, +database.millisecond);
-    }
-    return sum;
-}
+        const TimeOfDay = new Object();
+        // console.log(TimeOfDay);
 
-function viewData(ansver, select) {
-    const archiv = [];
+        const option = document.createElement("option");
 
-    section.innerHTML = "";
-    select.innerHTML = "";
+        div.id = countDiv;
+        countDiv++;
+        return function (database) {
+            date.type = "date";
+            date.valueAsNumber = database.date;
+            date.min = date.value;
+            date.max = date.value;
 
-    let ul = document.createElement("ul");
-    let obj = {};
-    let sum = 0;
-    let count = 0;
-    let currentValue = null; // Переменная для хранения текущего значения
-    let currentValue2 = null; // Переменная для хранения текущего значения
+            sum = sum || database.run || 28800000;
+            time.valueAsNumber = time12(database.run || 28800000);
+            time.setAttribute("disabled", true);
+            buttonRemove.beginning = time;
+            buttonLoad.beginning = time;
 
-    let fnh = renderPass();
+            buttonRemove.saveID = database.save_id;
+            buttonLoad.saveId = database.save_id;
 
-    ansver.forEach((database) => {
-        // const minute = database.millisecond / 60000;
-        if (database.save_id === currentValue) {
-            fnh(database);
-        } else {
-            if (currentValue !== null && currentValue2 !== null) {
-                fnh = renderPass(archiv);
+            p.textContent = database.time;
+
+            for (let i = 0; i < database.quantity; i++) {
+                const lineData = document.createElement("li");
+                const time = document.createElement("input");
+                lineData.append(time);
+                ol.append(lineData);
+
+                time.type = "time";
+                // time.setAttribute('readonly', true);
+                time.setAttribute("disabled", true);
+                sum += +database.millisecond;
+
+                // console.log(sum);
+                listMS.push(database.millisecond);
+                time.valueAsNumber = time12(sum);
+                updateColor(lineData, +database.millisecond);
             }
-            currentValue = database.save_id;
-            currentValue2 = database.time;
-            archiv.push({ date: dtinput, time: select });
-            fnh(database);
-        }
-    });
-    if (obj && ul) {
-        for (const [key, value] of Object.entries(obj)) {
-            const listItem = document.createElement("li");
-            listItem.textContent = `Время: ${key}, Количество: ${value}`;
-            ul.appendChild(listItem);
-        }
+            buttonLoad.textContent = "Загрузить";
+            buttonRemove.textContent = "Удалить";
+            return div;
+        };
     }
-    console.log(archiv.length);
-}
+
+    function write(database, sum, ol, list) {
+        const time = document.createElement("input");
+        time.type = "time";
+
+        for (let i = 0; i < database.quantity; i++) {
+            const lineData = document.createElement("li");
+            const time = document.createElement("input");
+            time.type = "time";
+            lineData.append(time);
+            ol.append(lineData);
+
+            sum += +database.millisecond;
+            listMS.push(database.millisecond);
+            time.valueAsNumber = time12(sum);
+            updateColor(lineData, +database.millisecond);
+        }
+        return sum;
+    }
+
+    function viewData(ansver, select) {
+        const archiv = [];
+
+        section.innerHTML = "";
+        select.innerHTML = "";
+
+        let ul = document.createElement("ul");
+        let obj = {};
+        let sum = 0;
+        let count = 0;
+        let currentValue = null; // Переменная для хранения текущего значения
+        let currentValue2 = null; // Переменная для хранения текущего значения
+
+        let fnh = renderPass();
+
+        ansver.forEach((database) => {
+            // const minute = database.millisecond / 60000;
+            if (database.save_id === currentValue) {
+                fnh(database);
+            } else {
+                if (currentValue !== null && currentValue2 !== null) {
+                    fnh = renderPass(archiv);
+                }
+                currentValue = database.save_id;
+                currentValue2 = database.time;
+                archiv.push({ date: dtinput, time: select });
+                fnh(database);
+            }
+        });
+        if (obj && ul) {
+            for (const [key, value] of Object.entries(obj)) {
+                const listItem = document.createElement("li");
+                listItem.textContent = `Время: ${key}, Количество: ${value}`;
+                ul.appendChild(listItem);
+            }
+        }
+        console.log(archiv.length);
+    }
+})("test");
+
 
 // const socket = new WebSocket("wss://worktime.glitch.me");
 
