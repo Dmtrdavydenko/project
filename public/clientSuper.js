@@ -961,6 +961,7 @@ const Tape = new DataTape("https://worktime.up.railway.app/textile");
 
     selectName.forEach((select, index) => {
         select.addEventListener('change', () => {
+            console.log(index);
             const selectedValue = select.value; // Значение из таргета
             // Синхронизируем значение во всех нижних select'ах от index+1 до конца
             for (let i = index + 1; i < selectName.length; i++) {
