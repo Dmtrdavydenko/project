@@ -954,21 +954,28 @@ const Tape = new DataTape("https://worktime.up.railway.app/textile");
             console.log(sum2);
         });
         section.append(send);
+
+
+
+
+
+
+        selectName.forEach((select, index) => {
+            select.addEventListener('change', () => {
+                console.log(index);
+                const selectedValue = select.value; // Значение из таргета
+                // Синхронизируем значение во всех нижних select'ах от index+1 до конца
+                for (let i = index + 1; i < selectName.length; i++) {
+                    selectName[i].value = selectedValue;
+                }
+            });
+        });
     }
 
     button.addEventListener("click", handleCalculation);
 
 
-    selectName.forEach((select, index) => {
-        select.addEventListener('change', () => {
-            console.log(index);
-            const selectedValue = select.value; // Значение из таргета
-            // Синхронизируем значение во всех нижних select'ах от index+1 до конца
-            for (let i = index + 1; i < selectName.length; i++) {
-                selectName[i].value = selectedValue;
-            }
-        });
-    });
+
 
     const color = [
         "#E7C697",
