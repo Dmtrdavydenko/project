@@ -285,7 +285,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         }
         function handleSelect(event) {
             console.log(event.target.textContent);
-            if (event.target.textContent === "Другое") {
+            if (event.target.value === 4800000) {
                 infoTime[this.name].style.display = "inline-block";
             } else {
                 infoTime[this.name].style.display = "none";
