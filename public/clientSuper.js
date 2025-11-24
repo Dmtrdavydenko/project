@@ -294,8 +294,8 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             const buttons = buttonRow[this.name];
             console.log(this.name);
             for (let button of buttons) {
-                button.textContent = this.value;
-                button.value = this.valueAsNumber;
+                button.textContent = infoTime[this.name].value;
+                button.value = infoTime[this.name].valueAsNumber;
             }
             handleCalculation();
         }
