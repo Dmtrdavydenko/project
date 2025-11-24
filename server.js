@@ -1058,7 +1058,9 @@ async function getTime() {
         const connection = await pool.getConnection();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
-            const sql = `SELECT id, UNIX_TIMESTAMP(task_time) AS time_seconds, UNIX_TIMESTAMP(task_time) * 1000 AS time_milliseconds FROM timestamps 
+            const sql = `SELECT id, UNIX_TIMESTAMP(task_time) AS time_seconds, UNIX_TIMESTAMP(task_time) * 1000 AS time_milliseconds, tape.thread_density, tape.color, tape.additive_name
+            FROM timestamps
+            JOIN TapeExtrusion as tape ON timestamps.TapeExtrusion_id = TapeExtrusion.id
             WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 1800 HOUR);
 `
             return await connection.execute(sql);
