@@ -285,6 +285,10 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         function handleInputTime(event) {
             infoTime[this.name].valueAsNumber = event.target.value;
 
+
+            infoTime[this.name].dispatchEvent(new MouseEvent("change", {}));
+
+
             console.log(event.target.value);
             console.log(handleInputTime.name);
             const buttons = buttonRow[this.name];
