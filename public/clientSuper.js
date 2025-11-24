@@ -288,8 +288,8 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             } else {
                 infoTime[this.name].style.display = "none";
             }
-            handleInputTime(event);
-            //handleInputTime.call(this, event);
+            infoTime[this.name].valueAsNumber = event.target.value;
+            handleInputTime.call(this, event);
         }
         function handleInputTime(event) {
             console.log(this.name);
@@ -298,7 +298,6 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
 
 
-            infoTime[this.name].valueAsNumber = event.target.value;
             const buttons = buttonRow[this.name];
             for (let button of buttons) {
                 button.textContent = infoTime[this.name].value;
