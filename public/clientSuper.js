@@ -287,6 +287,11 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             console.log(event.target.value);
             console.log(handleInputTime.name);
 
+            if (event.target.value === "Другое") {
+                infoTime[this.name].style.display = "inline - block";
+            } else {
+                infoTime[this.name].style.display = "none";
+            }
             infoTime[this.name].valueAsNumber = event.target.value;
             const buttons = buttonRow[this.name];
             for (let button of buttons) {
@@ -343,6 +348,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             time.type = "time";
             time.placeholder = "с";
             time.valueAsNumber = dataTime[i] || 0;
+            time.style.display = "none";
 
             let select = dropListSelectTex(thread[0]);
             select.name = i;
@@ -350,7 +356,6 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
             td.append(select);
             td.append(br);
-
             td.append(time);
 
 
