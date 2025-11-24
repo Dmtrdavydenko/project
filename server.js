@@ -1472,7 +1472,7 @@ async function sql(body) {
         if (Array.isArray(body.values))
             all = await connection.execute(body.query, body.values);
         else
-            all = await connection.execute(body.query);
+            all = await connection.query(body.query);
 
         console.log('Результаты запроса:', all);
         return all; // Возвращаем результаты запроса
