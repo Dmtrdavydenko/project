@@ -264,7 +264,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
 
 
-    thread[0].push({ density: "Другое", time_milliseconds: "Другое"})
+    thread[0].push({ density: "Другое", time_milliseconds: 4800000 })
 
 
 
@@ -280,15 +280,16 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
                 select.append(option);
             });
             //select.addEventListener('change', handleInputTime);
+            //4800000
             return select;
         }
         function handleSelect(event) {
-            if (event.target.value === "Другое") {
+            if (event.target.textContent === "Другое") {
                 infoTime[this.name].style.display = "inline-block";
+                infoTime[this.name].valueAsNumber = event.target.time_milliseconds;
             } else {
                 infoTime[this.name].style.display = "none";
             }
-            infoTime[this.name].valueAsNumber = event.target.value;
             handleInputTime.call(this, event);
         }
         function handleInputTime(event) {
