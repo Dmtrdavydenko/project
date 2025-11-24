@@ -264,7 +264,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
 
 
-
+    thread[0].push({ density: "Другое", time_milliseconds: "Другое"})
 
 
 
@@ -338,6 +338,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
             const time = document.createElement("input");
             const td = document.createElement("td");
+            const br = document.createElement("br");
             time.name = i;
             time.type = "time";
             time.placeholder = "с";
@@ -345,7 +346,10 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
             let select = dropListSelectTex(thread[0]);
             select.name = i;
+
+
             td.append(select);
+            td.append(br);
 
             td.append(time);
 
