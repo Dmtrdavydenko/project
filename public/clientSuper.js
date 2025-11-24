@@ -284,6 +284,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             return select;
         }
         function handleSelect(event) {
+            console.log(event.target.textContent);
             if (event.target.textContent === "Другое") {
                 infoTime[this.name].style.display = "inline-block";
             } else {
