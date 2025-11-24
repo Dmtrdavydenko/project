@@ -211,7 +211,7 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
 
     // Заполнение списка с input type="time"
     const stTime = getCurrentMinutes();
-    schedule.forEach((item,i) => {
+    schedule.forEach((item) => {
         const li = document.createElement('li');
         const timeInput = new viewTime(item.time);
         const threadName = new viewText(item.name);
