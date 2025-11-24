@@ -286,7 +286,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             infoTime[this.name].valueAsNumber = event.target.value;
 
 
-            infoTime[this.name].dispatchEvent(new MouseEvent("change", {}));
+            //infoTime[this.name].dispatchEvent(new MouseEvent("change", {}));
 
 
             console.log(event.target.value);
