@@ -279,10 +279,12 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
                 option.textContent = data.density;
                 select.append(option);
             });
-            select.addEventListener('change', handleInputTime);
+            //select.addEventListener('change', handleInputTime);
             return select;
         }
         function handleInputTime(event) {
+            infoTime[this.name].valueAsNumber = event.target.value;
+
             console.log(event.target.value);
             console.log(handleInputTime.name);
             const buttons = buttonRow[this.name];
@@ -367,6 +369,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
                 tbody.childNodes[j].append(cell);
             }
 
+            select.addEventListener('change', handleInputTime);
 
             time.addEventListener("input", handleInputTime);
             time.addEventListener("change", handleInputTime);
