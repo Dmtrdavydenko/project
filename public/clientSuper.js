@@ -282,16 +282,22 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             //select.addEventListener('change', handleInputTime);
             return select;
         }
-        function handleInputTime(event) {
-            console.log(this.name);
-            console.log(event.target.value);
-            console.log(handleInputTime.name);
-
+        function handleSelect(event) {
             if (event.target.value === "Другое") {
                 infoTime[this.name].style.display = "inline-block";
             } else {
                 infoTime[this.name].style.display = "none";
             }
+            handleInputTime(event);
+            //handleInputTime.call(this, event);
+        }
+        function handleInputTime(event) {
+            console.log(this.name);
+            console.log(event.target.value);
+            console.log(handleInputTime.name);
+
+
+
             infoTime[this.name].valueAsNumber = event.target.value;
             const buttons = buttonRow[this.name];
             for (let button of buttons) {
@@ -380,7 +386,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
                 tbody.childNodes[j].append(cell);
             }
 
-            select.addEventListener('change', handleInputTime);
+            select.addEventListener('change', handleSelect);
 
             time.addEventListener("input", handleInputTime);
             time.addEventListener("change", handleInputTime);
