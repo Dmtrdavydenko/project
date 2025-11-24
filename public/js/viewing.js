@@ -152,7 +152,7 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
     console.log(task[0]);
 
 
-    const schedule = task[0].map(item => item.time_milliseconds);
+    const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.thread_density} ${item.color} ${item.additive_name}`  }));
     let intervalSecondsJob = [0];
 
     for (let i = 1; i < task[0].length; i++) {
@@ -211,12 +211,12 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
 
     // Заполнение списка с input type="time"
     const stTime = getCurrentMinutes();
-    schedule.forEach((time,i) => {
+    schedule.forEach((item,i) => {
         const li = document.createElement('li');
-        const timeInput = new viewTime(time);
-        const threadName = new viewText(nameThread[i]);
-        const slotMinutes = time;
-        let sum = time;
+        const timeInput = new viewTime(item.time);
+        const threadName = new viewText(item.name);
+        const slotMinutes = item.time;
+        let sum = item.time;
         if (sum < currentTime) {
             timeInput.disabled = true;
         } else {
@@ -224,7 +224,7 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
         }
 
         li.appendChild(timeInput);
-        //li.appendChild(threadName);
+        li.appendChild(threadName);
         timeList.appendChild(li);
     });
 }) ();
