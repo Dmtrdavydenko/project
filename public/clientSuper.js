@@ -104,6 +104,17 @@ class DataTape {
 const Tape = new DataTape("https://worktime.up.railway.app/textile");
 const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
+
+function dropListSelectTex(array, select = document.createElement("select")) {
+    array.forEach((data) => {
+        let option = document.createElement("option");
+        option.value = data.time_milliseconds;
+        option.textContent = data.density;
+        select.append(option);
+    });
+    return select;
+}
+
 (async (cmd) => {
     const tape = await Tape.loadData("getTape");
     const thread = await Thread.loadData("getThreads");
@@ -114,6 +125,9 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
     console.log(tape[0]);
     console.log(thread[0]);
     console.log(cmd);
+
+    main.append(dropListSelectTex(thread[0]));
+
 
     function isAndroid() {
         return /Android/i.test(navigator.userAgent);
@@ -268,7 +282,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
     {
         function handleInputTime(event) {
-            console.log("handleInputTime");
+            console.log(handleInputTime.name);
             const buttons = buttonRow[this.name];
             for (let button of buttons) {
                 button.textContent = this.value;
