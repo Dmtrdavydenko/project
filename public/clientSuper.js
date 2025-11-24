@@ -102,13 +102,17 @@ class DataTape {
     }
 }
 const Tape = new DataTape("https://worktime.up.railway.app/textile");
+const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
 (async (cmd) => {
     const tape = await Tape.loadData("getTape");
+    const thread = await Thread.loadData("getThreads");
+
     //const tape = [[0]];
 
 
     console.log(tape[0]);
+    console.log(thread[0]);
     console.log(cmd);
 
     function isAndroid() {
