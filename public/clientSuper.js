@@ -286,6 +286,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             console.log(event.target.value);
             console.log(handleInputTime.name);
             const buttons = buttonRow[this.name];
+            console.log(this.name);
             for (let button of buttons) {
                 button.textContent = this.value;
                 button.value = this.valueAsNumber;
@@ -340,7 +341,9 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             time.placeholder = "с";
             time.valueAsNumber = dataTime[i] || 0;
             td.append(time);
-            td.append(dropListSelectTex(thread[0]));
+            let select = dropListSelectTex(thread[0])
+            select.name = i;
+            td.append(select);
 
 
             timeLine.append(td);
