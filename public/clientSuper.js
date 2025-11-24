@@ -105,15 +105,7 @@ const Tape = new DataTape("https://worktime.up.railway.app/textile");
 const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
 
-function dropListSelectTex(array, select = document.createElement("select")) {
-    array.forEach((data) => {
-        let option = document.createElement("option");
-        option.value = data.time_milliseconds;
-        option.textContent = data.density;
-        select.append(option);
-    });
-    return select;
-}
+
 
 (async (cmd) => {
     const tape = await Tape.loadData("getTape");
@@ -280,7 +272,18 @@ function dropListSelectTex(array, select = document.createElement("select")) {
 
 
     {
+        function dropListSelectTex(array, select = document.createElement("select")) {
+            array.forEach((data) => {
+                let option = document.createElement("option");
+                option.value = data.time_milliseconds;
+                option.textContent = data.density;
+                select.append(option);
+            });
+            select.addEventListener('change', handleInputTime);
+            return select;
+        }
         function handleInputTime(event) {
+            console.log(event.target.value);
             console.log(handleInputTime.name);
             const buttons = buttonRow[this.name];
             for (let button of buttons) {
