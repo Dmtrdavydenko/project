@@ -126,7 +126,6 @@ function dropListSelectTex(array, select = document.createElement("select")) {
     console.log(thread[0]);
     console.log(cmd);
 
-    main.append(dropListSelectTex(thread[0]));
 
 
     function isAndroid() {
@@ -328,6 +327,9 @@ function dropListSelectTex(array, select = document.createElement("select")) {
             buttonRow.push([]);
             //######################################################################### calc
 
+            //main.append(dropListSelectTex(thread[0]));
+
+
             const time = document.createElement("input");
             const td = document.createElement("td");
             time.name = i;
@@ -335,6 +337,7 @@ function dropListSelectTex(array, select = document.createElement("select")) {
             time.placeholder = "с";
             time.valueAsNumber = dataTime[i] || 0;
             td.append(time);
+            td.append(dropListSelectTex(thread[0]));
 
 
             timeLine.append(td);
