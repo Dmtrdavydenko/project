@@ -631,7 +631,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
             case "Thread_Parameters":
                 const field = ["thread_id", "thread_density", "thread_length"];
                 //sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
-                sql = "SELECT * FROM Thread_Parameters";
+                sql = "SELECT thread_density, thread_length, thread_speed_id, thread_time FROM Thread_Parameters ORDER BY thread_density ASC";
 
 
                 break;
@@ -1035,7 +1035,7 @@ async function getTape() {
         const connection = await pool.getConnection();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
-            const sql = "SELECT thread_density, color, additive_name, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
+            const sql = "SELECT id, thread_density, color, additive_name, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
                 "FROM TapeExtrusion " +
                 "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
                 "JOIN color ON TapeExtrusion.color_id = color.color_id " +
