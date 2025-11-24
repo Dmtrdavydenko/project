@@ -342,7 +342,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             time.type = "time";
             time.placeholder = "с";
             time.valueAsNumber = dataTime[i] || 0;
-            //td.append(time);
+            td.append(time);
             let select = dropListSelectTex(thread[0]);
             select.name = i;
             td.append(select);
