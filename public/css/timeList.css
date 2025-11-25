@@ -35,8 +35,8 @@ ol {
 li {
 /*    padding: 5px 0;*/
     margin: 2px 0;
-    display: flex;
-    justify-content: center;
+/*    display: flex;*/
+/*    justify-content: center;*/
 }
 
 input[type="time"] {
@@ -96,4 +96,74 @@ input[type="datetime-local"] {
     font-size: 14px;
     color: #666;
     margin-top: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+body {
+    font-family: Arial, sans-serif;
+/*    background-color: #f4f4f4;*/
+/*    margin: 20px;*/
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.class {
+/*    background-color: #fff;*/
+/*    border: 1px solid #ddd;*/
+    border-radius: 8px;
+    padding: 20px;
+/*    width: 30%;*/
+/*    box-shadow: 0 2px 5px rgba(0,0,0,0.1);*/
+}
+
+    .class h2 {
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+    li:last-child {
+        border-bottom: none;
+    }
+
+.time {
+    font-weight: bold;
+    color: #555;
+}
+
+.subject, .room {
+    margin-left: 10px;
+}
+
+.highlight {
+    background-color: #e7f3ff;
+    padding: 5px;
+    border-radius: 4px;
 }
