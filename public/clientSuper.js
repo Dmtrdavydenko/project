@@ -118,6 +118,223 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
     console.log(thread[0]);
     console.log(cmd);
 
+    //const tape = [[]];
+    //const thread = [[]];
+    //thread[0] = [
+    //    {
+    //        "density": 50,
+    //        "length": 25420,
+    //        "time_seconds": 3720,
+    //        "time_milliseconds": 3720000
+    //    },
+    //    {
+    //        "density": 64,
+    //        "length": 20300,
+    //        "time_seconds": 3480,
+    //        "time_milliseconds": 3480000
+    //    },
+    //    {
+    //        "density": 78,
+    //        "length": 16000,
+    //        "time_seconds": 2400,
+    //        "time_milliseconds": 2400000
+    //    },
+    //    {
+    //        "density": 90,
+    //        "length": 14000,
+    //        "time_seconds": 2100,
+    //        "time_milliseconds": 2100000
+    //    },
+    //    {
+    //        "density": 102,
+    //        "length": 11900,
+    //        "time_seconds": 2040,
+    //        "time_milliseconds": 2040000
+    //    },
+    //    {
+    //        "density": 105,
+    //        "length": 11550,
+    //        "time_seconds": 1980,
+    //        "time_milliseconds": 1980000
+    //    },
+    //    {
+    //        "density": 110,
+    //        "length": 10850,
+    //        "time_seconds": 1860,
+    //        "time_milliseconds": 1860000
+    //    },
+    //    {
+    //        "density": 112,
+    //        "length": 10500,
+    //        "time_seconds": 1800,
+    //        "time_milliseconds": 1800000
+    //    },
+    //    {
+    //        "density": 130,
+    //        "length": 9800,
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "density": 140,
+    //        "length": 8400,
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "density": 170,
+    //        "length": 7000,
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "density": 220,
+    //        "length": 5200,
+    //        "time_seconds": 1560,
+    //        "time_milliseconds": 1560000
+    //    },
+    //    {
+    //        "density": 240,
+    //        "length": 4400,
+    //        "time_seconds": 1320,
+    //        "time_milliseconds": 1320000
+    //    },
+    //    {
+    //        "density": "Другое",
+    //        "time_milliseconds": 4800000
+    //    }
+    //];
+    //tape[0] = [
+    //    {
+    //        "id": 1,
+    //        "thread_density": 64,
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "time_seconds": 3480,
+    //        "time_milliseconds": 3480000
+    //    },
+    //    {
+    //        "id": 10,
+    //        "thread_density": 64,
+    //        "color": "оранжевая",
+    //        "additive_name": "нет",
+    //        "time_seconds": 3480,
+    //        "time_milliseconds": 3480000
+    //    },
+    //    {
+    //        "id": 2,
+    //        "thread_density": 78,
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "time_seconds": 2400,
+    //        "time_milliseconds": 2400000
+    //    },
+    //    {
+    //        "id": 11,
+    //        "thread_density": 78,
+    //        "color": "зелёная",
+    //        "additive_name": "нет",
+    //        "time_seconds": 2400,
+    //        "time_milliseconds": 2400000
+    //    },
+    //    {
+    //        "id": 3,
+    //        "thread_density": 90,
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "time_seconds": 2100,
+    //        "time_milliseconds": 2100000
+    //    },
+    //    {
+    //        "id": 14,
+    //        "thread_density": 90,
+    //        "color": "белая",
+    //        "additive_name": "светостабилизатор 1,5%",
+    //        "time_seconds": 2100,
+    //        "time_milliseconds": 2100000
+    //    },
+    //    {
+    //        "id": 17,
+    //        "thread_density": 90,
+    //        "color": "прозрачная",
+    //        "additive_name": "нет",
+    //        "time_seconds": 2100,
+    //        "time_milliseconds": 2100000
+    //    },
+    //    {
+    //        "id": 4,
+    //        "thread_density": 105,
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "time_seconds": 1980,
+    //        "time_milliseconds": 1980000
+    //    },
+    //    {
+    //        "id": 15,
+    //        "thread_density": 105,
+    //        "color": "белая",
+    //        "additive_name": "светостабилизатор 1,5%",
+    //        "time_seconds": 1980,
+    //        "time_milliseconds": 1980000
+    //    },
+    //    {
+    //        "id": 5,
+    //        "thread_density": 110,
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "time_seconds": 1860,
+    //        "time_milliseconds": 1860000
+    //    },
+    //    {
+    //        "id": 6,
+    //        "thread_density": 112,
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "time_seconds": 1800,
+    //        "time_milliseconds": 1800000
+    //    },
+    //    {
+    //        "id": 12,
+    //        "thread_density": 112,
+    //        "color": "цветная",
+    //        "additive_name": "нет",
+    //        "time_seconds": 1800,
+    //        "time_milliseconds": 1800000
+    //    },
+    //    {
+    //        "id": 7,
+    //        "thread_density": 140,
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "id": 8,
+    //        "thread_density": 170,
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "id": 13,
+    //        "thread_density": 170,
+    //        "color": "цветная",
+    //        "additive_name": "нет",
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "id": 9,
+    //        "thread_density": 220,
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "time_seconds": 1560,
+    //        "time_milliseconds": 1560000
+    //    }
+    //];
+
 
 
     function isAndroid() {
@@ -990,10 +1207,16 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             time.setAttribute("disabled", true);
 
             const TapeName = document.createElement("select");
-            console.log(tape[0].find(current => current.time_milliseconds === +item.value));
-            
+            console.log(tape[0].filter(current => current.time_milliseconds === +item.value));
 
-            dropListTape(tape[0].filter(current => current.time_milliseconds === +item.value), TapeName);
+            let nameArray = tape[0].filter(current => current.time_milliseconds === +item.value);
+
+            if (nameArray.length === 0) {
+                dropListTape(tape[0], TapeName);
+            } else {
+                dropListTape(nameArray, TapeName);
+            }
+
             selectName.push(TapeName);
 
             box.append(time);
