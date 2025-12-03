@@ -74,8 +74,8 @@ class ManualRepository {
                 d.density,
                 type.yarn_name,
                 CASE
-                    WHEN type.yarn_name = "warp" THEN warp.warp_quantity
-                    WHEN type.yarn_name = "weft" THEN weft.weft_quantity
+                    WHEN type.yarn_id = 1 THEN warp.warp_quantity
+                    WHEN type.yarn_id = 2 THEN weft.weft_quantity
                     ELSE NULL
                 END as quantity,
                 thread.thread_density,
