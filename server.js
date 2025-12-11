@@ -853,9 +853,9 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
             Field: select.fields,
             F: select.sqlFields,
             key: select.pri,
-            get: getMeta(body),
-            get2: getMeta2(body),
-            get3: getMeta3(body),
+            get: await getMeta(body),
+            get2: await getMeta2(body),
+            get3: await getMeta3(body),
         };
     } catch (err) {
         console.error('Ошибка:', err);
