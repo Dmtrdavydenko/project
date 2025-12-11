@@ -848,8 +848,8 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
         //select.name = body.table.name;
         console.log("Клиент " + sql);
         return {
-            all,
-            rows,
+            //all,
+            //rows,
             //Field: select.fields,
             //F: select.sqlFields,
             //key: select.pri,
