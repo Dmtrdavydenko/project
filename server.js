@@ -310,6 +310,76 @@ async function where(filters = {}) {
     };
 }
 
+async function getMeta(body) {
+    try {
+        const connection = await pool.getConnection();
+        try {
+            console.log('Успешно подключено к базе данных MySQL!');
+            const sql = `SELECT
+            COLUMN_NAME,
+            DATA_TYPE,
+            COLUMN_TYPE,
+            IS_NULLABLE,
+            COLUMN_KEY,
+            EXTRA,
+            COLUMN_DEFAULT
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = ${body.table.name} 
+            AND TABLE_SCHEMA = 'railway'`;
+
+            return await connection.execute(sql);
+        } catch (err) {
+            console.error('Ошибка:', err);
+            throw err;
+        } finally {
+            if (connection) connection.release();
+            console.log("Соединение возвращено.");
+        }
+    } catch (error) {
+        console.error('Error connection MySQL:', error.message);
+    }
+}
+async function getMeta2(body) {
+    try {
+        const connection = await pool.getConnection();
+        try {
+            console.log('Успешно подключено к базе данных MySQL!');
+
+
+            const sql = "SHOW CREATE TABLE " + body.table.name;
+
+            return await connection.execute(sql);
+        } catch (err) {
+            console.error('Ошибка:', err);
+            throw err;
+        } finally {
+            if (connection) connection.release();
+            console.log("Соединение возвращено.");
+        }
+    } catch (error) {
+        console.error('Error connection MySQL:', error.message);
+    }
+}
+async function getMeta3(body) {
+    try {
+        const connection = await pool.getConnection();
+        try {
+            console.log('Успешно подключено к базе данных MySQL!');
+
+            const sql = "DESCRIBE " + body.table.name;
+
+            return await connection.execute(sql);
+        } catch (err) {
+            console.error('Ошибка:', err);
+            throw err;
+        } finally {
+            if (connection) connection.release();
+            console.log("Соединение возвращено.");
+        }
+    } catch (error) {
+        console.error('Error connection MySQL:', error.message);
+    }
+}
 async function select(body) {
     const connection = await pool.getConnection();
 
@@ -428,7 +498,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                 sql = `SELECT 
                         -- l.loom_id,
                         l.loom_number,
-                        machine.machine_name,
+                        -- machine.machine_name,
                         -- s.speed,
                         -- machine.shuttle,
                         sw.sleeve_width as width,
@@ -782,7 +852,10 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
             rows,
             Field: select.fields,
             F: select.sqlFields,
-            key: select.pri
+            key: select.pri,
+            get: getMeta(body),
+            get2: getMeta2(body),
+            get3: getMeta3(body),
         };
     } catch (err) {
         console.error('Ошибка:', err);

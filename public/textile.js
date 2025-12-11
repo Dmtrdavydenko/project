@@ -1,5 +1,10 @@
 console.log("textile");
 console.log(document.location.href);
+(async () => {
+    const tableName = await getTableName();
+    console.log(tableName);
+    await loadTable();
+})();
 
 function createTable(data) {
     if (!data || data.length === 0) {
@@ -251,8 +256,7 @@ async function getTableName() {
             }),
         });
         const result = await response.json();
-        // Make sure the result is an array
-        if (Array.isArray(result)) {  // Adjust based on actual response structure
+        if (Array.isArray(result)) {  
             createSelectOptions(result);
         } else {
             console.log("Expected an array but got:", result);
@@ -1360,11 +1364,7 @@ async function sendForm() {
 
 
 
-(async () => {
-    const tableName = await getTableName();
-    console.log(tableName);
-    await loadTable();
-})();
+
 
 
 
