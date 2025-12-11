@@ -315,6 +315,7 @@ async function getMeta1(body) {
         const connection = await pool.getConnection();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
+            console.log("body: ",body.table.name);
             const sql = `SELECT
             COLUMN_NAME,
             DATA_TYPE,
@@ -324,10 +325,10 @@ async function getMeta1(body) {
             EXTRA,
             COLUMN_DEFAULT
             FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_NAME = "Tape"
+            WHERE TABLE_NAME = ?
             AND TABLE_SCHEMA = "railway"`;
 
-            return await connection.execute(sql);
+            return await connection.execute(sql, body.table.name);
         } catch (err) {
             console.error('Ошибка:', err);
             throw err;
@@ -847,8 +848,8 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
         //select.name = body.table.name;
         console.log("Клиент " + sql);
         return {
-            //all,
-            //rows,
+            all,
+            rows,
             //Field: select.fields,
             //F: select.sqlFields,
             //key: select.pri,
