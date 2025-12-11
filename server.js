@@ -324,10 +324,10 @@ async function getMeta(body) {
             EXTRA,
             COLUMN_DEFAULT
             FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_NAME = ${body.table.name} 
+            WHERE TABLE_NAME = ?
             AND TABLE_SCHEMA = "railway"`;
 
-            return await connection.execute(sql);
+            return await connection.execute(sql, body.table.name);
         } catch (err) {
             console.error('Ошибка:', err);
             throw err;
@@ -852,7 +852,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
             Field: select.fields,
             F: select.sqlFields,
             key: select.pri,
-            get: await getMeta(body),
+            get1: await getMeta(body),
             get2: await getMeta2(body),
             get3: await getMeta3(body)
         };
