@@ -325,7 +325,7 @@ async function getMeta(body) {
             COLUMN_DEFAULT
             FROM INFORMATION_SCHEMA.COLUMNS
             WHERE TABLE_NAME = ${body.table.name} 
-            AND TABLE_SCHEMA = 'railway'`;
+            AND TABLE_SCHEMA = "railway"`;
 
             return await connection.execute(sql);
         } catch (err) {
@@ -344,7 +344,6 @@ async function getMeta2(body) {
         const connection = await pool.getConnection();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
-
 
             const sql = "SHOW CREATE TABLE " + body.table.name;
 
@@ -853,7 +852,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
             Field: select.fields,
             F: select.sqlFields,
             key: select.pri,
-            get1: await getMeta(body),
+            get: await getMeta(body),
             get2: await getMeta2(body),
             get3: await getMeta3(body)
         };
