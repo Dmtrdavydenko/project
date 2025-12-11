@@ -849,9 +849,9 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
         return {
             all,
             rows,
-            Field: select.fields,
-            F: select.sqlFields,
-            key: select.pri,
+            //Field: select.fields,
+            //F: select.sqlFields,
+            //key: select.pri,
             get1: await getMeta1(body),
             get2: await getMeta2(body),
             get3: await getMeta3(body)
