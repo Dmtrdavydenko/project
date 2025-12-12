@@ -151,8 +151,8 @@ queryButton.addEventListener("click", () => {
 });
 
 const form = document.createElement("form");
-form.textContent = "Создать форму";
-form.addEventListener("click", generateForm);
+//form.textContent = "Создать форму";
+//form.addEventListener("click", generateForm);
 
 
 // Устанавливаем атрибуты для textarea (по желанию)
@@ -930,7 +930,6 @@ async function getTypeKey() {
     }
 }
 async function getTypeMySqlForm(columns) {
-    const form = document.getElementById('form');
     form.innerHTML = '';
     array.length = 0;
     columns.forEach(column => {
@@ -938,6 +937,7 @@ async function getTypeMySqlForm(columns) {
         form.append(inputElement);
         array.push(inputElement);
     });
+    main.append(form);
     console.log(array);
     console.log(selectTableName.options[selectTableName.selectedIndex].dataset.isParent);
 }
