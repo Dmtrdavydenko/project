@@ -481,8 +481,8 @@ async function loadTable() {
         container.appendChild(table);
         await getTypeTableHeder();
         await getTypeKey();
-        await getTypeMySqlForm(result.get3[0]);
     } else {
+        await getTypeMySqlForm(result.get3[0]);
         container.textContent = "Empty";
     }
 }
