@@ -846,16 +846,44 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
         //const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
         //select.pri = primaryKeyColumn;
         //select.name = body.table.name;
+
+
+        function decodeSlice(data, start, length, encoding = 'utf-8') {
+            const slice = data.slice(start, start + length);
+            const decoder = new TextDecoder(encoding);
+            return decoder.decode(new Uint8Array(slice));
+        }
+        function decodeMetadata(metadata) {
+            const data = metadata._buf.data;
+            return {
+                catalog: decodeSlice(data, metadata._catalogStart, metadata._catalogLength, metadata._clientEncoding),
+                schema: decodeSlice(data, metadata._schemaStart, metadata._schemaLength, metadata._clientEncoding),
+                table: decodeSlice(data, metadata._tableStart, metadata._tableLength, metadata._clientEncoding),
+                orgTable: decodeSlice(data, metadata._orgTableStart, metadata._orgTableLength, metadata._clientEncoding),
+                orgName: decodeSlice(data, metadata._orgNameStart, metadata._orgNameLength, metadata._clientEncoding),
+            };
+        }
+
+
         console.log("Клиент " + sql);
+
+
+        const get1 = await getMeta1(body);
+        const get2 = await getMeta2(body);
+        const get3 = await getMeta3(body);
+
+        get1[[1]] = get1[[1]].map(meta => (decodeMetadata(meta)));
+        get2[[1]] = get2[[1]].map(meta => (decodeMetadata(meta)));
+        get3[[1]] = get3[[1]].map(meta => (decodeMetadata(meta)));
         return {
             all,
             rows,
             //Field: select.fields,
             //F: select.sqlFields,
             //key: select.pri,
-            get1: await getMeta1(body),
-            get2: await getMeta2(body),
-            get3: await getMeta3(body)
+            get1,
+            get2,
+            get3
         };
     } catch (err) {
         console.error('Ошибка:', err);
