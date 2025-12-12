@@ -150,7 +150,7 @@ queryButton.addEventListener("click", () => {
     sqlQuery(textArea.value); // Передаем текст из textarea в функцию sqlQuery
 });
 
-const form = document.createElement("button");
+const form = document.createElement("form");
 form.textContent = "Создать форму";
 form.addEventListener("click", generateForm);
 
