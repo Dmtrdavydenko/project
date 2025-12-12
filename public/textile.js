@@ -434,6 +434,26 @@ async function loadTable() {
         }),
     }).then((response) => response.json());
     console.log(result);
+
+    function decodeSlice(data, start, length, encoding = 'utf-8') {
+        const slice = data.slice(start, start + length);
+        const decoder = new TextDecoder(encoding);
+        return decoder.decode(new Uint8Array(slice));
+    }
+    function decodeMetadata(metadata) {
+        const data = metadata._buf.data;
+        return {
+            catalog: decodeSlice(data, metadata._catalogStart, metadata._catalogLength, metadata._clientEncoding),
+            schema: decodeSlice(data, metadata._schemaStart, metadata._schemaLength, metadata._clientEncoding),
+            table: decodeSlice(data, metadata._tableStart, metadata._tableLength, metadata._clientEncoding),
+            orgTable: decodeSlice(data, metadata._orgTableStart, metadata._orgTableLength, metadata._clientEncoding),
+            orgName: decodeSlice(data, metadata._orgNameStart, metadata._orgNameLength, metadata._clientEncoding),
+        };
+    }
+    result.get1[1]=result.get1[1].map(meta => (decodeMetadata(meta)));
+    result.get1[1]=result.get2[1].map(meta => (decodeMetadata(meta)));
+    result.get1[1]=result.get3[1].map(meta => (decodeMetadata(meta)));
+
     //console.log(event.target.value);
 
     const container = document.getElementById('table-container');
