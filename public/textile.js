@@ -48,6 +48,105 @@ function createTable(data) {
 }
 
 
+// Функция для создания и добавления формы в body (или другой контейнер)
+function createTapeForm() {
+    const form = document.createElement('form');
+    form.id = 'tapeForm';
+    form.action = '/api/tape/insert';
+    form.method = 'POST';
+    form.enctype = 'application/x-www-form-urlencoded';
+
+    const fieldset = document.createElement('fieldset');
+    const legend = document.createElement('legend');
+    legend.textContent = 'Данные ленты';
+    fieldset.appendChild(legend);
+
+    // Поле ID (disabled)
+    const idDiv = document.createElement('div');
+    const idLabel = document.createElement('label');
+    idLabel.htmlFor = 'id';
+    idLabel.textContent = 'ID (автоматически):';
+    const idInput = document.createElement('input');
+    idInput.id = 'id';
+    idInput.name = 'id';
+    idInput.placeholder = 'auto';
+    idInput.type = 'number';
+    idInput.min = '0';
+    idInput.disabled = true;
+    idInput.readOnly = true;
+    idDiv.append(idLabel, idInput);
+    fieldset.appendChild(idDiv);
+
+    // Поле Density
+    const densityDiv = document.createElement('div');
+    const densityLabel = document.createElement('label');
+    densityLabel.htmlFor = 'density';
+    densityLabel.textContent = 'Плотность (density):';
+    const densityInput = document.createElement('input');
+    densityInput.id = 'density';
+    densityInput.name = 'density';
+    densityInput.placeholder = 'density';
+    densityInput.type = 'number';
+    densityInput.min = '0';
+    densityInput.step = '0.01';
+    densityInput.required = true;
+    densityDiv.append(densityLabel, densityInput);
+    fieldset.appendChild(densityDiv);
+
+    // Поле Length
+    const lengthDiv = document.createElement('div');
+    const lengthLabel = document.createElement('label');
+    lengthLabel.htmlFor = 'length';
+    lengthLabel.textContent = 'Длина (length):';
+    const lengthInput = document.createElement('input');
+    lengthInput.id = 'length';
+    lengthInput.name = 'length';
+    lengthInput.placeholder = 'length';
+    lengthInput.type = 'number';
+    lengthInput.min = '0';
+    lengthInput.step = '0.01';
+    lengthInput.required = true;
+    lengthDiv.append(lengthLabel, lengthInput);
+    fieldset.appendChild(lengthDiv);
+
+    // Кнопка Submit
+    const submitBtn = document.createElement('button');
+    submitBtn.type = 'submit';
+    submitBtn.textContent = 'Вставить ленту';
+    fieldset.appendChild(submitBtn);
+
+    form.appendChild(fieldset);
+    document.body.appendChild(form);  // Добавляем в body (или укажите контейнер)
+
+    // Обработчик submit для асинхронной отправки
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+
+        try {
+            const response = await fetch('/api/tape/insert', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (response.ok) {
+                alert('Лента успешно вставлена!');
+                form.reset();
+            } else {
+                alert('Ошибка: ' + response.statusText);
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Ошибка сети');
+        }
+    });
+    return form;
+}
+
+// Вызов функции при загрузке страницы
+document.addEventListener('DOMContentLoaded', createTapeForm);
+
 
 
 //let tbody = document.querySelector('tbody');
@@ -150,7 +249,7 @@ queryButton.addEventListener("click", () => {
     sqlQuery(textArea.value); // Передаем текст из textarea в функцию sqlQuery
 });
 
-const form = document.createElement("form");
+const form = createTapeForm();
 //form.textContent = "Создать форму";
 //form.addEventListener("click", generateForm);
 
