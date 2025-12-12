@@ -450,9 +450,9 @@ async function loadTable() {
             orgName: decodeSlice(data, metadata._orgNameStart, metadata._orgNameLength, metadata._clientEncoding),
         };
     }
-    result.get1[1]=result.get1[1].map(meta => (decodeMetadata(meta)));
-    result.get1[1]=result.get2[1].map(meta => (decodeMetadata(meta)));
-    result.get1[1]=result.get3[1].map(meta => (decodeMetadata(meta)));
+    //result.get1[1]=result.get1[1].map(meta => (decodeMetadata(meta)));
+    //result.get2[1]=result.get2[1].map(meta => (decodeMetadata(meta)));
+    //result.get3[1]=result.get3[1].map(meta => (decodeMetadata(meta)));
 
     //console.log(event.target.value);
 
