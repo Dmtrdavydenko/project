@@ -932,7 +932,6 @@ async function getTypeMySqlForm(columns) {
     const form = document.getElementById('form');
     form.innerHTML = '';
     array.length = 0;
-    const columns = columns;
     columns.forEach(column => {
         const inputElement = createInputElement(column);
         form.append(inputElement);
