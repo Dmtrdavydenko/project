@@ -482,9 +482,10 @@ async function loadTable() {
         await getTypeTableHeder();
         await getTypeKey();
     } else {
-        await getTypeMySqlForm(result.get3[0]);
         container.textContent = "Empty";
     }
+    await getTypeMySqlForm(result.get3[0]);
+
 }
 async function selectTable(event) {
     try {
