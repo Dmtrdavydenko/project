@@ -910,7 +910,6 @@ async function find(url, dataToSend) {
 
 const serverUrl = "https://worktime.up.railway.app/textile";
 async function getTypeKey() {
-    const form = document.getElementById('form');
     if (selectTableName.options[selectTableName.selectedIndex].dataset.isParent === "true") {
         form.innerHTML = '';
         array.length = 0;
