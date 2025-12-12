@@ -481,6 +481,7 @@ async function loadTable() {
         container.appendChild(table);
         await getTypeTableHeder();
         await getTypeKey();
+        await getTypeMySqlForm(result.get3[0]);
     } else {
         container.textContent = "Empty";
     }
@@ -927,11 +928,11 @@ async function getTypeKey() {
         form.innerHTML = '';
     }
 }
-async function getTypeMySqlForm() {
+async function getTypeMySqlForm(columns) {
     const form = document.getElementById('form');
     form.innerHTML = '';
     array.length = 0;
-    const columns = await getSelectedValue();
+    const columns = columns;
     columns.forEach(column => {
         const inputElement = createInputElement(column);
         form.append(inputElement);
