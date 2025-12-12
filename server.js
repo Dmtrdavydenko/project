@@ -873,9 +873,9 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
         const get3 = await getMeta3(body);
 
         //console.log("ROW ",get1[[1]]);
-        get1[1] = get1[1].map(meta => (decodeMetadata(meta)));
-        get2[1] = get2[1].map(meta => (decodeMetadata(meta)));
-        get3[1] = get3[1].map(meta => (decodeMetadata(meta)));
+        //get1[1] = get1[1].map(meta => (decodeMetadata(meta)));
+        //get2[1] = get2[1].map(meta => (decodeMetadata(meta)));
+        //get3[1] = get3[1].map(meta => (decodeMetadata(meta)));
         return {
             all,
             rows,
