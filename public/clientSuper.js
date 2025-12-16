@@ -480,8 +480,9 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
 
 
-
-    thread[0].push({ density: "Другое", time_milliseconds: 4800000 })
+    let myThread = [];
+    myThread[0] = thread[0].slice();
+    myThread[0].push({ density: "Другое", time_milliseconds: 4800000 });
 
 
 
@@ -502,6 +503,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             return select;
         }
         function handleSelect(event) {
+            console.log(this)
             console.log(event.target.value);
             if (event.target.value === "4800000") {
                 infoTime[this.name].style.display = "inline-block";
@@ -509,12 +511,14 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
                 infoTime[this.name].style.display = "none";
             }
             infoTime[this.name].valueAsNumber = event.target.value;
+            //console.log(this.options[this.selectedIndex].name);
+
             handleInputTime.call(this, event);
         }
         function handleInputTime(event) {
-            console.log(this.name);
             console.log(event.target.value);
             console.log(handleInputTime.name);
+            const tape = this.options[this.selectedIndex].name;
 
 
 
@@ -522,7 +526,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             for (let button of buttons) {
                 button.textContent = infoTime[this.name].value;
                 button.value = infoTime[this.name].valueAsNumber;
-                button.name = infoTime[this.name].name;
+                button.name = tape;
             }
             handleCalculation();
         }
@@ -576,7 +580,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             time.valueAsNumber = dataTime[i] || 0;
             time.style.display = "none";
 
-            let select = dropListSelectTex(thread[0]);
+            let select = dropListSelectTex(myThread[0]);
             select.name = i;
 
 
@@ -1143,7 +1147,8 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             let option = document.createElement("option");
             option.value = data.id;
 
-            option.textContent = `${data.thread_density}  ${data.additive_name === "нет" ? data.color : data.additive_name}`;
+            option.textContent = `${data.density} `;
+            //option.textContent = `${data.thread_density}  ${data.additive_name === "нет" ? data.color : data.additive_name}`;
             select.append(option);
         });
         return select;
@@ -1202,7 +1207,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             updateColor(box, +item.value);
             const time = document.createElement("input");
             time.type = "time";
-            time.name = item.value;
+            time.name = item.name;
             sum2 += +item.value;
             time.valueAsNumber = time12(sum2);
             //time.valueAsNumber = sum2;
@@ -1210,12 +1215,15 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             time.setAttribute("disabled", true);
 
             const TapeName = document.createElement("select");
-            console.log(thread[0].filter(current => current.length === time.name));
+            console.log("time.name ",time.name);
+            console.log("time.name ", time.name);
+            console.log(thread[0].filter(current => current.length === +time.name));
+            console.log(thread[0].filter(current => current.length ===  "16000"));
 
-            let nameArray = thread[0].filter(current => current.length === time.name);
+            let nameArray = thread[0].filter(current => current.length === +time.name);
 
             if (nameArray.length === 0) {
-                dropListTape(tape[0], TapeName);
+                dropListTape(thread[0], TapeName);
             } else {
                 dropListTape(nameArray, TapeName);
             }
@@ -1281,8 +1289,8 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         const minMinutes = 20;
         const maxMinutes = 90;
 
-        const minPixels = 80; // Минимальное значение в пикселях
-        const maxPixels = 200; // Максимальное значение в пикселях
+        const minPixels = 120; // Минимальное значение в пикселях
+        const maxPixels = 240; // Максимальное значение в пикселях
 
         // Проверяем, что минуты находятся в пределах
         if (minutes < minMinutes || minutes > maxMinutes) {
