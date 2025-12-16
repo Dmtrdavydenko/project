@@ -1200,6 +1200,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             updateColor(box, +item.value);
             const time = document.createElement("input");
             time.type = "time";
+            time.name = item.value;
             sum2 += +item.value;
             time.valueAsNumber = time12(sum2);
             //time.valueAsNumber = sum2;
@@ -1207,9 +1208,9 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             time.setAttribute("disabled", true);
 
             const TapeName = document.createElement("select");
-            console.log(tape[0].filter(current => current.time_milliseconds === +item.value));
+            console.log(thread[0].filter(current => current.length === time.name));
 
-            let nameArray = tape[0].filter(current => current.time_milliseconds === +item.value);
+            let nameArray = thread[0].filter(current => current.length === time.name);
 
             if (nameArray.length === 0) {
                 dropListTape(tape[0], TapeName);
