@@ -490,10 +490,11 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
     {
         function dropListSelectTex(array, select = document.createElement("select")) {
-            array.forEach((data) => {
+            array.forEach((tape) => {
                 let option = document.createElement("option");
-                option.value = data.time_milliseconds;
-                option.textContent = data.density;
+                option.value = tape.time_milliseconds;
+                option.textContent = tape.density;
+                option.name = tape.length;
                 select.append(option);
             });
             //select.addEventListener('change', handleInputTime);
@@ -521,6 +522,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             for (let button of buttons) {
                 button.textContent = infoTime[this.name].value;
                 button.value = infoTime[this.name].valueAsNumber;
+                button.name = infoTime[this.name].name;
             }
             handleCalculation();
         }
