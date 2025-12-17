@@ -380,6 +380,17 @@ async function getMeta3(body) {
         console.error('Error connection MySQL:', error.message);
     }
 }
+async function getMetaDataTable(body) {
+    const get1 = await getMeta1(body);
+    const get2 = await getMeta2(body);
+    const get3 = await getMeta3(body);
+
+    return {
+        get1,
+        get2,
+        get3
+    };
+}
 async function select(body) {
     const connection = await pool.getConnection();
 
@@ -868,9 +879,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
         console.log("Клиент " + sql);
 
 
-        const get1 = await getMeta1(body);
-        const get2 = await getMeta2(body);
-        const get3 = await getMeta3(body);
+
 
         //console.log("ROW ",get1[[1]]);
         //get1[1] = get1[1].map(meta => (decodeMetadata(meta)));
@@ -882,9 +891,6 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
             //Field: select.fields,
             //F: select.sqlFields,
             //key: select.pri,
-            get1,
-            get2,
-            get3
         };
     } catch (err) {
         console.error('Ошибка:', err);
