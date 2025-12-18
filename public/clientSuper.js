@@ -495,7 +495,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
                 let option = document.createElement("option");
                 option.value = tape.time_milliseconds;
                 option.textContent = `${tape.density} ${tape.speed && "v"+tape.speed ||""}`;
-                option.name = tape.length;
+                option.name = tape.density;
                 select.append(option);
             });
             //select.addEventListener('change', handleInputTime);
@@ -518,7 +518,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         function handleInputTime(event) {
             console.log(event.target.value);
             console.log(handleInputTime.name);
-            const tape = this.options[this.selectedIndex].name;
+            const type = this.options[this.selectedIndex].name;
 
 
 
@@ -526,7 +526,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             for (let button of buttons) {
                 button.textContent = infoTime[this.name].value;
                 button.value = infoTime[this.name].valueAsNumber;
-                button.name = tape;
+                button.name = type;
             }
             handleCalculation();
         }
@@ -1217,13 +1217,13 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             const TapeName = document.createElement("select");
             console.log("time.name ",time.name);
             console.log("time.name ", time.name);
-            console.log(thread[0].filter(current => current.length === +time.name));
-            console.log(thread[0].filter(current => current.length ===  "16000"));
+            console.log(tape[0].filter(current => current.density === +time.name));
+            console.log(tape[0].filter(current => current.density ===  105));
 
-            let nameArray = thread[0].filter(current => current.length === +time.name);
+            let nameArray = tape[0].filter(current => current.density === +time.name);
 
             if (nameArray.length === 0) {
-                dropListTape(thread[0], TapeName);
+                dropListTape(tape[0], TapeName);
             } else {
                 dropListTape(nameArray, TapeName);
             }

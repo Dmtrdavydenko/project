@@ -1227,7 +1227,7 @@ async function getThreads() {
         try {
             console.log('Успешно подключено к базе данных MySQL!');
             const sql = `
-            SELECT density, length, thread_speed_id as speed, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds
+            SELECT thread_id as id, density, length, thread_speed_id as speed, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds
             FROM Thread_Parameters
             JOIN Tape ON Thread_Parameters.tape_id = Tape.id
             ORDER BY density, speed ASC
