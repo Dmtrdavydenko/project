@@ -458,7 +458,7 @@ async function createSourceTable(name = selectTableName.value) {
     const data = (await getSourceTable(name))[0];
     console.info(data);
     if (data.length > 0) {
-        const table = createTable();
+        const table = createTable(data);
         table.addEventListener("click", queryTarget);
         container.appendChild(table);
         await getTypeTableHeder();
