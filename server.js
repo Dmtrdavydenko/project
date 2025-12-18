@@ -716,7 +716,16 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
             case "Thread_Parameters":
                 const field = ["thread_id", "thread_density", "thread_length"];
                 //sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
-                sql = "SELECT thread_density, thread_length, thread_speed_id, thread_time FROM Thread_Parameters ORDER BY thread_density ASC";
+                sql = `
+                SELECT density, length, thread_speed_id, thread_time
+
+                FROM Thread_Parameters
+
+                JOIN Tape   ON Thread_Parameters.tape_id = Tape.id
+
+                ORDER BY thread_density ASC
+
+                `;
 
 
                 break;
@@ -1027,6 +1036,8 @@ async function getTable(body) {
         console.log("Соединение возвращено.");
     }
 }
+
+
 
 
 async function insertGenerate(body) {
