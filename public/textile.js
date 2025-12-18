@@ -454,11 +454,15 @@ async function createSourceTable(name = selectTableName.value) {
 
     console.log(meta);
     await getTypeMySqlForm(infoTable);
-    await getTypeTableHeder();
 
-    const table = createTable((await getSourceTable(name))[0]);
-    table.addEventListener("click", queryTarget);
-    container.appendChild(table);
+    const data = (await getSourceTable(name))[0];
+    console.info(data);
+    if (data.length > 0) {
+        const table = createTable();
+        table.addEventListener("click", queryTarget);
+        container.appendChild(table);
+        await getTypeTableHeder();
+    }
 }
 async function getSourceTable(name) {
     return await fetch("https://worktime.up.railway.app/textile", {
