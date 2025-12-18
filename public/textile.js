@@ -448,7 +448,8 @@ async function createSourceTable(name = selectTableName.value) {
     container.appendChild(table);
 
 
-    const infoTable = (await getSourceMetaDataTable(name)).get3[1].map(meta => (decodeMetadata(meta)));
+    const infoTable = (await getSourceMetaDataTable(name)).get3[0];
+    //const infoTable = (await getSourceMetaDataTable(name)).get3[0].map(meta => (decodeMetadata(meta)));
     console.log(await getSourceMetaDataTable(name));
     console.log(await getSourceMetaDataTable(name));
     console.log(await getSourceMetaDataTable(name));
