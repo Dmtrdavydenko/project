@@ -27,6 +27,7 @@ const functionDB = {
     "getTable": getTable,
     "getQuntity": getQuntity,
     "getSourceTable": getSourceTable,
+    "getMetaDataTable": getMetaDataTable,
 }
 
 
@@ -262,7 +263,7 @@ ${whereClause};`;
     //    rows: rows
     //};
 }
-async function getSourceTable(body) {
+async function getSourceTable(name = body.table.name) {
 
     //const allowedTables = ['users', 'products', 'orders']; // Список разрешённых таблиц
     //if (!allowedTables.includes(body.table.name)) {
@@ -272,7 +273,7 @@ async function getSourceTable(body) {
         const connection = await pool.getConnection();
         console.log('Подключение к MySQL успешно установлено');
         try {
-            const request = `SELECT * FROM \`${body.table.name}\`;`
+            const request = `SELECT * FROM \`${name}\`;`
             console.log(request);
             return await connection.execute(request);
         } catch (error) {
@@ -384,7 +385,6 @@ async function getMetaDataTable(body) {
     const get1 = await getMeta1(body);
     const get2 = await getMeta2(body);
     const get3 = await getMeta3(body);
-
     return {
         get1,
         get2,

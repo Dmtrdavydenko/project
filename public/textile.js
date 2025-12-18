@@ -425,17 +425,34 @@ async function slect(table) {
         }),
     }).then((response) => response.json());
 }
+function decodeSlice(data, start, length, encoding = 'utf-8') {
+    const slice = data.slice(start, start + length);
+    const decoder = new TextDecoder(encoding);
+    return decoder.decode(new Uint8Array(slice));
+}
+function decodeMetadata(metadata) {
+    const data = metadata._buf.data;
+    return {
+        catalog: decodeSlice(data, metadata._catalogStart, metadata._catalogLength, metadata._clientEncoding),
+        schema: decodeSlice(data, metadata._schemaStart, metadata._schemaLength, metadata._clientEncoding),
+        table: decodeSlice(data, metadata._tableStart, metadata._tableLength, metadata._clientEncoding),
+        orgTable: decodeSlice(data, metadata._orgTableStart, metadata._orgTableLength, metadata._clientEncoding),
+        orgName: decodeSlice(data, metadata._orgNameStart, metadata._orgNameLength, metadata._clientEncoding),
+    };
+}
 async function createSourceTable(name = selectTableName.value) {
     const container = document.getElementById('table-container');
     container.innerHTML = '';
     const table = createTable((await getSourceTable(name))[0]);
     table.addEventListener("click", queryTarget);
     container.appendChild(table);
-    await getTypeMySqlForm();
+
+
+    const infoTable = (await getSourceMetaDataTable(name)).get3[1] = result.get3[1].map(meta => (decodeMetadata(meta)));
+    console.log(infoTable);
+    await getTypeMySqlForm(infoTable);
     await getTypeTableHeder();
 }
-
-
 async function getSourceTable(name) {
     return await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
@@ -450,10 +467,20 @@ async function getSourceTable(name) {
         }),
     }).then((response) => response.json());
 }
-//inputs.forEach(input => {
-//    data[input.name] = input.value;
-//});
-
+async function getSourceMetaDataTable(name) {
+    return await fetch("https://worktime.up.railway.app/textile", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "getMetaDataTable",
+            table: {
+                name: name,
+            }
+        }),
+    }).then((response) => response.json());
+}
 async function showTableFn(query) {
     const result = await fetch("https://worktime.up.railway.app/textile", {
         method: "POST",
@@ -534,21 +561,7 @@ async function loadTable() {
     }).then((response) => response.json());
     console.log(result);
 
-    function decodeSlice(data, start, length, encoding = 'utf-8') {
-        const slice = data.slice(start, start + length);
-        const decoder = new TextDecoder(encoding);
-        return decoder.decode(new Uint8Array(slice));
-    }
-    function decodeMetadata(metadata) {
-        const data = metadata._buf.data;
-        return {
-            catalog: decodeSlice(data, metadata._catalogStart, metadata._catalogLength, metadata._clientEncoding),
-            schema: decodeSlice(data, metadata._schemaStart, metadata._schemaLength, metadata._clientEncoding),
-            table: decodeSlice(data, metadata._tableStart, metadata._tableLength, metadata._clientEncoding),
-            orgTable: decodeSlice(data, metadata._orgTableStart, metadata._orgTableLength, metadata._clientEncoding),
-            orgName: decodeSlice(data, metadata._orgNameStart, metadata._orgNameLength, metadata._clientEncoding),
-        };
-    }
+
     //result.get1[1]=result.get1[1].map(meta => (decodeMetadata(meta)));
     //result.get2[1]=result.get2[1].map(meta => (decodeMetadata(meta)));
     //result.get3[1]=result.get3[1].map(meta => (decodeMetadata(meta)));
