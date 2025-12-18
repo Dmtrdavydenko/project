@@ -447,12 +447,14 @@ async function createSourceTable(name = selectTableName.value) {
     table.addEventListener("click", queryTarget);
     container.appendChild(table);
 
+    let meta = await getSourceMetaDataTable(name)
+    const infoTable = meta.get3[0];
 
-    const infoTable = (await getSourceMetaDataTable(name)).get3[0];
-    //const infoTable = (await getSourceMetaDataTable(name)).get3[0].map(meta => (decodeMetadata(meta)));
-    console.log(await getSourceMetaDataTable(name));
-    console.log(await getSourceMetaDataTable(name));
-    console.log(await getSourceMetaDataTable(name));
+    meta.get1[1]=meta.get1[1].map(meta => (decodeMetadata(meta)));
+    meta.get2[1]=meta.get2[1].map(meta => (decodeMetadata(meta)));
+    meta.get3[1]=meta.get3[1].map(meta => (decodeMetadata(meta)));
+
+    console.log(meta);
     await getTypeMySqlForm(infoTable);
     await getTypeTableHeder();
 }

@@ -329,7 +329,9 @@ async function getMeta1(body) {
             WHERE TABLE_NAME = ?
             AND TABLE_SCHEMA = "railway"`;
 
-            return await connection.execute(sql, [body.table.name]);
+            const data = await connection.execute(sql, [body.table.name]);
+            console.info(data);
+            return data;
         } catch (err) {
             console.error('Ошибка:', err);
             throw err;
@@ -348,8 +350,9 @@ async function getMeta2(body) {
             console.log('Успешно подключено к базе данных MySQL!');
 
             const sql = "SHOW CREATE TABLE " + body.table.name;
-
-            return await connection.execute(sql);
+            const data = await connection.execute(sql);
+            console.info(data);
+            return data;
         } catch (err) {
             console.error('Ошибка:', err);
             throw err;
@@ -368,8 +371,9 @@ async function getMeta3(body) {
             console.log('Успешно подключено к базе данных MySQL!');
 
             const sql = "DESCRIBE " + body.table.name;
-
-            return await connection.execute(sql);
+            const data = await connection.execute(sql);
+            console.info(data);
+            return data
         } catch (err) {
             console.error('Ошибка:', err);
             throw err;
