@@ -1161,12 +1161,14 @@ async function getTape() {
         const connection = await pool.getConnection();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
-            const sql = "SELECT id, thread_density, color, additive_name, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
+            const sql = "SELECT id, density, color, additive_name, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
                 "FROM TapeExtrusion " +
                 "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
+                "JOIN Tape   ON Thread_Parameters.tape_id = Tape.id " +
+
                 "JOIN color ON TapeExtrusion.color_id = color.color_id " +
                 "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
-                "ORDER BY thread_density ASC";
+                "ORDER BY density ASC";
             return await connection.execute(sql);
         } catch (err) {
             console.error('Ошибка:', err);
@@ -1224,7 +1226,9 @@ async function getThreads() {
         const connection = await pool.getConnection();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
-            const sql = `SELECT thread_density as density, thread_length as length, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds FROM Thread_Parameters ORDER BY density ASC`;
+            const sql = `SELECT density, length, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds FROM Thread_Parameters
+                JOIN Tape ON Thread_Parameters.tape_id = Tape.id
+                ORDER BY density ASC`;
             return await connection.execute(sql);
         } catch (err) {
             console.error('Ошибка:', err);
