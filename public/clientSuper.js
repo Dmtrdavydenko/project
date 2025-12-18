@@ -495,7 +495,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
                 let option = document.createElement("option");
                 option.value = tape.time_milliseconds;
                 option.textContent = `${tape.density} ${tape.speed && "v"+tape.speed ||""}`;
-                option.name = tape.group_id;
+                option.name = tape.id;
                 select.append(option);
             });
             //select.addEventListener('change', handleInputTime);
