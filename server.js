@@ -263,7 +263,7 @@ ${whereClause};`;
     //    rows: rows
     //};
 }
-async function getSourceTable(name = body.table.name) {
+async function getSourceTable(body) {
 
     //const allowedTables = ['users', 'products', 'orders']; // Список разрешённых таблиц
     //if (!allowedTables.includes(body.table.name)) {
@@ -273,7 +273,7 @@ async function getSourceTable(name = body.table.name) {
         const connection = await pool.getConnection();
         console.log('Подключение к MySQL успешно установлено');
         try {
-            const request = `SELECT * FROM \`${name}\`;`
+            const request = `SELECT * FROM \`${body.table.name}\`;`
             console.log(request);
             return await connection.execute(request);
         } catch (error) {
