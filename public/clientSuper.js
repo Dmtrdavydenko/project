@@ -494,7 +494,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             array.forEach((tape) => {
                 let option = document.createElement("option");
                 option.value = tape.time_milliseconds;
-                option.textContent = `${tape.density} ${tape.speed && "v"+tape.speed ||""}`;
+                option.textContent = `${tape.density} ${tape.speed && "v" + tape.speed || ""}`;
                 option.name = tape.id;
                 select.append(option);
             });
@@ -1215,10 +1215,11 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             time.setAttribute("disabled", true);
 
             const TapeName = document.createElement("select");
-            console.log("time.name ",time.name);
+            TapeName.name = item.name;
+            console.log("time.name ", time.name);
             console.log("time.name ", time.name);
             console.log(tape[0].filter(current => current.group_id === +time.name));
-            console.log(tape[0].filter(current => current.group_id ===  105));
+            console.log(tape[0].filter(current => current.group_id === 105));
 
             let nameArray = tape[0].filter(current => current.group_id === +time.name);
 
@@ -1246,9 +1247,11 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             select.addEventListener('change', () => {
                 console.log(index);
                 const selectedValue = select.value; // Значение из таргета
+                const selectedName = select.name; // Значение из таргета
                 // Синхронизируем значение во всех нижних select'ах от index+1 до конца
                 for (let i = index + 1; i < selectName.length; i++) {
-                    selectName[i].value = selectedValue;
+                    if (selectName[i].name === selectedName)
+                        selectName[i].value = selectedValue;
                 }
             });
         });
