@@ -838,9 +838,12 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                 sql = "SELECT * " +
                     "FROM TapeExtrusion " +
                     "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
+
+                    "JOIN Tape   ON Thread_Parameters.tape_id = Tape.id" +
+
                     "JOIN color ON TapeExtrusion.color_id = color.color_id " +
                     "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
-                    "ORDER BY thread_density ASC";
+                    "ORDER BY density ASC";
                 break;
             default:
                 sql = 'SELECT * FROM `' + body.table.name + "`";
