@@ -449,7 +449,9 @@ async function createSourceTable(name = selectTableName.value) {
 
 
     const infoTable = (await getSourceMetaDataTable(name)).get3[1].map(meta => (decodeMetadata(meta)));
-    console.log(infoTable);
+    console.log(await getSourceMetaDataTable(name)).get1[1].map(meta => (decodeMetadata(meta)));
+    console.log(await getSourceMetaDataTable(name)).get2[1].map(meta => (decodeMetadata(meta)));
+    console.log(await getSourceMetaDataTable(name)).get3[1].map(meta => (decodeMetadata(meta)));
     await getTypeMySqlForm(infoTable);
     await getTypeTableHeder();
 }
