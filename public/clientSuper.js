@@ -1143,12 +1143,12 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         return select;
     }
     function dropListTape(array, select) {
-        array.forEach((data) => {
+        array.forEach((tape) => {
             let option = document.createElement("option");
-            option.value = data.id;
+            option.value = tape.id;
 
-            option.textContent = `${data.color}`;
-            //option.textContent = `${data.thread_density}  ${data.additive_name === "нет" ? data.color : data.additive_name}`;
+            //option.textContent = `${tape.color}`;
+            option.textContent = `${tape.density} ${tape.additive_name === "нет" ? tape.color : tape.additive_name}`;
             select.append(option);
         });
         return select;
