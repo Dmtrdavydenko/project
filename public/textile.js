@@ -145,7 +145,7 @@ function createTapeForm() {
 }
 
 // Вызов функции при загрузке страницы
-document.addEventListener('DOMContentLoaded', createTapeForm);
+//document.addEventListener('DOMContentLoaded', createTapeForm);
 
 
 
@@ -443,9 +443,7 @@ function decodeMetadata(metadata) {
 async function createSourceTable(name = selectTableName.value) {
     const container = document.getElementById('table-container');
     container.innerHTML = '';
-    const table = createTable((await getSourceTable(name))[0]);
-    table.addEventListener("click", queryTarget);
-    container.appendChild(table);
+
 
     let meta = await getSourceMetaDataTable(name)
     const infoTable = meta.get3[0];
@@ -457,6 +455,10 @@ async function createSourceTable(name = selectTableName.value) {
     console.log(meta);
     await getTypeMySqlForm(infoTable);
     await getTypeTableHeder();
+
+    const table = createTable((await getSourceTable(name))[0]);
+    table.addEventListener("click", queryTarget);
+    container.appendChild(table);
 }
 async function getSourceTable(name) {
     return await fetch("https://worktime.up.railway.app/textile", {
@@ -567,7 +569,7 @@ async function loadTable() {
     console.log(result);
 
 
-    //result.get1[1]=result.get1[1].map(meta => (decodeMetadata(meta)));
+    result.all[1] = result.all[1].map(meta => (decodeMetadata(meta)));
     //result.get2[1]=result.get2[1].map(meta => (decodeMetadata(meta)));
     //result.get3[1]=result.get3[1].map(meta => (decodeMetadata(meta)));
 
