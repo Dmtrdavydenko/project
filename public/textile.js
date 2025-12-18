@@ -570,6 +570,9 @@ async function loadTable() {
         if (selectTableName.value === "TapeExtrusion") {
             await generateFormTape();
         }
+        if (selectTableName.value === "Tape") {
+            await getTypeMySqlForm(result.get3[0]);
+        }
         if (selectTableName.value === "manual") {
             table.addEventListener("click", selectTable);
             await generateForm();
@@ -583,7 +586,6 @@ async function loadTable() {
     } else {
         container.textContent = "Empty";
     }
-    //await getTypeMySqlForm(result.get3[0]);
 
 }
 async function selectTable(event) {
