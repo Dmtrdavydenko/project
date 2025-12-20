@@ -626,9 +626,11 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         aViewTime.textContent = "Просмотр";
 
         const setTime = document.createElement("button");
+        setTime.textContent = "setToDay";
 
 
-        setTime.addEventListener("click", function () {
+
+        setTime.addEventListener("click", async function () {
             const response = await fetch("https://worktime.up.railway.app/textile", {
                 //response = await fetch(document.location.href, {
                 method: "POST",
