@@ -1127,12 +1127,12 @@ async function insertTime(body) {
         console.log('Успешно подключено к базе данных MySQL!');
 
         //connection.execute("TRUNCATE TABLE timestamps");
-        const times = body.data.map(time => time / 1000);
-        const placeholders = body.data.map(() => '(FROM_UNIXTIME(?))').join(', ');
-        const sql = `INSERT INTO timestamps (task_time) VALUES ${placeholders}`;
-
+        //const times = body.data.map(time => time / 1000);
+        const values = body.data.map(item => [item.time / 1000, item.id]);
+        const placeholders = body.data.map(() => '(FROM_UNIXTIME(?), ?)').join(', ');
+        const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
         // Вставка новой записи
-        return await connection.execute(sql, times);
+        return await connection.execute(sql, values.flat());
 
 
 

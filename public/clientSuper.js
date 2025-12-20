@@ -1020,10 +1020,10 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         });
         const timeData = [];
         list.forEach((item, i) => {
-            timeData.push(cc);
+            timeData.push({ time: cc, id: selectNmae[i].select.value });
             cc += +item.value;
         });
-        timeData.push(cc);
+        timeData.push({ time: cc, id: selectNmae[selectNmae.length-1].select.value });
 
 
         if (currentValue !== null) {
