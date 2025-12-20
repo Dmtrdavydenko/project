@@ -1126,7 +1126,7 @@ async function insertTime(body) {
     try {
         console.log('Успешно подключено к базе данных MySQL!');
 
-        connection.execute("TRUNCATE TABLE timestamps");
+        //connection.execute("TRUNCATE TABLE timestamps");
         const times = body.data.map(time => time / 1000);
         const placeholders = body.data.map(() => '(FROM_UNIXTIME(?))').join(', ');
         const sql = `INSERT INTO timestamps (task_time) VALUES ${placeholders}`;
@@ -1203,7 +1203,7 @@ async function getTime() {
 
             JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
 
-            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 1800 HOUR)
+            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 18 HOUR)
             ORDER BY task_time ASC;
 
 `
