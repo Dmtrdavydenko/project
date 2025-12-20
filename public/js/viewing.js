@@ -293,9 +293,10 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
     //        "additive_name": "нет"
     //    }
     //]
+    //option.textContent = `${tape.density} ${item.additive_name === "нет" ? item.color : item.additive_name}`;
 
 
-    const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.thread_density} ${item.color} ${item.additive_name}` }));
+    const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.additive_name === "нет" ? item.color : item.additive_name}` }));
     let intervalSecondsJob = [0];
 
     for (let i = 1; i < task[0].length; i++) {
@@ -357,8 +358,8 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
     }
 
     make();
-    make();
-    make();
+    //make();
+    //make();
 
 
     //main.classList.add("container");
