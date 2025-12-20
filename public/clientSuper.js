@@ -625,10 +625,29 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         aViewTime.href = "/viewTime";
         aViewTime.textContent = "Просмотр";
 
+        const setTime = document.createElement("button");
+
+
+        setTime.addEventListener("click", function () {
+            const response = await fetch("https://worktime.up.railway.app/textile", {
+                //response = await fetch(document.location.href, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: "setToDay"
+                }),
+            }).then((response) => response.json());
+            console.log(response);
+        });
+
+
 
         const thead = document.createElement("thead");
         main.append(start);
         main.append(aViewTime);
+        main.append(setTime);
         thead.append(timeLine);
         table.append(thead, tbody);
         main.append(table);

@@ -28,6 +28,7 @@ const functionDB = {
     "getQuntity": getQuntity,
     "getSourceTable": getSourceTable,
     "getMetaDataTable": getMetaDataTable,
+    "setToDay": setToDay,
 }
 
 
@@ -1180,6 +1181,31 @@ async function getTape() {
     } catch (error) {
         console.error('Error connection MySQL:', error.message);
     }
+}
+async function setToDay() {
+    try {
+        const connection = await pool.getConnection();
+        try {
+            console.log('Успешно подключено к базе данных MySQL!');
+            const sql = `
+
+            DELETE FROM timestamps
+
+            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 18 HOUR)
+
+            `;
+            return await connection.execute(sql);
+        } catch (err) {
+            console.error('Ошибка:', err);
+            throw err;
+        } finally {
+            if (connection) connection.release();
+            console.log("Соединение возвращено.");
+        }
+    } catch (error) {
+        console.error('Error connection MySQL:', error.message);
+    }
+
 }
 async function getTime() {
     try {
