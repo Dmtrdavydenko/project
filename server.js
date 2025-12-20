@@ -1191,7 +1191,7 @@ async function getTime() {
 
             SELECT timestamps.id, UNIX_TIMESTAMP(task_time) AS time_seconds, UNIX_TIMESTAMP(task_time) * 1000 AS time_milliseconds,
 
-            Thread_Parameters.thread_density, color.color, additive.additive_name
+            Tape.density, color.color, additive.additive_name
 
             FROM timestamps
 
@@ -1199,11 +1199,14 @@ async function getTime() {
 
             JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id
 
+            JOIN Tape   ON Thread_Parameters.tape_id = Tape.id
+
             JOIN color ON TapeExtrusion.color_id = color.color_id
 
             JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
 
             WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 18 HOUR)
+
             ORDER BY task_time ASC;
 
 `
