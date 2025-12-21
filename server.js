@@ -1191,7 +1191,7 @@ async function setToDay() {
 
             DELETE FROM timestamps
 
-            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 18 HOUR)
+            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 14 HOUR)
 
             `;
             return await connection.execute(sql);
@@ -1231,7 +1231,7 @@ async function getTime() {
 
             JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
 
-            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 18 HOUR)
+            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 14 HOUR)
 
             ORDER BY task_time ASC;
 
