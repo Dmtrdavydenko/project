@@ -1217,6 +1217,12 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         time.valueAsNumber = sum2;
         time.setAttribute("disabled", true);
         box.append(time);
+
+        const startTapeName = document.createElement("select");
+
+        dropListTape(tape[0], startTapeName);
+        box.append(startTapeName);
+
         ol.append(box);
 
 
