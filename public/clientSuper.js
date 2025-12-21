@@ -518,16 +518,18 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         function handleInputTime(event) {
             console.log(event.target.value);
             console.log(handleInputTime.name);
-            if (this.options)
-                const type = this.options[this.selectedIndex].name;
-
+            let type = 0;
+            if (this.options) {
+                type = this.options[this.selectedIndex].name;
+            }
 
             const buttons = buttonRow[this.name];
             for (let button of buttons) {
                 button.textContent = infoTime[this.name].value;
                 button.value = infoTime[this.name].valueAsNumber;
-                if(type)
+                if (type) {
                     button.name = type;
+                }
             }
             handleCalculation();
         }
