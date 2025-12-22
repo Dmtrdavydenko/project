@@ -1171,7 +1171,7 @@ async function getTape() {
         const connection = await pool.getConnection();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
-            const sql = "SELECT TapeExtrusion.id as id, Thread_Parameters.thread_id as group_id, density, yarn_name as type " +
+            const sql = "SELECT TapeExtrusion.id as id, Thread_Parameters.thread_id as group_id, density, yarn_name as type, " +
                 "color, additive_name, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
                 "FROM TapeExtrusion " +
                 "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
@@ -1225,7 +1225,7 @@ async function getTime() {
             const sql = `
 
 
-            SELECT timestamps.id, UNIX_TIMESTAMP(task_time) AS time_seconds, UNIX_TIMESTAMP(task_time) * 1000 AS time_milliseconds,
+            SELECT timestamps.id, UNIX_TIMESTAMP(task_time) AS time_seconds, UNIX_TIMESTAMP(task_time) * 1000 AS time_milliseconds, yarn_name as type,
 
             Tape.density, color.color, additive.additive_name
 
@@ -1236,6 +1236,8 @@ async function getTime() {
             JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id
 
             JOIN Tape   ON Thread_Parameters.tape_id = Tape.id
+
+            JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
 
             JOIN color ON TapeExtrusion.color_id = color.color_id
 

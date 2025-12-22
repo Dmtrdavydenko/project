@@ -298,7 +298,7 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
 
 
 
-    const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.yarn_name} ${item.density} ${item.additive_name === "нет" ? item.color : item.additive_name}` }));
+    const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.type} ${item.yarn_name} ${item.density} ${item.additive_name === "нет" ? item.color : item.additive_name}` }));
     let intervalSecondsJob = [0];
 
     for (let i = 1; i < task[0].length; i++) {
