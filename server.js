@@ -851,8 +851,6 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                     "FROM Tape " +
                     "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id" +
 
-                    "JOIN Tape   ON Thread_Parameters.tape_id = Tape.id " +
-
                     "ORDER BY density ASC";
                 break;
 
