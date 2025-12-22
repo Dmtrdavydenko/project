@@ -849,7 +849,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
             case "Tape":
                 sql = "SELECT * " +
                     "FROM Tape " +
-                    "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id" +
+                    "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
 
                     "ORDER BY density ASC";
                 break;
