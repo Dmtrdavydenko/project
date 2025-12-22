@@ -841,6 +841,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                     "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
 
                     "JOIN Tape   ON Thread_Parameters.tape_id = Tape.id " +
+                    "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
 
                     "JOIN color ON TapeExtrusion.color_id = color.color_id " +
                     "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
