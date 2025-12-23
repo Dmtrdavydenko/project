@@ -1227,7 +1227,7 @@ async function getTime() {
 
             SELECT timestamps.id, UNIX_TIMESTAMP(task_time) AS time_seconds, UNIX_TIMESTAMP(task_time) * 1000 AS time_milliseconds, yarn_name as type,
 
-            Tape.density, color.color, additive.additive_name
+            Tape.density, color.color, additive.additive_name, Tape.length / Thread_Parameters.thread_speed_id as range,
 
             FROM timestamps
 
