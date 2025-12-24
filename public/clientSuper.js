@@ -582,7 +582,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             time.placeholder = "с";
             time.valueAsNumber = dataTime[i] || 0;
             time.style.display = "none";
-
+            console.log(myThread[0]);
             let select = dropListSelectTex(myThread[0]);
             select.name = i;
 
