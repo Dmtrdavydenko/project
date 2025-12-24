@@ -1226,6 +1226,7 @@ async function getTime() {
 
 
             SELECT timestamps.id,
+            UNIX_TIMESTAMP(task_time) / 60 AS task_minutes,
             UNIX_TIMESTAMP(task_time) AS task_seconds,
             UNIX_TIMESTAMP(task_time) * 1000 AS task_milliseconds,
             yarn_name as type,
@@ -1235,8 +1236,7 @@ async function getTime() {
             additive.additive_name,
             Tape.length,
             Thread_Parameters.thread_speed_id as speed,
-
-            UNIX_TIMESTAMP(Tape.length / Thread_Parameters.thread_speed_id) * 60000 as tape_milliseconds
+            (Tape.length / Thread_Parameters.thread_speed_id) * 60000 as tape_milliseconds
 
             FROM timestamps
 

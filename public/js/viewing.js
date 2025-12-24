@@ -304,12 +304,12 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
 
     for (let i = 0; i < task[0].length; i++) {
 
-        console.log(task[0][i].length / task[0][i].speed * 60000);
+        console.log(task[0][i].speed * task[0][i].task_minutes);
 
     }
     for (let i = 1; i < task[0].length; i++) {
         
-        intervalSecondsJob.push(task[0][i].task_milliseconds - task[0][i - 1].task_milliseconds);
+        intervalSecondsJob.push(task[0][i].task_minutes - task[0][i - 1].task_minutes);
 
     }
     let nameThread = [];
