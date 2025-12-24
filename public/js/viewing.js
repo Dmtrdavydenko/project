@@ -302,7 +302,13 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
     //const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.type} ${item.density} ${item.additive_name === "нет" ? item.color : item.additive_name}` }));
     let intervalSecondsJob = [0];
 
+    for (let i = 0; i < task[0].length; i++) {
+
+        console.log(task[0][i].length / task[0][i].speed * 60000);
+
+    }
     for (let i = 1; i < task[0].length; i++) {
+        
         intervalSecondsJob.push(task[0][i].task_milliseconds - task[0][i - 1].task_milliseconds);
 
     }

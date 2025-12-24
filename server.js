@@ -1225,9 +1225,17 @@ async function getTime() {
             const sql = `
 
 
-            SELECT timestamps.id, UNIX_TIMESTAMP(task_time) AS task_seconds, UNIX_TIMESTAMP(task_time) * 1000 AS task_milliseconds, yarn_name as type,
+            SELECT timestamps.id,
+            UNIX_TIMESTAMP(task_time) AS task_seconds,
+            UNIX_TIMESTAMP(task_time) * 1000 AS task_milliseconds,
+            yarn_name as type,
 
-            Tape.density, color.color, additive.additive_name, Tape.length, Tape.length / Thread_Parameters.thread_speed_id * 60000 as tape_milliseconds
+            Tape.density,
+            color.color,
+            additive.additive_name,
+            Tape.length,
+            Thread_Parameters.thread_speed_id as speed,
+            Tape.length / Thread_Parameters.thread_speed_id * 60000 as tape_milliseconds
 
             FROM timestamps
 
