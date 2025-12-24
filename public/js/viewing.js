@@ -294,6 +294,10 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
     //    }
     //]
     //option.textContent = `${tape.density} ${item.additive_name === "нет" ? item.color : item.additive_name}`;
+    function predictYarn(range) {
+        this.range = range;
+        this.length = this.range * task[0][i].speed;
+    }
 
 
 
@@ -302,14 +306,10 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
     //const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.type} ${item.density} ${item.additive_name === "нет" ? item.color : item.additive_name}` }));
     let intervalSecondsJob = [0];
 
-    for (let i = 0; i < task[0].length; i++) {
 
-        console.log(task[0][i].speed * task[0][i].task_minutes);
-
-    }
     for (let i = 1; i < task[0].length; i++) {
         
-        intervalSecondsJob.push(task[0][i].task_minutes - task[0][i - 1].task_minutes);
+        intervalSecondsJob.push(predictYarn(task[0][i].task_minutes - task[0][i - 1].task_minutes));
 
     }
     let nameThread = [];
