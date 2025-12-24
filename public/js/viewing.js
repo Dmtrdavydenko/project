@@ -294,13 +294,13 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
     //    }
     //]
     //option.textContent = `${tape.density} ${item.additive_name === "нет" ? item.color : item.additive_name}`;
-    function predictYarn(range) {
-        this.range = range;
-        this.length = this.range * task[0][i].speed;
+
+
+
+    function predictYarn(task, i) {
+        this.range = task[i].task_minutes - task[i - 1].task_minutes;
+        this.length = this.range * task[i].speed;
     }
-
-
-
 
     const schedule = task[0].map(item => ({ time: item.task_milliseconds, name: `${item.density} ${item.additive_name === "нет" ? item.color : item.additive_name}` }));
     //const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.type} ${item.density} ${item.additive_name === "нет" ? item.color : item.additive_name}` }));
@@ -309,9 +309,10 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
 
     for (let i = 1; i < task[0].length; i++) {
         
-        intervalSecondsJob.push(predictYarn(task[0][i].task_minutes - task[0][i - 1].task_minutes));
+        intervalSecondsJob.push(predictYarn(task[0],i));
 
     }
+
     let nameThread = [];
     //for (var i = 0; i < intervalSecondsJob.length; i++) {
     //    const foundItem = tape[0].find(item => item.time_seconds === intervalSecondsJob[i]);
