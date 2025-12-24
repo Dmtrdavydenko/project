@@ -320,18 +320,23 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
 
 
     console.log(task[0]);
+    let leftoverMs = 0; 
+
     const schedule = task[0].map(item => {
-
-
         const warp_or_weft = Math.abs(item.task_length - item.length) <= 20 ? item.type : 'основа';
         const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
-        const timeHHMM = Math.floor(item.task_milliseconds / 60000) * 60000;
+
+        const totalMs = item.task_milliseconds + leftoverMs;
+        const fullMinutes = Math.floor(totalMs / 60000);
+        leftoverMs = totalMs % 60000;
+        const timeHHMM = fullMinutes * 60000;
 
         return {
             time: timeHHMM,
             name: `${warp_or_weft} ${item.density} ${nameAdd}`
-        }
+        };
     });
+
 
     let nameThread = [];
     //for (var i = 0; i < intervalSecondsJob.length; i++) {
