@@ -522,6 +522,13 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             if (this.options) {
                 type = this.options[this.selectedIndex].name;
                 console.log(type)
+                const buttons = buttonRow[this.name];
+                for (let button of buttons) {
+                    //button.textContent = infoTime[this.name].value;
+                    //button.value = infoTime[this.name].valueAsNumber;
+                 
+                    button.name = type;
+                }
             }
 
             const buttons = buttonRow[this.name];
