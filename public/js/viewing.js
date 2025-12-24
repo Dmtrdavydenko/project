@@ -325,9 +325,10 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
 
         const warp_or_weft = Math.abs(item.task_length - item.length) <= 20 ? item.type : 'основа';
         const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
+        const timeHHMM = Math.floor(item.task_milliseconds / 60000) * 60000;
 
         return {
-            time: item.task_milliseconds,
+            time: timeHHMM,
             name: `${warp_or_weft} ${item.density} ${nameAdd}`
         }
     });
