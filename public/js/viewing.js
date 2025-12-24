@@ -298,8 +298,9 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
 
 
     function predictYarn(task, i) {
-        this.range = task[i].task_minutes - task[i - 1].task_minutes;
-        this.length = this.range * task[i].speed;
+        const range = task[i].task_minutes - task[i - 1].task_minutes;
+        const length = range * task[i].speed;
+        return { range, length };
     }
 
     const schedule = task[0].map(item => ({ time: item.task_milliseconds, name: `${item.density} ${item.additive_name === "нет" ? item.color : item.additive_name}` }));
