@@ -1235,7 +1235,8 @@ async function getTime() {
             additive.additive_name,
             Tape.length,
             Thread_Parameters.thread_speed_id as speed,
-            (Tape.length / Thread_Parameters.thread_speed_id) * 60000 as tape_milliseconds
+
+            UNIX_TIMESTAMP(Tape.length / Thread_Parameters.thread_speed_id) * 60000 as tape_milliseconds
 
             FROM timestamps
 
