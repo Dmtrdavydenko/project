@@ -515,6 +515,8 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
             handleInputTime.call(this, event);
         }
+
+        //background: linear - gradient(to right, #06d327b0 0 % 56 %, #00eeff6b 0 % 100 %);
         function handleInputTime(event) {
             console.log(event.target.value);
             console.log(handleInputTime.name);
