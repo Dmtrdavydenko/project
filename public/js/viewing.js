@@ -320,7 +320,17 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
 
 
     console.log(task[0]);
-    const schedule = task[0].map(item => ({ time: item.task_milliseconds, name: `${item.density} ${item.additive_name === "нет" ? item.color : item.additive_name}` }));
+    const schedule = task[0].map(item => {
+
+
+        const warp_or_weft = Math.abs(item.task_length - item.length) <= 20 ? item.type : 'основа';
+        const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
+
+        return {
+            time: item.task_milliseconds,
+            name: `${warp_or_weft} ${item.density} ${nameAdd}`
+        }
+    });
 
     let nameThread = [];
     //for (var i = 0; i < intervalSecondsJob.length; i++) {
