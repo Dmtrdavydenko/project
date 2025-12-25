@@ -301,6 +301,7 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
         const range = task[i].task_minutes - task[i - 1].task_minutes;
         const task_length = range * task[i].speed;
         task[i].task_length = task_length;
+        task[i].range = range;
         return { range, task_length, ...task[i] };
     }
     //if (Math.abs(item.task_length - item.length) <= 20) {
@@ -330,7 +331,7 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
         const fullMinutes = Math.floor(totalMs / 60000);
         leftoverMs = totalMs % 60000;
         const timeHHMM = fullMinutes * 60000;
-        console.log(warp_or_weft, item.density, item.task_length, item.length, item.speed, Math.abs(item.task_length - item.length));
+        console.log(item.range, warp_or_weft, item.density, item.task_length, item.length, item.speed, Math.abs(item.task_length - item.length));
 
         return {
             time: timeHHMM,
