@@ -482,7 +482,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
     let myThread = [];
     myThread[0] = thread[0].slice();
-    myThread[0].push({ density: "Другое", length:32000,speed:400, time_milliseconds: 4800000, id:0 });
+    myThread[0].push({ density: "Другое", length:32000, speed:400, time_milliseconds: 4800000, id:0 });
 
 
 
@@ -1112,18 +1112,18 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             //}).then((response) => response.json());
 
 
-            let response = await fetch("https://worktime.up.railway.app/textile", {
-                //response = await fetch(document.location.href, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
-                },
-                body: JSON.stringify({
-                    action: "insertTime",
-                    data: timeData
-                }),
-            }).then((response) => response.json());
-            console.log(response);
+            let response = {}
+            //    let response = await fetch("https://worktime.up.railway.app/textile", {
+            //    method: "POST",
+            //    headers: {
+            //        "Content-Type": "application/json;charset=utf-8",
+            //    },
+            //    body: JSON.stringify({
+            //        action: "insertTime",
+            //        data: timeData
+            //    }),
+            //}).then((response) => response.json());
+            //console.log(response);
 
 
             response = await fetch("https://worktime.up.railway.app/textile", {
@@ -1227,6 +1227,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         const startTapeName = document.createElement("select");
 
         dropListTape(tape[0], startTapeName);
+        selectName.push(startTapeName);
         box.append(startTapeName);
 
         ol.append(box);
