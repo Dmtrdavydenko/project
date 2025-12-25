@@ -493,7 +493,8 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         function dropListSelectTex(array, select = document.createElement("select")) {
             array.forEach((tape) => {
                 let option = document.createElement("option");
-                option.value = tape.time_milliseconds;
+                option.value = tape.length / tape.speed * 60000;
+                //option.value = tape.time_milliseconds;
                 option.textContent = `${tape.density} ${tape.speed && "v" + tape.speed || ""}`;
                 option.name = tape.id;
                 select.append(option);
