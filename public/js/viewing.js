@@ -324,7 +324,7 @@ const Time = new DataTape("https://worktime.up.railway.app/textile");
 
     const schedule = task[0].map(item => {
         console.log(Math.abs(item.task_length - item.length));
-        const warp_or_weft = Math.abs(item.task_length - item.length) <= 20 ? item.type : 'основа';
+        const warp_or_weft = Math.abs(item.task_length - item.length) <= 200 ? item.type : 'основа';
         const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
 
         const totalMs = item.task_milliseconds + leftoverMs;
