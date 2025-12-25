@@ -482,7 +482,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
     let myThread = [];
     myThread[0] = thread[0].slice();
-    myThread[0].push({ density: "Другое", time_milliseconds: 4800000, id:0 });
+    myThread[0].push({ density: "Другое", length:32000,speed:400, time_milliseconds: 4800000, id:0 });
 
 
 
