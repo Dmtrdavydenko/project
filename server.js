@@ -1190,6 +1190,7 @@ async function getTape() {
         }
     } catch (error) {
         console.error('Error connection MySQL:', error.message);
+        console.error('Error connection MySQL:', error);
     }
 }
 async function setToDay() {
