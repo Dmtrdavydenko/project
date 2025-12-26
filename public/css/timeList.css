@@ -58,7 +58,7 @@ input[type="time"] {
     }
 
     input[type="time"].active {
-        color: #2e7d32;
+/*        color: #2e7d32;*/
         font-weight: bold;
         background-color: #e8f5e8;
         border: 1px solid #4caf50;
