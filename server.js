@@ -1191,6 +1191,7 @@ async function getTape() {
     } catch (error) {
         console.error('Error connection MySQL:', error.message);
         console.error('Error connection MySQL:', error);
+        console.error(error);
     }
 }
 async function setToDay() {
@@ -1253,7 +1254,7 @@ async function getTime() {
 
             JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
 
-            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 8 HOUR)
+            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 800 HOUR)
 
             ORDER BY task_time ASC;
 
