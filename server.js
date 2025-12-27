@@ -1166,40 +1166,55 @@ async function insertTime(body) {
 }
 
 
-async function getTape() {
-    try {
-        const connection = await pool.getConnection();
+async function getTape(maxRetries = 3) {
+    let currentRetry = 0;
+    const retryDelay = 3000; // 3000 ms 3s
+    while (currentRetry < maxRetries) {
         try {
-            console.log('Успешно подключено к базе данных MySQL!');
-            const sql = "SELECT TapeExtrusion.id as id, Thread_Parameters.thread_id as group_id, density, yarn_name as type, " +
-                "color, additive_name, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
-                "FROM TapeExtrusion " +
-                "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
-                "JOIN Tape   ON Thread_Parameters.tape_id = Tape.id " +
-                "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
-                "JOIN color ON TapeExtrusion.color_id = color.color_id " +
-                "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
-                "ORDER BY density ASC";
-            return await connection.execute(sql);
-        } catch (err) {
-            console.error('Ошибка:', err);
-            throw err;
-        } finally {
-            if (connection) connection.release();
-            console.log("Соединение возвращено.");
-        }
-    } catch (error) {
-        console.error('Error connection MySQL:', error.message);
-        console.error(error);
-        //    Error: connect ECONNREFUSED fd12: 4459: 818b: 0: 1000: 8: 70f2: 9146: 3306
-        //at TCPConnectWrap.afterConnect[as oncomplete](node: net:1610:16) 
-        const exception = {
-            errno: -111,
-            code: 'ECONNREFUSED',
-            syscall: 'connect',
-            address: 'fd12:4459:818b:0:1000:8:70f2:9146',
-            port: 3306,
-            fatal: true
+            const connection = await pool.getConnection();
+            try {
+                console.log('Успешно подключено к базе данных MySQL!');
+                const sql = "SELECT TapeExtrusion.id as id, Thread_Parameters.thread_id as group_id, density, yarn_name as type, " +
+                    "color, additive_name, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
+                    "FROM TapeExtrusion " +
+                    "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
+                    "JOIN Tape   ON Thread_Parameters.tape_id = Tape.id " +
+                    "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
+                    "JOIN color ON TapeExtrusion.color_id = color.color_id " +
+                    "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
+                    "ORDER BY density ASC";
+                return await connection.execute(sql);
+            } catch (err) {
+                console.error('Ошибка:', err);
+                throw err;
+            } finally {
+                if (connection) connection.release();
+                console.log("Соединение возвращено.");
+            }
+        } catch (error) {
+            currentRetry++;
+            if (currentRetry >= maxRetries) {
+                console.error(`Ошибка подключения MySQL после ${maxRetries} попыток:`, error.message);
+                throw new Error(`Не удалось подключиться к MySQL после ${maxRetries} попыток. Последняя ошибка: ${error.message}`);
+            }
+
+            console.error('Error connection MySQL:', error.message);
+            console.error(error);
+            if (error.code === "ECONNREFUSED") {
+                console.log(`Ошибка подключения MySQL (попытка ${currentRetry}/${maxRetries}). Ожидание ${retryDelay / 1000} секунд перед повтором...`);
+                await new Promise(resolve => setTimeout(resolve, retryDelay)); // Ожидание 3 сек
+            }
+
+            const exception = {
+                //    Error: connect ECONNREFUSED fd12: 4459: 818b: 0: 1000: 8: 70f2: 9146: 3306
+                //at TCPConnectWrap.afterConnect[as oncomplete](node: net:1610:16)
+                errno: -111,
+                code: 'ECONNREFUSED',
+                syscall: 'connect',
+                address: 'fd12:4459:818b:0:1000:8:70f2:9146',
+                port: 3306,
+                fatal: true
+            }
         }
     }
 }
