@@ -9,17 +9,17 @@
 }*/
 
 .container {
-/*    background: white;*/
-/*    padding: 20px;*/
-/*    border-radius: 8px;*/
-/*    box-shadow: 0 0 10px rgba(0,0,0,0.1);*/
-/*    width: 300px;*/
-/*    text-align: center;*/
+    /*    background: white;*/
+    /*    padding: 20px;*/
+    /*    border-radius: 8px;*/
+    /*    box-shadow: 0 0 10px rgba(0,0,0,0.1);*/
+    /*    width: 300px;*/
+    /*    text-align: center;*/
 }
 
 h1 {
-/*    margin-bottom: 20px;*/
-/*    font-size: 24px;*/
+    /*    margin-bottom: 20px;*/
+    /*    font-size: 24px;*/
 }
 
 ol {
@@ -27,16 +27,16 @@ ol {
     padding: 0;
     margin: 0;
     width: 100%;
-/*    max-height: 400px;*/
+    /*    max-height: 400px;*/
     /* Прокрутка для длинного списка */
     overflow-y: auto;
 }
 
 li {
-/*    padding: 5px 0;*/
+    /*    padding: 5px 0;*/
     margin: 2px 0;
-/*    display: flex;*/
-/*    justify-content: center;*/
+    /*    display: flex;*/
+    /*    justify-content: center;*/
 }
 
 input[type="time"] {
@@ -46,7 +46,7 @@ input[type="time"] {
     /* Крупнее для монитора */
     border: none;
     background: transparent;
-/*    text-align: center;*/
+    /*    text-align: center;*/
     cursor: default;
 }
 
@@ -58,7 +58,7 @@ input[type="time"] {
     }
 
     input[type="time"].active {
-/*        color: #2e7d32;*/
+        /*        color: #2e7d32;*/
         font-weight: bold;
         background-color: #e8f5e8;
         border: 1px solid #4caf50;
@@ -67,7 +67,7 @@ input[type="time"] {
 
 
 input[type="datetime-local"] {
-/*    width: 100px;*/
+    /*    width: 100px;*/
     padding: 4px;
     font-size: 19px;
     /* Крупнее для монитора */
@@ -110,8 +110,8 @@ input[type="datetime-local"] {
 
 body {
     font-family: Arial, sans-serif;
-/*    background-color: #f4f4f4;*/
-/*    margin: 20px;*/
+    /*    background-color: #f4f4f4;*/
+    /*    margin: 20px;*/
 }
 
 h1 {
@@ -127,16 +127,16 @@ h1 {
 }
 
 .class {
-/*    background-color: #fff;*/
-/*    border: 1px solid #ddd;*/
+    /*    background-color: #fff;*/
+    /*    border: 1px solid #ddd;*/
     border-radius: 8px;
-/*    padding: 0px 0px 0px 20px;*/
-/*    width: 30%;*/
-/*    box-shadow: 0 2px 5px rgba(0,0,0,0.1);*/
+    /*    padding: 0px 0px 0px 20px;*/
+    /*    width: 30%;*/
+    /*    box-shadow: 0 2px 5px rgba(0,0,0,0.1);*/
 }
 
     .class h2 {
-/*        color: #007bff;*/
+        /*        color: #007bff;*/
         margin-bottom: 15px;
     }
 
@@ -168,6 +168,7 @@ li {
     padding: 5px;
     border-radius: 4px;
 }
+
 label {
     padding: 0px 0px 0px 20px;
     margin-right: 0px;
@@ -177,6 +178,61 @@ label {
 input::-webkit-calendar-picker-indicator {
     display: none;
 }
+
 input[type="time"] {
     width: 59px;
+}
+
+
+
+/* Основные стили для input date/time — убираем нативный вид и пространство под индикатор */
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"] {
+    -webkit-appearance: none; /* Для WebKit (Samsung Internet, Chrome, Safari) */
+    -moz-appearance: none; /* Для Firefox */
+    appearance: none; /* Стандарт для всех */
+    /* Убираем пространство под индикатор, чтобы текст не обрезался */
+    padding-right: 0 !important; /* Важно: переопределяем дефолтный padding справа */
+    background: transparent; /* Опционально: убирает фон, если нужно */
+    border: 1px solid #ccc; /* Добавьте свой border, если нужно */
+    width: 100%; /* Убеждаемся, что поле занимает всю ширину */
+}
+
+    /* Скрытие индикатора в WebKit (Samsung Internet, Chrome, Safari) */
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator {
+        display: none !important;
+        opacity: 0 !important; /* Дополнительно: на всякий случай, если display не сработает */
+        width: 0; /* Убираем ширину, чтобы освободить место */
+        height: 0; /* Убираем высоту */
+        padding: 0;
+        margin: 0;
+        background: none;
+    }
+
+    /* Для Firefox (Gecko) */
+    input[type="date"]::-moz-calendar-picker-indicator,
+    input[type="datetime-local"]::-moz-calendar-picker-indicator,
+    input[type="time"]::-moz-calendar-picker-indicator {
+        display: none !important;
+        opacity: 0 !important;
+        width: 0;
+        height: 0;
+    }
+
+    /* Для старого Edge (Trident) или на всякий случай */
+    input[type="date"]::-ms-clear,
+    input[type="datetime-local"]::-ms-clear,
+    input[type="time"]::-ms-clear {
+        display: none;
+    }
+
+/* Опционально: если текст всё равно обрезается, добавьте фиксированную ширину или padding */
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"] {
+    padding: 8px 12px 8px 8px; /* Padding слева/сверху/снизу, справа минимальный */
+    box-sizing: border-box; /* Чтобы padding не увеличивал ширину */
 }
