@@ -317,7 +317,7 @@ async function getMeta1(body) {
         const connection = await pool.getConnection();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
-            console.log("bodyTableName: ",body.table.name);
+            console.log("bodyTableName: ", body.table.name);
             const sql = `SELECT
             COLUMN_NAME,
             DATA_TYPE,
@@ -1191,6 +1191,16 @@ async function getTape() {
     } catch (error) {
         console.error('Error connection MySQL:', error.message);
         console.error(error);
+        //    Error: connect ECONNREFUSED fd12: 4459: 818b: 0: 1000: 8: 70f2: 9146: 3306
+        //at TCPConnectWrap.afterConnect[as oncomplete](node: net:1610:16) 
+        const exception = {
+            errno: -111,
+            code: 'ECONNREFUSED',
+            syscall: 'connect',
+            address: 'fd12:4459:818b:0:1000:8:70f2:9146',
+            port: 3306,
+            fatal: true
+        }
     }
 }
 async function setToDay() {
