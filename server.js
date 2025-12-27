@@ -1170,7 +1170,7 @@ async function getTape() {
     console.log("CALL=",getTape.name)
     let maxRetries = 3
     let currentRetry = 0;
-    const retryDelay = 2000; // 3000 ms 3s
+    const retryDelay = 3000; // 3000 ms 3s
     while (currentRetry < maxRetries) {
         try {
             const connection = await pool.getConnection();
