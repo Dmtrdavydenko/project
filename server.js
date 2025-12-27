@@ -1166,7 +1166,9 @@ async function insertTime(body) {
 }
 
 
-async function getTape(maxRetries = 3) {
+async function getTape() {
+    console.log("call= ",getTape.name)
+    let maxRetries = 3
     let currentRetry = 0;
     const retryDelay = 3000; // 3000 ms 3s
     while (currentRetry < maxRetries) {
@@ -1183,10 +1185,12 @@ async function getTape(maxRetries = 3) {
                     "JOIN color ON TapeExtrusion.color_id = color.color_id " +
                     "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
                     "ORDER BY density ASC";
-                return await connection.execute(sql);
-            } catch (err) {
-                console.error('Ошибка:', err);
-                throw err;
+                const data = await connection.execute(sql);
+                console.log(data);
+                return data;
+            } catch (error) {
+                console.error('Ошибка:', error);
+                throw error;
             } finally {
                 if (connection) connection.release();
                 console.log("Соединение возвращено.");
@@ -1203,6 +1207,8 @@ async function getTape(maxRetries = 3) {
             if (error.code === "ECONNREFUSED") {
                 console.log(`Ошибка подключения MySQL (попытка ${currentRetry}/${maxRetries}). Ожидание ${retryDelay / 1000} секунд перед повтором...`);
                 await new Promise(resolve => setTimeout(resolve, retryDelay)); // Ожидание 3 сек
+            } else {
+                throw error;
             }
 
             const exception = {
