@@ -1185,9 +1185,9 @@ async function getTape() {
                     "JOIN color ON TapeExtrusion.color_id = color.color_id " +
                     "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
                     "ORDER BY density ASC";
-                const data = await connection.execute(sql);
-                console.log(data);
-                return data;
+                //const data = await connection.execute(sql);
+                //console.log(data);
+                return await connection.execute(sql);
             } catch (error) {
                 console.error('Ошибка:', error);
                 throw error;
@@ -1197,13 +1197,14 @@ async function getTape() {
             }
         } catch (error) {
             currentRetry++;
+            console.error('Error connection MySQL:', error.message);
+            console.error(error);
             if (currentRetry >= maxRetries) {
                 console.error(`Ошибка подключения MySQL после ${maxRetries} попыток:`, error.message);
                 throw new Error(`Не удалось подключиться к MySQL после ${maxRetries} попыток. Последняя ошибка: ${error.message}`);
             }
 
-            console.error('Error connection MySQL:', error.message);
-            console.error(error);
+
             if (error.code === "ECONNREFUSED") {
                 console.log(`Ошибка подключения MySQL (попытка ${currentRetry}/${maxRetries}). Ожидание ${retryDelay / 1000} секунд перед повтором...`);
                 await new Promise(resolve => setTimeout(resolve, retryDelay)); // Ожидание 3 сек
