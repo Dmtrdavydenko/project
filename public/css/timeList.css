@@ -1,3 +1,6 @@
+html {
+    background: rgb(170, 170, 170); /*      серый*/
+}
 * {
     border-radius: 0;
     border-width: .1px;
@@ -48,7 +51,7 @@ li {
 }
 
 input[type="time"] {
-    width: 115px;
+/*    width: 115px;*/
     padding: 4px;
     font-size: 19px;
     /* Крупнее для монитора */
@@ -199,10 +202,12 @@ input[type="time"] {
     -moz-appearance: none; /* Для Firefox */
     appearance: none; /* Стандарт для всех */
     /* Убираем пространство под индикатор, чтобы текст не обрезался */
-    padding-right: 0 !important; /* Важно: переопределяем дефолтный padding справа */
+/*    padding-right: 0 !important;*/
+    /* Важно: переопределяем дефолтный padding справа */
     background: transparent; /* Опционально: убирает фон, если нужно */
     border: 1px solid #ccc; /* Добавьте свой border, если нужно */
-    width: 100%; /* Убеждаемся, что поле занимает всю ширину */
+/*    width: 100%;*/
+    /* Убеждаемся, что поле занимает всю ширину */
 }
 
     /* Скрытие индикатора в WebKit (Samsung Internet, Chrome, Safari) */
@@ -211,7 +216,8 @@ input[type="time"] {
     input[type="time"]::-webkit-calendar-picker-indicator {
         display: none !important;
         opacity: 0 !important; /* Дополнительно: на всякий случай, если display не сработает */
-        width: 0; /* Убираем ширину, чтобы освободить место */
+/*        width: 0;*/
+        /* Убираем ширину, чтобы освободить место */
         height: 0; /* Убираем высоту */
         padding: 0;
         margin: 0;
@@ -224,7 +230,7 @@ input[type="time"] {
     input[type="time"]::-moz-calendar-picker-indicator {
         display: none !important;
         opacity: 0 !important;
-        width: 0;
+/*        width: 0;*/
         height: 0;
     }
 
@@ -246,5 +252,5 @@ input[type="time"] {
 
 
 input[type="time"] {
-    width: 78px;
+/*    width: 78px;*/
 }
