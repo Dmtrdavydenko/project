@@ -251,13 +251,13 @@ input[type="time"] {
 input[type="date"],
 input[type="datetime-local"],
 input[type="time"] {
-    padding: 8px 12px 8px 8px; /* Padding слева/сверху/снизу, справа минимальный */
+    padding: 8px 17px 8px 8px; /* Padding слева/сверху/снизу, справа минимальный */
     box-sizing: border-box; /* Чтобы padding не увеличивал ширину */
 }
 
 
 
 input[type="time"] {
-/*    width: 78px;*/
+    width: min-content;
 }
 
