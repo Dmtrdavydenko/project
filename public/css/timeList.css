@@ -223,6 +223,12 @@ input[type="time"] {
         margin: 0;
         background: none;
     }
+    input[type="date"]::-webkit-date-and-time-value,
+    input[type="datetime-local"]::-webkit-date-and-time-value,
+    input[type="time"]::-webkit-date-and-time-value {
+        margin-right: -8px;
+        margin-left: 0px;
+    }
 
     /* Для Firefox (Gecko) */
     input[type="date"]::-moz-calendar-picker-indicator,
@@ -254,3 +260,4 @@ input[type="time"] {
 input[type="time"] {
 /*    width: 78px;*/
 }
+
