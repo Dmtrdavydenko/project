@@ -1168,7 +1168,7 @@ async function insertTime(body) {
 
 async function getTape() {
     console.log("CALL=",getTape.name)
-    let maxRetries = 3
+    let maxRetries = 5;
     let currentRetry = 0;
     const retryDelay = 3000; // 3000 ms 3s
     while (currentRetry < maxRetries) {
