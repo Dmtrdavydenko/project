@@ -339,9 +339,12 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
                     list[this.id] && list[this.id].classList.remove("tg");
                     list[this.id] = e.target;
                     e.target.classList.add("tg");
-                    console.log(list[this.id].name);
-                    console.log(list[this.id].textContent);
-                    console.log(list[this.id].value);
+                    
+                    console.log({
+                        name: list[this.id].name,
+                        textContent: list[this.id].textContent,
+                        value: list[this.id].value
+                    });
                 }
                 handleCalculation(event);
             });
