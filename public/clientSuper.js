@@ -972,8 +972,8 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         selectName = [];
 
 
-        console.log(list);
-        console.log(buttonLine);
+        //console.log(list);
+        //console.log(buttonLine);
         dtinput = document.createElement("input");
         const ol = document.createElement("ol");
 
@@ -1033,17 +1033,15 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
             const TapeName = document.createElement("select");
             TapeName.name = item.name;
-            console.log("time.name ", time.name);
-            console.log("time.name ", time.name);
-            console.log(tape[0].filter(current => current.group_id === +time.name));
-            console.log(tape[0].filter(current => current.group_id === 105));
 
-            let nameArray = tape[0].filter(current => current.group_id === +time.name);
+            let tapeNamesArray = tape[0].filter(current => current.group_id === +time.name);
 
-            if (nameArray.length === 0) {
+            console.log(tapeNamesArray);
+
+            if (tapeNamesArray.length === 0) {
                 dropListTape(tape[0], TapeName);
             } else {
-                dropListTape(nameArray, TapeName);
+                dropListTape(tapeNamesArray, TapeName);
             }
 
             selectName.push(TapeName);
