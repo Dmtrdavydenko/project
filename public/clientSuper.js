@@ -1013,12 +1013,12 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         ol.append(box);
 
 
-        let intervalSecondsJob = [start.valueAsNumber / 60000];
+        //let intervalSecondsJob = [start.valueAsNumber / 60000];
 
         //for (let i = 1; i < list.length; i++) {
         //    intervalSecondsJob.push(list[i].value / 60000);
         //}
-        console.log(intervalSecondsJob);
+        //console.log(intervalSecondsJob);
         list.forEach((item) => {
             const box = document.createElement("li");
             updateColor(box, +item.value);
