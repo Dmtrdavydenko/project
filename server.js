@@ -836,16 +836,23 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                 //select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 break;
             case "TapeExtrusion":
-                sql = "SELECT TapeExtrusion.*, Thread_Parameters.*, Tape.*, color.*, additive.*, yarn_type.* " +
-                    "FROM TapeExtrusion " +
-                    "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
+                sql = `SELECT TapeExtrusion.id as code,
+                TapeExtrusion.thread_id,
+                TapeExtrusion.color_id,
+                TapeExtrusion.additive_id,
 
-                    "JOIN Tape   ON Thread_Parameters.tape_id = Tape.id " +
-                    "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
+                 Thread_Parameters.*, Tape.*, color.*, additive.*, yarn_type.*
+                    FROM TapeExtrusion 
+                    JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id 
 
-                    "JOIN color ON TapeExtrusion.color_id = color.color_id " +
-                    "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
-                    "ORDER BY density ASC";
+                    JOIN Tape ON Thread_Parameters.tape_id = Tape.id 
+                    JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id 
+
+                    JOIN color ON TapeExtrusion.color_id = color.color_id 
+                    JOIN additive ON TapeExtrusion.additive_id = additive.additive_id 
+                    ORDER BY density ASC
+
+                    `;
                 break;
             case "Tape":
                 sql = "SELECT * " +
