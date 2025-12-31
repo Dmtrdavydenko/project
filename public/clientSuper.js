@@ -1284,10 +1284,10 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
         selectName.forEach((select, index) => {
             select.addEventListener('change', () => {
-                console.log(index);
                 const selectedValue = select.value; // Значение из таргета
                 const selectedName = select.name; // Значение из таргета
                 // Синхронизируем значение во всех нижних select'ах от index+1 до конца
+                console.log(index, selectedName, selectedValue);
                 for (let i = index + 1; i < selectName.length; i++) {
                     if (selectName[i].name === selectedName)
                         selectName[i].value = selectedValue;
@@ -1658,6 +1658,20 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
         console.log(archiv.length);
     }
 })("test");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // const socket = new WebSocket("wss://worktime.glitch.me");
