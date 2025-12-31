@@ -836,7 +836,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                 //select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 break;
             case "TapeExtrusion":
-                sql = `SELECT TapeExtrusion.id as code,
+                sql = `SELECT TapeExtrusion.id as Tape_id,
                 TapeExtrusion.thread_id,
                 TapeExtrusion.color_id,
                 TapeExtrusion.additive_id,
