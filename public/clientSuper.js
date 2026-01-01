@@ -265,19 +265,13 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
     let myThread = [];
     myThread[0] = thread[0].slice();
     myThread[0].push({ density: "ЧЧ:ММ", length:32000, speed:400, time_milliseconds: 4800000, id:0 });
-
-
-
-
-
-
     {
         function dropListSelectTex(array, select = document.createElement("select")) {
             array.forEach((tape) => {
                 let option = document.createElement("option");
                 option.value = tape.length / tape.speed * 60000;
                 //option.value = tape.time_milliseconds;
-                option.textContent = `${tape.density} ${tape.speed && "v" + tape.speed || ""}`;
+                option.textContent = Number.isInteger(tape.density) ? `${tape.density} ${tape.speed && "v" + tape.speed || ""}` : `${tape.density}`
                 option.name = tape.id;
                 select.append(option);
             });
