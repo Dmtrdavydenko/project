@@ -1894,7 +1894,7 @@ server.on("request", (req, res) => {
 
     }
 
-    if (req.url === "/textile") {
+    if (req.url === "/app") {
         if (req.method === "POST") {
             let chunks = [];
             req.on("data", (chunk) => {
