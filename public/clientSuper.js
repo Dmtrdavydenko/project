@@ -101,8 +101,8 @@ class DataTape {
         return [...this.data].sort(compareFunction);
     }
 }
-const Tape = new DataTape("https://worktime.up.railway.app/textile");
-const Thread = new DataTape("https://worktime.up.railway.app/textile");
+const Tape = new DataTape("https://worktime.up.railway.app/app");
+const Thread = new DataTape("https://worktime.up.railway.app/app");
 
 
 
@@ -413,7 +413,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
 
         setTime.addEventListener("click", async function () {
-            const response = await fetch("https://worktime.up.railway.app/textile", {
+            const response = await fetch("https://worktime.up.railway.app/app", {
                 //response = await fetch(document.location.href, {
                 method: "POST",
                 headers: {
@@ -887,7 +887,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
 
             //let response = {}
 
-            let response = await fetch("https://worktime.up.railway.app/textile", {
+            let response = await fetch("https://worktime.up.railway.app/app", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json;charset=utf-8",
@@ -900,7 +900,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/textile");
             console.log(response);
 
 
-            response = await fetch("https://worktime.up.railway.app/textile", {
+            response = await fetch("https://worktime.up.railway.app/app", {
                 //response = await fetch(document.location.href, {
                 method: "POST",
                 headers: {
