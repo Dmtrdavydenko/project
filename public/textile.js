@@ -302,7 +302,7 @@ function Textile(inputId, inputWidth, inputDensity) {
 
 
 drop.addEventListener("click", async function (e) {
-    const result = await fetch("https://worktime.up.railway.app/textile", {
+    const result = await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -320,7 +320,7 @@ drop.addEventListener("click", async function (e) {
 });
 
 //getAllTablesName.addEventListener("click", async function (e) {
-//    const result = await fetch("https://worktime.up.railway.app/textile", {
+//    const result = await fetch("https://worktime.up.railway.app/app", {
 //        method: "POST",
 //        headers: {
 //            "Content-Type": "application/json;charset=utf-8",
@@ -345,7 +345,7 @@ drop.addEventListener("click", async function (e) {
 
 async function getTableName() {
     try {
-        const response = await fetch("https://worktime.up.railway.app/textile", {
+        const response = await fetch("https://worktime.up.railway.app/app", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
@@ -380,7 +380,7 @@ function createSelectOptions(dataArray) {
 
 
 async function getSelected() {
-    const result = await fetch("https://worktime.up.railway.app/textile", {
+    const result = await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -396,7 +396,7 @@ async function getSelected() {
     return await result;
 }
 async function getSelectedValue() {
-    const result = await fetch("https://worktime.up.railway.app/textile", {
+    const result = await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -412,7 +412,7 @@ async function getSelectedValue() {
     return await result;
 }
 async function slect(table) {
-    return await fetch("https://worktime.up.railway.app/textile", {
+    return await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -465,7 +465,7 @@ async function createSourceTable(name = selectTableName.value) {
     }
 }
 async function getSourceTable(name) {
-    return await fetch("https://worktime.up.railway.app/textile", {
+    return await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -479,7 +479,7 @@ async function getSourceTable(name) {
     }).then((response) => response.json());
 }
 async function getSourceMetaDataTable(name) {
-    return await fetch("https://worktime.up.railway.app/textile", {
+    return await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -493,7 +493,7 @@ async function getSourceMetaDataTable(name) {
     }).then((response) => response.json());
 }
 async function showTableFn(query) {
-    const result = await fetch("https://worktime.up.railway.app/textile", {
+    const result = await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -528,7 +528,7 @@ async function showTableFn(query) {
     }
 }
 async function getTable() {
-    const result = await fetch("https://worktime.up.railway.app/textile", {
+    const result = await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -558,7 +558,7 @@ function myfilter(arr) {
     console.log(sum);
 }
 async function loadTable() {
-    const result = await fetch("https://worktime.up.railway.app/textile", {
+    const result = await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -778,7 +778,7 @@ async function queryTarget(event) {
 
 
 async function sqlWhere({ tableName, rowId, columnName, whereColum, value }) {
-    const result = await fetch("https://worktime.up.railway.app/textile", {
+    const result = await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -804,7 +804,7 @@ async function sqlWhere({ tableName, rowId, columnName, whereColum, value }) {
 
 //async function sqlQuery(sqlQueryString, values = null) {
 //    try {
-//        const response = await fetch("https://worktime.up.railway.app/textile", {
+//        const response = await fetch("https://worktime.up.railway.app/app", {
 //            method: "POST",
 //            headers: {
 //                "Content-Type": "application/json;charset=utf-8",
@@ -837,7 +837,7 @@ async function sqlWhere({ tableName, rowId, columnName, whereColum, value }) {
 
 
 async function fetchTableStructure() {
-    const response = await fetch("https://worktime.up.railway.app/textile", {
+    const response = await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -976,7 +976,7 @@ async function switchYarn(select) {
     console.log(threads);
 }
 async function getQuan(where) {
-    return await fetch("https://worktime.up.railway.app/textile", {
+    return await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -1030,7 +1030,7 @@ async function find(url, dataToSend) {
     }
 }
 
-const serverUrl = "https://worktime.up.railway.app/textile";
+const serverUrl = "https://worktime.up.railway.app/app";
 async function getTypeKey() {
     if (selectTableName.options[selectTableName.selectedIndex].dataset.isParent === "true") {
         form.innerHTML = '';
@@ -1441,7 +1441,7 @@ async function generateFormTape() {
 
 async function sqlQuery(sqlQueryString, values = null) {
     try {
-        const response = await fetch("https://worktime.up.railway.app/textile", {
+        const response = await fetch("https://worktime.up.railway.app/app", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
@@ -1474,7 +1474,7 @@ async function sendForm() {
     }
     console.log(p);
 
-    const response = await fetch("https://worktime.up.railway.app/textile", {
+    const response = await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
