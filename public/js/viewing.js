@@ -131,9 +131,9 @@ class DataTape {
 
 
 
-const Tape = new DataTape("https://worktime.up.railway.app/textile");
-const Thread = new DataTape("https://worktime.up.railway.app/textile");
-const Time = new DataTape("https://worktime.up.railway.app/textile");
+const Tape = new DataTape("https://worktime.up.railway.app/app");
+const Thread = new DataTape("https://worktime.up.railway.app/app");
+const Time = new DataTape("https://worktime.up.railway.app/app");
 
 (async () => {
     const tape = await Tape.loadData("getTape");

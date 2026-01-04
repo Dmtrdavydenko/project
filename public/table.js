@@ -39,7 +39,7 @@ function createTable(data) {
 }
 (async () => {
     async function showTableFn() {
-        const result = await fetch("https://worktime.up.railway.app/textile", {
+        const result = await fetch("https://worktime.up.railway.app/app", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",

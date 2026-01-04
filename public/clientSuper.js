@@ -5,6 +5,9 @@ class DataTape {
     }
     async loadData(action, params = {}) {
         try {
+            if (document.location.hostname === "localhost")
+                throw new Error("No load connection");
+
             const response = await fetch(this.apiUrl, {
                 method: "POST",
                 headers: {
@@ -111,8 +114,621 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
     const tape = await Tape.loadData("getTape");
     const thread = await Thread.loadData("getThreads");
 
-    //const tape = [[0]];
 
+
+
+
+
+    //const tape = [[]];
+    //tape[0] = [
+    //    {
+    //        "id": 19,
+    //        "group_id": 13,
+    //        "density": 50,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "thread_time": 62,
+    //        "time_seconds": 3720,
+    //        "time_milliseconds": 3720000
+    //    },
+    //    {
+    //        "id": 1,
+    //        "group_id": 1,
+    //        "density": 64,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "thread_time": 58,
+    //        "time_seconds": 3480,
+    //        "time_milliseconds": 3480000
+    //    },
+    //    {
+    //        "id": 10,
+    //        "group_id": 1,
+    //        "density": 64,
+    //        "type": "уток",
+    //        "color": "оранжевая",
+    //        "additive_name": "нет",
+    //        "thread_time": 58,
+    //        "time_seconds": 3480,
+    //        "time_milliseconds": 3480000
+    //    },
+    //    {
+    //        "id": 2,
+    //        "group_id": 2,
+    //        "density": 78,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "thread_time": 36.36360168457031,
+    //        "time_seconds": 2181.8161010742188,
+    //        "time_milliseconds": 2181816.1010742188
+    //    },
+    //    {
+    //        "id": 23,
+    //        "group_id": 2,
+    //        "density": 78,
+    //        "type": "уток",
+    //        "color": "цветная",
+    //        "additive_name": "нет",
+    //        "thread_time": 36.36360168457031,
+    //        "time_seconds": 2181.8161010742188,
+    //        "time_milliseconds": 2181816.1010742188
+    //    },
+    //    {
+    //        "id": 22,
+    //        "group_id": 2,
+    //        "density": 78,
+    //        "type": "уток",
+    //        "color": "желтая",
+    //        "additive_name": "нет",
+    //        "thread_time": 36.36360168457031,
+    //        "time_seconds": 2181.8161010742188,
+    //        "time_milliseconds": 2181816.1010742188
+    //    },
+    //    {
+    //        "id": 11,
+    //        "group_id": 14,
+    //        "density": 78,
+    //        "type": "уток",
+    //        "color": "зелёная",
+    //        "additive_name": "нет",
+    //        "thread_time": 45.714298248291016,
+    //        "time_seconds": 2742.857894897461,
+    //        "time_milliseconds": 2742857.894897461
+    //    },
+    //    {
+    //        "id": 21,
+    //        "group_id": 2,
+    //        "density": 78,
+    //        "type": "уток",
+    //        "color": "оранжевая",
+    //        "additive_name": "нет",
+    //        "thread_time": 36.36360168457031,
+    //        "time_seconds": 2181.8161010742188,
+    //        "time_milliseconds": 2181816.1010742188
+    //    },
+    //    {
+    //        "id": 20,
+    //        "group_id": 2,
+    //        "density": 78,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "светостаб 1,5%",
+    //        "thread_time": 36.36360168457031,
+    //        "time_seconds": 2181.8161010742188,
+    //        "time_milliseconds": 2181816.1010742188
+    //    },
+    //    {
+    //        "id": 24,
+    //        "group_id": 3,
+    //        "density": 90,
+    //        "type": "уток",
+    //        "color": "серая",
+    //        "additive_name": "нет",
+    //        "thread_time": 31.111099243164062,
+    //        "time_seconds": 1866.6659545898438,
+    //        "time_milliseconds": 1866665.9545898438
+    //    },
+    //    {
+    //        "id": 27,
+    //        "group_id": 15,
+    //        "density": 90,
+    //        "type": "уток",
+    //        "color": "цветная",
+    //        "additive_name": "нет",
+    //        "thread_time": 40,
+    //        "time_seconds": 2400,
+    //        "time_milliseconds": 2400000
+    //    },
+    //    {
+    //        "id": 26,
+    //        "group_id": 3,
+    //        "density": 90,
+    //        "type": "уток",
+    //        "color": "чёрная",
+    //        "additive_name": "нет",
+    //        "thread_time": 31.111099243164062,
+    //        "time_seconds": 1866.6659545898438,
+    //        "time_milliseconds": 1866665.9545898438
+    //    },
+    //    {
+    //        "id": 25,
+    //        "group_id": 3,
+    //        "density": 90,
+    //        "type": "уток",
+    //        "color": "красная",
+    //        "additive_name": "нет",
+    //        "thread_time": 31.111099243164062,
+    //        "time_seconds": 1866.6659545898438,
+    //        "time_milliseconds": 1866665.9545898438
+    //    },
+    //    {
+    //        "id": 18,
+    //        "group_id": 3,
+    //        "density": 90,
+    //        "type": "уток",
+    //        "color": "оранжевая",
+    //        "additive_name": "нет",
+    //        "thread_time": 31.111099243164062,
+    //        "time_seconds": 1866.6659545898438,
+    //        "time_milliseconds": 1866665.9545898438
+    //    },
+    //    {
+    //        "id": 17,
+    //        "group_id": 3,
+    //        "density": 90,
+    //        "type": "уток",
+    //        "color": "прозрачная",
+    //        "additive_name": "нет",
+    //        "thread_time": 31.111099243164062,
+    //        "time_seconds": 1866.6659545898438,
+    //        "time_milliseconds": 1866665.9545898438
+    //    },
+    //    {
+    //        "id": 16,
+    //        "group_id": 3,
+    //        "density": 90,
+    //        "type": "уток",
+    //        "color": "синяя",
+    //        "additive_name": "нет",
+    //        "thread_time": 31.111099243164062,
+    //        "time_seconds": 1866.6659545898438,
+    //        "time_milliseconds": 1866665.9545898438
+    //    },
+    //    {
+    //        "id": 14,
+    //        "group_id": 3,
+    //        "density": 90,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "светостаб 1,5%",
+    //        "thread_time": 31.111099243164062,
+    //        "time_seconds": 1866.6659545898438,
+    //        "time_milliseconds": 1866665.9545898438
+    //    },
+    //    {
+    //        "id": 3,
+    //        "group_id": 3,
+    //        "density": 90,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "thread_time": 31.111099243164062,
+    //        "time_seconds": 1866.6659545898438,
+    //        "time_milliseconds": 1866665.9545898438
+    //    },
+    //    {
+    //        "id": 28,
+    //        "group_id": 10,
+    //        "density": 102,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "светостаб 1,5%",
+    //        "thread_time": 34,
+    //        "time_seconds": 2040,
+    //        "time_milliseconds": 2040000
+    //    },
+    //    {
+    //        "id": 15,
+    //        "group_id": 4,
+    //        "density": 105,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "светостаб 1,5%",
+    //        "thread_time": 28.875,
+    //        "time_seconds": 1732.5,
+    //        "time_milliseconds": 1732500
+    //    },
+    //    {
+    //        "id": 33,
+    //        "group_id": 4,
+    //        "density": 105,
+    //        "type": "уток",
+    //        "color": "зелёная",
+    //        "additive_name": "нет",
+    //        "thread_time": 28.875,
+    //        "time_seconds": 1732.5,
+    //        "time_milliseconds": 1732500
+    //    },
+    //    {
+    //        "id": 32,
+    //        "group_id": 4,
+    //        "density": 105,
+    //        "type": "уток",
+    //        "color": "бирюзовая",
+    //        "additive_name": "нет",
+    //        "thread_time": 28.875,
+    //        "time_seconds": 1732.5,
+    //        "time_milliseconds": 1732500
+    //    },
+    //    {
+    //        "id": 31,
+    //        "group_id": 4,
+    //        "density": 105,
+    //        "type": "уток",
+    //        "color": "цветная",
+    //        "additive_name": "нет",
+    //        "thread_time": 28.875,
+    //        "time_seconds": 1732.5,
+    //        "time_milliseconds": 1732500
+    //    },
+    //    {
+    //        "id": 30,
+    //        "group_id": 4,
+    //        "density": 105,
+    //        "type": "уток",
+    //        "color": "чёрная",
+    //        "additive_name": "нет",
+    //        "thread_time": 28.875,
+    //        "time_seconds": 1732.5,
+    //        "time_milliseconds": 1732500
+    //    },
+    //    {
+    //        "id": 29,
+    //        "group_id": 4,
+    //        "density": 105,
+    //        "type": "уток",
+    //        "color": "красная",
+    //        "additive_name": "нет",
+    //        "thread_time": 28.875,
+    //        "time_seconds": 1732.5,
+    //        "time_milliseconds": 1732500
+    //    },
+    //    {
+    //        "id": 5,
+    //        "group_id": 5,
+    //        "density": 110,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "thread_time": 27,
+    //        "time_seconds": 1620,
+    //        "time_milliseconds": 1620000
+    //    },
+    //    {
+    //        "id": 38,
+    //        "group_id": 5,
+    //        "density": 110,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "светостаб 2%",
+    //        "thread_time": 27,
+    //        "time_seconds": 1620,
+    //        "time_milliseconds": 1620000
+    //    },
+    //    {
+    //        "id": 37,
+    //        "group_id": 5,
+    //        "density": 110,
+    //        "type": "уток",
+    //        "color": "чёрная",
+    //        "additive_name": "нет",
+    //        "thread_time": 27,
+    //        "time_seconds": 1620,
+    //        "time_milliseconds": 1620000
+    //    },
+    //    {
+    //        "id": 36,
+    //        "group_id": 5,
+    //        "density": 110,
+    //        "type": "уток",
+    //        "color": "желтая",
+    //        "additive_name": "нет",
+    //        "thread_time": 27,
+    //        "time_seconds": 1620,
+    //        "time_milliseconds": 1620000
+    //    },
+    //    {
+    //        "id": 35,
+    //        "group_id": 5,
+    //        "density": 110,
+    //        "type": "уток",
+    //        "color": "темно-синяя",
+    //        "additive_name": "нет",
+    //        "thread_time": 27,
+    //        "time_seconds": 1620,
+    //        "time_milliseconds": 1620000
+    //    },
+    //    {
+    //        "id": 34,
+    //        "group_id": 5,
+    //        "density": 110,
+    //        "type": "уток",
+    //        "color": "синяя",
+    //        "additive_name": "нет",
+    //        "thread_time": 27,
+    //        "time_seconds": 1620,
+    //        "time_milliseconds": 1620000
+    //    },
+    //    {
+    //        "id": 6,
+    //        "group_id": 6,
+    //        "density": 112,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "thread_time": 30,
+    //        "time_seconds": 1800,
+    //        "time_milliseconds": 1800000
+    //    },
+    //    {
+    //        "id": 12,
+    //        "group_id": 6,
+    //        "density": 112,
+    //        "type": "уток",
+    //        "color": "цветная",
+    //        "additive_name": "нет",
+    //        "thread_time": 30,
+    //        "time_seconds": 1800,
+    //        "time_milliseconds": 1800000
+    //    },
+    //    {
+    //        "id": 39,
+    //        "group_id": 11,
+    //        "density": 130,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "thread_time": 26.651399612426758,
+    //        "time_seconds": 1599.0839767456055,
+    //        "time_milliseconds": 1599083.9767456055
+    //    },
+    //    {
+    //        "id": 40,
+    //        "group_id": 11,
+    //        "density": 130,
+    //        "type": "уток",
+    //        "color": "синяя",
+    //        "additive_name": "нет",
+    //        "thread_time": 26.651399612426758,
+    //        "time_seconds": 1599.0839767456055,
+    //        "time_milliseconds": 1599083.9767456055
+    //    },
+    //    {
+    //        "id": 41,
+    //        "group_id": 11,
+    //        "density": 130,
+    //        "type": "уток",
+    //        "color": "чёрная",
+    //        "additive_name": "нет",
+    //        "thread_time": 26.651399612426758,
+    //        "time_seconds": 1599.0839767456055,
+    //        "time_milliseconds": 1599083.9767456055
+    //    },
+    //    {
+    //        "id": 7,
+    //        "group_id": 7,
+    //        "density": 140,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "thread_time": 28,
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "id": 42,
+    //        "group_id": 7,
+    //        "density": 140,
+    //        "type": "уток",
+    //        "color": "цветная",
+    //        "additive_name": "нет",
+    //        "thread_time": 28,
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "id": 13,
+    //        "group_id": 8,
+    //        "density": 170,
+    //        "type": "уток",
+    //        "color": "цветная",
+    //        "additive_name": "нет",
+    //        "thread_time": 28,
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "id": 8,
+    //        "group_id": 8,
+    //        "density": 170,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "thread_time": 28,
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "id": 43,
+    //        "group_id": 8,
+    //        "density": 170,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "светостаб 2%",
+    //        "thread_time": 28,
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "id": 9,
+    //        "group_id": 9,
+    //        "density": 220,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "нет",
+    //        "thread_time": 26,
+    //        "time_seconds": 1560,
+    //        "time_milliseconds": 1560000
+    //    },
+    //    {
+    //        "id": 44,
+    //        "group_id": 9,
+    //        "density": 220,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "светостаб 2%",
+    //        "thread_time": 26,
+    //        "time_seconds": 1560,
+    //        "time_milliseconds": 1560000
+    //    },
+    //    {
+    //        "id": 45,
+    //        "group_id": 12,
+    //        "density": 240,
+    //        "type": "уток",
+    //        "color": "белая",
+    //        "additive_name": "светостаб 2%",
+    //        "thread_time": 22,
+    //        "time_seconds": 1320,
+    //        "time_milliseconds": 1320000
+    //    }
+    //]
+    //const thread = [[]];
+    //thread[0] = [
+    //    {
+    //        "id": 13,
+    //        "density": 50,
+    //        "length": 25420,
+    //        "speed": 410,
+    //        "time_seconds": 3720,
+    //        "time_milliseconds": 3720000
+    //    },
+    //    {
+    //        "id": 1,
+    //        "density": 64,
+    //        "length": 20300,
+    //        "speed": 350,
+    //        "time_seconds": 3480,
+    //        "time_milliseconds": 3480000
+    //    },
+    //    {
+    //        "id": 14,
+    //        "density": 78,
+    //        "length": 16000,
+    //        "speed": 350,
+    //        "time_seconds": 2742.857894897461,
+    //        "time_milliseconds": 2742857.894897461
+    //    },
+    //    {
+    //        "id": 2,
+    //        "density": 78,
+    //        "length": 16000,
+    //        "speed": 440,
+    //        "time_seconds": 2181.8161010742188,
+    //        "time_milliseconds": 2181816.1010742188
+    //    },
+    //    {
+    //        "id": 15,
+    //        "density": 90,
+    //        "length": 14000,
+    //        "speed": 350,
+    //        "time_seconds": 2400,
+    //        "time_milliseconds": 2400000
+    //    },
+    //    {
+    //        "id": 3,
+    //        "density": 90,
+    //        "length": 14000,
+    //        "speed": 450,
+    //        "time_seconds": 1866.6659545898438,
+    //        "time_milliseconds": 1866665.9545898438
+    //    },
+    //    {
+    //        "id": 10,
+    //        "density": 102,
+    //        "length": 11900,
+    //        "speed": 350,
+    //        "time_seconds": 2040,
+    //        "time_milliseconds": 2040000
+    //    },
+    //    {
+    //        "id": 4,
+    //        "density": 105,
+    //        "length": 11550,
+    //        "speed": 400,
+    //        "time_seconds": 1732.5,
+    //        "time_milliseconds": 1732500
+    //    },
+    //    {
+    //        "id": 5,
+    //        "density": 110,
+    //        "length": 10850,
+    //        "speed": 400,
+    //        "time_seconds": 1620,
+    //        "time_milliseconds": 1620000
+    //    },
+    //    {
+    //        "id": 6,
+    //        "density": 112,
+    //        "length": 10500,
+    //        "speed": 350,
+    //        "time_seconds": 1800,
+    //        "time_milliseconds": 1800000
+    //    },
+    //    {
+    //        "id": 11,
+    //        "density": 130,
+    //        "length": 9328,
+    //        "speed": 350,
+    //        "time_seconds": 1599.0839767456055,
+    //        "time_milliseconds": 1599083.9767456055
+    //    },
+    //    {
+    //        "id": 7,
+    //        "density": 140,
+    //        "length": 8400,
+    //        "speed": 300,
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "id": 8,
+    //        "density": 170,
+    //        "length": 7000,
+    //        "speed": 250,
+    //        "time_seconds": 1680,
+    //        "time_milliseconds": 1680000
+    //    },
+    //    {
+    //        "id": 9,
+    //        "density": 220,
+    //        "length": 5200,
+    //        "speed": 200,
+    //        "time_seconds": 1560,
+    //        "time_milliseconds": 1560000
+    //    },
+    //    {
+    //        "id": 12,
+    //        "density": 240,
+    //        "length": 4400,
+    //        "speed": 200,
+    //        "time_seconds": 1320,
+    //        "time_milliseconds": 1320000
+    //    }
+    //];
 
     console.log(tape[0]);
     console.log(thread[0]);
@@ -264,7 +880,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
 
     let myThread = [];
     myThread[0] = thread[0].slice();
-    myThread[0].push({ density: "Время", length:32000, speed:400, time_milliseconds: 4800000, id:0 });
+    myThread[0].push({ density: "Время", length: 32000, speed: 400, time_milliseconds: 4800000, id: 0 });
     {
         function dropListSelectTex(array, select = document.createElement("select")) {
             array.forEach((tape) => {
@@ -299,9 +915,14 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
                 }
             }
             for (let button of buttons) {
-                button.textContent = infoTime[this.name].value;
+                //button.textContent = Math.floor(infoTime[this.name].valueAsNumber / 60000);
+                //button.textContent = infoTime[this.name].valueAsNumber % 60000;
+                button.textContent = infoTime[this.name].value.slice(0, 5);
+                //button.textContent = infoTime[this.name].value;
                 button.value = infoTime[this.name].valueAsNumber;
             }
+            //const fullMinutes = Math.floor(totalMs / 60000);
+            //leftoverMs = totalMs % 60000;
             handleCalculation();
         }
         //background: linear - gradient(to right, #06d327b0 0 % 56 %, #00eeff6b 0 % 100 %);
@@ -333,7 +954,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
                     list[this.id] && list[this.id].classList.remove("tg");
                     list[this.id] = e.target;
                     e.target.classList.add("tg");
-                    
+
                     console.log({
                         name: list[this.id].name,
                         textContent: list[this.id].textContent,
@@ -826,7 +1447,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
             timeData.push({ time: cc, id: selectName[i].value });
             cc += +item.value;
         });
-        timeData.push({ time: cc, id: selectName[selectName.length-1].value });
+        timeData.push({ time: cc, id: selectName[selectName.length - 1].value });
 
 
         if (currentValue !== null) {
@@ -1013,6 +1634,9 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         //    intervalSecondsJob.push(list[i].value / 60000);
         //}
         //console.log(intervalSecondsJob);
+        let mod = 0;
+
+
         list.forEach((item) => {
             const box = document.createElement("li");
             updateColor(box, +item.value);
@@ -1020,8 +1644,14 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
             time.type = "time";
             time.name = item.name;
             sum2 += +item.value;
-            time.valueAsNumber = time12(sum2);
-            //time.valueAsNumber = sum2;
+            //time.valueAsNumber = time12(sum2);
+
+            let timeMS = time12(sum2 + mod);
+            let timeS = Math.floor(timeMS / 60000);
+            mod = timeMS % 60000;
+            time.valueAsNumber = timeS * 60000;
+
+
 
             time.setAttribute("disabled", true);
 
