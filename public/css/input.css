@@ -142,10 +142,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
 }
 
-section input[type="time"], main>input[type="time"] {
+section input[type="time"], main > input[type="time"] {
     /*    width: 62.2px;*/
     /*     width: 67px; */
     /*     width: 55px; */
+    width: auto;
     padding: 4px;
     font-size: 12pt;
     font-family: 'Courier New', monospace;
@@ -398,3 +399,14 @@ button:active {
 
 
 
+input[type="date"]::-webkit-date-and-time-value,
+input[type="datetime-local"]::-webkit-date-and-time-value,
+input[type="time"]::-webkit-date-and-time-value {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    margin-left: 0px;
+    display: none;
+}
