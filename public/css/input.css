@@ -4,7 +4,7 @@ input[type="number"] {
 
 table {
     /*  display: inline;*/
-/*    width: 100%;*/
+    /*    width: 100%;*/
     border-collapse: collapse;
 }
 
@@ -256,8 +256,8 @@ label {
     }
 
 .android {
-/*    display: flex;*/
-/*    justify-content: center;*/
+    /*    display: flex;*/
+    /*    justify-content: center;*/
 }
 
 
@@ -427,4 +427,75 @@ section input[type="time"] {
     /* Добавьте свой border, если нужно */
     /*    width: 100%;*/
     /* Убеждаемся, что поле занимает всю ширину */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Сброс счётчиков один раз — например, на таблице */
+tbody {
+    counter-reset: col1 col2 col3 col4 col5;
+}
+
+/* Увеличиваем счётчик при встрече .tg в нужной колонке */
+td:nth-child(1) .tg {
+    counter-increment: col1;
+}
+
+td:nth-child(2) .tg {
+    counter-increment: col2;
+}
+
+td:nth-child(3) .tg {
+    counter-increment: col3;
+}
+
+td:nth-child(4) .tg {
+    counter-increment: col4;
+}
+
+td:nth-child(5) .tg {
+    counter-increment: col5;
+}
+
+/* Отображаем номер перед содержимым .tg */
+td:nth-child(1) .tg::before {
+    content: counter(col1) ";";
+}
+
+td:nth-child(2) .tg::before {
+    content: counter(col2) ";";
+}
+
+td:nth-child(3) .tg::before {
+    content: counter(col3) ";";
+}
+
+td:nth-child(4) .tg::before {
+    content: counter(col4) ";";
+}
+
+td:nth-child(5) .tg::before {
+    content: counter(col5) ";";
 }
