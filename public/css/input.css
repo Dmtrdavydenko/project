@@ -445,7 +445,9 @@ section input[type="time"] {
 
 
 
-
+.tap::before {
+    content: "0";
+}
 
 
 
@@ -481,21 +483,21 @@ td:nth-child(5) .tg {
 
 /* Отображаем номер перед содержимым .tg */
 td:nth-child(1) .tg::before {
-    content: counter(col1) ";";
+    content: counter(col1);
 }
 
 td:nth-child(2) .tg::before {
-    content: counter(col2) ";";
+    content: counter(col2);
 }
 
 td:nth-child(3) .tg::before {
-    content: counter(col3) ";";
+    content: counter(col3);
 }
 
 td:nth-child(4) .tg::before {
-    content: counter(col4) ";";
+    content: counter(col4);
 }
 
 td:nth-child(5) .tg::before {
-    content: counter(col5) ";";
+    content: counter(col5);
 }

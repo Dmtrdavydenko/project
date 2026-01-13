@@ -876,6 +876,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
 
 
     let list = [];
+    let listTask = [];
     const section = document.createElement("section");
     const select = document.createElement("select");
     const send = document.createElement("button");
@@ -902,16 +903,18 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         }
         function handleSelect(event) {
             console.log(this, event.target.value)
-            if (event.target.value === "4800000") {
-                infoTime[this.name].style.display = "inline-block";
-            } else {
-                infoTime[this.name].style.display = "none";
-            }
-            infoTime[this.name].valueAsNumber = event.target.value;
-            handleInputTime.call(this, event);
+            //if (event.target.value === "4800000") {
+            //    //infoTime[this.name].style.display = "inline-block";
+            //} else {
+            //    //infoTime[this.name].style.display = "none";
+            //}
+            infoTime[this.name].valueAsNumber = Math.floor(event.target.value / 60000) *60000;
+            handleSetButtonColumn.call(this, event);
+            // ## dev
+            //setTimeTask();
         }
-        function handleInputTime(event) {
-            console.log(handleInputTime.name, event.target.value);
+        function handleSetButtonColumn(event) {
+            console.log(handleSetButtonColumn.name, event.target.value, infoTime[this.name].valueAsNumber);
             let tape = new Object();
             tape.name = 0;
             const buttons = buttonRow[this.name];
@@ -922,19 +925,16 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
                 }
             }
             for (let button of buttons) {
+                button.value = event.target.value;
                 //button.textContent = Math.floor(infoTime[this.name].valueAsNumber / 60000);
                 //button.textContent = infoTime[this.name].valueAsNumber % 60000;
                 //button.textContent = infoTime[this.name].value;
-
-
-
-                button.value = infoTime[this.name].valueAsNumber;
                 //button.textContent = infoTime[this.name].value.slice(0, 5);
-                button.textContent = 0;
+                //button.textContent = "";
             }
             //const fullMinutes = Math.floor(totalMs / 60000);
             //leftoverMs = totalMs % 60000;
-            handleCalculation();
+            //handleCalculation();
         }
         //background: linear - gradient(to right, #06d327b0 0 % 56 %, #00eeff6b 0 % 100 %);
 
@@ -960,7 +960,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
                 if (!e.target.closest("button")) return;
                 if (list[this.id] === e.target) {
                     e.target.classList.remove("tg");
-                    list[this.id].textContent = 0;  
+                    //list[this.id].textContent = 0;  
                     delete list[this.id];
                 } else {
                     list[this.id] && list[this.id].classList.remove("tg");
@@ -994,8 +994,8 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
             time.name = counterColunms;
             time.type = "time";
             time.placeholder = "с";
-            time.valueAsNumber = dataTime[counterColunms] || 0;
-            time.style.display = "none";
+            time.valueAsNumber = Math.floor(dataTime[counterColunms] / 60000) * 60000 || 0;
+            //time.style.display = "none";
             console.log(myThread[0]);
             let select = dropListSelectTex(myThread[0]);
             select.name = counterColunms;
@@ -1031,8 +1031,8 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
 
             select.addEventListener('change', handleSelect);
 
-            time.addEventListener("input", handleInputTime);
-            time.addEventListener("change", handleInputTime);
+            time.addEventListener("input", handleSetButtonColumn);
+            time.addEventListener("change", handleSetButtonColumn);
             time.dispatchEvent(new MouseEvent("change", {}));
         }
 
@@ -1583,7 +1583,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         });
         return select;
     }
-    function dropListTape(array, select) {
+    function setNameTape(array, select) {
         array.forEach((tape) => {
             let option = document.createElement("option");
             option.value = tape.id;
@@ -1596,11 +1596,87 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
     }
     let selectName;
 
+
+
+
+
+
+
+  
+    let tapeMap = tape[0];
+    function setTimeTask(event) {
+        console.log(list, listTask);
+        const tape = {};
+        tape.name = 0;
+        tape.ms = 0;
+        tape.sumMs = start.valueAsNumber;
+        tape.mod = 0;
+        list.forEach((item,i) => {
+            tape.name = +item.name;
+            tape.ms = +item.value;
+            tape.sumMs += +item.value;
+
+            let timeMS = time12(tape.sumMs + tape.mod);
+            tape.mod = timeMS % 60000;
+            // ## minute
+            listTask[i].valueAsNumber = Math.floor(timeMS / 60000) * 60000;
+
+
+
+            //selectName[i]
+
+
+            let tapeNamesArray = tapeMap.filter(current => +item.name === current.group_id);
+            if (tapeNamesArray.length === 0) {
+                setNameTape(tapeMap, selectName[i]);
+            } else {
+                setNameTape(tapeNamesArray, selectName[i]);
+            }
+
+            //const box = document.createElement("li");
+            //updateColor(box, +item.value);
+            //const time = document.createElement("input");
+            //time.type = "time";
+            //time.name = item.name;
+            //sum2 += +item.value;
+            ////time.valueAsNumber = time12(sum2);
+
+            //let timeMS = time12(sum2 + mod);
+            //let timeS = Math.floor(timeMS / 60000);
+            //mod = timeMS % 60000;
+            //time.valueAsNumber = timeS * 60000;
+
+
+
+            //time.setAttribute("disabled", true);
+
+            //const TapeName = document.createElement("select");
+            //TapeName.name = item.name;
+
+            //let tapeNamesArray = tape[0].filter(current => current.group_id === +time.name);
+
+            //console.log(tapeNamesArray);
+
+            //if (tapeNamesArray.length === 0) {
+            //    setNameTape(tape[0], TapeName);
+            //} else {
+            //    setNameTape(tapeNamesArray, TapeName);
+            //}
+
+            //selectName.push(TapeName);
+
+            //box.append(time);
+            //box.append(TapeName);
+            //ol.append(box);
+            //console.log(sum2);
+        });
+    }
+    selectName = [];
+
     function handleCalculation(event) {
         section.innerHTML = "";
         select.innerHTML = "";
 
-        selectName = [];
 
 
         //console.log(list);
@@ -1637,7 +1713,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
 
         const startTapeName = document.createElement("select");
 
-        dropListTape(tape[0], startTapeName);
+        setNameTape(tape[0], startTapeName);
         selectName.push(startTapeName);
         box.append(startTapeName);
 
@@ -1653,10 +1729,11 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         let mod = 0;
 
 
-        list.forEach((item) => {
+        list.forEach((item,i) => {
             const box = document.createElement("li");
             updateColor(box, +item.value);
             const time = document.createElement("input");
+            listTask[i] = time;
             time.type = "time";
             time.name = item.name;
             sum2 += +item.value;
@@ -1674,17 +1751,14 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
             const TapeName = document.createElement("select");
             TapeName.name = item.name;
 
-            let tapeNamesArray = tape[0].filter(current => current.group_id === +time.name);
-
-            console.log(tapeNamesArray);
-
+            let tapeNamesArray = tape[0].filter(current => +time.name === current.group_id);
             if (tapeNamesArray.length === 0) {
-                dropListTape(tape[0], TapeName);
+                setNameTape(tape[0], TapeName);
             } else {
-                dropListTape(tapeNamesArray, TapeName);
+                setNameTape(tapeNamesArray, TapeName);
             }
 
-            selectName.push(TapeName);
+            selectName[i] = TapeName;
 
             box.append(time);
             box.append(TapeName);
