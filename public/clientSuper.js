@@ -909,13 +909,11 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
             //    //infoTime[this.name].style.display = "none";
             //}
             infoTime[this.name].valueAsNumber = Math.floor(event.target.value / 60000) *60000;
-            handleSetButtonColumn.call(this, event);
+
             // ## dev
             //setTimeTask();
-        }
-        function handleSetButtonColumn(event) {
-            console.log(handleSetButtonColumn.name, event.target.value, infoTime[this.name].valueAsNumber);
-            let tape = new Object();
+
+            let tape = {};
             tape.name = 0;
             const buttons = buttonRow[this.name];
             if (this.options) {
@@ -926,6 +924,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
             }
             for (let button of buttons) {
                 button.value = event.target.value;
+                //button.value = this.valueAsNumber;
                 //button.textContent = Math.floor(infoTime[this.name].valueAsNumber / 60000);
                 //button.textContent = infoTime[this.name].valueAsNumber % 60000;
                 //button.textContent = infoTime[this.name].value;
@@ -935,6 +934,30 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
             //const fullMinutes = Math.floor(totalMs / 60000);
             //leftoverMs = totalMs % 60000;
             //handleCalculation();
+        }
+        function handleSetButtonColumn(event) {
+            console.log(handleSetButtonColumn.name, event.target.value, infoTime[this.name].valueAsNumber, this.valueAsNumber);
+            let tape = {};
+            tape.name = 0;
+            const buttons = buttonRow[this.name];
+            if (this.options) {
+                tape.name = this.options[this.selectedIndex].name;
+                for (let button of buttons) {
+                    button.name = tape.name;
+                }
+            }
+            for (let button of buttons) {
+                button.value = this.valueAsNumber;
+                //button.value = this.valueAsNumber;
+                //button.textContent = Math.floor(infoTime[this.name].valueAsNumber / 60000);
+                //button.textContent = infoTime[this.name].valueAsNumber % 60000;
+                //button.textContent = infoTime[this.name].value;
+                //button.textContent = infoTime[this.name].value.slice(0, 5);
+                //button.textContent = "";
+            }
+            //const fullMinutes = Math.floor(totalMs / 60000);
+            //leftoverMs = totalMs % 60000;
+            handleCalculation();
         }
         //background: linear - gradient(to right, #06d327b0 0 % 56 %, #00eeff6b 0 % 100 %);
 
