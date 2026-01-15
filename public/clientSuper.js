@@ -903,12 +903,15 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         }
         function handleSelect(event) {
             console.log(this, event.target.value)
-            //if (event.target.value === "4800000") {
-            //    //infoTime[this.name].style.display = "inline-block";
-            //} else {
-            //    //infoTime[this.name].style.display = "none";
-            //}
-            infoTime[this.name].valueAsNumber = Math.floor(event.target.value / 60000) *60000;
+            if (event.target.value === "4800000") {
+                //    //infoTime[this.name].style.display = "inline-block";
+                infoTime[this.name].removeAttribute("disabled");
+            } else {
+                //    //infoTime[this.name].style.display = "none";
+                infoTime[this.name].setAttribute("disabled", true);
+
+            }
+            infoTime[this.name].valueAsNumber = Math.floor(event.target.value / 60000) * 60000;
 
             // ## dev
             //setTimeTask();
@@ -1483,7 +1486,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         });
         const timeData = [];
         list.forEach((item, i) => {
-            timeData.push({ elementTime: item, elementName: selectName[i],  time: cc, id: selectName[i].value });
+            timeData.push({ elementTime: item, elementName: selectName[i], time: cc, id: selectName[i].value });
             cc += +item.value;
         });
         timeData.push({ time: cc, id: selectName[selectName.length - 1].value });
@@ -1625,7 +1628,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
 
 
 
-  
+
     let tapeMap = tape[0];
     function setTimeTask(event) {
         console.log(list, listTask);
@@ -1634,7 +1637,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         tape.ms = 0;
         tape.sumMs = start.valueAsNumber;
         tape.mod = 0;
-        list.forEach((item,i) => {
+        list.forEach((item, i) => {
             tape.name = +item.name;
             tape.ms = +item.value;
             tape.sumMs += +item.value;
@@ -1752,7 +1755,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         let mod = 0;
 
 
-        list.forEach((item,i) => {
+        list.forEach((item, i) => {
             const box = document.createElement("li");
             updateColor(box, +item.value);
             const time = document.createElement("input");

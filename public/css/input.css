@@ -243,11 +243,11 @@ label {
 
 
 .android .block input[type="time"] {
-    width: 62.2px;
+/*    width: 62.2px;*/
 }
 
 .android .block input {
-    width: 62.2px;
+/*    width: 62.2px;*/
 }
 
     .android .block input::-webkit-calendar-picker-indicator {
