@@ -933,7 +933,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
             }
             //const fullMinutes = Math.floor(totalMs / 60000);
             //leftoverMs = totalMs % 60000;
-            //handleCalculation();
+            handleCalculation();
         }
         function handleSetButtonColumn(event) {
             console.log(handleSetButtonColumn.name, event.target.value, infoTime[this.name].valueAsNumber, this.valueAsNumber);
