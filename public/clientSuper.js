@@ -875,7 +875,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
 
 
 
-    let list = [];
+    let selectedButtons = [];
     let listTask = [];
     const section = document.createElement("section");
     const select = document.createElement("select");
@@ -984,21 +984,21 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
             // ## loatd
             line.addEventListener("click", function (e) {
                 if (!e.target.closest("button")) return;
-                if (list[this.id] === e.target) {
+                if (selectedButtons[this.id] === e.target) {
                     e.target.classList.remove("tg");
-                    //list[this.id].textContent = 0;  
-                    delete list[this.id];
+                    //selectedButtons[this.id].textContent = 0;  
+                    delete selectedButtons[this.id];
                 } else {
-                    list[this.id] && list[this.id].classList.remove("tg");
-                    list[this.id] = e.target;
+                    selectedButtons[this.id] && selectedButtons[this.id].classList.remove("tg");
+                    selectedButtons[this.id] = e.target;
                     e.target.classList.add("tg");
 
-                    //list[this.id].textContent = i;  
-                    console.log(list);
+                    //selectedButtons[this.id].textContent = i;  
+                    console.log(selectedButtons);
                     console.log({
-                        name: list[this.id].name,
-                        textContent: list[this.id].textContent,
-                        value: list[this.id].value
+                        name: selectedButtons[this.id].name,
+                        textContent: selectedButtons[this.id].textContent,
+                        value: selectedButtons[this.id].value
                     });
                 }
                 handleCalculation(event);
@@ -1280,10 +1280,10 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
 
         infoTime.forEach((item) => (item.valueAsNumber = NaN));
         infoTime.forEach((item) => item.dispatchEvent(event));
-        list.length &&
-            list.forEach((item, i) => {
+        selectedButtons.length &&
+            selectedButtons.forEach((item, i) => {
                 item.classList.remove("tg");
-                delete list[i];
+                delete selectedButtons[i];
             });
 
         const data = [];
@@ -1322,7 +1322,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
             infoTime[c].valueAsNumber = val;
             infoTime[c].dispatchEvent(event);
             buttonLine[i][c].classList.add("tg");
-            list[i] = buttonLine[i][c];
+            selectedButtons[i] = buttonLine[i][c];
         });
         start.valueAsNumber = this.beginning.valueAsNumber;
 
@@ -1331,7 +1331,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         timeDx.dispatchEvent(getSum);
     }
     function getListTimeSum(sum = 0) {
-        list.forEach((item) => {
+        selectedButtons.forEach((item) => {
             sum += +item.value;
         });
         return sum;
@@ -1342,10 +1342,10 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         //   console.log(g.id);
         //   infoTime.forEach((item) => (item.valueAsNumber = NaN));
         //   infoTime.forEach((item) => item.dispatchEvent(event));
-        //   list.length &&
-        //     list.forEach((item, i) => {
+        //   selectedButtons.length &&
+        //     selectedButtons.forEach((item, i) => {
         //       item.classList.remove("tg");
-        //       delete list[i];
+        //       delete selectedButtons[i];
         //     });
 
         //   let sum = 0;
@@ -1360,7 +1360,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         //     infoTime[c].valueAsNumber = val;
         //     infoTime[c].dispatchEvent(event);
         //     buttonLine[i][c].classList.add("tg");
-        //     list[i] = buttonLine[i][c];
+        //     selectedButtons[i] = buttonLine[i][c];
         //   });
         //   timeDx.valueAsNumber = end.valueAsNumber - sum - start.valueAsNumber;
         //   dx.value = (end.valueAsNumber - sum - start.valueAsNumber) / 60000;
@@ -1471,7 +1471,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         let count = 0;
 
         let cc = dtinput.valueAsNumber + start.valueAsNumber;
-        list.forEach((item, i) => {
+        selectedButtons.forEach((item, i) => {
             if (item.value === currentValue) {
                 count++;
             } else {
@@ -1485,12 +1485,16 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
             }
         });
         const timeData = [];
-        list.forEach((item, i) => {
-            timeData.push({ elementTime: item, elementName: selectName[i], time: cc, id: selectName[i].value });
+        timeData.push({ elementDate: dtinput, elementTime: start, elementName: selectTapeName, time: cc, name: selectTapeName.value });
+        selectedButtons.forEach((item, i) => {
             cc += +item.value;
+            timeData.push({ elementDate: dtinput, elementTime: item, elementName: selectName[i], time: cc, name: selectName[i].value });
         });
-        timeData.push({ time: cc, id: selectName[selectName.length - 1].value });
 
+        const timeTape = timeData.map(tape => ({
+            time: tape.time,
+            name: tape.name
+        }))
 
         if (currentValue !== null) {
             console.log("millisecond " + currentValue, "quantity " + count);
@@ -1498,8 +1502,9 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
                 new Task(currentValue, count, select.value, dateSave, start.valueAsNumber)
             );
         }
-        console.log(list);
+        console.log(selectedButtons);
         console.log(timeData);
+        console.log(timeTape);
 
 
         try {
@@ -1548,19 +1553,19 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
             //}).then((response) => response.json());
 
 
-            let response = {}
+            //let response = {}
 
-            //let response = await fetch("https://worktime.up.railway.app/app", {
-            //    method: "POST",
-            //    headers: {
-            //        "Content-Type": "application/json;charset=utf-8",
-            //    },
-            //    body: JSON.stringify({
-            //        action: "insertTime",
-            //        data: timeData
-            //    }),
-            //}).then((response) => response.json());
-            //console.log(response);
+            let response = await fetch("https://worktime.up.railway.app/app", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: "insertTime",
+                    data: timeTape
+                }),
+            }).then((response) => response.json());
+            console.log(response);
 
 
             response = await fetch("https://worktime.up.railway.app/app", {
@@ -1631,13 +1636,13 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
 
     let tapeMap = tape[0];
     function setTimeTask(event) {
-        console.log(list, listTask);
+        console.log(selectedButtons, listTask);
         const tape = {};
         tape.name = 0;
         tape.ms = 0;
         tape.sumMs = start.valueAsNumber;
         tape.mod = 0;
-        list.forEach((item, i) => {
+        selectedButtons.forEach((item, i) => {
             tape.name = +item.name;
             tape.ms = +item.value;
             tape.sumMs += +item.value;
@@ -1698,6 +1703,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         });
     }
     selectName = [];
+    let selectTapeName = {};
 
     function handleCalculation(event) {
         section.innerHTML = "";
@@ -1705,7 +1711,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
 
 
 
-        //console.log(list);
+        //console.log(selectedButtons);
         //console.log(buttonLine);
         dtinput = document.createElement("input");
         const ol = document.createElement("ol");
@@ -1740,7 +1746,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         const startTapeName = document.createElement("select");
 
         setNameTape(tape[0], startTapeName);
-        selectName.push(startTapeName);
+        selectTapeName = startTapeName;
         box.append(startTapeName);
 
         ol.append(box);
@@ -1748,14 +1754,14 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
 
         //let intervalSecondsJob = [start.valueAsNumber / 60000];
 
-        //for (let i = 1; i < list.length; i++) {
-        //    intervalSecondsJob.push(list[i].value / 60000);
+        //for (let i = 1; i < selectedButtons.length; i++) {
+        //    intervalSecondsJob.push(selectedButtons[i].value / 60000);
         //}
         //console.log(intervalSecondsJob);
         let mod = 0;
 
 
-        list.forEach((item, i) => {
+        selectedButtons.forEach((item, i) => {
             const box = document.createElement("li");
             updateColor(box, +item.value);
             const time = document.createElement("input");
@@ -2116,7 +2122,7 @@ const Thread = new DataTape("https://worktime.up.railway.app/app");
         };
     }
 
-    function write(database, sum, ol, list) {
+    function write(database, sum, ol, selectedButtons) {
         const time = document.createElement("input");
         time.type = "time";
 

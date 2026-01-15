@@ -1145,7 +1145,7 @@ async function insertTime(body) {
 
         //connection.execute("TRUNCATE TABLE timestamps");
         //const times = body.data.map(time => time / 1000);
-        const values = body.data.map(item => [item.time / 1000, item.id]);
+        const values = body.data.map(tape => [tape.time / 1000, tape.name]);
         const placeholders = body.data.map(() => '(FROM_UNIXTIME(?), ?)').join(', ');
         const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
         // Вставка новой записи
