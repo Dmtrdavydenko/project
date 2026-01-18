@@ -205,7 +205,7 @@ main > section {
 
     width: 100%;
     box-sizing: border-box;
-    padding: 0;
+/*    padding: 0;*/
     /*    margin: 0;*/
     /*    border: none;*/
     text-align: center;
@@ -222,6 +222,7 @@ main > section {
 .tap {
     /*     padding: 1px 18px 1px; */
     width: 100%;
+    font-size: 14pt;
 }
 
 label {
@@ -428,6 +429,10 @@ section input[type="time"] {
     /* Добавьте свой border, если нужно */
     /*    width: 100%;*/
     /* Убеждаемся, что поле занимает всю ширину */
+}
+select {
+    padding: 6px 0px;
+    font-size: 10pt;
 }
 
 
