@@ -1067,17 +1067,13 @@ localSpace.getThreads = [
         table.classList.add("block");
 
 
-        const aViewTime = document.createElement("a");
-        aViewTime.href = "/viewTime";
-        aViewTime.textContent = "Просмотр";
-
+        
 
 
 
 
         const thead = document.createElement("thead");
         main.append(start);
-        main.append(aViewTime);
         thead.append(timeLine);
         table.append(thead, tbody);
         main.append(table);
@@ -1578,9 +1574,9 @@ localSpace.getThreads = [
 
         dtinput.valueAsNumber = timestampInMs;
         dateSave = timestampInMs;
-        section.append(dtinput);
+        //section.append(dtinput);
 
-        section.append(dropListSelect([{ name: "День" }, { name: "Ночь" }], select));
+        //section.append(dropListSelect([{ name: "День" }, { name: "Ночь" }], select));
         section.append(ol);
 
         let sum2 = start.valueAsNumber;
@@ -1591,11 +1587,12 @@ localSpace.getThreads = [
         time.setAttribute("disabled", true);
         box.append(time);
 
-        const startTapeName = document.createElement("select");
 
+
+        const startTapeName = document.createElement("select");
         setNameTape(tape[0], startTapeName);
         selectTapeName = startTapeName;
-        box.append(startTapeName);
+        //box.append(startTapeName);
 
         ol.append(box);
 
@@ -1641,7 +1638,7 @@ localSpace.getThreads = [
             selectName[i] = TapeName;
 
             box.append(time);
-            box.append(TapeName);
+            //box.append(TapeName);
             ol.append(box);
             console.log(sum2);
         });
