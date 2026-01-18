@@ -881,6 +881,7 @@ localSpace.getThreads = [
     let listTask = [];
     const section = document.createElement("section");
     const select = document.createElement("select");
+    const send = document.createElement("button");
 
     let dtinput = null;
     let dateSave = 0;
@@ -1071,13 +1072,31 @@ localSpace.getThreads = [
         aViewTime.href = "/viewTime";
         aViewTime.textContent = "Просмотр";
 
+        const setTime = document.createElement("button");
+        setTime.textContent = "setToDay";
 
+
+
+        setTime.addEventListener("click", async function () {
+            const response = await fetch("https://worktime.up.railway.app/app", {
+                //response = await fetch(document.location.href, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: "setToDay"
+                }),
+            }).then((response) => response.json());
+            console.log(response);
+        });
 
 
 
         const thead = document.createElement("thead");
         main.append(start);
         main.append(aViewTime);
+        main.append(setTime);
         thead.append(timeLine);
         table.append(thead, tbody);
         main.append(table);
@@ -1244,6 +1263,8 @@ localSpace.getThreads = [
     const button = document.createElement("button");
     button.textContent = "Вычислить";
     //main.append(button);
+    send.textContent = "Сохранить";
+    main.append(send);
     const get = document.createElement("button");
     //get.textContent = "Загрузить";
     //main.append(get);
@@ -1442,7 +1463,140 @@ localSpace.getThreads = [
         this.runMinute = run / 60000;
     }
 
-   
+    send.addEventListener("click", async function (e) {
+        const dat = [];
+        const dateSave = dtinput.valueAsNumber;
+        console.log("data ", dateSave);
+        console.log("time ", select.value);
+        console.log("run ", start.valueAsNumber);
+        let currentValue = 0; // Переменная для хранения текущего значения
+        let count = 0;
+
+        let cc = dtinput.valueAsNumber + start.valueAsNumber;
+        selectedButtons.forEach((item, i) => {
+            if (item.value === currentValue) {
+                count++;
+            } else {
+                if (currentValue) {
+                    // Если это не первое значение, выводим результат
+                    console.log("millisecond " + currentValue, "quantity " + count);
+                    dat.push(new Task(currentValue, count, select.value, dateSave, start.valueAsNumber));
+                }
+                currentValue = item.value;
+                count = 1;
+            }
+        });
+        const timeData = [];
+        timeData.push({ elementDate: dtinput, elementTime: start, elementName: selectTapeName, time: cc, name: selectTapeName.value });
+        selectedButtons.forEach((item, i) => {
+            cc += +item.value;
+            timeData.push({ elementDate: dtinput, elementTime: item, elementName: selectName[i], time: cc, name: selectName[i].value });
+        });
+
+        const timeTape = timeData.map(tape => ({
+            time: tape.time,
+            name: tape.name
+        }))
+
+        if (currentValue !== null) {
+            console.log("millisecond " + currentValue, "quantity " + count);
+            dat.push(
+                new Task(currentValue, count, select.value, dateSave, start.valueAsNumber)
+            );
+        }
+        console.log(selectedButtons);
+        console.log(timeData);
+        console.log(timeTape);
+
+
+        try {
+            // date:13
+            // millisecond:2100000
+            // quantity:7
+            // run:28800000
+            // save_id:13
+            // time:"День"
+
+            // await fetch(document.location.href, {
+            //   method: "POST",
+            //   headers: {
+            //     "Content-Type": "application/json;charset=utf-8",
+            //   },
+            //   body: JSON.stringify({
+            //     action: "todayW",
+            //     table: {
+            //       name: "diary",
+            //     },
+            //     data: dat,
+            //     key: {
+            //       date: dateSave,
+            //       time: select.value,
+            //     },
+            //   }),
+            // }).then((response) => response.json());
+            // console.log(response);
+
+            //response = await fetch(document.location.href, {
+            //    method: "POST",
+            //    headers: {
+            //        "Content-Type": "application/json;charset=utf-8",
+            //    },
+            //    body: JSON.stringify({
+            //        action: "save",
+            //        table: {
+            //            name: "timestamps",
+            //        },
+            //        data: dat,
+            //        key: {
+            //            date: dateSave,
+            //            time: select.value,
+            //        },
+            //    }),
+            //}).then((response) => response.json());
+
+
+            //let response = {}
+
+            let response = await fetch("https://worktime.up.railway.app/app", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: "insertTime",
+                    data: timeTape
+                }),
+            }).then((response) => response.json());
+            console.log(response);
+
+
+            response = await fetch("https://worktime.up.railway.app/app", {
+                //response = await fetch(document.location.href, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    action: "ping"
+                }),
+            }).then((response) => response.json());
+            console.log(response);
+
+            if (response === "pong") {
+                this.classList.add("success");
+                setTimeout(() => {
+                    this.classList.remove("success");
+                }, 3000);
+            } else throw response;
+        } catch (error) {
+            this.classList.add("reject");
+            setTimeout(() => {
+                this.classList.remove("reject");
+            }, 3000);
+            console.warn(response);
+            // console.warn(error);
+        }
+    });
 
     function dropListSelectS(array, select) {
         let option = document.createElement("option");
@@ -1645,6 +1799,7 @@ localSpace.getThreads = [
             ol.append(box);
             console.log(sum2);
         });
+        section.append(send);
 
 
 
@@ -1749,7 +1904,142 @@ localSpace.getThreads = [
         return `rgb(${red}, ${green}, ${blue})`;
     }
 
-    
+    //(async () => {
+    //    const today = new Date();
+
+    //    // Добавляем смещение к текущему времени
+    //    const adjustedTime = new Date(today.getTime());
+
+    //    // Получаем год, месяц и день
+    //    const year = adjustedTime.getFullYear();
+    //    const month = adjustedTime.getMonth(); // Месяцы начинаются с 0 (январь)
+    //    const day = adjustedTime.getDate();
+
+    //    // Создаем новую дату без времени и получаем её в миллисекундах
+    //    const dateWithoutTimeInMs = new Date(year, month, day).getTime() + 3600000 * 7;
+    //    console.log(dateWithoutTimeInMs);
+
+    //    const response = await fetch(document.location.href, {
+    //        method: "POST",
+    //        headers: {
+    //            "Content-Type": "application/json;charset=utf-8",
+    //        },
+    //        body: JSON.stringify({
+    //            action: "today",
+    //            table: {
+    //                name: "diary_ref",
+    //            },
+    //            ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
+    //            // date:dateWithoutTimeInMs-47*60*60*1000,
+    //        }),
+    //    }).then((response) => response.json())
+    //    console.log(response);
+
+
+    //    let select = document.createElement("select");
+    //    section.id = "today";
+
+    //    if (response.messeag) {
+    //        const no_records = document.createElement("span");
+    //        no_records.textContent = response.messeag;
+    //        section.append(no_records);
+    //    } else {
+    //        viewData(response, select);
+    //    }
+
+    //    fetch(document.location.href, {
+    //        method: "POST",
+    //        headers: {
+    //            "Content-Type": "application/json;charset=utf-8",
+    //        },
+    //        body: JSON.stringify({
+    //            action: "selectT",
+    //            table: {
+    //                name: "MyChrono",
+    //            },
+    //            data: null,
+    //            // ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
+    //            // date:dateWithoutTimeInMs-47*60*60*1000,
+    //        }),
+    //    })
+    //        .then((response) => response.json())
+    //        .then(console.log);
+
+    //    fetch(document.location.href, {
+    //        method: "POST",
+    //        headers: {
+    //            "Content-Type": "application/json;charset=utf-8",
+    //        },
+    //        body: JSON.stringify({
+    //            action: "selectT",
+    //            table: {
+    //                name: "diary_ref",
+    //            },
+    //            data: null,
+    //            // ms: dateWithoutTimeInMs - 24 * 60 * 60 * 1000,
+    //            // date:dateWithoutTimeInMs-47*60*60*1000,
+    //        }),
+    //    })
+    //        .then((response) => response.json())
+    //        .then(console.log);
+
+    //    // fetch(document.location.href, {
+    //    //   method: "POST",
+    //    //   headers: {
+    //    //     "Content-Type": "application/json;charset=utf-8",
+    //    //   },
+    //    //   body: JSON.stringify({
+    //    //     action: "selectT",
+    //    //     table: {
+    //    //       name: "MyСhange",
+    //    //     },
+    //    //     data: null
+    //    //   }),
+    //    // }).then((response) => response.json()).then(console.log);
+
+    //    fetch(document.location.href, {
+    //        method: "POST",
+    //        headers: {
+    //            "Content-Type": "application/json;charset=utf-8",
+    //        },
+    //        body: JSON.stringify({
+    //            action: "selectT",
+    //            table: {
+    //                name: "MySaveTest",
+    //            },
+    //            data: null,
+    //        }),
+    //    })
+    //        .then((response) => response.json())
+    //        .then(console.log);
+
+    //    fetch(document.location.href, {
+    //        method: "POST",
+    //        headers: {
+    //            "Content-Type": "application/json;charset=utf-8",
+    //        },
+    //        body: JSON.stringify({
+    //            action: "select",
+    //            table: {
+    //                name: "diary_ref",
+    //            },
+    //            data: null,
+    //        }),
+    //    })
+    //        .then((response) => response.json())
+    //        .then(console.log);
+
+    //    // fetch(document.location.href, {
+    //    //     method: "POST",
+    //    //     headers: {
+    //    //       "Content-Type": "application/json;charset=utf-8",
+    //    //     },
+    //    //     body: JSON.stringify({
+    //    //       action: "getOrAddValue",
+    //    //         date:1747872000000
+    //    //     }),
+    //    //   }).then((response) => response.json()).then(console.log);
+    //})();
 
     let countDiv = 0;
 
@@ -1907,3 +2197,59 @@ localSpace.getThreads = [
 
 
 
+
+// const socket = new WebSocket("wss://worktime.glitch.me");
+
+// socket.addEventListener("open", () => {
+//   console.log("Connected to the WebSocket server.");
+//   socket.send("Hello, server!"); // Отправляем сообщение при открытии соединения
+// });
+
+// socket.addEventListener("message", (event) => {
+//   const message = event.data;
+//   console.log("Message from server:", message);
+// });
+
+// // Обработка ошибок
+// socket.addEventListener("error", (error) => {
+//   console.error("WebSocket error:", error);
+// });
+
+// // Обработка закрытия соединения
+// socket.addEventListener("close", () => {
+//   console.log("Disconnected from the WebSocket server.");
+// });
+
+// socket.addEventListener("message", async (event) => {
+//   const blob = event.data; // Получаем Blob
+//   if (blob instanceof Blob) {
+//     try {
+//       const arrayBuffer = await blob.arrayBuffer(); // Преобразуем Blob в ArrayBuffer
+//       const decoder = new TextDecoder("utf-8"); // Указываем кодировку
+//       const messageString = decoder.decode(arrayBuffer); // Декодируем
+//       console.log("Message from server:", messageString);
+//     } catch (error) {
+//       console.error("Error reading Blob:", error);
+//     }
+//   } else {
+//     console.warn("Received non-Blob data:", blob);
+//   }
+// });
+
+// socket.addEventListener("message", (event) => {
+//   const blob = event.data; // Получаем Blob
+//   if (blob instanceof Blob) {
+//     const reader = new FileReader();
+
+//     // Когда чтение завершено, выводим строку
+//     reader.onload = () => {
+//       const messageString = reader.result; // Получаем строку
+//       console.log("Message from server:", messageString);
+//     };
+
+//     // Читаем Blob как текст
+//     reader.readAsText(blob);
+//   } else {
+//     console.warn("Received non-Blob data:", blob);
+//   }
+// });
