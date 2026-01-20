@@ -578,7 +578,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
                      -- GROUP BY type.yarn_name, thread.thread_density, c.color, ad.additive_name
 
-                     ORDER BY width ASC, Tape.density ASC
+                     ORDER BY width ASC, d.density ASC
 
 
 
