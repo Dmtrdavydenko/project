@@ -104,7 +104,7 @@ class ManualRepository {
 
 
 
-                thread_density
+                //thread_density
 
                 console.log(query, values);
                 const [rows] = await connection.execute(query, values);

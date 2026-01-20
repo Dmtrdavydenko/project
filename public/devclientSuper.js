@@ -33,7 +33,7 @@ class DataTape {
                 console.info("Load local space data");
                 return this.data;
             }
-            console.error("Ошибка при загрузке данных:", error);   
+            console.error("Ошибка при загрузке данных:", error);
         }
     }
     getAll() {
@@ -1008,7 +1008,7 @@ localSpace.getThreads = [
             tbody.append(line);
         }
 
-        let dataTime = [1732500, 2100000, 2400000, 4800000];
+        let dataTime = [0, 0, 0, 0];
         for (let counterColunms = 0; counterColunms < 5; counterColunms++) {
             buttonRow.push([]);
             //######################################################################### calc
@@ -1628,6 +1628,7 @@ localSpace.getThreads = [
         return select;
     }
     let selectName;
+    let lineTask;
 
 
 
@@ -1705,6 +1706,7 @@ localSpace.getThreads = [
         });
     }
     selectName = [];
+    lineTask = [];
     let selectTapeName = {};
 
     function handleCalculation(event) {
@@ -1763,39 +1765,46 @@ localSpace.getThreads = [
         let mod = 0;
 
 
-        selectedButtons.forEach((item, i) => {
+        selectedButtons.forEach((button, i) => {
             const box = document.createElement("li");
-            updateColor(box, +item.value);
-            const time = document.createElement("input");
-            listTask[i] = time;
-            time.type = "time";
-            time.name = item.name;
-            sum2 += +item.value;
-            //time.valueAsNumber = time12(sum2);
+            updateColor(box, +button.value);
+
+
+            lineTask[i] = {};
+            lineTask[i].time = document.createElement("input");
+            lineTask[i].time.setAttribute("disabled", true);
+            lineTask[i].time.type = "time";
+
+
+            lineTask[i].time.name = button.name;
+            listTask[i] = lineTask[i].time;
+
+
+            sum2 += +button.value;
+
 
             let timeMS = time12(sum2 + mod);
             let timeS = Math.floor(timeMS / 60000);
             mod = timeMS % 60000;
-            time.valueAsNumber = timeS * 60000;
+            lineTask[i].time.valueAsNumber = timeS * 60000;
+
+            lineTask[i].select = document.createElement("select");
+            lineTask[i].select.name = button.name;
+            selectName[i] = lineTask[i].select;
 
 
-
-            time.setAttribute("disabled", true);
-
-            const TapeName = document.createElement("select");
-            TapeName.name = item.name;
-
-            let tapeNamesArray = tape[0].filter(current => +time.name === current.group_id);
+            let tapeNamesArray = tape[0].filter(current => +lineTask[i].time.name === current.group_id);
             if (tapeNamesArray.length === 0) {
-                setNameTape(tape[0], TapeName);
+                setNameTape(tape[0], lineTask[i].select);
             } else {
-                setNameTape(tapeNamesArray, TapeName);
+                setNameTape(tapeNamesArray, lineTask[i].select);
             }
 
-            selectName[i] = TapeName;
+            console.log(lineTask);
 
-            box.append(time);
-            box.append(TapeName);
+
+            box.append(lineTask[i].time);
+            box.append(lineTask[i].select);
             ol.append(box);
             console.log(sum2);
         });

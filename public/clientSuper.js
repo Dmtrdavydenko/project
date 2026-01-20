@@ -1007,7 +1007,7 @@ localSpace.getThreads = [
             tbody.append(line);
         }
 
-        let dataTime = [1732500, 2100000, 2400000, 4800000];
+        let dataTime = [0, 0, 0, 0];
         for (let counterColunms = 0; counterColunms < 5; counterColunms++) {
             buttonRow.push([]);
             //######################################################################### calc
