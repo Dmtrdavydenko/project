@@ -542,8 +542,8 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
 
                         CASE
-                            WHEN type.yarn_id = 2 AND weft.weft_quantity > 25 THEN CEIL(weft.weft_quantity * 0.1 * sw.sleeve_width * 2 * s.speed * 720 / (weft.weft_quantity * 10) * 0.89 / thread.thread_length)
-                            WHEN type.yarn_id = 2 AND weft.weft_quantity < 25 THEN CEIL(weft.weft_quantity * 0.1 * sw.sleeve_width * 2 * s.speed * 720 / (weft.weft_quantity * 20) * 0.89 / thread.thread_length)
+                            WHEN type.yarn_id = 2 AND weft.weft_quantity > 25 THEN CEIL(weft.weft_quantity * 0.1 * sw.sleeve_width * 2 * s.speed * 720 / (weft.weft_quantity * 10) * 0.89 / Tape.length)
+                            WHEN type.yarn_id = 2 AND weft.weft_quantity < 25 THEN CEIL(weft.weft_quantity * 0.1 * sw.sleeve_width * 2 * s.speed * 720 / (weft.weft_quantity * 20) * 0.89 / Tape.length)
                             ELSE NULL
                         END as quantity_weft,
 
@@ -565,6 +565,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
                      LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
                      LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
+                     LEFT JOIN Tape ON m.thread_densiti_id = Tape.id
                      LEFT JOIN color c ON m.color_id = c.color_id
                      LEFT JOIN additive ad ON m.additive_id = ad.additive_id
 
