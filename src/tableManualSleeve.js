@@ -88,7 +88,7 @@ class ManualRepository {
                 JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
                 JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
                 JOIN Thread_Parameters thread                    ON m.thread_densiti_id = thread.thread_id
-                JOIN Tape ON Thread_Parameters.tape_id = Tape.id
+                JOIN Tape ON thread.tape_id = Tape.id
                 JOIN color c                    ON m.color_id = c.color_id
                 JOIN additive ad                    ON m.additive_id = ad.additive_id
                 LEFT JOIN warp_quantity warp                    ON m.quantity_id = warp.warp_id
