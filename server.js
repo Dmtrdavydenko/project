@@ -517,8 +517,8 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         -- machine.machine_name,
                         -- s.speed,
                         -- machine.shuttle,
-                        sw.sleeve_width as width,
-                        d.density as density,
+                        sw.sleeve_width as fabric_width,
+                        d.density as fabric_density,
                         -- l.modifier_id,
                         type.yarn_name,
                         CASE
@@ -547,7 +547,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                             ELSE NULL
                         END as quantity_weft,
 
-                        Tape.density,
+                        Tape.density as tape_density,
                         c.color,
                         ad.additive_name
                         -- l.loom_nameId,
@@ -578,7 +578,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
                      -- GROUP BY type.yarn_name, thread.thread_density, c.color, ad.additive_name
 
-                     ORDER BY width ASC, d.density ASC
+                     ORDER BY fabric_width ASC, fabric_density ASC
 
 
 
