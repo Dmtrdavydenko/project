@@ -107,10 +107,12 @@ class ManualRepository {
                 //thread_density
 
                 console.log(query, values);
-                const [rows] = await connection.execute(query, values);
+                const all = await connection.execute(query, values);
+                const [rows] = all;
                 return {
                     success: true,
-                    rows: rows
+                    rows: rows,
+                    all:all
                 };
             } finally {
                 connection.release();
