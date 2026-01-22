@@ -15,6 +15,7 @@
 }
 
 body {
+    /*tahoma*/
     font-family: '';
     line-height: 1.6;
     color: var(--text-color);
@@ -35,7 +36,7 @@ ul {
     list-style: none;
 }
 
-.griid-container {
+.grid-container {
     display: grid;
     grid-template: 1fr;
     grid-template-areas: "header" "hero" "main" "sidebar" "footer";
@@ -44,9 +45,37 @@ ul {
 
 .header {
     grid-area: header;
-    background: linear-gradient(130deg,rgba(255,255,255,0.6) 20%, rgba(255,255,255,0.6) 70%, rgba(255,255,255,0.6) 100%);
+    background: linear-gradient(130deg,rgba(0,255,0,0.6) 20%, rgba(0,0,0,0.6) 70%, rgba(255,0,0,0.6) 100%);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .logo img {
     height: 50px;
+}
+
+.main-nav ul {
+    display: flex;
+    gap: 1.5rem;
+}
+
+    .main-nav ul li a {
+        color: var(--dark-color);
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+        .main-nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+.hero {
+    grid-area: hero;
+    background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6),url(https://www.atomic-energy.ru/files/images/2022/11/4_2.jpg) no-repet center center/cover);
 }
