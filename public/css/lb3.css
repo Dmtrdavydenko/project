@@ -47,7 +47,10 @@ ul {
     transition:all 0.3s ease; 
 }
 
-    .btn:hover
+    .btn:hover {
+        background:secontrecover;
+        transforn:translateY(-5px);
+    }
     .grid-container {
         display: grid;
         grid-template: 1fr;
