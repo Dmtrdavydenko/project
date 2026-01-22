@@ -36,12 +36,23 @@ ul {
     list-style: none;
 }
 
-.grid-container {
-    display: grid;
-    grid-template: 1fr;
-    grid-template-areas: "header" "hero" "main" "sidebar" "footer";
-    min-height: 100vh;
+.btn {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.8rem 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor:pointer;
 }
+
+    .btn:hover
+    .grid-container {
+        display: grid;
+        grid-template: 1fr;
+        grid-template-areas: "header" "hero" "main" "sidebar" "footer";
+        min-height: 100vh;
+    }
 
 .header {
     grid-area: header;
@@ -77,5 +88,23 @@ ul {
 
 .hero {
     grid-area: hero;
-    background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6),url(https://www.atomic-energy.ru/files/images/2022/11/4_2.jpg) no-repet center center/cover);
+    background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url(https://lk.asu.ru/.src/images/elements/header_logo_2023_01.svg) no-repeat center center/cover;
+    color: white;
+    padding: 5rem 2rem;
+    display: flex;
+    align-items: center;
 }
+
+.hero-content {
+    max-width: 600px
+}
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+    }
