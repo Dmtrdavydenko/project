@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .input-group {
+            margin: 10px 0;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+        }
+
+        .result {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-group">
+            <textarea id="inputText" placeholder="Введите текст на русском или английском..."></textarea>
+        </div>
+
+        <button onclick="processText()">Обработать текст</button>
+        <button onclick="generateWordPairs()">Сгенерировать пары слов</button>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const RU_ALPHABET = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя';
+        const EN_ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
+        const COMBINED_ALPHABET = RU_ALPHABET + EN_ALPHABET + '0123456789 ';
+
+        function normalizeText(text) {
+            return text
+                .toLowerCase()
+                .replace(/[^a-zа-яё0-9\s]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function textToVector(text, alphabet = COMBINED_ALPHABET) {
+            const vector = new Array(alphabet.length).fill(0);
+            const normalized = normalizeText(text);
+            for (let char of normalized) {
+                const index = alphabet.indexOf(char);
+                if (index !== -1) vector[index] = 1;
+            }
+            console.log(vector);
+
+            return vector;
+        }
+
+        function vectorToText(vector, alphabet = COMBINED_ALPHABET) {
+            let result = '';
+            for (let i = 0; i < vector.length; i++) {
+                if (vector[i] === 1) result += alphabet[i];
+            }
+            return result;
+        }
+
+        function processText() {
+            const inputText = document.getElementById('inputText').value;
+            const normalized = normalizeText(inputText);
+            const vector = textToVector(inputText);
+
+            document.getElementById('result').innerHTML = `
+                <h3>Результаты обработки:</h3>
+                <p><strong>Исходный текст:</strong> ${inputText}</p>
+                <p><strong>Нормализованный текст:</strong> ${normalized}</p>
+                <p><strong>Векторное представление:</strong> [${vector.join(', ')}]</p>
+                <p><strong>Длина вектора:</strong> ${vector.length}</p>
+                <p><strong>Активные символы:</strong> ${vector.filter(x => x === 1).length}</p>
+            `;
+        }
+
+        function generateWordPairs() {
+            const inputText = document.getElementById('inputText').value;
+            const normalized = normalizeText(inputText);
+            const words = normalized.split(' ').filter(word => word.length > 0);
+
+            const wordPairs = [];
+            for (let i = 0; i < words.length - 1; i++) {
+                wordPairs.push([words[i], words[i + 1]]);
+            }
+
+            let pairsHTML = '<h3>Пары слов:</h3><ul>';
+            wordPairs.forEach(pair => {
+                pairsHTML += `<li>"${pair[0]}" → "${pair[1]}"</li>`;
+            });
+            pairsHTML += '</ul>';
+
+            document.getElementById('result').innerHTML = pairsHTML;
+        }
+    </script>
+</body>
+</html>

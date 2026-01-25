@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система поиска работы</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .search-section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+            input:focus, select:focus {
+                outline: none;
+                border-color: #3498db;
+                box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            }
+
+        .search-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            grid-column: 1 / -1;
+            justify-self: center;
+            width: 200px;
+        }
+
+            .search-btn:hover {
+                background: #2980b9;
+            }
+
+        .results-section {
+            display: none;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-count {
+            font-size: 18px;
+            color: #7f8c8d;
+        }
+
+        .sort-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .sort-btn {
+            padding: 8px 15px;
+            background: #ecf0f1;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+            .sort-btn.active {
+                background: #3498db;
+                color: white;
+            }
+
+        .job-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .job-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid #3498db;
+        }
+
+            .job-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+
+        .job-title {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .job-company {
+            font-size: 1.1rem;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+
+        .job-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .job-detail {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #7f8c8d;
+        }
+
+        .job-description {
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .job-salary {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #27ae60;
+        }
+
+        .apply-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 600;
+        }
+
+            .apply-btn:hover {
+                background: #219653;
+            }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+            .no-results h3 {
+                color: #7f8c8d;
+                margin-bottom: 10px;
+            }
+
+        @media (max-width: 768px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .sort-options {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Автоматизированная система поиска работы</h1>
+            <p>Найдите подходящую вакансию по различным критериям</p>
+        </header>
+
+        <section class="search-section">
+            <form class="search-form" id="searchForm">
+                <div class="form-group">
+                    <label for="keyword">Ключевое слово</label>
+                    <input type="text" id="keyword" placeholder="Должность, навыки, компания">
+                </div>
+
+                <div class="form-group">
+                    <label for="city">Город</label>
+                    <input type="text" id="city" placeholder="Москва, Санкт-Петербург...">
+                </div>
+
+                <div class="form-group">
+                    <label for="salary">Зарплата от</label>
+                    <input type="number" id="salary" placeholder="рублей в месяц">
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Опыт работы</label>
+                    <select id="experience">
+                        <option value="">Любой</option>
+                        <option value="0">Без опыта</option>
+                        <option value="1">1-3 года</option>
+                        <option value="3">3-5 лет</option>
+                        <option value="5">Более 5 лет</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="search-btn">Найти вакансии</button>
+            </form>
+        </section>
+
+        <section class="results-section" id="resultsSection">
+            <div class="results-header">
+                <div class="results-count" id="resultsCount">Найдено 0 вакансий</div>
+                <div class="sort-options">
+                    <button class="sort-btn" data-sort="salary">По зарплате</button>
+                    <button class="sort-btn" data-sort="relevance">По релевантности</button>
+                    <button class="sort-btn active" data-sort="date">По дате</button>
+                </div>
+            </div>
+
+            <div class="job-list" id="jobList">
+                <!-- Результаты поиска будут здесь -->
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Пример данных о вакансиях
+        const jobData = [
+            {
+                id: 1,
+                title: "Frontend разработчик",
+                company: "ТехноКорп",
+                city: "Москва",
+                salary: 120000,
+                experience: "1-3 года",
+                description: "Разработка пользовательских интерфейсов для веб-приложений. Требуется опыт работы с HTML, CSS, JavaScript.",
+                date: "2024-05-20",
+                skills: ["HTML", "CSS", "JavaScript", "React"]
+            },
+            {
+                id: 2,
+                title: "Веб-дизайнер",
+                company: "КреативСтудио",
+                city: "Санкт-Петербург",
+                salary: 80000,
+                experience: "Без опыта",
+                description: "Создание дизайна для веб-сайтов и мобильных приложений. Работа в команде с разработчиками.",
+                date: "2024-05-18",
+                skills: ["UI/UX", "Figma", "Photoshop"]
+            },
+            {
+                id: 3,
+                title: "Fullstack разработчик",
+                company: "ИТ Решения",
+                city: "Новосибирск",
+                salary: 150000,
+                experience: "3-5 лет",
+                description: "Разработка полного цикла веб-приложений. Знание backend и frontend технологий.",
+                date: "2024-05-15",
+                skills: ["JavaScript", "Node.js", "React", "MongoDB"]
+            },
+            {
+                id: 4,
+                title: "HTML-верстальщик",
+                company: "ВебМастер",
+                city: "Москва",
+                salary: 70000,
+                experience: "Без опыта",
+                description: "Верстка сайтов по макетам. Адаптивная верстка для различных устройств.",
+                date: "2024-05-10",
+                skills: ["HTML", "CSS", "JavaScript", "Bootstrap"]
+            },
+            {
+                id: 5,
+                title: "JavaScript разработчик",
+                company: "ТехноЛаб",
+                city: "Екатеринбург",
+                salary: 130000,
+                experience: "1-3 года",
+                description: "Разработка клиентской части приложений на чистом JavaScript.",
+                date: "2024-05-05",
+                skills: ["JavaScript", "HTML", "CSS", "API"]
+            },
+            {
+                id: 6,
+                title: "UI/UX дизайнер",
+                company: "ДизайнПро",
+                city: "Казань",
+                salary: 90000,
+                experience: "1-3 года",
+                description: "Проектирование пользовательских интерфейсов и создание прототипов.",
+                date: "2024-05-01",
+                skills: ["Figma", "UI/UX", "Прототипирование"]
+            }
+        ];
+
+        // Элементы DOM
+        const searchForm = document.getElementById('searchForm');
+        const resultsSection = document.getElementById('resultsSection');
+        const jobList = document.getElementById('jobList');
+        const resultsCount = document.getElementById('resultsCount');
+        const sortButtons = document.querySelectorAll('.sort-btn');
+
+        // Текущие результаты поиска
+        let currentResults = [];
+        let currentSort = 'date';
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            // Обработчик отправки формы
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                performSearch();
+            });
+
+            // Обработчики кнопок сортировки
+            sortButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    sortButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentSort = this.dataset.sort;
+                    sortResults(currentSort);
+                    displayResults();
+                });
+            });
+        });
+
+        // Выполнение поиска
+        function performSearch() {
+            const keyword = document.getElementById('keyword').value.toLowerCase();
+            const city = document.getElementById('city').value.toLowerCase();
+            const salary = parseInt(document.getElementById('salary').value) || 0;
+            const experience = document.getElementById('experience').value;
+
+            // Фильтрация данных
+            currentResults = jobData.filter(job => {
+                // По ключевому слову (ищет в названии, компании, описании и навыках)
+                const keywordMatch = !keyword ||
+                    job.title.toLowerCase().includes(keyword) ||
+                    job.company.toLowerCase().includes(keyword) ||
+                    job.description.toLowerCase().includes(keyword) ||
+                    job.skills.some(skill => skill.toLowerCase().includes(keyword));
+
+                // По городу
+                const cityMatch = !city || job.city.toLowerCase().includes(city);
+
+                // По зарплате
+                const salaryMatch = !salary || job.salary >= salary;
+
+                // По опыту работы
+                let experienceMatch = true;
+                if (experience) {
+                    if (experience === "0") {
+                        experienceMatch = job.experience === "Без опыта";
+                    } else if (experience === "1") {
+                        experienceMatch = job.experience === "1-3 года";
+                    } else if (experience === "3") {
+                        experienceMatch = job.experience === "3-5 лет";
+                    } else if (experience === "5") {
+                        experienceMatch = job.experience === "Более 5 лет";
+                    }
+                }
+
+                return keywordMatch && cityMatch && salaryMatch && experienceMatch;
+            });
+
+            // Сортировка и отображение результатов
+            sortResults(currentSort);
+            displayResults();
+
+            // Показываем секцию с результатами
+            resultsSection.style.display = 'block';
+        }
+
+        // Сортировка результатов
+        function sortResults(sortBy) {
+            switch(sortBy) {
+                case 'salary':
+                    currentResults.sort((a, b) => b.salary - a.salary);
+                    break;
+                case 'relevance':
+                    // В реальной системе здесь была бы более сложная логика релевантности
+                    currentResults.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    break;
+                case 'date':
+                default:
+                    currentResults.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    break;
+            }
+        }
+
+        // Отображение результатов
+        function displayResults() {
+            // Обновляем счетчик результатов
+            const count = currentResults.length;
+            resultsCount.textContent = `Найдено ${count} вакансий`;
+
+            // Очищаем список
+            jobList.innerHTML = '';
+
+            // Если нет результатов
+            if (count === 0) {
+                jobList.innerHTML = `
+                    <div class="no-results">
+                        <h3>По вашему запросу ничего не найдено</h3>
+                        <p>Попробуйте изменить критерии поиска</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Добавляем вакансии в список
+            currentResults.forEach(job => {
+                const jobCard = document.createElement('div');
+                jobCard.className = 'job-card';
+                jobCard.innerHTML = `
+                    <h3 class="job-title">${job.title}</h3>
+                    <div class="job-company">${job.company}</div>
+                    <div class="job-details">
+                        <div class="job-detail">
+                            <span>📍</span> ${job.city}
+                        </div>
+                        <div class="job-detail">
+                            <span>💼</span> ${job.experience}
+                        </div>
+                        <div class="job-detail">
+                            <span>📅</span> ${formatDate(job.date)}
+                        </div>
+                    </div>
+                    <div class="job-description">${job.description}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="job-salary">${formatSalary(job.salary)}</div>
+                        <button class="apply-btn">Откликнуться</button>
+                    </div>
+                `;
+
+                jobList.appendChild(jobCard);
+            });
+        }
+
+        // Форматирование зарплаты
+        function formatSalary(salary) {
+            return new Intl.NumberFormat('ru-RU').format(salary) + ' руб./мес.';
+        }
+
+        // Форматирование даты
+        function formatDate(dateString) {
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('ru-RU', options);
+        }
+    </script>
+</body>
+</html>

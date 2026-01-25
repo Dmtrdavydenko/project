@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система подбора работы в России</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .input-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .results-section {
+            flex: 2;
+            min-width: 600px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+        .vacancy-card {
+            border: 1px solid #eee;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+            .vacancy-card:hover {
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                transform: translateY(-2px);
+            }
+
+        .vacancy-title {
+            font-size: 1.3rem;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .vacancy-company {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .match-score {
+            display: inline-block;
+            padding: 5px 10px;
+            background: #e8f4fd;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .heatmap-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .heatmap-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .word-impact {
+            display: inline-block;
+            margin: 5px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .impact-high {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .impact-medium {
+            background: #ffa726;
+            color: white;
+        }
+
+        .impact-low {
+            background: #42a5f5;
+            color: white;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+
+            .tab.active {
+                border-bottom: 3px solid #1e3c72;
+                font-weight: bold;
+            }
+
+        .tab-content {
+            display: none;
+        }
+
+            .tab-content.active {
+                display: block;
+            }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .input-section, .results-section {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Персональный подбор работы в России</h1>
+            <p class="subtitle">Автоматизированная система на основе нейронных сетей и NLP</p>
+        </header>
+
+        <div class="main-content">
+            <section class="input-section">
+                <h2>Ваш профиль</h2>
+                <form id="profile-form">
+                    <div class="form-group">
+                        <label for="name">Имя</label>
+                        <input type="text" id="name" placeholder="Введите ваше имя">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age">Возраст</label>
+                        <input type="number" id="age" placeholder="Ваш возраст">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Город</label>
+                        <input type="text" id="location" placeholder="Город проживания">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="education">Образование</label>
+                        <select id="education">
+                            <option value="">Выберите образование</option>
+                            <option value="school">Среднее</option>
+                            <option value="college">Среднее специальное</option>
+                            <option value="bachelor">Бакалавр</option>
+                            <option value="master">Магистр</option>
+                            <option value="phd">Кандидат наук / PhD</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experience">Опыт работы (лет)</label>
+                        <input type="number" id="experience" placeholder="Опыт работы в годах">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="skills">Ключевые навыки</label>
+                        <textarea id="skills" placeholder="Перечислите ваши ключевые навыки через запятую"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interests">Интересы и предпочтения</label>
+                        <textarea id="interests" placeholder="Опишите ваши профессиональные интересы"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="salary">Желаемая зарплата (руб.)</label>
+                        <input type="number" id="salary" placeholder="Желаемый уровень дохода">
+                    </div>
+
+                    <button type="button" id="find-jobs">Найти подходящие вакансии</button>
+                </form>
+            </section>
+
+            <section class="results-section">
+                <div class="tabs">
+                    <div class="tab active" data-tab="vacancies">Вакансии</div>
+                    <div class="tab" data-tab="heatmap">Тепловая карта</div>
+                </div>
+
+                <div class="tab-content active" id="vacancies-tab">
+                    <h2>Подходящие вакансии</h2>
+                    <div id="vacancies-list">
+                        <div class="loading">Заполните форму и нажмите "Найти подходящие вакансии"</div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="heatmap-tab">
+                    <h2>Тепловая карта влияния слов</h2>
+                    <div class="heatmap-container">
+                        <p class="heatmap-title">Слова, которые повлияли на подбор вакансий:</p>
+                        <div id="word-impact-list">
+                            <div class="loading">Сначала найдите подходящие вакансии</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Генерация тестовых данных (300 вакансий)
+        function generateVacancies() {
+            const vacancies = [];
+            const jobTitles = [
+                "Frontend Developer", "Backend Developer", "Fullstack Developer",
+                "Data Scientist", "ML Engineer", "DevOps Engineer",
+                "Project Manager", "Product Manager", "UX/UI Designer",
+                "Marketing Manager", "Sales Manager", "Business Analyst",
+                "QA Engineer", "System Administrator", "Network Engineer",
+                "Content Manager", "SEO Specialist", "HR Manager",
+                "Financial Analyst", "Accountant", "Legal Counsel"
+            ];
+
+            const companies = [
+                "Яндекс", "Сбер", "Тинькофф", "МТС", "Билайн", "МегаФон",
+                "Ростелеком", "ВТБ", "Газпром", "Лукойл", "Роснефть",
+                "Ozon", "Wildberries", "Avito", "Lamoda", "Delivery Club"
+            ];
+
+            const locations = [
+                "Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург",
+                "Казань", "Нижний Новгород", "Челябинск", "Самара", "Ростов-на-Дону"
+            ];
+
+            const skills = [
+                "JavaScript", "Python", "Java", "C++", "React", "Vue", "Angular",
+                "Node.js", "Django", "Flask", "Spring", "SQL", "MongoDB", "PostgreSQL",
+                "Docker", "Kubernetes", "AWS", "Azure", "Git", "Linux", "Agile", "Scrum"
+            ];
+
+            for (let i = 0; i < 300; i++) {
+                vacancies.push({
+                    id: i,
+                    title: jobTitles[Math.floor(Math.random() * jobTitles.length)],
+                    company: companies[Math.floor(Math.random() * companies.length)],
+                    location: locations[Math.floor(Math.random() * locations.length)],
+                    salary: Math.floor(Math.random() * 200000) + 50000,
+                    description: `Требуется специалист с опытом работы от ${Math.floor(Math.random() * 5)} лет. Обязательные навыки: ${skills[Math.floor(Math.random() * skills.length)]}, ${skills[Math.floor(Math.random() * skills.length)]}.`,
+                    requiredSkills: [
+                        skills[Math.floor(Math.random() * skills.length)],
+                        skills[Math.floor(Math.random() * skills.length)],
+                        skills[Math.floor(Math.random() * skills.length)]
+                    ]
+                });
+            }
+            console.log(vacancies);
+            return vacancies;
+        }
+
+        // Упрощенный NLP для создания векторных представлений
+        function createTextVector(text) {
+            // Упрощенная токенизация и создание вектора
+            const words = text.toLowerCase()
+                .replace(/[^\w\sа-яё]/gi, '')
+                .split(/\s+/)
+                .filter(word => word.length > 2);
+
+            // Создание частотного вектора (в реальной системе это были бы эмбеддинги)
+            const vector = {};
+            words.forEach(word => {
+                vector[word] = (vector[word] || 0) + 1;
+            });
+
+            return vector;
+        }
+
+        // Упрощенная нейронная сеть для оценки соответствия
+        function neuralNetworkMatch(userProfile, vacancy) {
+            // Создание векторов из текстовых данных
+            const userSkillsVector = createTextVector(userProfile.skills + ' ' + userProfile.interests);
+            const vacancyVector = createTextVector(vacancy.description + ' ' + vacancy.requiredSkills.join(' '));
+
+            // Расчет косинусного сходства (упрощенная версия)
+            let dotProduct = 0;
+            let userMagnitude = 0;
+            let vacancyMagnitude = 0;
+
+            // Вычисление скалярного произведения и величин векторов
+            for (const word in userSkillsVector) {
+                if (vacancyVector[word]) {
+                    dotProduct += userSkillsVector[word] * vacancyVector[word];
+                }
+                userMagnitude += userSkillsVector[word] * userSkillsVector[word];
+            }
+
+            for (const word in vacancyVector) {
+                vacancyMagnitude += vacancyVector[word] * vacancyVector[word];
+            }
+
+            userMagnitude = Math.sqrt(userMagnitude);
+            vacancyMagnitude = Math.sqrt(vacancyMagnitude);
+
+            // Косинусное сходство
+            const similarity = userMagnitude && vacancyMagnitude ?
+                dotProduct / (userMagnitude * vacancyMagnitude) : 0;
+
+            // Учет других факторов (зарплата, местоположение, опыт)
+            let salaryMatch = 1;
+            if (userProfile.salary && vacancy.salary) {
+                salaryMatch = Math.min(1, vacancy.salary / userProfile.salary);
+            }
+
+            let locationMatch = userProfile.location && vacancy.location &&
+                userProfile.location.toLowerCase() === vacancy.location.toLowerCase() ? 1 : 0.5;
+
+            let experienceMatch = 1;
+            if (userProfile.experience) {
+                // Упрощенная логика соответствия опыта
+                experienceMatch = Math.min(1, userProfile.experience / 5);
+            }
+
+            // Общий балл соответствия
+            const totalScore = (similarity * 0.5) + (salaryMatch * 0.2) +
+                (locationMatch * 0.2) + (experienceMatch * 0.1);
+
+            return {
+                score: totalScore,
+                factors: {
+                    skills: similarity,
+                    salary: salaryMatch,
+                    location: locationMatch,
+                    experience: experienceMatch
+                }
+            };
+        }
+
+        // Создание тепловой карты влияния слов
+        function createHeatmap(userProfile, topVacancies) {
+            // Анализ наиболее влиятельных слов
+            const wordImpact = {};
+            const userWords = (userProfile.skills + ' ' + userProfile.interests)
+                .toLowerCase()
+                .replace(/[^\w\sа-яё]/gi, '')
+                .split(/\s+/)
+                .filter(word => word.length > 2);
+
+            // Подсчет встречаемости слов в топовых вакансиях
+            topVacancies.forEach(vacancy => {
+                const vacancyText = (vacancy.description + ' ' + vacancy.requiredSkills.join(' '))
+                    .toLowerCase()
+                    .replace(/[^\w\sа-яё]/gi, '')
+                    .split(/\s+/)
+                    .filter(word => word.length > 2);
+
+                userWords.forEach(word => {
+                    if (vacancyText.includes(word)) {
+                        wordImpact[word] = (wordImpact[word] || 0) + 1;
+                    }
+                });
+            });
+
+            // Нормализация оценок влияния
+            const maxImpact = Math.max(...Object.values(wordImpact));
+            const impactLevels = {};
+
+            for (const word in wordImpact) {
+                const normalizedImpact = wordImpact[word] / maxImpact;
+                if (normalizedImpact > 0.7) {
+                    impactLevels[word] = 'high';
+                } else if (normalizedImpact > 0.4) {
+                    impactLevels[word] = 'medium';
+                } else {
+                    impactLevels[word] = 'low';
+                }
+            }
+
+            return impactLevels;
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const vacancies = generateVacancies();
+            const findJobsButton = document.getElementById('find-jobs');
+            const vacanciesList = document.getElementById('vacancies-list');
+            const wordImpactList = document.getElementById('word-impact-list');
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            // Обработчик переключения вкладок
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+
+            // Обработчик поиска вакансий
+            findJobsButton.addEventListener('click', function() {
+                // Получение данных из формы
+                const userProfile = {
+                    name: document.getElementById('name').value,
+                    age: parseInt(document.getElementById('age').value) || 0,
+                    location: document.getElementById('location').value,
+                    education: document.getElementById('education').value,
+                    experience: parseInt(document.getElementById('experience').value) || 0,
+                    skills: document.getElementById('skills').value,
+                    interests: document.getElementById('interests').value,
+                    salary: parseInt(document.getElementById('salary').value) || 0
+                };
+
+                // Проверка заполнения обязательных полей
+                if (!userProfile.skills || !userProfile.interests) {
+                    vacanciesList.innerHTML = '<div class="loading">Пожалуйста, заполните поля "Ключевые навыки" и "Интересы и предпочтения"</div>';
+                    return;
+                }
+
+                vacanciesList.innerHTML = '<div class="loading">Идёт поиск подходящих вакансий...</div>';
+
+                // Имитация загрузки
+                setTimeout(() => {
+                    // Оценка соответствия для всех вакансий
+                    const scoredVacancies = vacancies.map(vacancy => {
+                        const matchResult = neuralNetworkMatch(userProfile, vacancy);
+                        return {
+                            ...vacancy,
+                            matchScore: matchResult.score,
+                            factors: matchResult.factors
+                        };
+                    });
+
+                    // Сортировка по релевантности
+                    scoredVacancies.sort((a, b) => b.matchScore - a.matchScore);
+
+                    // Отображение топ-10 вакансий
+                    const topVacancies = scoredVacancies.slice(0, 10);
+                    displayVacancies(topVacancies);
+
+                    // Создание и отображение тепловой карты
+                    const heatmap = createHeatmap(userProfile, topVacancies);
+                    displayHeatmap(heatmap);
+                }, 1500);
+            });
+
+            // Функция отображения вакансий
+            function displayVacancies(vacancies) {
+                if (vacancies.length === 0) {
+                    vacanciesList.innerHTML = '<div class="loading">К сожалению, подходящих вакансий не найдено</div>';
+                    return;
+                }
+
+                let html = '';
+                vacancies.forEach(vacancy => {
+                    const scorePercent = Math.round(vacancy.matchScore * 100);
+                    html += `
+                        <div class="vacancy-card">
+                            <div class="vacancy-title">${vacancy.title}</div>
+                            <div class="vacancy-company">${vacancy.company}</div>
+                            <div>${vacancy.location}</div>
+                            <div>Зарплата: ${vacancy.salary.toLocaleString()} руб.</div>
+                            <div>${vacancy.description}</div>
+                            <div class="match-score">Совпадение: ${scorePercent}%</div>
+                        </div>
+                    `;
+                });
+
+                vacanciesList.innerHTML = html;
+            }
+
+            // Функция отображения тепловой карты
+            function displayHeatmap(heatmap) {
+                if (Object.keys(heatmap).length === 0) {
+                    wordImpactList.innerHTML = '<div class="loading">Недостаточно данных для построения тепловой карты</div>';
+                    return;
+                }
+
+                let html = '';
+                for (const word in heatmap) {
+                    const impactClass = `impact-${heatmap[word]}`;
+                    html += `<span class="word-impact ${impactClass}">${word}</span>`;
+                }
+
+                wordImpactList.innerHTML = html;
+            }
+        });
+    </script>
+</body>
+</html>

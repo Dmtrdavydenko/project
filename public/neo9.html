@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Персональный подбор работы — на чистом JS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        canvas {
+            border: 1px solid #ccc;
+            margin: 20px 0;
+            background: white;
+        }
+
+        .result {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 15px 0;
+        }
+
+        .heatmap-title {
+            font-size: 16px;
+            color: #34495e;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Персональный подбор работы по резюме (Биржа труда РФ)</h1>
+    <p>Вставьте текст резюме или вакансии — система определит подходящую профессию и покажет, какие буквы повлияли больше всего.</p>
+
+    <textarea id="inputText" placeholder="Например: 'Ищу работу в области машинного обучения, опыт с нейросетями, Python, PyTorch, ReLU'"></textarea>
+    <button onclick="processText()">Анализировать</button>
+
+    <div class="result" id="result">Результат появится здесь...</div>
+
+    <div class="heatmap-title">🌡️ Тепловая карта активации по буквам (в порядке появления)</div>
+    <canvas id="heatmapCanvas" width="800" height="100"></canvas>
+
+    <script src="js/nn9.js"></script>
+</body>
+</html>

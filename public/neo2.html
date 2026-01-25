@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Экспертная система подбора профессии</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .question {
+            background: white;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+
+            button:hover {
+                background: #2980b9;
+            }
+
+        #mic-btn {
+            background: #e74c3c;
+        }
+
+            #mic-btn.active {
+                background: #c0392b;
+            }
+
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            background: #ecf0f1;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-left: 4px solid #27ae60;
+        }
+
+        .loading {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Экспертная система подбора профессии</h1>
+    <p>Ответьте на вопросы — система подберёт вам идеальную карьеру. Можно вводить текст или говорить!</p>
+
+    <div id="form-container">
+        <!-- Вопросы -->
+        <div class="question">
+            <label>1. Как вы описываете свою энергичность? (Экстраверт / Интроверт)</label>
+            <input type="text" id="q1" placeholder="Например: я люблю общаться с людьми" />
+            <button id="mic-btn">🎤 Говорить</button>
+        </div>
+
+        <div class="question">
+            <label>2. Что для вас важнее всего в работе?</label>
+            <select id="q2">
+                <option value="">Выберите...</option>
+                <option value="деньги">Деньги</option>
+                <option value="свобода">Свобода / гибкий график</option>
+                <option value="стабильность">Стабильность</option>
+                <option value="творчество">Творчество</option>
+                <option value="помощь">Помогать другим</option>
+                <option value="влияние">Влияние / лидерство</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>3. Как вы относитесь к рутине?</label>
+            <select id="q3">
+                <option value="">Выберите...</option>
+                <option value="ненавижу">Ненавижу — хочу новизны</option>
+                <option value="терпимо">Терпимо — можно и рутину</option>
+                <option value="люблю">Люблю — структура меня успокаивает</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>4. Какие навыки у вас развиты лучше всего? (например: писать, считать, рисовать, общаться)</label>
+            <textarea id="q4" rows="3" placeholder="Напишите ваши сильные стороны..."></textarea>
+            <button id="mic-btn2">🎤 Говорить</button>
+        </div>
+
+        <div class="question">
+            <label>5. Вы предпочитаете работать:</label>
+            <select id="q5">
+                <option value="">Выберите...</option>
+                <option value="один">Один / удалённо</option>
+                <option value="команда">В команде</option>
+                <option value="клиенты">С клиентами / публично</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>6. Насколько вы стрессоустойчивы?</label>
+            <select id="q6">
+                <option value="">Выберите...</option>
+                <option value="высокая">Высокая — работаю в кризисах</option>
+                <option value="средняя">Средняя — могу, но не часто</option>
+                <option value="низкая">Низкая — нужен спокойный график</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>7. Какой уровень дохода вас устроит через 3 года?</label>
+            <select id="q7">
+                <option value="">Выберите...</option>
+                <option value="минимальный">Минимальный — для жизни</option>
+                <option value="средний">Средний — комфортно</option>
+                <option value="высокий">Высокий — больше 150к/мес</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>8. Готовы ли вы проходить долгое обучение (2+ года)?</label>
+            <select id="q8">
+                <option value="">Выберите...</option>
+                <option value="да">Да</option>
+                <option value="нет">Нет</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>9. Какие темы вас увлекают? (наука, искусство, технологии, природа, спорт и т.д.)</label>
+            <textarea id="q9" rows="3" placeholder="Например: космос, психология, код, книги"></textarea>
+            <button id="mic-btn3">🎤 Говорить</button>
+        </div>
+
+        <div class="question">
+            <label>10. Какой график вам подходит?</label>
+            <select id="q10">
+                <option value="">Выберите...</option>
+                <option value="9-18">9:00–18:00 (офис)</option>
+                <option value="гибкий">Гибкий</option>
+                <option value="ночной">Ночной / сменный</option>
+                <option value="удалёнка">Удалёнка / фриланс</option>
+            </select>
+        </div>
+
+        <button id="submit-btn">🔍 Получить рекомендации</button>
+    </div>
+
+    <div id="loading" class="loading" style="display: none;">Анализируем ваши ответы... 🤖</div>
+    <div id="results">
+        <h2>🎯 Ваши рекомендуемые профессии:</h2>
+        <div id="results-list"></div>
+    </div>
+
+    <script>
+    // База знаний: профессии и их характеристики
+    const professions = [
+      {
+        name: "Программист / Разработчик",
+        traits: { q1: "интроверт", q2: "свобода", q3: "терпимо", q4: ["код", "логика", "анализ", "технологии"], q5: "один", q6: "высокая", q7: "высокий", q8: "да", q9: ["технологии", "наука", "компьютеры"], q10: "удалёнка" },
+        score: 0
+      },
+      {
+        name: "Психолог / Коуч",
+        traits: { q1: "интроверт", q2: "помощь", q3: "терпимо", q4: ["общаться", "понимать", "слушать"], q5: "клиенты", q6: "средняя", q7: "средний", q8: "да", q9: ["психология", "люди", "чувства"], q10: "гибкий" },
+        score: 0
+      },
+      {
+        name: "Маркетолог / Контент-менеджер",
+        traits: { q1: "экстраверт", q2: "творчество", q3: "ненавижу", q4: ["писать", "творить", "анализировать"], q5: "команда", q6: "средняя", q7: "средний", q8: "нет", q9: ["искусство", "медиа", "соцсети"], q10: "гибкий" },
+        score: 0
+      },
+      {
+        name: "Учитель / Преподаватель",
+        traits: { q1: "экстраверт", q2: "помощь", q3: "люблю", q4: ["объяснять", "организовывать", "помогать"], q5: "клиенты", q6: "низкая", q7: "средний", q8: "да", q9: ["образование", "дети", "наука"], q10: "9-18" },
+        score: 0
+      },
+      {
+        name: "Фрилансер / Дизайнер",
+        traits: { q1: "интроверт", q2: "свобода", q3: "ненавижу", q4: ["рисовать", "дизайн", "творчество"], q5: "один", q6: "средняя", q7: "средний", q8: "нет", q9: ["искусство", "дизайн", "красота"], q10: "удалёнка" },
+        score: 0
+      },
+      {
+        name: "Врач / Медсестра",
+        traits: { q1: "экстраверт", q2: "помощь", q3: "терпимо", q4: ["заботиться", "быстро реагировать"], q5: "клиенты", q6: "высокая", q7: "средний", q8: "да", q9: ["медицина", "здоровье", "люди"], q10: "сменный" },
+        score: 0
+      },
+      {
+        name: "Бухгалтер / Аналитик",
+        traits: { q1: "интроверт", q2: "стабильность", q3: "люблю", q4: ["считать", "анализировать", "точность"], q5: "один", q6: "низкая", q7: "средний", q8: "да", q9: ["финансы", "данные", "числа"], q10: "9-18" },
+        score: 0
+      },
+      {
+        name: "Предприниматель / Стартапер",
+        traits: { q1: "экстраверт", q2: "влияние", q3: "ненавижу", q4: ["управлять", "продавать", "инициатива"], q5: "клиенты", q6: "высокая", q7: "высокий", q8: "да", q9: ["бизнес", "инновации", "рынок"], q10: "гибкий" },
+        score: 0
+      }
+    ];
+
+    // Инициализация распознавания речи
+    let recognition;
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'ru-RU';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+    } else {
+      console.warn('Распознавание речи не поддерживается в вашем браузере.');
+    }
+
+    // Привязка микрофонов
+    document.getElementById('mic-btn').addEventListener('click', () => speechInput('q1'));
+    document.getElementById('mic-btn2').addEventListener('click', () => speechInput('q4'));
+    document.getElementById('mic-btn3').addEventListener('click', () => speechInput('q9'));
+
+    function speechInput(fieldId) {
+      if (!recognition) {
+        alert('Распознавание речи не поддерживается. Пожалуйста, введите текст вручную.');
+        return;
+      }
+
+      const btn = document.getElementById(`mic-btn${fieldId === 'q1' ? '' : fieldId === 'q4' ? '2' : '3'}`);
+      btn.textContent = '听着...';
+      btn.classList.add('active');
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById(fieldId).value = transcript;
+        btn.textContent = '🎤 Говорить';
+        btn.classList.remove('active');
+      };
+
+      recognition.onerror = () => {
+        btn.textContent = '🎤 Говорить';
+        btn.classList.remove('active');
+        alert('Ошибка распознавания. Попробуйте ещё раз.');
+      };
+
+      recognition.onend = () => {
+        btn.textContent = '🎤 Говорить';
+        btn.classList.remove('active');
+      };
+
+      recognition.start();
+    }
+
+    // Обработка формы
+    document.getElementById('submit-btn').addEventListener('click', () => {
+      const answers = {
+        q1: document.getElementById('q1').value.toLowerCase(),
+        q2: document.getElementById('q2').value,
+        q3: document.getElementById('q3').value,
+        q4: document.getElementById('q4').value.toLowerCase(),
+        q5: document.getElementById('q5').value,
+        q6: document.getElementById('q6').value,
+        q7: document.getElementById('q7').value,
+        q8: document.getElementById('q8').value,
+        q9: document.getElementById('q9').value.toLowerCase(),
+        q10: document.getElementById('q10').value
+      };
+
+      // Проверка на пустые обязательные поля
+      const required = ['q2', 'q3', 'q5', 'q6', 'q7', 'q8', 'q10'];
+      for (let key of required) {
+        if (!answers[key]) {
+          alert(`Пожалуйста, ответьте на вопрос: ${['Важность в работе', 'Отношение к рутине', 'Стиль работы', 'Стрессоустойчивость', 'Доход', 'Обучение', 'График'][required.indexOf(key)]}`);
+          return;
+        }
+      }
+
+      // Показать загрузку
+      document.getElementById('form-container').style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('results').style.display = 'none';
+
+      // Задержка для эффекта загрузки
+      setTimeout(() => {
+        calculateRecommendations(answers);
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('results').style.display = 'block';
+      }, 1500);
+    });
+
+    function calculateRecommendations(answers) {
+      const resultsList = document.getElementById('results-list');
+      resultsList.innerHTML = '';
+
+      // Копируем профессии для оценки
+      const scoredProfessions = [...professions];
+
+      scoredProfessions.forEach(prof => {
+        let score = 0;
+        const traits = prof.traits;
+
+        // Проверка по каждому вопросу
+        for (let q in traits) {
+          if (!answers[q]) continue;
+
+          const expected = traits[q];
+          const actual = answers[q];
+
+          if (Array.isArray(expected)) {
+            // Для списков (q4, q9): ищем совпадения по ключевым словам
+            let matches = 0;
+            expected.forEach(keyword => {
+              if (actual.includes(keyword)) matches++;
+            });
+            score += matches * 2; // Каждое совпадение = 2 балла
+          } else {
+            // Для точных совпадений (q1, q2 и т.д.)
+            if (actual.includes(expected) || expected.includes(actual)) {
+              score += 5;
+            }
+          }
+        }
+
+        // Бонусы за полные совпадения
+        if (answers.q2 === traits.q2) score += 3;
+        if (answers.q5 === traits.q5) score += 3;
+        if (answers.q10 === traits.q10) score += 3;
+
+        prof.score = score;
+      });
+
+      // Сортируем по баллам
+      scoredProfessions.sort((a, b) => b.score - a.score);
+
+      // Выводим топ-5
+      const topProfessions = scoredProfessions.filter(p => p.score > 0).slice(0, 5);
+
+      if (topProfessions.length === 0) {
+        resultsList.innerHTML = '<p class="result-item">К сожалению, не удалось найти подходящие профессии. Попробуйте уточнить ответы.</p>';
+        return;
+      }
+
+      topProfessions.forEach(prof => {
+        const item = document.createElement('div');
+        item.className = 'result-item';
+        item.innerHTML = `
+          <strong>${prof.name}</strong><br>
+          <small>Совместимость: ${prof.score}/50</small>
+        `;
+        resultsList.appendChild(item);
+      });
+    }
+    </script>
+</body>
+</html>
