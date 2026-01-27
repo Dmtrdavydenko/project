@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLP с векторными представлениями и нечеткой логикой</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+            button:hover {
+                background: #0056b3;
+            }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+
+        .vector-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            margin: 10px 0;
+        }
+
+        .vector-cell {
+            width: 20px;
+            height: 20px;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            border-radius: 2px;
+        }
+
+            .vector-cell.active {
+                background: #007bff;
+                color: white;
+            }
+
+        .similarity-bar {
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+
+        .similarity-fill {
+            height: 100%;
+            background: #28a745;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NML система с векторными представлениями</h1>
+
+        <div>
+            <h3>Введите текст для анализа:</h3>
+            <textarea id="inputText" placeholder="Введите ваш текст здесь...">Привет я хочу найти работу в городе москва возраст 39 лет вес 68 кг фобий нет аллергий нет</textarea>
+            <button onclick="analyzeText()">Анализировать текст</button>
+        </div>
+
+        <div>
+            <h3>Тестовые запросы для сравнения:</h3>
+            <button onclick="testQuery('работа программист')">💻 Работа программистом</button>
+            <button onclick="testQuery('москва возраст 30')">🏢 Москва, возраст 30</button>
+            <button onclick="testQuery('здоровье аллергия')">🏥 Здоровье, аллергии</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Алфавит и константы
+        const RU_ALPHABET = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя';
+        const EN_ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
+        const COMBINED_ALPHABET = RU_ALPHABET + EN_ALPHABET + '0123456789 ';
+
+        // Создание нормализованного массива для кодирования символов
+        function createNormalizedArray(min, max, count) {
+            const result = [];
+            const step = (max - min) / (count - 1);
+
+            for (let i = 0; i < count; i++) {
+                const value = min + i * step;
+                const normalizedValue = (value - min) / (max - min);
+                result.push(normalizedValue);
+            }
+
+            return result;
+        }
+
+        const normalizedArray = createNormalizedArray(0, COMBINED_ALPHABET.length, COMBINED_ALPHABET.length);
+
+        // Нормализация текста
+        function normalizeText(text) {
+            return text
+                .toLowerCase()
+                .replace(/[^a-zа-яё0-9\s]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        // Создание векторного представления текста
+        function textToVector(text) {
+            const normalizedText = normalizeText(text);
+            const vector = new Array(COMBINED_ALPHABET.length).fill(0);
+
+            for (let char of normalizedText) {
+                const index = COMBINED_ALPHABET.indexOf(char);
+                if (index !== -1) {
+                    vector[index] += normalizedArray[index];
+                }
+            }
+
+            // Нормализация вектора
+            const magnitude = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
+            return magnitude > 0 ? vector.map(val => val / magnitude) : vector;
+        }
+
+        // Функция нечеткого сравнения (косинусное сходство)
+        function fuzzySimilarity(vec1, vec2) {
+            if (vec1.length !== vec2.length) return 0;
+
+            let dotProduct = 0;
+            let mag1 = 0;
+            let mag2 = 0;
+
+            for (let i = 0; i < vec1.length; i++) {
+                dotProduct += vec1[i] * vec2[i];
+                mag1 += vec1[i] * vec1[i];
+                mag2 += vec2[i] * vec2[i];
+            }
+
+            mag1 = Math.sqrt(mag1);
+            mag2 = Math.sqrt(mag2);
+
+            return mag1 > 0 && mag2 > 0 ? dotProduct / (mag1 * mag2) : 0;
+        }
+
+        // Простая ML-модель для классификации
+        class SimpleMLModel {
+            constructor() {
+                this.patterns = {
+                    'работа': textToVector('работа трудоустройство вакансия карьера'),
+                    'программист': textToVector('программист разработчик it код python java javasctipt'),
+                    'город': textToVector('барнаул столица город'),
+                    'возраст': textToVector('возраст лет год рождения'),
+                    'здоровье': textToVector('здоровье аллергия болезнь фобия вес кг рост см 0123456789'),
+                };
+            }
+
+            predict(text) {
+                const vector = textToVector(text);
+                const results = [];
+
+                for (const [category, patternVector] of Object.entries(this.patterns)) {
+                    const similarity = fuzzySimilarity(vector, patternVector);
+                    results.push({ 
+                        category,
+                        similarity: similarity,
+                        confidence: this.fuzzyConfidence(similarity)
+                    });
+                }
+                return results.sort((a, b) => b.similarity - a.similarity);
+            }
+
+            fuzzyConfidence(similarity) {
+                // Нечеткая логика для определения уверенности
+                if (similarity > 0.8) return 'очень высокая';
+                if (similarity > 0.6) return 'высокая';
+                if (similarity > 0.4) return 'средняя';
+                if (similarity > 0.2) return 'низкая';
+                return 'очень низкая';
+            }
+        }
+
+        // Инициализация модели
+        const mlModel = new SimpleMLModel();
+
+        // Функция анализа текста
+        function analyzeText() {
+            const inputText = document.getElementById('inputText').value;
+            const resultsDiv = document.getElementById('results');
+
+            if (!inputText.trim()) {
+                resultsDiv.innerHTML = '<div class="result">Пожалуйста, введите текст для анализа</div>';
+                return;
+            }
+
+            const vector = textToVector(inputText);
+            const predictions = mlModel.predict(inputText);
+
+            let html = `
+                    <div class="result">
+                        <h3>Анализ текста:</h3>
+                        <p><strong>Оригинальный текст:</strong> "${inputText}"</p>
+                        <p><strong>Нормализованный текст:</strong> "${normalizeText(inputText)}"</p>
+
+                        <h4>Векторное представление (первые 50 элементов):</h4>
+                        <div class="vector-visual">
+                `;
+
+            // Визуализация вектора
+            for (let i = 0; i < Math.min(70, vector.length); i++) {
+                const isActive = vector[i] > 0.01;
+                html += `<div class="vector-cell ${isActive ? 'active' : ''}" title="${COMBINED_ALPHABET[i]}: ${vector[i].toFixed(3)}">${isActive ? '●' : '○'}</div>`;
+            }
+
+            html += `</div><p>Размерность вектора: ${vector.length}</p>`;
+
+            html += `<h4>Результаты классификации:</h4>`;
+
+            predictions.forEach(pred => {
+                const width = Math.max(5, pred.similarity * 100);
+                html += `
+                        <div>
+                            <strong>${pred.category}</strong>
+                            <div class="similarity-bar">
+                                <div class="similarity-fill" style="width: ${width}%"></div>
+                            </div>
+                            <span>Сходство: ${(pred.similarity * 100).toFixed(1)}% (${pred.confidence})</span>
+                        </div>
+                    `;
+            });
+
+            // Дополнительный анализ ключевых слов
+            const words = normalizeText(inputText).split(' ');
+            const uniqueWords = [...new Set(words)];
+
+            html += `<h4>Ключевые слова:</h4><ul>`;
+            uniqueWords.forEach(word => {
+                if (word.length > 2) {
+                    html += `<li>${word}</li>`;
+                }
+            });
+            html += `</ul>`;
+
+            html += `</div>`;
+            resultsDiv.innerHTML = html;
+        }
+
+        // Функция для тестовых запросов
+        function testQuery(query) {
+            document.getElementById('inputText').value = query;
+            analyzeText();
+        }
+
+        // Автоматический анализ при загрузке
+        window.onload = function () {
+            analyzeText();
+        };
+    </script>
+</body>
+</html>

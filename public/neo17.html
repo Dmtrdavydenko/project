@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система обработки нечеткой логики</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .rule {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Система обработки нечеткой логики</h1>
+
+        <div class="section">
+            <h2>Функции принадлежности</h2>
+            <div class="input-group">
+                <label>Выберите тип функции принадлежности:</label>
+                <select id="membershipType">
+                    <option value="triangle">Треугольная</option>
+                    <option value="trapezoid">Трапециевидная</option>
+                    <option value="gaussian">Гауссова</option>
+                </select>
+            </div>
+            <div id="paramsContainer"></div>
+            <button id="plotMembership">Построить график</button>
+            <div class="chart-container">
+                <canvas id="membershipChart"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Нечеткие операции</h2>
+            <div class="input-group">
+                <label>Операция:</label>
+                <select id="fuzzyOperation">
+                    <option value="union">Объединение</option>
+                    <option value="intersection">Пересечение</option>
+                    <option value="complement">Дополнение</option>
+                </select>
+            </div>
+            <div id="operationParams"></div>
+            <button id="performOperation">Выполнить операцию</button>
+            <div class="result" id="operationResult"></div>
+        </div>
+
+        <div class="section">
+            <h2>Нечеткий вывод</h2>
+            <div class="input-group">
+                <label>Входное значение:</label>
+                <input type="number" id="inputValue" step="0.1">
+            </div>
+            <div class="input-group">
+                <label>Правила:</label>
+                <div id="rulesContainer">
+                    <div class="rule">
+                        <input type="text" class="rule-input" placeholder="Если X низкий, то Y малый">
+                    </div>
+                </div>
+                <button id="addRule">Добавить правило</button>
+            </div>
+            <button id="performInference">Выполнить вывод</button>
+            <div class="result" id="inferenceResult"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Объекты для хранения данных
+        let membershipChart = null;
+        let fuzzySets = {};
+
+        // Функции принадлежности
+        function triangularMF(x, a, b, c) {
+            if (x <= a) return 0;
+            if (x > a && x <= b) return (x - a) / (b - a);
+            if (x > b && x <= c) return (c - x) / (c - b);
+            return 0;
+        }
+
+        function trapezoidalMF(x, a, b, c, d) {
+            if (x <= a) return 0;
+            if (x > a && x <= b) return (x - a) / (b - a);
+            if (x > b && x <= c) return 1;
+            if (x > c && x <= d) return (d - x) / (d - c);
+            return 0;
+        }
+
+        function gaussianMF(x, mean, sigma) {
+            return Math.exp(-Math.pow(x - mean, 2) / (2 * Math.pow(sigma, 2)));
+        }
+
+        // Нечеткие операции
+        function fuzzyUnion(setA, setB) {
+            const result = {};
+            const allKeys = new Set([...Object.keys(setA), ...Object.keys(setB)]);
+
+            for (let key of allKeys) {
+                const valueA = setA[key] || 0;
+                const valueB = setB[key] || 0;
+                result[key] = Math.max(valueA, valueB);
+            }
+
+            return result;
+        }
+
+        function fuzzyIntersection(setA, setB) {
+            const result = {};
+            const allKeys = new Set([...Object.keys(setA), ...Object.keys(setB)]);
+
+            for (let key of allKeys) {
+                const valueA = setA[key] || 0;
+                const valueB = setB[key] || 0;
+                result[key] = Math.min(valueA, valueB);
+            }
+
+            return result;
+        }
+
+        function fuzzyComplement(set) {
+            const result = {};
+            for (let key in set) {
+                result[key] = 1 - set[key];
+            }
+            return result;
+        }
+
+        // Инициализация интерфейса
+        document.addEventListener('DOMContentLoaded', function() {
+            updateMembershipParams();
+            updateOperationParams();
+
+            // Обработчики событий
+            document.getElementById('membershipType').addEventListener('change', updateMembershipParams);
+            document.getElementById('fuzzyOperation').addEventListener('change', updateOperationParams);
+            document.getElementById('plotMembership').addEventListener('click', plotMembershipFunction);
+            document.getElementById('performOperation').addEventListener('click', performFuzzyOperation);
+            document.getElementById('addRule').addEventListener('click', addRule);
+            document.getElementById('performInference').addEventListener('click', performInference);
+        });
+
+        // Обновление параметров функции принадлежности
+        function updateMembershipParams() {
+            const type = document.getElementById('membershipType').value;
+            const container = document.getElementById('paramsContainer');
+
+            let html = '';
+            switch(type) {
+                case 'triangle':
+                    html = `
+                        <div class="input-group">
+                            <label>Параметр a:</label>
+                            <input type="number" id="paramA" value="0" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label>Параметр b:</label>
+                            <input type="number" id="paramB" value="5" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label>Параметр c:</label>
+                            <input type="number" id="paramC" value="10" step="0.1">
+                        </div>
+                    `;
+                    break;
+                case 'trapezoid':
+                    html = `
+                        <div class="input-group">
+                            <label>Параметр a:</label>
+                            <input type="number" id="paramA" value="0" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label>Параметр b:</label>
+                            <input type="number" id="paramB" value="3" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label>Параметр c:</label>
+                            <input type="number" id="paramC" value="7" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label>Параметр d:</label>
+                            <input type="number" id="paramD" value="10" step="0.1">
+                        </div>
+                    `;
+                    break;
+                case 'gaussian':
+                    html = `
+                        <div class="input-group">
+                            <label>Среднее значение (mean):</label>
+                            <input type="number" id="paramMean" value="5" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label>Стандартное отклонение (sigma):</label>
+                            <input type="number" id="paramSigma" value="1.5" step="0.1">
+                        </div>
+                    `;
+                    break;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Обновление параметров операции
+        function updateOperationParams() {
+            const operation = document.getElementById('fuzzyOperation').value;
+            const container = document.getElementById('operationParams');
+
+            let html = '';
+            if (operation !== 'complement') {
+                html = `
+                    <div class="input-group">
+                        <label>Множество A (через запятую: значение:степень):</label>
+                        <input type="text" id="setA" value="1:0.2, 2:0.5, 3:0.8, 4:1.0, 5:0.8, 6:0.5, 7:0.2">
+                    </div>
+                    <div class="input-group">
+                        <label>Множество B (через запятую: значение:степень):</label>
+                        <input type="text" id="setB" value="3:0.1, 4:0.3, 5:0.6, 6:0.9, 7:1.0, 8:0.9, 9:0.6">
+                    </div>
+                `;
+            } else {
+                html = `
+                    <div class="input-group">
+                        <label>Множество (через запятую: значение:степень):</label>
+                        <input type="text" id="setA" value="1:0.2, 2:0.5, 3:0.8, 4:1.0, 5:0.8, 6:0.5, 7:0.2">
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Построение графика функции принадлежности
+        function plotMembershipFunction() {
+            const type = document.getElementById('membershipType').value;
+            const canvas = document.getElementById('membershipChart');
+            const ctx = canvas.getContext('2d');
+
+            // Очистка предыдущего графика
+            if (membershipChart) {
+                membershipChart.destroy();
+            }
+
+            // Генерация данных
+            const labels = [];
+            const data = [];
+
+            for (let x = 0; x <= 10; x += 0.1) {
+                labels.push(x.toFixed(1));
+
+                let value = 0;
+                switch(type) {
+                    case 'triangle':
+                        const a = parseFloat(document.getElementById('paramA').value);
+                        const b = parseFloat(document.getElementById('paramB').value);
+                        const c = parseFloat(document.getElementById('paramC').value);
+                        value = triangularMF(x, a, b, c);
+                        break;
+                    case 'trapezoid':
+                        const a_trap = parseFloat(document.getElementById('paramA').value);
+                        const b_trap = parseFloat(document.getElementById('paramB').value);
+                        const c_trap = parseFloat(document.getElementById('paramC').value);
+                        const d = parseFloat(document.getElementById('paramD').value);
+                        value = trapezoidalMF(x, a_trap, b_trap, c_trap, d);
+                        break;
+                    case 'gaussian':
+                        const mean = parseFloat(document.getElementById('paramMean').value);
+                        const sigma = parseFloat(document.getElementById('paramSigma').value);
+                        value = gaussianMF(x, mean, sigma);
+                        break;
+                }
+
+                data.push(value);
+            }
+
+            // Создание графика
+            membershipChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Функция принадлежности',
+                        data: data,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'X'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Степень принадлежности'
+                            },
+                            min: 0,
+                            max: 1
+                        }
+                    }
+                }
+            });
+        }
+
+        // Выполнение нечеткой операции
+        function performFuzzyOperation() {
+            const operation = document.getElementById('fuzzyOperation').value;
+            const resultContainer = document.getElementById('operationResult');
+
+            try {
+                let result = {};
+
+                if (operation !== 'complement') {
+                    const setAStr = document.getElementById('setA').value;
+                    const setBStr = document.getElementById('setB').value;
+
+                    const setA = parseFuzzySet(setAStr);
+                    const setB = parseFuzzySet(setBStr);
+
+                    if (operation === 'union') {
+                        result = fuzzyUnion(setA, setB);
+                    } else if (operation === 'intersection') {
+                        result = fuzzyIntersection(setA, setB);
+                    }
+                } else {
+                    const setAStr = document.getElementById('setA').value;
+                    const setA = parseFuzzySet(setAStr);
+                    result = fuzzyComplement(setA);
+                }
+
+                resultContainer.textContent = formatFuzzySet(result);
+            } catch (error) {
+                resultContainer.textContent = 'Ошибка: ' + error.message;
+            }
+        }
+
+        // Парсинг нечеткого множества из строки
+        function parseFuzzySet(str) {
+            const set = {};
+            const pairs = str.split(',');
+
+            for (let pair of pairs) {
+                const [key, value] = pair.split(':').map(s => s.trim());
+                set[key] = parseFloat(value);
+            }
+
+            return set;
+        }
+
+        // Форматирование нечеткого множества для вывода
+        function formatFuzzySet(set) {
+            let result = '{ ';
+            const entries = Object.entries(set);
+
+            for (let i = 0; i < entries.length; i++) {
+                const [key, value] = entries[i];
+                result += `${key}/${value.toFixed(2)}`;
+                if (i < entries.length - 1) result += ', ';
+            }
+
+            result += ' }';
+            return result;
+        }
+
+        // Добавление правила
+        function addRule() {
+            const container = document.getElementById('rulesContainer');
+            const newRule = document.createElement('div');
+            newRule.className = 'rule';
+            newRule.innerHTML = '<input type="text" class="rule-input" placeholder="Если X низкий, то Y малый">';
+            container.appendChild(newRule);
+        }
+
+        // Выполнение нечеткого вывода
+        function performInference() {
+            const inputValue = parseFloat(document.getElementById('inputValue').value);
+            const resultContainer = document.getElementById('inferenceResult');
+
+            if (isNaN(inputValue)) {
+                resultContainer.textContent = 'Введите корректное входное значение';
+                return;
+            }
+
+            // Простой пример нечеткого вывода
+            // Определяем функции принадлежности для входной переменной
+            const lowMF = triangularMF(inputValue, 0, 0, 5);
+            const mediumMF = triangularMF(inputValue, 0, 5, 10);
+            const highMF = triangularMF(inputValue, 5, 10, 10);
+
+            // Собираем правила
+            const ruleInputs = document.querySelectorAll('.rule-input');
+            const rules = [];
+
+            for (let input of ruleInputs) {
+                if (input.value.trim() !== '') {
+                    rules.push(input.value);
+                }
+            }
+
+            // Простой вывод (в реальной системе здесь была бы более сложная логика)
+            let output = '';
+            output += `Входное значение: ${inputValue}\n`;
+            output += `Степень принадлежности к "низкий": ${lowMF.toFixed(2)}\n`;
+            output += `Степень принадлежности к "средний": ${mediumMF.toFixed(2)}\n`;
+            output += `Степень принадлежности к "высокий": ${highMF.toFixed(2)}\n\n`;
+            output += `Примененные правила:\n`;
+
+            for (let rule of rules) {
+                output += `- ${rule}\n`;
+            }
+
+            output += `\nРезультат: ${(lowMF * 10 + mediumMF * 50 + highMF * 90).toFixed(2)}`;
+
+            resultContainer.textContent = output;
+        }
+    </script>
+</body>
+</html>

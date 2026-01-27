@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Классификация слов по категориям</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+        .category-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .category-item {
+            background-color: #e0e0e0;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+            .category-item button {
+                background-color: #f44336;
+                margin-left: 5px;
+                padding: 2px 6px;
+                font-size: 12px;
+            }
+
+        #visualization {
+            border: 1px solid #ddd;
+            background-color: white;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            flex-grow: 1;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .color-box {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="panel">
+            <h1>Классификация слов по категориям</h1>
+            <p>Добавьте слова и категории для обучения модели. Затем введите новые слова для классификации.</p>
+        </div>
+
+        <div class="panel">
+            <h2>Добавление категорий и слов</h2>
+            <div class="controls">
+                <input type="text" id="categoryInput" placeholder="Название категории">
+                <input type="text" id="wordInput" placeholder="Слово для этой категории">
+                <button id="addWordBtn">Добавить слово</button>
+            </div>
+            <div class="category-list" id="categoriesContainer">
+                <!-- Категории будут добавляться здесь -->
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Классификация новых слов</h2>
+            <textarea id="newWordsInput" placeholder="Введите слова для классификации (через запятую)"></textarea>
+            <button id="classifyBtn">Классифицировать</button>
+            <div id="classificationResults"></div>
+        </div>
+
+        <div class="panel">
+            <h2>Визуализация</h2>
+            <canvas id="visualization" width="800" height="600"></canvas>
+            <div class="legend" id="legend"></div>
+        </div>
+    </div>
+
+    <script>
+        // Модель машинного обучения
+        class WordClassifier {
+            constructor() {
+                this.categories = {};
+                this.wordVectors = {};
+                this.categoryColors = {};
+            }
+
+            // Создание вектора для слова (простая реализация)
+            createWordVector(word) {
+                // Простой вектор на основе символов и их позиций
+                const vector = new Array(26).fill(0); // 26 букв английского алфавита
+                const normalizedWord = word.toLowerCase().replace(/[^a-z]/g, '');
+
+                for (let i = 0; i < normalizedWord.length; i++) {
+                    const charCode = normalizedWord.charCodeAt(i) - 97; // 'a' = 0
+                    if (charCode >= 0 && charCode < 26) {
+                        vector[charCode] += 1 / normalizedWord.length;
+                    }
+                }
+
+                return vector;
+            }
+
+            // Добавление слова в категорию
+            addWordToCategory(word, category) {
+                if (!this.categories[category]) {
+                    this.categories[category] = [];
+                    // Генерация случайного цвета для категории
+                    this.categoryColors[category] = this.getRandomColor();
+                }
+
+                const vector = this.createWordVector(word);
+                this.categories[category].push(vector);
+                this.wordVectors[word] = { vector, category };
+            }
+
+            // Классификация нового слова
+            classifyWord(word) {
+                const wordVector = this.createWordVector(word);
+                let minDistance = Infinity;
+                let bestCategory = null;
+
+                // Находим ближайшую категорию по евклидову расстоянию
+                for (const category in this.categories) {
+                    const categoryVectors = this.categories[category];
+
+                    // Вычисляем средний вектор категории
+                    const avgVector = this.calculateAverageVector(categoryVectors);
+
+                    // Вычисляем расстояние до среднего вектора категории
+                    const distance = this.calculateEuclideanDistance(wordVector, avgVector);
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        bestCategory = category;
+                    }
+                }
+
+                return bestCategory;
+            }
+
+            // Вычисление среднего вектора
+            calculateAverageVector(vectors) {
+                if (vectors.length === 0) return new Array(26).fill(0);
+
+                const sumVector = new Array(26).fill(0);
+                for (const vector of vectors) {
+                    for (let i = 0; i < vector.length; i++) {
+                        sumVector[i] += vector[i];
+                    }
+                }
+
+                return sumVector.map(val => val / vectors.length);
+            }
+
+            // Вычисление евклидова расстояния
+            calculateEuclideanDistance(vec1, vec2) {
+                let sum = 0;
+                for (let i = 0; i < vec1.length; i++) {
+                    sum += Math.pow(vec1[i] - vec2[i], 2);
+                }
+                return Math.sqrt(sum);
+            }
+
+            // Генерация случайного цвета
+            getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+
+            // Получение данных для визуализации (упрощенная 2D проекция)
+            getVisualizationData() {
+                const data = [];
+
+                // Добавляем обучающие слова
+                for (const word in this.wordVectors) {
+                    const { vector, category } = this.wordVectors[word];
+                    // Упрощенная проекция на 2D (первые два измерения вектора)
+                    const x = vector[0] * 300 + 400;
+                    const y = vector[1] * 300 + 300;
+
+                    data.push({
+                        word,
+                        x,
+                        y,
+                        category,
+                        color: this.categoryColors[category],
+                        isTraining: true
+                    });
+                }
+
+                return data;
+            }
+        }
+
+        // Инициализация приложения
+        const classifier = new WordClassifier();
+        const canvas = document.getElementById('visualization');
+        const ctx = canvas.getContext('2d');
+
+        // Элементы интерфейса
+        const categoryInput = document.getElementById('categoryInput');
+        const wordInput = document.getElementById('wordInput');
+        const addWordBtn = document.getElementById('addWordBtn');
+        const categoriesContainer = document.getElementById('categoriesContainer');
+        const newWordsInput = document.getElementById('newWordsInput');
+        const classifyBtn = document.getElementById('classifyBtn');
+        const classificationResults = document.getElementById('classificationResults');
+        const legend = document.getElementById('legend');
+
+        // Добавление слова в категорию
+        addWordBtn.addEventListener('click', () => {
+            const category = categoryInput.value.trim();
+            const word = wordInput.value.trim();
+
+            if (!category || !word) {
+                alert('Пожалуйста, введите категорию и слово');
+                return;
+            }
+
+            classifier.addWordToCategory(word, category);
+            updateCategoriesDisplay();
+            updateVisualization();
+            wordInput.value = '';
+        });
+
+        // Классификация новых слов
+        classifyBtn.addEventListener('click', () => {
+            const wordsText = newWordsInput.value.trim();
+            if (!wordsText) {
+                alert('Пожалуйста, введите слова для классификации');
+                return;
+            }
+
+            const words = wordsText.split(',').map(word => word.trim()).filter(word => word);
+            let resultsHTML = '<h3>Результаты классификации:</h3><ul>';
+
+            words.forEach(word => {
+                const category = classifier.classifyWord(word);
+                resultsHTML += `<li><strong>${word}</strong> → ${category || 'Не удалось классифицировать'}</li>`;
+            });
+
+            resultsHTML += '</ul>';
+            classificationResults.innerHTML = resultsHTML;
+
+            // Обновляем визуализацию с новыми словами
+            updateVisualization(words);
+        });
+
+        // Обновление отображения категорий
+        function updateCategoriesDisplay() {
+            categoriesContainer.innerHTML = '';
+
+            for (const category in classifier.categories) {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category-item';
+                categoryDiv.innerHTML = `
+                    <strong>${category}</strong>: ${classifier.categories[category].length} слов
+                    <button data-category="${category}">×</button>
+                `;
+                categoriesContainer.appendChild(categoryDiv);
+
+                // Удаление категории
+                categoryDiv.querySelector('button').addEventListener('click', (e) => {
+                    delete classifier.categories[category];
+                    updateCategoriesDisplay();
+                    updateVisualization();
+                });
+            }
+        }
+
+        // Обновление легенды
+        function updateLegend() {
+            legend.innerHTML = '';
+
+            for (const category in classifier.categoryColors) {
+                const legendItem = document.createElement('div');
+                legendItem.className = 'legend-item';
+                legendItem.innerHTML = `
+                    <div class="color-box" style="background-color: ${classifier.categoryColors[category]}"></div>
+                    <span>${category}</span>
+                `;
+                legend.appendChild(legendItem);
+            }
+        }
+
+        // Обновление визуализации
+        function updateVisualization(newWords = []) {
+            // Очищаем canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Получаем данные для визуализации
+            const data = classifier.getVisualizationData();
+
+            // Рисуем обучающие слова
+            data.forEach(item => {
+                ctx.fillStyle = item.color;
+                ctx.beginPath();
+                ctx.arc(item.x, item.y, 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#000';
+                ctx.font = '12px Arial';
+                ctx.fillText(item.word, item.x + 10, item.y + 5);
+            });
+
+            // Рисуем новые слова для классификации (если есть)
+            newWords.forEach(word => {
+                const category = classifier.classifyWord(word);
+                const vector = classifier.createWordVector(word);
+                const x = vector[0] * 300 + 400;
+                const y = vector[1] * 300 + 300;
+                const color = classifier.categoryColors[category] || '#888';
+
+                // Рисуем новый пунктирный круг
+                ctx.strokeStyle = color;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.arc(x, y, 12, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                ctx.fillStyle = '#000';
+                ctx.font = '12px Arial';
+                ctx.fillText(word, x + 15, y + 5);
+            });
+
+            // Обновляем легенду
+            updateLegend();
+        }
+
+        // Инициализация с примерами данных
+        function initializeWithExamples() {
+            // Добавляем примеры слов для разных категорий
+            const examples = {
+                'Животные': ['cat', 'dog', 'elephant', 'lion', 'tiger', 'bear'],
+                'Фрукты': ['apple', 'banana', 'orange', 'grape', 'strawberry'],
+                'Цвета': ['red', 'blue', 'green', 'yellow', 'purple'],
+                'Города': ['paris', 'london', 'tokyo', 'moscow', 'berlin']
+            };
+
+            for (const category in examples) {
+                examples[category].forEach(word => {
+                    classifier.addWordToCategory(word, category);
+                });
+            }
+
+            updateCategoriesDisplay();
+            updateVisualization();
+        }
+
+        // Запуск приложения с примерами
+        initializeWithExamples();
+    </script>
+</body>
+</html>
