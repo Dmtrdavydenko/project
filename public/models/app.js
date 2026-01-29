@@ -402,8 +402,8 @@ class WordClassificationApp {
         canvas.width = width;
         canvas.height = height;
 
-        canvas.style.width = width * 8+"px";
-        canvas.style.height = height * 8+"px";
+        canvas.style.width = width * 8 + "px";
+        canvas.style.height = height * 8 + "px";
 
         const imageData = ctxHeatmap.createImageData(width, height);
         const data = imageData.data;
@@ -534,7 +534,7 @@ class WordClassificationApp {
         const examples = {
             'животные': ['кот', 'собака', 'мышь', 'тигр', 'лев'],
             'фрукты': ['яблоко', 'апельсин', 'банан', 'виноград', 'киви'],
-            'города': ["кот","собака",'москва', 'париж', 'лондон', 'токио', 'берлин']
+            'города': ["кот", "собака", 'москва', 'париж', 'лондон', 'токио', 'берлин']
         };
 
         for (const [category, words] of Object.entries(examples)) {
