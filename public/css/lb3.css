@@ -167,12 +167,12 @@ ul {
     object-fit: cover;
 }
 .faetures-card h3{
-    padding: 0 0.5rem;
+    padding: 0 1rem 0.5rem;
     color: var(--secondary-color);
 
 }
 .faetures-card p{
-    padding: 0 0.5rem;
+    padding: 0 1rem 0.5rem;
     color: var(--text-light);
     
 }
