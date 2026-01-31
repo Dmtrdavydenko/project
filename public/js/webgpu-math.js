@@ -7,7 +7,7 @@ class WebGPUMath {
     }
 
     async initialize() {
-        if (!navigator.gpu) {
+        if (!   ) {
             throw new Error('WebGPU не поддерживается в этом браузере');
         }
 

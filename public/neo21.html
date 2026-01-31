@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>WebGPU Neural Network — Training with Backprop</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+
+        canvas {
+            border: 1px solid #333;
+            background: #000;
+        }
+
+        #status {
+            color: #0f0;
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+
+        #loss {
+            color: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebGPU Neural Network — Training with Backpropagation</h1>
+    <p>Обучаем MLP (784→128→10) на 10 изображениях MNIST</p>
+    <canvas width="280" height="280" id="canvas"></canvas>
+    <div id="status">Инициализация GPU...</div>
+    <div id="loss">Loss: —</div>
+    <button id="trainBtn">Запустить 1 эпоху обучения</button>
+
+    <script>
+        // --- 1. Инициализация WebGPU ---
+        async function initGPU() {
+            if (!navigator.gpu) {
+                throw new Error("WebGPU not supported");
+            }
+            const adapter = await navigator.gpu.requestAdapter();
+            if (!adapter) throw new Error("No GPU adapter found");
+            const device = await adapter.requestDevice({
+                limits: {
+                    maxBindGroups: 8,
+                    maxUniformBufferBindingSize: 16 * 1024 * 1024,
+                    maxStorageBufferBindingSize: 256 * 1024 * 1024,
+                },
+            });
+            return { device, adapter };
+        }
+
+        // --- 2. Генерация случайных весов и данных ---
+        function generateRandomWeights(size) {
+            return new Float32Array(size).map(() => (Math.random() - 0.5) * 0.1);
+        }
+
+        function generateSampleData(numSamples = 10) {
+            const inputs = new Float32Array(numSamples * 784);
+            const targets = new Float32Array(numSamples * 10);
+
+            for (let s = 0; s < numSamples; s++) {
+                const label = Math.floor(Math.random() * 10);
+                targets[s * 10 + label] = 1.0;
+
+                for (let i = 0; i < 784; i++) {
+                    const x = i % 28, y = Math.floor(i / 28);
+                    let val = 0.0;
+                    if (label === 0) {
+                        if ((x > 4 && x < 23) && (y > 4 && y < 23)) val = 1.0;
+                    } else if (label === 1) {
+                        if (x > 14 && y < 24) val = 1.0;
+                    } else if (label === 7) {
+                        if (y < 6 || (x > 18 && y < 24)) val = 1.0;
+                    } else {
+                        val = Math.random() > 0.7 ? 1.0 : 0.0;
+                    }
+                    inputs[s * 784 + i] = val;
+                }
+            }
+            return { inputs, targets };
+        }
+
+        // --- 3. WGSL: Forward + Loss + Backprop (fixed syntax) ---
+        const shaderCode = `
+          // Буферы
+          @group(0) @binding(0) var<storage, read> inputs: array<f32>;
+          @group(0) @binding(1) var<storage, read> targets: array<f32>;
+          @group(0) @binding(2) var<storage, read> w1: array<f32>;
+          @group(0) @binding(3) var<storage, read> b1: array<f32>;
+          @group(0) @binding(4) var<storage, read> w2: array<f32>;
+          @group(0) @binding(5) var<storage, read> b2: array<f32>;
+          @group(0) @binding(6) var<storage, read_write> grad_w1: array<f32>;
+          @group(0) @binding(7) var<storage, read_write> grad_b1: array<f32>;
+          @group(0) @binding(8) var<storage, read_write> grad_w2: array<f32>;
+          @group(0) @binding(9) var<storage, read_write> grad_b2: array<f32>;
+          @group(0) @binding(10) var<storage, read_write> output: array<f32>;
+          @group(0) @binding(11) var<storage, read_write> loss: array<f32>;
+
+          // Константы
+          const NUM_SAMPLES = 10u;
+          const INPUT_SIZE = 784u;
+          const HIDDEN_SIZE = 128u;
+          const OUTPUT_SIZE = 10u;
+          const LEARNING_RATE = 0.01;
+
+          // ReLU
+          fn relu(x: f32) -> f32 {
+            return max(0.0, x);
+          }
+
+          // Softmax
+          fn softmax(input: array<f32, 10>) -> array<f32, 10> {
+            var max_val: f32 = input[0];
+            for (var i = 1u; i < 10u; i = i + 1u) {
+              max_val = max(max_val, input[i]);
+            }
+            var sum: f32 = 0.0;
+            var out: array<f32, 10>;
+            for (var i = 0u; i < 10u; i = i + 1u) {
+              out[i] = exp(input[i] - max_val);
+              sum = sum + out[i];
+            }
+            for (var i = 0u; i < 10u; i = i + 1u) {
+              out[i] = out[i] / sum;
+            }
+            return out;
+          }
+
+          // Cross-entropy loss — renamed 'target' to 'y_true' to avoid reserved keyword
+          fn cross_entropy_loss(pred: array<f32, 10>, y_true: array<f32, 10>) -> f32 {
+            var loss: f32 = 0.0;
+            for (var i = 0u; i < 10u; i = i + 1u) {
+              let p = max(pred[i], 1e-7);
+              loss = loss - y_true[i] * log(p);
+            }
+            return loss;
+          }
+
+          @compute @workgroup_size(1)
+          fn main(@builtin(global_invocation_id) id: vec3u) {
+            let sampleIdx = id.x;
+
+            if (sampleIdx >= NUM_SAMPLES) {
+              return;
+            }
+
+            // --- 1. Forward Pass ---
+            var hidden: array<f32, 128>;
+            for (var j = 0u; j < HIDDEN_SIZE; j = j + 1u) {
+              var sum: f32 = 0.0;
+              for (var k = 0u; k < INPUT_SIZE; k = k + 1u) {
+                sum = sum + inputs[sampleIdx * INPUT_SIZE + k] * w1[j * INPUT_SIZE + k];
+              }
+              hidden[j] = relu(sum + b1[j]);
+            }
+
+            var logits: array<f32, 10>;
+            for (var j = 0u; j < OUTPUT_SIZE; j = j + 1u) {
+              var sum: f32 = 0.0;
+              for (var k = 0u; k < HIDDEN_SIZE; k = k + 1u) {
+                sum = sum + hidden[k] * w2[j * HIDDEN_SIZE + k];
+              }
+              logits[j] = sum + b2[j];
+            }
+
+            var pred: array<f32, 10> = softmax(logits);
+            for (var j = 0u; j < OUTPUT_SIZE; j = j + 1u) {
+              output[sampleIdx * OUTPUT_SIZE + j] = pred[j];
+            }
+
+            // --- 2. Loss ---
+            var y_true: array<f32, 10>;
+            for (var j = 0u; j < OUTPUT_SIZE; j = j + 1u) {
+              y_true[j] = targets[sampleIdx * OUTPUT_SIZE + j];
+            }
+            loss[sampleIdx] = cross_entropy_loss(pred, y_true);
+
+            // --- 3. Backward Pass: dL/dw2, dL/db2 ---
+            var dz: array<f32, 10>;
+            for (var j = 0u; j < OUTPUT_SIZE; j = j + 1u) {
+              dz[j] = pred[j] - y_true[j];
+            }
+
+            for (var j = 0u; j < OUTPUT_SIZE; j = j + 1u) {
+              for (var k = 0u; k < HIDDEN_SIZE; k = k + 1u) {
+                let grad = dz[j] * hidden[k];
+                atomicAdd(&grad_w2[j * HIDDEN_SIZE + k], grad);
+              }
+            }
+
+            for (var j = 0u; j < OUTPUT_SIZE; j = j + 1u) {
+              atomicAdd(&grad_b2[j], dz[j]);
+            }
+
+            // --- 4. Backward: dL/dhidden = dz * w2.T ---
+            var dhidden: array<f32, 128>;
+            for (var k = 0u; k < HIDDEN_SIZE; k = k + 1u) {
+              var sum: f32 = 0.0;
+              for (var j = 0u; j < OUTPUT_SIZE; j = j + 1u) {
+                sum = sum + dz[j] * w2[j * HIDDEN_SIZE + k];
+              }
+              dhidden[k] = sum;
+            }
+
+            // dL/dz_hidden = dhidden * ReLU'(hidden)
+            for (var k = 0u; k < HIDDEN_SIZE; k = k + 1u) {
+              dhidden[k] = dhidden[k] * f32(hidden[k] > 0.0);
+            }
+
+            // dL/dw1 = dhidden * input.T
+            for (var j = 0u; j < HIDDEN_SIZE; j = j + 1u) {
+              for (var k = 0u; k < INPUT_SIZE; k = k + 1u) {
+                let grad = dhidden[j] * inputs[sampleIdx * INPUT_SIZE + k];
+                atomicAdd(&grad_w1[j * INPUT_SIZE + k], grad);
+              }
+            }
+
+            // dL/db1 = dhidden
+            for (var j = 0u; j < HIDDEN_SIZE; j = j + 1u) {
+              atomicAdd(&grad_b1[j], dhidden[j]);
+            }
+          }
+        `;
+
+        // --- 4. WGSL: Update Weights (SGD) — fixed syntax ---
+        const updateShaderCode = `
+          @group(0) @binding(0) var<storage, read> w1: array<f32>;
+          @group(0) @binding(1) var<storage, read> grad_w1: array<f32>;
+          @group(0) @binding(2) var<storage, read_write> w1_out: array<f32>;
+          @group(0) @binding(3) var<storage, read> b1: array<f32>;
+          @group(0) @binding(4) var<storage, read> grad_b1: array<f32>;
+          @group(0) @binding(5) var<storage, read_write> b1_out: array<f32>;
+          @group(0) @binding(6) var<storage, read> w2: array<f32>;
+          @group(0) @binding(7) var<storage, read> grad_w2: array<f32>;
+          @group(0) @binding(8) var<storage, read_write> w2_out: array<f32>;
+          @group(0) @binding(9) var<storage, read> b2: array<f32>;
+          @group(0) @binding(10) var<storage, read> grad_b2: array<f32>;
+          @group(0) @binding(11) var<storage, read_write> b2_out: array<f32>;
+
+          const LEARNING_RATE = 0.01;
+          const TOTAL_WEIGHTS = 784 * 128 + 128 + 128 * 10 + 10;
+
+          @compute @workgroup_size(64)
+          fn main(@builtin(global_invocation_id) id: vec3u) {
+            let idx = id.x;
+            if (idx >= TOTAL_WEIGHTS) {  // ✅ Fixed: added braces
+              return;
+            }
+
+            // Обновление w1
+            if (idx < 784 * 128) {
+              w1_out[idx] = w1[idx] - LEARNING_RATE * grad_w1[idx];
+            }
+            // Обновление b1
+            else if (idx < 784 * 128 + 128) {
+              let b1_idx = idx - 784 * 128;
+              b1_out[b1_idx] = b1[b1_idx] - LEARNING_RATE * grad_b1[b1_idx];
+            }
+            // Обновление w2
+            else if (idx < 784 * 128 + 128 + 128 * 10) {
+              let w2_idx = idx - (784 * 128 + 128);
+              w2_out[w2_idx] = w2[w2_idx] - LEARNING_RATE * grad_w2[w2_idx];
+            }
+            // Обновление b2
+            else {
+              let b2_idx = idx - (784 * 128 + 128 + 128 * 10);
+              b2_out[b2_idx] = b2[b2_idx] - LEARNING_RATE * grad_b2[b2_idx];
+            }
+          }
+        `;
+
+        // --- 5. Создание буферов ---
+        async function createBuffers(device, weights, numSamples = 10) {
+            const size = (n) => n * 4; // Float32 = 4 bytes
+
+            const buffers = {};
+
+            buffers.inputs = device.createBuffer({
+                size: size(numSamples * 784),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+            });
+            buffers.targets = device.createBuffer({
+                size: size(numSamples * 10),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+            });
+
+            buffers.w1 = device.createBuffer({
+                size: size(weights.w1.length),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+            });
+            buffers.b1 = device.createBuffer({
+                size: size(weights.b1.length),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+            });
+            buffers.w2 = device.createBuffer({
+                size: size(weights.w2.length),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+            });
+            buffers.b2 = device.createBuffer({
+                size: size(weights.b2.length),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+            });
+
+            buffers.grad_w1 = device.createBuffer({
+                size: size(weights.w1.length),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC,
+            });
+            buffers.grad_b1 = device.createBuffer({
+                size: size(weights.b1.length),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC,
+            });
+            buffers.grad_w2 = device.createBuffer({
+                size: size(weights.w2.length),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC,
+            });
+            buffers.grad_b2 = device.createBuffer({
+                size: size(weights.b2.length),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC,
+            });
+
+            buffers.output = device.createBuffer({
+                size: size(numSamples * 10),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC,
+            });
+            buffers.loss = device.createBuffer({
+                size: size(numSamples),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC,
+            });
+
+            buffers.w1_new = device.createBuffer({
+                size: size(weights.w1.length),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC,
+            });
+            buffers.b1_new = device.createBuffer({
+                size: size(weights.b1.length),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC,
+            });
+            buffers.w2_new = device.createBuffer({
+                size: size(weights.w2.length),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC,
+            });
+            buffers.b2_new = device.createBuffer({
+                size: size(weights.b2.length),
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC,
+            });
+
+            // Инициализируем градиенты нулями
+            device.queue.writeBuffer(buffers.grad_w1, 0, new Float32Array(weights.w1.length));
+            device.queue.writeBuffer(buffers.grad_b1, 0, new Float32Array(weights.b1.length));
+            device.queue.writeBuffer(buffers.grad_w2, 0, new Float32Array(weights.w2.length));
+            device.queue.writeBuffer(buffers.grad_b2, 0, new Float32Array(weights.b2.length));
+
+            // Копируем веса
+            device.queue.writeBuffer(buffers.w1, 0, weights.w1);
+            device.queue.writeBuffer(buffers.b1, 0, weights.b1);
+            device.queue.writeBuffer(buffers.w2, 0, weights.w2);
+            device.queue.writeBuffer(buffers.b2, 0, weights.b2);
+
+            return buffers;
+        }
+
+        // --- 6. Создание пайплайнов ---
+        async function createPipelines(device, shaderCode, updateShaderCode) {
+            const module = device.createShaderModule({ code: shaderCode });
+            const updateModule = device.createShaderModule({ code: updateShaderCode });
+
+            const pipeline = device.createComputePipeline({
+                layout: "auto",
+                compute: { module, entryPoint: "main" },
+            });
+
+            const updatePipeline = device.createComputePipeline({
+                layout: "auto",
+                compute: { module: updateModule, entryPoint: "main" },
+            });
+
+            return { pipeline, updatePipeline };
+        }
+
+        // --- 7. Создание bind groups ---
+        function createBindGroups(device, buffers, numSamples = 10) {
+            const bg1 = device.createBindGroup({
+                layout: pipeline.getBindGroupLayout(0),
+                entries: [
+                    { binding: 0, resource: { buffer: buffers.inputs } },
+                    { binding: 1, resource: { buffer: buffers.targets } },
+                    { binding: 2, resource: { buffer: buffers.w1 } },
+                    { binding: 3, resource: { buffer: buffers.b1 } },
+                    { binding: 4, resource: { buffer: buffers.w2 } },
+                    { binding: 5, resource: { buffer: buffers.b2 } },
+                    { binding: 6, resource: { buffer: buffers.grad_w1 } },
+                    { binding: 7, resource: { buffer: buffers.grad_b1 } },
+                    { binding: 8, resource: { buffer: buffers.grad_w2 } },
+                    { binding: 9, resource: { buffer: buffers.grad_b2 } },
+                    { binding: 10, resource: { buffer: buffers.output } },
+                    { binding: 11, resource: { buffer: buffers.loss } },
+                ],
+            });
+
+            const bg2 = device.createBindGroup({
+                layout: updatePipeline.getBindGroupLayout(0),
+                entries: [
+                    { binding: 0, resource: { buffer: buffers.w1 } },
+                    { binding: 1, resource: { buffer: buffers.grad_w1 } },
+                    { binding: 2, resource: { buffer: buffers.w1_new } },
+                    { binding: 3, resource: { buffer: buffers.b1 } },
+                    { binding: 4, resource: { buffer: buffers.grad_b1 } },
+                    { binding: 5, resource: { buffer: buffers.b1_new } },
+                    { binding: 6, resource: { buffer: buffers.w2 } },
+                    { binding: 7, resource: { buffer: buffers.grad_w2 } },
+                    { binding: 8, resource: { buffer: buffers.w2_new } },
+                    { binding: 9, resource: { buffer: buffers.b2 } },
+                    { binding: 10, resource: { buffer: buffers.grad_b2 } },
+                    { binding: 11, resource: { buffer: buffers.b2_new } },
+                ],
+            });
+
+            return { bg1, bg2 };
+        }
+
+        // --- 8. Отрисовка ---
+        function drawResult(inputs, output, canvas) {
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const scale = 10;
+            const imgData = ctx.createImageData(280, 280);
+            const data = imgData.data;
+
+            for (let y = 0; y < 28; y++) {
+                for (let x = 0; x < 28; x++) {
+                    const idx = y * 28 + x;
+                    const val = inputs[idx];
+                    const r = g = b = 255 - Math.floor(val * 255);
+                    const pxIdx = (y * scale * 280 + x * scale) * 4;
+                    for (let sy = 0; sy < scale; sy++) {
+                        for (let sx = 0; sx < scale; sx++) {
+                            const px = pxIdx + (sy * 280 + sx) * 4;
+                            data[px] = r;
+                            data[px + 1] = g;
+                            data[px + 2] = b;
+                            data[px + 3] = 255;
+                        }
+                    }
+                }
+            }
+
+            ctx.putImageData(imgData, 0, 0);
+
+            const pred = output.map(p => p.toFixed(3));
+            const maxIdx = output.indexOf(Math.max(...output));
+            document.getElementById("status").innerText = `Предсказание: ${maxIdx} | Вероятность: ${(Math.max(...output) * 100).toFixed(2)}%`;
+        }
+
+        // --- 9. Главная функция ---
+        let device, buffers, pipeline, updatePipeline, bg1, bg2, weights, sampleData;
+
+        async function main() {
+            ({ device } = await initGPU());
+            weights = {
+                w1: generateRandomWeights(784 * 128),
+                b1: generateRandomWeights(128),
+                w2: generateRandomWeights(128 * 10),
+                b2: generateRandomWeights(10),
+            };
+
+            sampleData = generateSampleData();
+
+            buffers = await createBuffers(device, weights);
+            const { pipeline: p, updatePipeline: up } = await createPipelines(device, shaderCode, updateShaderCode);
+            pipeline = p;
+            updatePipeline = up;
+            ({ bg1, bg2 } = createBindGroups(device, buffers));
+
+            device.queue.writeBuffer(buffers.inputs, 0, sampleData.inputs);
+            device.queue.writeBuffer(buffers.targets, 0, sampleData.targets);
+
+            // Инициализируем новые веса как копии старых
+            device.queue.copyBufferToBuffer(buffers.w1, 0, buffers.w1_new, 0, buffers.w1.size);
+            device.queue.copyBufferToBuffer(buffers.b1, 0, buffers.b1_new, 0, buffers.b1.size);
+            device.queue.copyBufferToBuffer(buffers.w2, 0, buffers.w2_new, 0, buffers.w2.size);
+            device.queue.copyBufferToBuffer(buffers.b2, 0, buffers.b2_new, 0, buffers.b2.size);
+
+            document.getElementById("trainBtn").addEventListener("click", trainEpoch);
+            trainEpoch();
+        }
+
+        async function trainEpoch() {
+            const commandEncoder = device.createCommandEncoder();
+
+            // 1. Forward + Backprop
+            const computePass = commandEncoder.beginComputePass();
+            computePass.setPipeline(pipeline);
+            computePass.setBindGroup(0, bg1);
+            computePass.dispatchWorkgroups(10);
+            computePass.end();
+
+            // 2. Update weights
+            const updatePass = commandEncoder.beginComputePass();
+            updatePass.setPipeline(updatePipeline);
+            updatePass.setBindGroup(0, bg2);
+            updatePass.dispatchWorkgroups(Math.ceil((784 * 128 + 128 + 128 * 10 + 10) / 64));
+            updatePass.end();
+
+            device.queue.submit([commandEncoder.finish()]);
+
+            // Чтение результатов
+            const lossArray = new Float32Array(10);
+            const outputArray = new Float32Array(100);
+            const inputArray = new Float32Array(7840);
+
+            await device.queue.readBuffer(buffers.loss, 0, lossArray);
+            await device.queue.readBuffer(buffers.output, 0, outputArray);
+            await device.queue.readBuffer(buffers.inputs, 0, inputArray);
+
+            const avgLoss = lossArray.reduce((a, b) => a + b, 0) / 10;
+            document.getElementById("loss").innerText = `Loss: ${avgLoss.toFixed(4)}`;
+
+            // Обновляем веса: копируем _new_ → _original_
+            device.queue.copyBufferToBuffer(buffers.w1_new, 0, buffers.w1, 0, buffers.w1.size);
+            device.queue.copyBufferToBuffer(buffers.b1_new, 0, buffers.b1, 0, buffers.b1.size);
+            device.queue.copyBufferToBuffer(buffers.w2_new, 0, buffers.w2, 0, buffers.w2.size);
+            device.queue.copyBufferToBuffer(buffers.b2_new, 0, buffers.b2, 0, buffers.b2.size);
+
+            // Обнуляем градиенты
+            device.queue.writeBuffer(buffers.grad_w1, 0, new Float32Array(weights.w1.length));
+            device.queue.writeBuffer(buffers.grad_b1, 0, new Float32Array(weights.b1.length));
+            device.queue.writeBuffer(buffers.grad_w2, 0, new Float32Array(weights.w2.length));
+            device.queue.writeBuffer(buffers.grad_b2, 0, new Float32Array(weights.b2.length));
+
+            // Отрисовка
+            drawResult(inputArray.slice(0, 784), outputArray.slice(0, 10), document.getElementById("canvas"));
+        }
+
+        main().catch(console.error);
+    </script>
+</body>
+</html>

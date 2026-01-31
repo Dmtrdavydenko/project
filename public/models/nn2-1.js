@@ -14,10 +14,8 @@ class NeuralNetwork {
 
             // Инициализация весов случайными значениями
             this.weights[i] = this.randomMatrix(rows, cols, -1, 1);
-            //this.weights[i] = this.randomMatrix(rows, cols, -Math.sqrt(6 / (rows + cols)), Math.sqrt(6 / (rows + cols)));
             // Инициализация смещений нулями
             this.biases[i] = this.randomMatrix(rows, 1, -0.5, 0.5);
-            //this.biases[i] = this.randomMatrix(rows, 1, 0, 0);
         }
     }
     // Генерация случайной матрицы

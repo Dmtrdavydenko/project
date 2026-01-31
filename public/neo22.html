@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebGPU-ускоренная нейросеть для вакансий</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f8ff;
+            border-radius: 5px;
+        }
+
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 WebGPU-ускоренная нейросеть для классификации вакансий</h1>
+    <p><em>Обучается на ваших данных — без библиотек, только чистый JS + WebGPU</em></p>
+
+    <textarea id="vacancy" placeholder="Вставьте текст вакансии..."></textarea><br>
+    <button onclick="classify()">Определить уровень</button>
+    <button onclick="trainModel()">🔄 Обучить модель на новых данных</button>
+    <div id="result"></div>
+    <div id="status" class="loading">Проверка WebGPU...</div>
+
+    <script>
+    // =========================
+    // 1. ПРИЗНАКИ ИЗ ТЕКСТА (без изменений)
+    // =========================
+    function extractFeatures(text) {
+      if (!text) return Array(20).fill(0);
+
+      const words = text.split(/\s+/);
+      const lowerText = text.toLowerCase();
+
+      const complexVerbs = "разрабатывал,оптимизировал,руководил,проектировал,внедрял,масштабировал,настраивал,вёл,организовал,предложил,реализовал,решил,определил,выбрал,спроектировал".split(',');
+      const techLevel1 = "python,js,java,react,node,sql,git,github,docker,api,rest,http,linux,ubuntu,macos,window".split(',');
+      const techLevel2 = "kubernetes,ci/cd,jenkins,github actions,postgres,redis,mongodb,nginx,apache,load balancing,monitoring,logging,debugging".split(',');
+      const techLevel3 = "architect,architecture,scalability,high availability,refactoring,design pattern,team lead,mentor,performance optimization,security,infrastructure,deployment pipeline,observability,monitoring system,incident response".split(',');
+
+      const features = [
+        text.length, // 0
+        words.length, // 1
+        complexVerbs.filter(v => text.includes(v)).length, // 2
+        techLevel1.filter(t => lowerText.includes(t)).length, // 3
+        techLevel2.filter(t => lowerText.includes(t)).length, // 4
+        techLevel3.filter(t => lowerText.includes(t)).length, // 5
+        (lowerText.match(/\b(я|мой|мне)\b/g) || []).length, // 6
+        (lowerText.match(/\b(команда|коллеги|руководил|вел|обучал|наставлял)\b/g) || []).length, // 7
+        (text.match(/!/g) || []).length, // 8
+        (text.match(/;/g) || []).length, // 9
+        (text.match(/[-–—]/g) || []).length, // 10
+        (text.match(/\n/g) || []).length, // 11
+        (text.match(/\d/g) || []).length, // 12
+        (text.match(/[A-Z]/g) || []).length / text.length, // 13
+        lowerText.includes("без опыта") ? 1 : 0, // 14
+        lowerText.includes("опыт от") ? 1 : 0, // 15
+        lowerText.includes("требования") ? 1 : 0, // 16
+        lowerText.includes("мы предлагаем") ? 1 : 0, // 17
+        lowerText.includes("будете заниматься") ? 1 : 0, // 18
+        lowerText.includes("обязанности") ? 1 : 0, // 19
+      ];
+
+      return features;
+    }
+
+    // =========================
+    // 2. WEBGPU НЕЙРОСЕТЬ (вся логика здесь)
+    // =========================
+    class WebGPUNeuralNetwork {
+      constructor(inputSize = 20, hiddenSize = 12, outputSize = 3, learningRate = 0.1) {
+        this.inputSize = inputSize;
+        this.hiddenSize = hiddenSize;
+        this.outputSize = outputSize;
+        this.learningRate = learningRate;
+        this.device = null;
+        this.pipeline = null;
+        this.buffers = {};
+        this.loaded = false;
+        this.isTraining = false;
+      }
+
+      async init() {
+        if (!navigator.gpu) {
+          throw new Error("WebGPU не поддерживается в вашем браузере. Используйте Chrome 113+ или Edge 113+");
+        }
+
+        this.device = await navigator.gpu.requestAdapter().then(adapter => adapter.requestDevice());
+
+        // Создаём шейдер
+        const shaderCode = `
+          @group(0) @binding(0) var<storage, read> input: array<f32>;
+          @group(0) @binding(1) var<storage, read> weightsIH: array<f32>;
+          @group(0) @binding(2) var<storage, read> weightsHO: array<f32>;
+          @group(0) @binding(3) var<storage, read> biasH: array<f32>;
+          @group(0) @binding(4) var<storage, read> biasO: array<f32>;
+          @group(0) @binding(5) var<storage, read> targets: array<f32>;
+          @group(0) @binding(6) var<storage, read_write> gradIH: array<f32>;
+          @group(0) @binding(7) var<storage, read_write> gradHO: array<f32>;
+          @group(0) @binding(8) var<storage, read_write> gradBiasH: array<f32>;
+          @group(0) @binding(9) var<storage, read_write> gradBiasO: array<f32>;
+          @group(0) @binding(10) var<storage, read_write> hidden: array<f32>;
+          @group(0) @binding(11) var<storage, read_write> output: array<f32>;
+
+          @compute @workgroup_size(1)
+          fn forward(@builtin(global_invocation_id) id: vec3<u32>) {
+            let i = id.x;
+            if (i >= ${this.hiddenSize}) {
+                return;
+            }
+
+            var sum = 0.0;
+            for (var j = 0u; j < ${this.inputSize}; j = j + 1u) {
+              sum = sum + input[j] * weightsIH[i * ${this.inputSize} + j];
+            }
+            hidden[i] = 1.0 / (1.0 + exp(-sum - biasH[i]));
+          }
+
+          @compute @workgroup_size(1)
+          fn forwardOutput(@builtin(global_invocation_id) id: vec3<u32>) {
+            let i = id.x;
+            if (i >= ${this.outputSize}) {
+                return;
+            }
+
+            var sum = 0.0;
+            for (var j = 0u; j < ${this.hiddenSize}; j = j + 1u) {
+              sum = sum + hidden[j] * weightsHO[i * ${this.hiddenSize} + j];
+            }
+            output[i] = 1.0 / (1.0 + exp(-sum - biasO[i]));
+          }
+
+          @compute @workgroup_size(1)
+          fn backward(@builtin(global_invocation_id) id: vec3<u32>) {
+            let i = id.x;
+            if (i >= ${this.outputSize}) {
+                return;    
+            }
+
+            let err = output[i] - targets[i];
+            let deriv = output[i] * (1.0 - output[i]);
+            let delta = err * deriv;
+
+            // Обновляем градиенты выходного слоя
+            for (var j = 0u; j < ${this.hiddenSize}; j = j + 1u) {
+              atomicAdd(&gradHO[i * ${this.hiddenSize} + j], delta * hidden[j]);
+            }
+            atomicAdd(&gradBiasO[i], delta);
+
+            // Градиенты скрытого слоя
+            for (var j = 0u; j < ${this.hiddenSize}; j = j + 1u) {
+              let herr = delta * weightsHO[i * ${this.hiddenSize} + j];
+              let hderiv = hidden[j] * (1.0 - hidden[j]);
+              let hdelta = herr * hderiv;
+
+              for (var k = 0u; k < ${this.inputSize}; k = k + 1u) {
+                atomicAdd(&gradIH[j * ${this.inputSize} + k], hdelta * input[k]);
+              }
+              atomicAdd(&gradBiasH[j], hdelta);
+            }
+          }
+
+          @compute @workgroup_size(1)
+          fn updateWeights(@builtin(global_invocation_id) id: vec3<u32>) {
+            let i = id.x;
+            if (i >= ${this.hiddenSize * this.inputSize}) {
+              let idx = i;
+              let g = gradIH[idx];
+              weightsIH[idx] = weightsIH[idx] - ${this.learningRate} * g;
+              gradIH[idx] = 0.0;
+            }
+
+            if (i >= ${this.hiddenSize * this.inputSize} && i < ${this.hiddenSize * this.inputSize + this.hiddenSize * this.outputSize}) {
+              let idx = i - ${this.hiddenSize * this.inputSize};
+              let g = gradHO[idx];
+              weightsHO[idx] = weightsHO[idx] - ${this.learningRate} * g;
+              gradHO[idx] = 0.0;
+            }
+
+            if (i >= ${this.hiddenSize * this.inputSize + this.hiddenSize * this.outputSize} && i < ${this.hiddenSize * this.inputSize + this.hiddenSize * this.outputSize + this.hiddenSize}) {
+              let idx = i - ${this.hiddenSize * this.inputSize + this.hiddenSize * this.outputSize};
+              let g = gradBiasH[idx];
+              biasH[idx] = biasH[idx] - ${this.learningRate} * g;
+              gradBiasH[idx] = 0.0;
+            }
+
+            if (i >= ${this.hiddenSize * this.inputSize + this.hiddenSize * this.outputSize + this.hiddenSize} && i < ${this.hiddenSize * this.inputSize + this.hiddenSize * this.outputSize + this.hiddenSize + this.outputSize}) {
+              let idx = i - ${this.hiddenSize * this.inputSize + this.hiddenSize * this.outputSize + this.hiddenSize};
+              let g = gradBiasO[idx];
+              biasO[idx] = biasO[idx] - ${this.learningRate} * g;
+              gradBiasO[idx] = 0.0;
+            }
+          }
+        `;
+
+        const shaderModule = this.device.createShaderModule({ code: shaderCode });
+
+        // Создаём вычислительные пайплайны
+        this.pipelineForward = this.device.createComputePipeline({
+          layout: "auto",
+          compute: { module: shaderModule, entryPoint: "forward" }
+        });
+
+        this.pipelineForwardOutput = this.device.createComputePipeline({
+          layout: "auto",
+          compute: { module: shaderModule, entryPoint: "forwardOutput" }
+        });
+
+        this.pipelineBackward = this.device.createComputePipeline({
+          layout: "auto",
+          compute: { module: shaderModule, entryPoint: "backward" }
+        });
+
+        this.pipelineUpdateWeights = this.device.createComputePipeline({
+          layout: "auto",
+          compute: { module: shaderModule, entryPoint: "updateWeights" }
+        });
+
+        // Инициализируем буферы
+        this.initBuffers();
+
+        this.loaded = true;
+        document.getElementById("status").textContent = "✅ WebGPU инициализирована. Модель готова.";
+      }
+
+      initBuffers() {
+        const size = (inputSize, hiddenSize, outputSize) => ({
+          input: inputSize,
+          weightsIH: hiddenSize * inputSize,
+          weightsHO: outputSize * hiddenSize,
+          biasH: hiddenSize,
+          biasO: outputSize,
+          target: outputSize,
+          gradIH: hiddenSize * inputSize,
+          gradHO: outputSize * hiddenSize,
+          gradBiasH: hiddenSize,
+          gradBiasO: outputSize,
+          hidden: hiddenSize,
+          output: outputSize
+        });
+
+        const s = size(this.inputSize, this.hiddenSize, this.outputSize);
+
+        // Инициализируем веса случайно
+        const weightsIH = new Float32Array(s.weightsIH).map(() => Math.random() - 0.5);
+        const weightsHO = new Float32Array(s.weightsHO).map(() => Math.random() - 0.5);
+        const biasH = new Float32Array(s.biasH).map(() => Math.random() - 0.5);
+        const biasO = new Float32Array(s.biasO).map(() => Math.random() - 0.5);
+
+        // Градиенты — нули
+        const gradIH = new Float32Array(s.gradIH).fill(0);
+        const gradHO = new Float32Array(s.gradHO).fill(0);
+        const gradBiasH = new Float32Array(s.gradBiasH).fill(0);
+        const gradBiasO = new Float32Array(s.gradBiasO).fill(0);
+
+        // Буферы
+        this.buffers.input = this.createBuffer(s.input * 4, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST);
+        this.buffers.weightsIH = this.createBuffer(s.weightsIH * 4, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC);
+        this.buffers.weightsHO = this.createBuffer(s.weightsHO * 4, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC);
+        this.buffers.biasH = this.createBuffer(s.biasH * 4, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC);
+        this.buffers.biasO = this.createBuffer(s.biasO * 4, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC);
+        this.buffers.target = this.createBuffer(s.target * 4, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST);
+        this.buffers.gradIH = this.createBuffer(s.gradIH * 4, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC);
+        this.buffers.gradHO = this.createBuffer(s.gradHO * 4, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC);
+        this.buffers.gradBiasH = this.createBuffer(s.gradBiasH * 4, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC);
+        this.buffers.gradBiasO = this.createBuffer(s.gradBiasO * 4, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC);
+        this.buffers.hidden = this.createBuffer(s.hidden * 4, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST);
+        this.buffers.output = this.createBuffer(s.output * 4, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST);
+
+        // Загружаем веса
+        this.device.queue.writeBuffer(this.buffers.weightsIH, 0, weightsIH);
+        this.device.queue.writeBuffer(this.buffers.weightsHO, 0, weightsHO);
+        this.device.queue.writeBuffer(this.buffers.biasH, 0, biasH);
+        this.device.queue.writeBuffer(this.buffers.biasO, 0, biasO);
+        this.device.queue.writeBuffer(this.buffers.gradIH, 0, gradIH);
+        this.device.queue.writeBuffer(this.buffers.gradHO, 0, gradHO);
+        this.device.queue.writeBuffer(this.buffers.gradBiasH, 0, gradBiasH);
+        this.device.queue.writeBuffer(this.buffers.gradBiasO, 0, gradBiasO);
+      }
+
+      createBuffer(size, usage) {
+        return this.device.createBuffer({ size, usage, mappedAtCreation: false });
+      }
+
+      async forward(inputArray) {
+        this.device.queue.writeBuffer(this.buffers.input, 0, inputArray);
+
+        const commandEncoder = this.device.createCommandEncoder();
+        const passEncoder = commandEncoder.beginComputePass();
+
+        // Forward: скрытый слой
+        passEncoder.setPipeline(this.pipelineForward);
+        passEncoder.setBindGroup(0, this.createBindGroup([
+          this.buffers.input,
+          this.buffers.weightsIH,
+          this.buffers.weightsHO,
+          this.buffers.biasH,
+          this.buffers.biasO,
+          this.buffers.target,
+          this.buffers.gradIH,
+          this.buffers.gradHO,
+          this.buffers.gradBiasH,
+          this.buffers.gradBiasO,
+          this.buffers.hidden,
+          this.buffers.output
+        ]));
+        passEncoder.dispatchWorkgroups(this.hiddenSize);
+
+        // Forward: выходной слой
+        passEncoder.setPipeline(this.pipelineForwardOutput);
+        passEncoder.setBindGroup(0, this.createBindGroup([
+          this.buffers.input,
+          this.buffers.weightsIH,
+          this.buffers.weightsHO,
+          this.buffers.biasH,
+          this.buffers.biasO,
+          this.buffers.target,
+          this.buffers.gradIH,
+          this.buffers.gradHO,
+          this.buffers.gradBiasH,
+          this.buffers.gradBiasO,
+          this.buffers.hidden,
+          this.buffers.output
+        ]));
+        passEncoder.dispatchWorkgroups(this.outputSize);
+
+        passEncoder.end();
+        this.device.queue.submit([commandEncoder.finish()]);
+
+        // Считываем output
+        const outputData = new Float32Array(this.outputSize);
+        await this.buffers.output.mapAsync(GPUMapMode.READ);
+        const outputBuffer = this.buffers.output.getMappedRange();
+        outputData.set(new Float32Array(outputBuffer));
+        this.buffers.output.unmap();
+
+        return outputData;
+      }
+
+      async train(inputArray, targetArray) {
+        // Записываем данные
+        this.device.queue.writeBuffer(this.buffers.input, 0, inputArray);
+        this.device.queue.writeBuffer(this.buffers.target, 0, targetArray);
+
+        // Обнуляем градиенты (вручную — WebGPU не имеет atomicZero)
+        const zero = new Float32Array(this.hiddenSize * this.inputSize).fill(0);
+        this.device.queue.writeBuffer(this.buffers.gradIH, 0, zero);
+        this.device.queue.writeBuffer(this.buffers.gradHO, 0, zero);
+        this.device.queue.writeBuffer(this.buffers.gradBiasH, 0, zero);
+        this.device.queue.writeBuffer(this.buffers.gradBiasO, 0, zero);
+
+        // Прямой проход
+        await this.forward(inputArray);
+
+        // Обратный проход
+        const commandEncoder = this.device.createCommandEncoder();
+        const passEncoder = commandEncoder.beginComputePass();
+
+        passEncoder.setPipeline(this.pipelineBackward);
+        passEncoder.setBindGroup(0, this.createBindGroup([
+          this.buffers.input,
+          this.buffers.weightsIH,
+          this.buffers.weightsHO,
+          this.buffers.biasH,
+          this.buffers.biasO,
+          this.buffers.target,
+          this.buffers.gradIH,
+          this.buffers.gradHO,
+          this.buffers.gradBiasH,
+          this.buffers.gradBiasO,
+          this.buffers.hidden,
+          this.buffers.output
+        ]));
+        passEncoder.dispatchWorkgroups(this.outputSize + this.hiddenSize);
+
+        passEncoder.end();
+        this.device.queue.submit([commandEncoder.finish()]);
+
+        // Обновление весов
+        const updateEncoder = this.device.createCommandEncoder();
+        const updatePass = updateEncoder.beginComputePass();
+        updatePass.setPipeline(this.pipelineUpdateWeights);
+        updatePass.setBindGroup(0, this.createBindGroup([
+          this.buffers.input,
+          this.buffers.weightsIH,
+          this.buffers.weightsHO,
+          this.buffers.biasH,
+          this.buffers.biasO,
+          this.buffers.target,
+          this.buffers.gradIH,
+          this.buffers.gradHO,
+          this.buffers.gradBiasH,
+          this.buffers.gradBiasO,
+          this.buffers.hidden,
+          this.buffers.output
+        ]));
+        updatePass.dispatchWorkgroups(this.hiddenSize * this.inputSize + this.hiddenSize * this.outputSize + this.hiddenSize + this.outputSize);
+        updatePass.end();
+        this.device.queue.submit([updateEncoder.finish()]);
+      }
+
+      createBindGroup(bindings) {
+        return this.device.createBindGroup({
+          layout: this.pipelineForward.getBindGroupLayout(0),
+          entries: bindings.map((buffer, idx) => ({ binding: idx, resource: { buffer } }))
+        });
+      }
+
+      async predict(inputArray) {
+        const output = await this.forward(inputArray);
+        const maxIndex = output.reduce((max, val, idx) => (val > output[max] ? idx : max), 0);
+        return {
+          probabilities: output,
+          level: ["Джун", "Мидл", "Сеньор"][maxIndex],
+          confidence: output[maxIndex]
+        };
+      }
+
+      async saveModel() {
+        const model = {
+          inputSize: this.inputSize,
+          hiddenSize: this.hiddenSize,
+          outputSize: this.outputSize,
+          learningRate: this.learningRate,
+          weightsIH: await this.readBuffer(this.buffers.weightsIH),
+          weightsHO: await this.readBuffer(this.buffers.weightsHO),
+          biasH: await this.readBuffer(this.buffers.biasH),
+          biasO: await this.readBuffer(this.buffers.biasO)
+        };
+        localStorage.setItem("webgpu_nn_model", JSON.stringify(model));
+      }
+
+      async loadModel() {
+        const saved = localStorage.getItem("webgpu_nn_model");
+        if (!saved) return false;
+
+        const model = JSON.parse(saved);
+        this.inputSize = model.inputSize;
+        this.hiddenSize = model.hiddenSize;
+        this.outputSize = model.outputSize;
+        this.learningRate = model.learningRate;
+
+        this.initBuffers();
+        this.device.queue.writeBuffer(this.buffers.weightsIH, 0, model.weightsIH);
+        this.device.queue.writeBuffer(this.buffers.weightsHO, 0, model.weightsHO);
+        this.device.queue.writeBuffer(this.buffers.biasH, 0, model.biasH);
+        this.device.queue.writeBuffer(this.buffers.biasO, 0, model.biasO);
+
+        this.loaded = true;
+        return true;
+      }
+
+      async readBuffer(buffer) {
+        await buffer.mapAsync(GPUMapMode.READ);
+        const data = new Float32Array(buffer.getMappedRange());
+        buffer.unmap();
+        return data;
+      }
+    }
+
+    // =========================
+    // 3. ДАННЫЕ И ОБУЧЕНИЕ
+    // =========================
+    const trainingData = [
+      { text: "Ищем джун-разработчика. Имеем опыт работы с Python. Изучали Git. Хочем учиться.", level: 0 },
+      { text: "Разрабатываем API на Node.js. Используем Docker, Redis, CI/CD. Нужен опыт от 2 лет.", level: 1 },
+      { text: "Руководим командой из 5 разработчиков. Проектируем архитектуру на Kubernetes. Внедряем observability. Масштабируем систему. Наставляем джунов.", level: 2 },
+      { text: "Требуется frontend-разработчик. Знание React, HTML, CSS. Опыт работы от 1 года.", level: 1 },
+      { text: "Без опыта. Изучаем JavaScript. Помогаем команде. Обучение на месте.", level: 0 },
+      { text: "Архитектор ПО. Определяем стратегию масштабирования. Отвечаем за отказоустойчивость. Выбираем технологии. Ведём ревью кода. Руководим 3 командами.", level: 2 }
+    ];
+
+    const nn = new WebGPUNeuralNetwork();
+
+    // Инициализация WebGPU
+    (async () => {
+      try {
+        await nn.init();
+        const loaded = await nn.loadModel();
+        if (loaded) {
+          document.getElementById("status").textContent = "✅ Модель загружена из localStorage.";
+        } else {
+          document.getElementById("status").textContent = "✅ Новая модель инициализирована. Обучите её!";
+        }
+      } catch (err) {
+        document.getElementById("status").textContent = `❌ Ошибка: ${err.message}`;
+      }
+    })();
+
+    // Обучение модели
+    async function trainModel() {
+      nn.isTraining = true;
+      document.getElementById("status").textContent = "⏳ Обучение на GPU... (может занять 10-30 сек)";
+
+      const epochs = 1000;
+      for (let epoch = 0; epoch < epochs; epoch++) {
+        for (const item of trainingData) {
+          const features = extractFeatures(item.text);
+          const target = [0, 0, 0];
+          target[item.level] = 1;
+
+          await nn.train(new Float32Array(features), new Float32Array(target));
+        }
+        if (epoch % 200 === 0) {
+          document.getElementById("status").textContent = `⏳ Обучение... (${epoch}/${epochs})`;
+        }
+      }
+
+      await nn.saveModel();
+      document.getElementById("status").textContent = "✅ Обучение завершено! Модель сохранена в localStorage.";
+      nn.isTraining = false;
+    }
+
+    // Классификация
+    async function classify() {
+      const text = document.getElementById("vacancy").value.trim();
+      if (!text) {
+        document.getElementById("result").innerHTML = "<p>Введите текст вакансии.</p>";
+        return;
+      }
+
+      const features = extractFeatures(text);
+      const result = await nn.predict(new Float32Array(features));
+
+      document.getElementById("result").innerHTML = `
+        <strong>🎯 Уровень:</strong> ${result.level}<br>
+        <strong>💡 Уверенность:</strong> ${result.confidence.toFixed(3)}<br>
+        <strong>📊 Вероятности:</strong><br>
+        Джун: ${result.probabilities[0].toFixed(3)}<br>
+        Мидл: ${result.probabilities[1].toFixed(3)}<br>
+        Сеньор: ${result.probabilities[2].toFixed(3)}
+      `;
+    }
+    </script>
+</body>
+</html>
