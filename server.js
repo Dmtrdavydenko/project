@@ -2,7 +2,8 @@
 
 
 
-
+const https = require('https');
+const querystring = require('querystring');
 const http = require("http"); // To use the HTTP interfaces in Node.js
 const fs = require("fs"); // For interacting with the file system
 const path = require("path"); // For working with file and directory paths
@@ -1825,15 +1826,128 @@ function deleteCookie(res) {
     const cookie = `${cookieName}=${sessionId}; HttpOnly; Secure; SameSite=Strict; Max-Age=${maxAge}`;
     res.setHeader("Set-Cookie", cookie);
 }
+function getAccessToken(code, callback) {
+    const postData = querystring.stringify({
+        grant_type: 'authorization_code',
+        code: code,
+        client_id: process.env.HH_CLIENT_ID,
+        client_secret: process.env.HH_CLIENT_SECRET,
+        redirect_uri: process.env.HH_REDIRECT_URI
+    });
 
+    const options = {
+        hostname: 'hh.ru',
+        path: '/oauth/token',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': postData.length,
+            'User-Agent': `HH-Assistant/1.0 (${process.env.MY_CONTACT})`,
+            "HH-User-Agent": `HH-Assistant/1.0 (${process.env.MY_CONTACT})`
+        }
+    };
+
+    const req = https.request(options, (res) => {
+        let data = '';
+
+        res.on('data', (chunk) => {
+            data += chunk;
+        });
+
+        res.on('end', () => {
+            try {
+                const tokenData = JSON.parse(data);
+                fs.writeFileSync('./hh-token.json', JSON.stringify(tokenData, null, 2), 'utf8');
+                console.log('🎉 УСПЕХ! Токен сохранён в hh-token.json');
+                callback(null, tokenData);
+            } catch (err) {
+                console.error('❌ Ошибка при парсинге ответа HH.ru:', err.message);
+                console.error('Ответ:', data);
+                callback(new Error('Неверный ответ от HH.ru'), null);
+            }
+        });
+    });
+
+    req.on('error', (err) => {
+        console.error('❌ Ошибка соединения с HH.ru:', err.message);
+        callback(err, null);
+    });
+
+    req.write(postData);
+    req.end();
+}
 const server = http.createServer();
 
 
 server.on("request", (req, res) => {
+    console.log(req.url)
 
     const parsedUrl = url.parse(req.url, true);
     let pathName = parsedUrl.pathname;
+    if (req.url === "/conecthh") {
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        console.log(parsedUrl);
+        const pathname = parsedUrl.pathname;
+        console.log(pathname);
+        // 📍 Главная страница — ссылка для авторизации
+        if (pathname === '/conecthh') {
+            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+            const authUrl = `https://hh.ru/oauth/authorize?response_type=code&client_id=${process.env.HH_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.HH_REDIRECT_URI)}&state=123`;
+            res.end(`
+      <html>
+        <head><title>HH.ru OAuth на Node.js</title></head>
+        <body>
+          <h1>HH.ru OAuth (чистый Node.js)</h1>
+          <p><a href="${authUrl}">👉 Нажмите здесь, чтобы авторизоваться в HH.ru</a></p>
+          <p><a href="/auth/token">查看当前 token</a></p>
+        </body>
+      </html>
+    `);
+        } else if (pathname === 'nn') {
+            const code = parsedUrl.searchParams.get('code');
+            const state = parsedUrl.searchParams.get('state');
+            //console.log(parsedUrl.query);
+            if (!code || state !== '123') {
+                res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+                res.end('❌ Неверный код или state');
+                return;
+            }
 
+            console.log('✅ Получен code от HH.ru:', code);
+            getAccessToken(code, (err, tokenData) => {
+                console.log(tokenData);
+                process.env.HH_ACCESS_TOKEN = tokenData.access_token;
+
+                if (err) {
+                    res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+                    res.end('❌ Ошибка получения токена: ' + err.message);
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                    res.end(`
+          <html>
+            <head><title>Успешно!</title></head>
+            <body>
+              <h1>✅ Токен успешно получен!</h1>
+              <p>Токен сохранён в файл <code>hh-token.json</code></p>
+              <p>Действителен: ${tokenData.expires_in} секунд</p>
+              <p>Закройте эту вкладку.</p>
+            </body>
+          </html>
+        `);
+                }
+            });
+        }
+
+
+
+
+
+
+
+
+
+
+    }
     if (req.method === "GET") {
         if (pathName.startsWith('/api')) {
             // Здесь обработка запроса к базе данных и возврат JSON
@@ -1876,7 +1990,6 @@ server.on("request", (req, res) => {
             fs.exists(filePath, function (exists, err) {
                 if (!exists || !MIMETYPES[ext]) {
                     console.log("File does not exist: " + pathName);
-99333
                     return;
                 }
                 res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
@@ -1886,16 +1999,6 @@ server.on("request", (req, res) => {
             });
             // Здесь отдаём статический файл из файловой системы
         }
-
-
-
-
-
-
-
-
-
-
     }
 
     if (req.url === "/app") {
