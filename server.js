@@ -1831,12 +1831,14 @@ const server = http.createServer();
 
 
 server.on("request", (req, res) => {
-    console.log("1834", req.url)
+    console.log("req.url=", req.url)
 
     const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
     console.log("1837", parsedUrl);
-    //const parsedUrl = url.parse(req.url, true);
-    if (req.url === "/conecthh") {
+    console.log("1838", parsedUrl.pathname);
+    const pathname = parsedUrl.pathname;
+
+    if (pathname === "/conecthh") {
         //const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
         //console.log("1840", parsedUrl);
         //const pathname = parsedUrl.pathname;
