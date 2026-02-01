@@ -1831,125 +1831,127 @@ const server = http.createServer();
 
 
 server.on("request", (req, res) => {
-    console.log("1834",req.url)
+    console.log("1834", req.url)
 
     const parsedUrl = url.parse(req.url, true);
     let pathName = parsedUrl.pathname;
     if (req.url === "/conecthh") {
         const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
-        console.log("1840",parsedUrl);
+        console.log("1840", parsedUrl);
         const pathname = parsedUrl.pathname;
-        console.log("1842",pathname);
+        console.log("1842", pathname);
         // 📍 Главная страница — ссылка для авторизации
-        if (pathname === '/conecthh') {
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-            const authUrl = `https://hh.ru/oauth/authorize?response_type=code&client_id=${process.env.HH_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.HH_REDIRECT_URI)}&state=123`;
-            res.end(`
-      <html>
-        <head><title>HH.ru OAuth на Node.js</title></head>
-        <body>
-          <h1>HH.ru OAuth (чистый Node.js)</h1>
-          <p><a href="${authUrl}">👉 Нажмите здесь, чтобы авторизоваться в HH.ru</a></p>
-          <p><a href="/nn">查看当前 token</a></p>
-        </body>
-      </html>
-    `);
-        } else if (pathname === '/nn') {
-            const code = parsedUrl.searchParams.get('code');
-            const state = parsedUrl.searchParams.get('state');
-            console.log("1860",cose.state);
-            if (!code || state !== '123') {
-                res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-                res.end('❌ Неверный код или state');
-                return;
-            }
+    //    if (pathname === '/conecthh') {
+    //        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    //        const authUrl = `https://hh.ru/oauth/authorize?response_type=code&client_id=${process.env.HH_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.HH_REDIRECT_URI)}&state=123`;
+    //        res.end(`
+    //  <html>
+    //    <head><title>HH.ru OAuth на Node.js</title></head>
+    //    <body>
+    //      <h1>HH.ru OAuth (чистый Node.js)</h1>
+    //      <p><a href="${authUrl}">👉 Нажмите здесь, чтобы авторизоваться в HH.ru</a></p>
+    //      <p><a href="/nn">查看当前 token</a></p>
+    //    </body>
+    //  </html>
+    //`);
+    //    } else if (pathname === '/nn') {
+    //        const code = parsedUrl.searchParams.get('code');
+    //        const state = parsedUrl.searchParams.get('state');
+    //        console.log("1860", cose.state);
+    //        if (!code || state !== '123') {
+    //            res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+    //            res.end('❌ Неверный код или state');
+    //            return;
+    //        }
 
-            console.log('✅ Получен code от HH.ru:', code);
-            getAccessToken(code, (err, tokenData) => {
-                console.log(tokenData);
-                process.env.HH_ACCESS_TOKEN = tokenData.access_token;
-                if (err) {
-                    res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
-                    res.end('❌ Ошибка получения токена: ' + err.message);
-                } else {
-                    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-                    res.end(`
-          <html>
-            <head><title>Успешно!</title></head>
-            <body>
-              <h1>✅ Токен успешно получен!</h1>
-              <p>Токен сохранён в файл <code>hh-token.json</code></p>
-              <p>Действителен: ${tokenData.expires_in} секунд</p>
-              <p>Закройте эту вкладку.</p>
-            </body>
-          </html>
-        `);
-                }
-            });
+    //        console.log('✅ Получен code от HH.ru:', code);
+    //        getAccessToken(code, (err, tokenData) => {
+    //            console.log("token", tokenData);
+    //            process.env.HH_ACCESS_TOKEN = tokenData.access_token;
+    //            if (err) {
+    //                res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+    //                res.end('❌ Ошибка получения токена: ' + err.message);
+    //            } else {
+    //                res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    //                res.end(`
+    //      <html>
+    //        <head><title>Успешно!</title></head>
+    //        <body>
+    //          <h1>✅ Токен успешно получен!</h1>
+    //          <p>Токен сохранён в файл <code>hh-token.json</code></p>
+    //          <p>Действителен: ${tokenData.expires_in} секунд</p>
+    //          <p>Закройте эту вкладку.</p>
+    //        </body>
+    //      </html>
+    //    `);
+    //            }
+    //        });
+
+
         }
 
 
 
 
 
-
-
-
-
-
     }
-    if (req.method === "GET") {
-        if (pathName.startsWith('/api')) {
-            // Здесь обработка запроса к базе данных и возврат JSON
-            // pathName оставляем как есть, не меняем
 
-            const base = path.basename(pathName);
-            console.log(base);
-            getTableColumns({ table: { name: "textile" } })
-                .then(result => {
-                    res.setHeader('Content-Type', 'application/json');
-                    res.end(JSON.stringify(result));
-                })
-                .catch(error => {
-                    res.statusCode = 500;
-                    res.end(JSON.stringify({ error: error.message }));
-                    console.error(error);
-                });
-        } else {
-            // Для остальных маршрутов — отдаём HTML страницы
-            const parsedUrl = url.parse(req.url, true);
-            console.log(parsedUrl.pathname);
-            let pathName = parsedUrl.pathname;
-            let ext = path.extname(pathName);
-            if (pathName !== "/" && pathName[pathName.length - 1] === "/") {
-                res.writeHead(302, { Location: pathName.slice(0, -1) });
-                res.end();
-                return;
-            }
 
-            if (pathName === '/') {
-                pathName = '/index.html';
-                ext = '.html';
-            } else if (!ext) {
-                pathName += '.html';
-                ext = '.html';
-            }
 
-            let filePath = path.join(process.cwd(), "/public", pathName);
-            console.log(pathName);
-            fs.exists(filePath, function (exists, err) {
-                if (!exists || !MIMETYPES[ext]) {
-                    console.log("File does not exist: " + pathName);
-                    return;
-                }
-                res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
-                console.log(filePath);
-                const fileStream = fs.createReadStream(filePath);
-                fileStream.pipe(res);
-            });
-            // Здесь отдаём статический файл из файловой системы
-        }
-    }
+
+
+    //if (req.method === "GET") {
+    //    if (pathName.startsWith('/api')) {
+    //        // Здесь обработка запроса к базе данных и возврат JSON
+    //        // pathName оставляем как есть, не меняем
+
+    //        const base = path.basename(pathName);
+    //        console.log(base);
+    //        getTableColumns({ table: { name: "textile" } })
+    //            .then(result => {
+    //                res.setHeader('Content-Type', 'application/json');
+    //                res.end(JSON.stringify(result));
+    //            })
+    //            .catch(error => {
+    //                res.statusCode = 500;
+    //                res.end(JSON.stringify({ error: error.message }));
+    //                console.error(error);
+    //            });
+    //    } else {
+    //        // Для остальных маршрутов — отдаём HTML страницы
+    //        const parsedUrl = url.parse(req.url, true);
+    //        console.log(parsedUrl.pathname);
+    //        let pathName = parsedUrl.pathname;
+    //        let ext = path.extname(pathName);
+    //        if (pathName !== "/" && pathName[pathName.length - 1] === "/") {
+    //            res.writeHead(302, { Location: pathName.slice(0, -1) });
+    //            res.end();
+    //            return;
+    //        }
+
+    //        if (pathName === '/') {
+    //            pathName = '/index.html';
+    //            ext = '.html';
+    //        } else if (!ext) {
+    //            pathName += '.html';
+    //            ext = '.html';
+    //        }
+
+    //        let filePath = path.join(process.cwd(), "/public", pathName);
+    //        console.log(pathName);
+    //        fs.exists(filePath, function (exists, err) {
+    //            if (!exists || !MIMETYPES[ext]) {
+    //                console.log("File does not exist: " + pathName);
+    //                return;
+    //            }
+    //            res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
+    //            console.log(filePath);
+    //            const fileStream = fs.createReadStream(filePath);
+    //            fileStream.pipe(res);
+    //        });
+    //        // Здесь отдаём статический файл из файловой системы
+    //    }
+    //}
 
     if (req.url === "/app") {
         if (req.method === "POST") {
