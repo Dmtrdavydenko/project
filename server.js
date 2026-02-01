@@ -1873,7 +1873,9 @@ server.on("request", (req, res) => {
                     console.log("File does not exist: " + pathName);
                     res.writeHead(404, { "Content-Type": "text/plain" });
                     res.write("404 Not Found");
-                    res.end();
+                    //res.end();
+                    res.end(JSON.stringify({ error: error.message }));
+
                     return;
                 }
                 res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
