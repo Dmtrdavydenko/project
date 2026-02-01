@@ -1704,10 +1704,10 @@ function decodeToken(token) {
 // Пример использования:
 const id = 12345;
 const token = encodeId(id);
-console.log('Token:', token);
+//console.log('Token:', token);
 
 const decodedId = decodeToken(token);
-console.log('Decoded id:', decodedId);
+//console.log('Decoded id:', decodedId);
 
 
 async function sql(body) {
@@ -1833,13 +1833,14 @@ const server = http.createServer();
 server.on("request", (req, res) => {
     console.log("1834", req.url)
 
+    const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+    console.log("1840", parsedUrl);
     const parsedUrl = url.parse(req.url, true);
     let pathName = parsedUrl.pathname;
     if (req.url === "/conecthh") {
         const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
         console.log("1840", parsedUrl);
         const pathname = parsedUrl.pathname;
-        console.log("1842", pathname);
         // 📍 Главная страница — ссылка для авторизации
     //    if (pathname === '/conecthh') {
     //        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
@@ -1892,7 +1893,9 @@ server.on("request", (req, res) => {
 
 
 
-
+                    res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+                    res.end('❌ Неверный код или state');
+                    return;
 
     }
 
