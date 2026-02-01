@@ -83,7 +83,7 @@ function httpGet(options, callback) {
 const server = https.createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true);
     const path = parsedUrl.pathname;
-
+    console.log({ parsedUrl, path })
     // Главная страница
     if (path === '/') {
         res.writeHead(404, { "Content-Type": "text/plain" });
