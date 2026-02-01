@@ -1834,13 +1834,12 @@ server.on("request", (req, res) => {
     console.log("1834", req.url)
 
     const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
-    console.log("1840", parsedUrl);
-    const parsedUrl = url.parse(req.url, true);
-    let pathName = parsedUrl.pathname;
+    console.log("1837", parsedUrl);
+    //const parsedUrl = url.parse(req.url, true);
     if (req.url === "/conecthh") {
-        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
-        console.log("1840", parsedUrl);
-        const pathname = parsedUrl.pathname;
+        //const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        //console.log("1840", parsedUrl);
+        //const pathname = parsedUrl.pathname;
         // 📍 Главная страница — ссылка для авторизации
     //    if (pathname === '/conecthh') {
     //        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
