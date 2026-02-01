@@ -1796,7 +1796,6 @@ const MIMETYPES = {
     ".woff2": "font/woff2",
 };
 
-const server = http.createServer();
 
 let combined
 
@@ -1822,6 +1821,7 @@ function deleteCookie(res) {
     res.setHeader("Set-Cookie", cookie);
 }
 
+const server = http.createServer();
 
 
 server.on("request", (req, res) => {
