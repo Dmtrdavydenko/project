@@ -1835,38 +1835,36 @@ server.on("request", (req, res) => {
 
     const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
     console.log("1837", parsedUrl);
-    console.log("1838", parsedUrl.pathname);
+    console.log("pathname", parsedUrl.pathname);
     const pathname = parsedUrl.pathname;
 
+    // 📍 Главная страница — ссылка для авторизации
     if (pathname === "/conecthh") {
-        //const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
-        //console.log("1840", parsedUrl);
-        //const pathname = parsedUrl.pathname;
-        // 📍 Главная страница — ссылка для авторизации
-    //    if (pathname === '/conecthh') {
-    //        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-    //        const authUrl = `https://hh.ru/oauth/authorize?response_type=code&client_id=${process.env.HH_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.HH_REDIRECT_URI)}&state=123`;
-    //        res.end(`
-    //  <html>
-    //    <head><title>HH.ru OAuth на Node.js</title></head>
-    //    <body>
-    //      <h1>HH.ru OAuth (чистый Node.js)</h1>
-    //      <p><a href="${authUrl}">👉 Нажмите здесь, чтобы авторизоваться в HH.ru</a></p>
-    //      <p><a href="/nn">查看当前 token</a></p>
-    //    </body>
-    //  </html>
-    //`);
-    //    } else if (pathname === '/nn') {
-    //        const code = parsedUrl.searchParams.get('code');
-    //        const state = parsedUrl.searchParams.get('state');
-    //        console.log("1860", cose.state);
-    //        if (!code || state !== '123') {
-    //            res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-    //            res.end('❌ Неверный код или state');
-    //            return;
-    //        }
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        console.log("1840", parsedUrl);
+        const pathname = parsedUrl.pathname;
+            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+            const authUrl = `https://hh.ru/oauth/authorize?response_type=code&client_id=${process.env.HH_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.HH_REDIRECT_URI)}&state=123`;
+            res.end(`
+      <html>
+        <head><title>HH.ru OAuth на Node.js</title></head>
+        <body>
+          <h1>HH.ru OAuth (чистый Node.js)</h1>
+          <p><a href="${authUrl}">👉 Нажмите здесь, чтобы авторизоваться в HH.ru</a></p>
+          <p><a href="/nn">查看当前 token</a></p>
+        </body>
+      </html>
+    `);
+        } else if (pathname === '/nn') {
+            const code = parsedUrl.searchParams.get('code');
+            const state = parsedUrl.searchParams.get('state');
+            if (!code || state !== '123') {
+                res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+                res.end('❌ Неверный код или state ' + code+' '+state);
+                return;
+            }
 
-    //        console.log('✅ Получен code от HH.ru:', code);
+            console.log('✅ Получен code от HH.ru:', code);
     //        getAccessToken(code, (err, tokenData) => {
     //            console.log("token", tokenData);
     //            process.env.HH_ACCESS_TOKEN = tokenData.access_token;
