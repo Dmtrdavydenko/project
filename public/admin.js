@@ -1,6 +1,7 @@
 console.log("textile");
 console.log(document.location.href);
 document.getElementById('subscribeForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
     const page = document.getElementById('pages').value;
     const n = document.getElementById('count').value;
     console.log("form", e, this,page,n);
