@@ -2,12 +2,13 @@ console.log("textile");
 console.log(document.location.href);
 document.getElementById('subscribeForm').addEventListener('click', async function (e) {
 
-    console.log("form",e,this);
+    console.log("form", e, this);
     await fetchVacancies();
 
 });
 async function fetchVacancies() {
-    const url = 'https://api.hh.ru/vacancies?area=11&page=0&per_page=100';
+    const page = document.getElementById('pages').value;
+    const url = 'https://api.hh.ru/vacancies?area=11&page=' + page||0 + '&per_page=100';
 
     try {
         const response = await fetch(url, {
@@ -444,7 +445,7 @@ async function sqlQuery(sqlQueryString) {
         const result = await response.json(); // Получаем JSON-ответ
         console.log(result); // Выводим результат в консоль
         console.log(result[1].map(meta => ({
-            name:meta.name,
+            name: meta.name,
             table: getTableNameFromMetadata(meta),
             all: decodeMetadata(meta)
         })));
