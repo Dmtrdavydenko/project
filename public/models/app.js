@@ -11,6 +11,8 @@ class WordClassificationApp {
         this.heatmaps = [];
         this.ctxHeatmap = [];
 
+        this.globalCharEmbeddings = null;
+
         this.initializeUI();
         this.initializeWithExamples();
 
@@ -141,37 +143,95 @@ class WordClassificationApp {
     //    console.log(vector);
     //    return vector;
     //}
-    createWordVector(word) {
-        const alphabet = 'abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя';
-        const charToIndex = {};
-        for (let i = 0; i < alphabet.length; i++) {
-            charToIndex[alphabet[i]] = i;
+
+    //createWordVector(word) {
+    //    const alphabet = 'abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя';
+    //    const charToIndex = {};
+    //    for (let i = 0; i < alphabet.length; i++) {
+    //        charToIndex[alphabet[i]] = i;
+    //    }
+
+    //    const vector = new Array(64).fill(0);
+    //    const normalizedWord = word.toLowerCase().replace(/[^a-zа-яё]/g, '');
+
+    //    if (normalizedWord.length === 0) return vector;
+
+    //    for (let i = 0; i < normalizedWord.length; i++) {
+    //        const char = normalizedWord[i];
+    //        const charCode = charToIndex[char];
+    //        if (charCode === undefined) continue;
+
+    //        const index1 = charCode % 64;
+    //        const index2 = (charCode + i) % 64;
+    //        const index3 = (charCode * (i + 1)) % 64; // +1 для избежания 0 при i=0
+
+    //        const weight = 1 / normalizedWord.length;
+
+    //        vector[index1] += 0.5 * weight;
+    //        vector[index2] += 0.3 * weight;
+    //        vector[index3] += 0.2 * weight;
+    //    }
+    //    const sumOfSquares = vector.reduce((sum, val) => sum + val * val, 0);
+    //    const norm = Math.sqrt(sumOfSquares);
+
+    //    if (norm > 1e-10) { // Избегаем деления на ноль (с учётом погрешности)
+    //        for (let i = 0; i < vector.length; i++) {
+    //            vector[i] /= norm;
+    //        }
+    //    }
+
+    //    return vector;
+    //}
+    initializeCharEmbeddings() {
+        const russian = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+        const english = "abcdefghijklmnopqrstuvwxyz";
+        const alphabet = russian + english;
+        const embeddingDim = 64;
+
+        // Инициализируем только один раз
+        if (!this.globalCharEmbeddings) {
+            this.globalCharEmbeddings = {};
+            alphabet.split('').forEach(char => {
+                this.globalCharEmbeddings[char] = Array(embeddingDim).fill().map(() =>
+                    (Math.random() - 0.5) * 0.1
+                );
+            });
         }
 
-        const vector = new Array(64).fill(0);
+        return { alphabet, embeddingDim };
+    }
+    createWordVector(word) {
+        const { embeddingDim } = this.initializeCharEmbeddings();
+        //this.Embeddings = embeddingDim;
+        //console.log(embeddingDim);
+        const vector = Array(embeddingDim).fill(0);
         const normalizedWord = word.toLowerCase().replace(/[^a-zа-яё]/g, '');
 
         if (normalizedWord.length === 0) return vector;
 
-        for (let i = 0; i < normalizedWord.length; i++) {
-            const char = normalizedWord[i];
-            const charCode = charToIndex[char];
-            if (charCode === undefined) continue;
-
-            const index1 = charCode % 64;
-            const index2 = (charCode + i) % 64;
-            const index3 = (charCode * (i + 1)) % 64; // +1 для избежания 0 при i=0
-
-            const weight = 1 / normalizedWord.length;
-
-            vector[index1] += 0.5 * weight;
-            vector[index2] += 0.3 * weight;
-            vector[index3] += 0.2 * weight;
+        for (let char of normalizedWord) {
+            if (this.globalCharEmbeddings[char]) {
+                for (let i = 0; i < embeddingDim; i++) {
+                    vector[i] += this.globalCharEmbeddings[char][i];
+                }
+            }
         }
 
+        // Усреднение
+        for (let i = 0; i < embeddingDim; i++) {
+            vector[i] /= normalizedWord.length;
+        }
+
+        // L2 нормализация
+        const norm = Math.sqrt(vector.reduce((sum, x) => sum + x * x, 0));
+        if (norm > 1e-10) {
+            for (let i = 0; i < embeddingDim; i++) {
+                vector[i] /= norm;
+            }
+        }
+        //console.log(vector);
         return vector;
     }
-
 
     // Добавление слова в категорию
     addWordToCategory() {
@@ -347,8 +407,16 @@ class WordClassificationApp {
 
         words.forEach(word => {
             const vector = this.createWordVector(word);
+            console.log(vector);
+            console.log(this.isUnitVector(vector));
+
+            const unitVector = vector.map(x => x / Math.sqrt(vector.reduce((s, v) => s + v * v, 0)));
+            console.log(unitVector);
+            console.log(this.isUnitVector(unitVector));
+
             const input = vector.map(val => [val]);
             const output = this.network.predict(input);
+            console.log(output);
 
             // Находим категорию с максимальной вероятностью
             const probabilities = output.flat();
@@ -368,6 +436,26 @@ class WordClassificationApp {
 
         // Обновляем визуализацию с новыми словами
         this.updateVisualization(words);
+    }
+    isUnitVector(vector) {
+        // Проверка: массив должен быть непустым и содержать только числа
+        if (!Array.isArray(vector) || vector.length === 0) {
+            return false;
+        }
+
+        const sumOfSquares = vector.reduce((sum, component) => {
+            if (typeof component !== 'number' || isNaN(component)) {
+                throw new Error('Вектор должен содержать только числа');
+            }
+            return sum + component * component;
+        }, 0);
+
+        const length = Math.sqrt(sumOfSquares);
+
+        // Используем небольшую погрешность для сравнения с плавающей точкой
+        const epsilon = 1e-10;
+        //return Math.abs(length - 1) < epsilon;
+        return length
     }
     updateVisualizationHeatmap() {
         //console.log(this.network.getWeights()[0]);
@@ -534,7 +622,7 @@ class WordClassificationApp {
         const examples = {
             'животные': ['кот', 'собака', 'мышь', 'тигр', 'лев'],
             'фрукты': ['яблоко', 'апельсин', 'банан', 'виноград', 'киви'],
-            'города': ["кот", "собака", 'москва', 'париж', 'лондон', 'токио', 'берлин']
+            'города': ['москва', 'париж', 'лондон', 'токио', 'берлин']
         };
 
         for (const [category, words] of Object.entries(examples)) {
@@ -566,6 +654,11 @@ class WordClassificationApp {
             trainingData: this.trainingData
         };
     }
+    getWord() {
+        return {
+
+        }
+    }
 
     // Метод для загрузки состояния
     loadState(state) {
@@ -592,12 +685,22 @@ document.addEventListener('DOMContentLoaded', function () {
         const state = window.app.getState();
         localStorage.setItem('wordClassificationState', JSON.stringify(state));
         alert('Состояние сохранено!');
+        const stateWord = window.app.getWord();
+        localStorage.setItem('word', JSON.stringify(stateWord));
+        alert('Состояние сохранено!');
     });
 
     document.getElementById('loadStateBtn').addEventListener('click', () => {
         const savedState = localStorage.getItem('wordClassificationState');
         if (savedState) {
             window.app.loadState(JSON.parse(savedState));
+            alert('Состояние загружено!');
+        } else {
+            alert('Нет сохраненного состояния');
+        }
+        const savedWord = localStorage.getItem('word');
+        if (savedState) {
+            window.app.loadState(JSON.parse(savedWord));
             alert('Состояние загружено!');
         } else {
             alert('Нет сохраненного состояния');
