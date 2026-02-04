@@ -8,6 +8,7 @@ document.getElementById('subscribeForm').addEventListener('submit', async functi
     await fetchVacancies(page,n);
 
 });
+let mydata = [];
 async function fetchVacancies(page = 0, n = 100) {
 
     const url = 'https://api.hh.ru/vacancies?area=11&page=' + page + '&per_page=' + n;
@@ -25,10 +26,13 @@ async function fetchVacancies(page = 0, n = 100) {
         }
 
         const data = await response.json();
+
         console.log('✅ Successfully fetched data from HH.ru');
         console.log(`Total vacancies found: ${data.found}`);
         console.log(`First vacancy: ${data.items[0]?.name || 'None'}`);
         console.log(data);
+        console.log(JSON.stringify(data.items));
+        mydata.push(data.items);
         return data;
     } catch (error) {
         console.error('❌ Error fetching vacancies:', error.message);
