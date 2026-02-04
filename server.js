@@ -37,6 +37,7 @@ const functionDB = {
     "setToDay": setToDay,
 }
 
+const ENCRYPTION_KEY = process.env.HH_ENCRYPTION_KEY;
 
 //считываем из env railway
 const dbConfig = {
@@ -1180,59 +1181,111 @@ async function insertTime(body) {
 }
 
 
+//async function getTape() {
+//    console.log("CALL=", getTape.name)
+//    let maxRetries = 5;
+//    let currentRetry = 0;
+//    const retryDelay = 3000; // 3000 ms 3s
+//    while (currentRetry < maxRetries) {
+//        try {
+//            const connection = await pool.getConnection();
+//            try {
+//                console.log('Успешно подключено к базе данных MySQL!');
+//                const sql = "SELECT TapeExtrusion.id as id, Thread_Parameters.thread_id as group_id, density, yarn_name as type, " +
+//                    "color, additive_name, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
+//                    "FROM TapeExtrusion " +
+//                    "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
+//                    "JOIN Tape   ON Thread_Parameters.tape_id = Tape.id " +
+//                    "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
+//                    "JOIN color ON TapeExtrusion.color_id = color.color_id " +
+//                    "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
+//                    "ORDER BY density ASC";
+//                //const data = await connection.execute(sql);
+//                //console.log(data);
+//                return await connection.execute(sql);
+//            } catch (error) {
+//                console.error('Ошибка:', error);
+//                throw error;
+//            } finally {
+//                if (connection) connection.release();
+//                console.log("Соединение возвращено.");
+//            }
+//        } catch (error) {
+//            currentRetry++;
+//            console.error('Error connection MySQL:', error.message);
+//            console.error(error);
+//            if (currentRetry >= maxRetries) {
+//                console.error(`Ошибка подключения MySQL после ${maxRetries} попыток:`, error.message);
+//                throw new Error(`Не удалось подключиться к MySQL после ${maxRetries} попыток. Последняя ошибка: ${error.message}`);
+//            }
+
+
+//            if (error.code === "ECONNREFUSED") {
+//                console.log(`Ошибка подключения MySQL (попытка ${currentRetry}/${maxRetries}). Ожидание ${retryDelay / 1000} секунд перед повтором...`);
+//                await new Promise(resolve => setTimeout(resolve, retryDelay)); // Ожидание 3 сек
+//            } else {
+//                throw error;
+//            }
+
+//            const exception = {
+//                errno: -111,
+//                code: 'ECONNREFUSED',
+//                syscall: 'connect',
+//                address: 'fd12:4459:818b:0:1000:8:70f2:9146',
+//                port: 3306,
+//                fatal: true
+//            }
+//        }
+//    }
+//}
 async function getTape() {
     console.log("CALL=", getTape.name)
-    let maxRetries = 5;
+    let connection = null;
+    const sql = "SELECT TapeExtrusion.id as id, Thread_Parameters.thread_id as group_id, density, yarn_name as type, " +
+        "color, additive_name, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
+        "FROM TapeExtrusion " +
+        "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
+        "JOIN Tape   ON Thread_Parameters.tape_id = Tape.id " +
+        "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
+        "JOIN color ON TapeExtrusion.color_id = color.color_id " +
+        "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
+        "ORDER BY density ASC";
+    try {
+        connection = await getAwaitConnect();
+        //console.log(data);
+        return await connection.execute(sql);
+    } catch (error) {
+        console.error('Ошибка:', error);
+        throw error;
+    } finally {
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
+    }
+}
+async function getAwaitConnect(maxRetries = 5, retryDelay = 3000) {
+    console.log("CALL=", getAwaitConnect.name)
     let currentRetry = 0;
-    const retryDelay = 3000; // 3000 ms 3s
     while (currentRetry < maxRetries) {
         try {
             const connection = await pool.getConnection();
-            try {
-                console.log('Успешно подключено к базе данных MySQL!');
-                const sql = "SELECT TapeExtrusion.id as id, Thread_Parameters.thread_id as group_id, density, yarn_name as type, " +
-                    "color, additive_name, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
-                    "FROM TapeExtrusion " +
-                    "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
-                    "JOIN Tape   ON Thread_Parameters.tape_id = Tape.id " +
-                    "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
-                    "JOIN color ON TapeExtrusion.color_id = color.color_id " +
-                    "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
-                    "ORDER BY density ASC";
-                //const data = await connection.execute(sql);
-                //console.log(data);
-                return await connection.execute(sql);
-            } catch (error) {
-                console.error('Ошибка:', error);
-                throw error;
-            } finally {
-                if (connection) connection.release();
-                console.log("Соединение возвращено.");
-            }
+            console.log("Успешное подключение к MySQL");
+            return connection;
         } catch (error) {
             currentRetry++;
-            console.error('Error connection MySQL:', error.message);
-            console.error(error);
+            console.error(`Ошибка подключения MySQL (попытка ${currentRetry}/${maxRetries}):`, error.message);
             if (currentRetry >= maxRetries) {
-                console.error(`Ошибка подключения MySQL после ${maxRetries} попыток:`, error.message);
                 throw new Error(`Не удалось подключиться к MySQL после ${maxRetries} попыток. Последняя ошибка: ${error.message}`);
             }
-
-
             if (error.code === "ECONNREFUSED") {
-                console.log(`Ошибка подключения MySQL (попытка ${currentRetry}/${maxRetries}). Ожидание ${retryDelay / 1000} секунд перед повтором...`);
-                await new Promise(resolve => setTimeout(resolve, retryDelay)); // Ожидание 3 сек
+                console.log(`⏳ Ожидание ${retryDelay / 1000} секунд перед повтором...`);
+                await new Promise(resolve => setTimeout(resolve, retryDelay));
             } else {
-                throw error;
+                throw error; // Другие ошибки не ретраим
             }
-
             const exception = {
-                //    Error: connect ECONNREFUSED fd12: 4459: 818b: 0: 1000: 8: 70f2: 9146: 3306
-                //at TCPConnectWrap.afterConnect[as oncomplete](node: net:1610:16)
                 errno: -111,
                 code: 'ECONNREFUSED',
                 syscall: 'connect',
-                address: 'fd12:4459:818b:0:1000:8:70f2:9146',
                 port: 3306,
                 fatal: true
             }
@@ -1681,6 +1734,23 @@ async function getTableColumnsAndTypes() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const algorithm = 'aes-256-cbc';
 const key = crypto.randomBytes(32); // 32 байта ключа, храните этот ключ в безопасном месте
 const iv = crypto.randomBytes(16);  // 16 байт вектор инициализации
@@ -1827,6 +1897,196 @@ function deleteCookie(res) {
     res.setHeader("Set-Cookie", cookie);
 }
 
+const secret = Buffer.from(ENCRYPTION_KEY, "hex");
+function encrypt(text) {
+    const iv = crypto.randomBytes(16); // 16 байт для AES
+    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(secret), iv);
+    let encrypted = cipher.update(text);
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
+}
+
+function decrypt(encryptedData, iv) {
+    const ivBuffer = Buffer.from(iv, 'hex');
+    const encryptedBuffer = Buffer.from(encryptedData, 'hex');
+    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(secret), ivBuffer);
+    let decrypted = decipher.update(encryptedBuffer);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+    return decrypted.toString("utf8");
+}
+
+async function saveToken(tokenData, userId = 1) {
+    console.log(saveToken.name);
+    if (!tokenData?.access_token || !tokenData?.expires_in) {
+        throw new Error('Invalid tokenData: missing required fields');
+    }
+
+    const { access_token, refresh_token, expires_in } = tokenData;
+    const expires_at = Date.now() + expires_in * 1000;
+
+    // Шифруем токены
+    const { encryptedData: encryptedAccess, iv: ivAccess } = encrypt(access_token);
+    const { encryptedData: encryptedRefresh, iv: ivRefresh } = refresh_token ? encrypt(refresh_token) : { encryptedData: null, iv: null };
+
+    const connection = await getAwaitConnect();
+
+    try {
+        const query = `
+            INSERT INTO hh_tokens (user_id, encrypted_access_token, encrypted_refresh_token, iv_access_token, iv_refresh_token, expires_at)
+            VALUES (?, ?, ?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE
+                encrypted_access_token = VALUES(encrypted_access_token),
+                encrypted_refresh_token = VALUES(encrypted_refresh_token),
+                iv_access_token = VALUES(iv_access_token),
+                iv_refresh_token = VALUES(iv_refresh_token),
+                expires_at = VALUES(expires_at),
+                updated_at = CURRENT_TIMESTAMP
+        `;
+
+        const [result] = await connection.execute(query, [
+            userId, encryptedAccess, encryptedRefresh, ivAccess, ivRefresh, expires_at
+        ]);
+
+        console.log('✅ Токен успешно сохранен в БД');
+        return result;
+
+    } catch (error) {
+        console.error('❌ Ошибка сохранения токена:', error.message);
+        throw error;
+    } finally {
+        connection.release(); // Важно: всегда освобождаем соединение
+    }
+}
+
+
+async function getAccessTokenBD(userId = 1) {
+    const connection = await getAwaitConnect();
+
+    try {
+        const query = 'SELECT encrypted_access_token, iv_access_token, expires_at FROM hh_tokens WHERE user_id = ?';
+        const [rows] = await connection.execute(query, [userId]);
+
+        if (rows.length === 0) {
+            console.log('🔍 Токен не найден для пользователя:', userId);
+            return null;
+        }
+
+        const row = rows[0];
+        const now = Date.now();
+
+        // Проверяем срок действия токена
+        //if (now > row.expires_at) {
+        //    console.log('⚠️ Токен устарел');
+        //    return null;
+        //}
+
+        try {
+            const decryptedToken = decrypt(row.encrypted_access_token, row.iv_access_token);
+            console.log('✅ Токен успешно получен и расшифрован');
+            return decryptedToken;
+        } catch (error) {
+            throw new Error('Ошибка расшифровки токена: ' + error.message);
+        }
+
+    } catch (error) {
+        console.error('❌ Ошибка получения токена:', error.message);
+        throw error;
+    } finally {
+        connection.release();
+    }
+}
+(async () => {
+
+    console.log(getAccessTokenBD.name, await getAccessTokenBD());
+
+})();
+async function getRefreshTokenBD(userId = 1) {
+    const connection = await getAwaitConnect();
+
+    try {
+        const query = 'SELECT encrypted_refresh_token, iv_refresh_token FROM hh_tokens WHERE user_id = ?';
+        const [rows] = await connection.execute(query, [userId]);
+
+        if (rows.length === 0 || !rows[0].encrypted_refresh_token) {
+            return null;
+        }
+
+        const row = rows[0];
+        return decrypt(row.encrypted_refresh_token, row.iv_refresh_token);
+
+    } catch (error) {
+        console.error('❌ Ошибка получения refresh токена:', error.message);
+        throw error;
+    } finally {
+        connection.release();
+    }
+}
+async function deleteTokenBD(userId = 1) {
+    const connection = await getAwaitConnect();
+
+    try {
+        const query = 'DELETE FROM hh_tokens WHERE user_id = ?';
+        const [result] = await connection.execute(query, [userId]);
+        console.log('🗑️ Токен удален для пользователя:', userId);
+        return result;
+    } catch (error) {
+        console.error('❌ Ошибка удаления токена:', error.message);
+        throw error;
+    } finally {
+        connection.release();
+    }
+}
+function getAccessToken(code, callback) {
+    const postData = querystring.stringify({
+        grant_type: 'authorization_code',
+        code: code,
+        client_id: process.env.HH_CLIENT_ID,
+        client_secret: process.env.HH_CLIENT_SECRET,
+        redirect_uri: process.env.HH_REDIRECT_URI
+    });
+
+    const options = {
+        hostname: 'hh.ru',
+        path: '/oauth/token',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': postData.length,
+            'User-Agent': `HH-Assistant/1.0 (${process.env.MY_CONTACT})`,
+            "HH-User-Agent": `HH-Assistant/1.0 (${process.env.MY_CONTACT})`
+        }
+    };
+
+    const req = https.request(options, (res) => {
+        let data = '';
+
+        res.on('data', (chunk) => {
+            data += chunk;
+        });
+
+        res.on('end', () => {
+            try {
+                const tokenData = JSON.parse(data);
+                console.log("TOKEN=", data);
+                console.log('УСПЕХ! Токен сохранён');
+                callback(null, tokenData);
+            } catch (err) {
+                console.error('❌ Ошибка при парсинге ответа HH.ru:', err.message);
+                console.error('Ответ:', data);
+                callback(new Error('Неверный ответ от HH.ru'), null);
+            }
+        });
+    });
+
+    req.on('error', (err) => {
+        console.error('❌ Ошибка соединения с HH.ru:', err.message);
+        callback(err, null);
+    });
+
+    req.write(postData);
+    req.end();
+}
+
 const server = http.createServer();
 
 
@@ -1843,117 +2103,104 @@ server.on("request", (req, res) => {
         const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
         console.log("1840", parsedUrl);
         const pathname = parsedUrl.pathname;
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-            const authUrl = `https://hh.ru/oauth/authorize?response_type=code&client_id=${process.env.HH_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.HH_REDIRECT_URI)}&state=123`;
-            res.end(`
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        const authUrl = `https://hh.ru/oauth/authorize?response_type=code&client_id=${process.env.HH_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.HH_REDIRECT_URI)}&state=123`;
+        res.end(`
       <html>
         <head><title>HH.ru OAuth на Node.js</title></head>
         <body>
           <h1>HH.ru OAuth (чистый Node.js)</h1>
           <p><a href="${authUrl}">👉 Нажмите здесь, чтобы авторизоваться в HH.ru</a></p>
-          <p><a href="/nn">查看当前 token</a></p>
+          <p><a href="/nn">token</a></p>
         </body>
       </html>
     `);
-        } else if (pathname === '/nn') {
-            const code = parsedUrl.searchParams.get('code');
-            const state = parsedUrl.searchParams.get('state');
-            if (!code || state !== '123') {
-                res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-                res.end('❌ Неверный код или state ' + code+' '+state);
+    } else if (pathname === '/nn') {
+        const code = parsedUrl.searchParams.get('code');
+        const state = parsedUrl.searchParams.get('state');
+        if (!code || state !== '123') {
+            res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+            res.end('❌ Неверный код или state ' + code + ' ' + state);
+            return;
+        }
+
+        console.log('✅ Получен code от HH.ru:', code, state);
+        getAccessToken(code, async (err, tokenData) => {
+            console.log("token=", tokenData);
+
+            await saveToken(tokenData);
+
+
+            if (err) {
+                res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+                res.end('❌ Ошибка получения токена: ' + err.message);
+            } else {
+                res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                res.end(`
+          <html>
+            <head><title>Успешно!</title></head>
+            <body>
+              <h1>✅ Токен успешно получен!</h1>
+              <p>Токен сохранён в файл</p>
+              <p>Действителен: ${tokenData.expires_in} секунд</p>
+              <p>Закройте эту вкладку.</p>
+            </body>
+          </html>
+        `);
+            }
+        });
+    } else if (req.method === "GET") {
+        if (pathname.startsWith('/api')) {
+            // Здесь обработка запроса к базе данных и возврат JSON
+            // pathname оставляем как есть, не меняем
+
+            const base = path.basename(pathname);
+            console.log(base);
+            getTableColumns({ table: { name: "textile" } })
+                .then(result => {
+                    res.setHeader('Content-Type', 'application/json');
+                    res.end(JSON.stringify(result));
+                })
+                .catch(error => {
+                    res.statusCode = 500;
+                    res.end(JSON.stringify({ error: error.message }));
+                    console.error(error);
+                });
+        } else {
+            // Для остальных маршрутов — отдаём HTML страницы
+            const parsedUrl = url.parse(req.url, true);
+            console.log(parsedUrl.pathname);
+            let pathname = parsedUrl.pathname;
+            let ext = path.extname(pathname);
+            if (pathname !== "/" && pathname[pathname.length - 1] === "/") {
+                res.writeHead(302, { Location: pathname.slice(0, -1) });
+                res.end();
                 return;
             }
 
-            console.log('✅ Получен code от HH.ru:', code);
-    //        getAccessToken(code, (err, tokenData) => {
-    //            console.log("token", tokenData);
-    //            process.env.HH_ACCESS_TOKEN = tokenData.access_token;
-    //            if (err) {
-    //                res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
-    //                res.end('❌ Ошибка получения токена: ' + err.message);
-    //            } else {
-    //                res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-    //                res.end(`
-    //      <html>
-    //        <head><title>Успешно!</title></head>
-    //        <body>
-    //          <h1>✅ Токен успешно получен!</h1>
-    //          <p>Токен сохранён в файл <code>hh-token.json</code></p>
-    //          <p>Действителен: ${tokenData.expires_in} секунд</p>
-    //          <p>Закройте эту вкладку.</p>
-    //        </body>
-    //      </html>
-    //    `);
-    //            }
-    //        });
+            if (pathname === '/') {
+                pathname = '/index.html';
+                ext = '.html';
+            } else if (!ext) {
+                pathname += '.html';
+                ext = '.html';
+            }
 
-
-        //}
-
-
-
-                    res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-                    res.end('❌ Неверный код или state');
+            let filePath = path.join(process.cwd(), "/public", pathname);
+            console.log(pathname);
+            fs.exists(filePath, function (exists, err) {
+                if (!exists || !MIMETYPES[ext]) {
+                    console.log("File does not exist: " + pathname);
                     return;
-
+                }
+                res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
+                console.log(filePath);
+                const fileStream = fs.createReadStream(filePath);
+                fileStream.pipe(res);
+            });
+            // Здесь отдаём статический файл из файловой системы
+        }
     }
-
-
-
-
-
-    //if (req.method === "GET") {
-    //    if (pathName.startsWith('/api')) {
-    //        // Здесь обработка запроса к базе данных и возврат JSON
-    //        // pathName оставляем как есть, не меняем
-
-    //        const base = path.basename(pathName);
-    //        console.log(base);
-    //        getTableColumns({ table: { name: "textile" } })
-    //            .then(result => {
-    //                res.setHeader('Content-Type', 'application/json');
-    //                res.end(JSON.stringify(result));
-    //            })
-    //            .catch(error => {
-    //                res.statusCode = 500;
-    //                res.end(JSON.stringify({ error: error.message }));
-    //                console.error(error);
-    //            });
-    //    } else {
-    //        // Для остальных маршрутов — отдаём HTML страницы
-    //        const parsedUrl = url.parse(req.url, true);
-    //        console.log(parsedUrl.pathname);
-    //        let pathName = parsedUrl.pathname;
-    //        let ext = path.extname(pathName);
-    //        if (pathName !== "/" && pathName[pathName.length - 1] === "/") {
-    //            res.writeHead(302, { Location: pathName.slice(0, -1) });
-    //            res.end();
-    //            return;
-    //        }
-
-    //        if (pathName === '/') {
-    //            pathName = '/index.html';
-    //            ext = '.html';
-    //        } else if (!ext) {
-    //            pathName += '.html';
-    //            ext = '.html';
-    //        }
-
-    //        let filePath = path.join(process.cwd(), "/public", pathName);
-    //        console.log(pathName);
-    //        fs.exists(filePath, function (exists, err) {
-    //            if (!exists || !MIMETYPES[ext]) {
-    //                console.log("File does not exist: " + pathName);
-    //                return;
-    //            }
-    //            res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
-    //            console.log(filePath);
-    //            const fileStream = fs.createReadStream(filePath);
-    //            fileStream.pipe(res);
-    //        });
-    //        // Здесь отдаём статический файл из файловой системы
-    //    }
-    //}
 
     if (req.url === "/app") {
         if (req.method === "POST") {
