@@ -1,6 +1,37 @@
 console.log("textile");
 console.log(document.location.href);
+document.getElementById('subscribeForm').addEventListener('click', async function (e) {
 
+    console.log("form",e,this);
+    await fetchVacancies();
+
+});
+async function fetchVacancies() {
+    const url = 'https://api.hh.ru/vacancies?area=11&page=0&per_page=100';
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'User-Agent': 'MyApp/1.0 (your-email@example.com)',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('✅ Successfully fetched data from HH.ru');
+        console.log(`Total vacancies found: ${data.found}`);
+        console.log(`First vacancy: ${data.items[0]?.name || 'None'}`);
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error('❌ Error fetching vacancies:', error.message);
+        throw error;
+    }
+}
 function createTable(data) {
     if (!data || data.length === 0) {
         return '<p>U</p>';
