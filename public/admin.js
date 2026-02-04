@@ -1,14 +1,15 @@
 console.log("textile");
 console.log(document.location.href);
-document.getElementById('subscribeForm').addEventListener('click', async function (e) {
-
-    console.log("form", e, this);
-    await fetchVacancies();
+document.getElementById('subscribeForm').addEventListener('submit', async function (e) {
+    const page = document.getElementById('pages').value;
+    const n = document.getElementById('count').value;
+    console.log("form", e, this,page,n);
+    await fetchVacancies(page,n);
 
 });
-async function fetchVacancies() {
-    const page = document.getElementById('pages').value;
-    const url = 'https://api.hh.ru/vacancies?area=11&page=' + page||0 + '&per_page=100';
+async function fetchVacancies(page = 0, n = 100) {
+
+    const url = 'https://api.hh.ru/vacancies?area=11&page=' + page + '&per_page=' + n;
 
     try {
         const response = await fetch(url, {
