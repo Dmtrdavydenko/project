@@ -2190,7 +2190,11 @@ server.on("request", (req, res) => {
             if (pathname === "/hh.json") {
                 filePath = path.join(process.cwd(), "/public/models", pathname);
             }
-            
+
+            //if (pathname === "/n-n.html" || pathname === "/nnstyle.css" || pathname === "nn2-1.js" || pathname === "app.js") {
+            //    filePath = path.join(process.cwd(), "/public/models", pathname);
+            //}
+
             if (pathname === "/n-n.html") {
                 filePath = path.join(process.cwd(), "/public/models", pathname);
             }
