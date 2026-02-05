@@ -2191,7 +2191,7 @@ server.on("request", (req, res) => {
                 filePath = path.join(process.cwd(), "/public/models", pathname);
             }
             
-            if (pathname === "/n-n") {
+            if (pathname === "/n-n.html") {
                 filePath = path.join(process.cwd(), "/public/models", pathname);
             }
 
