@@ -15,14 +15,12 @@ class WordClassificationApp {
 
         this.dataset = [];
         this.initializeUI();
-        this.initializeWithExamples();
-        this.getDataHH();
 
 
     }
 
     // Инициализация интерфейса
-    initializeUI() {
+    async initializeUI() {
         // Элементы интерфейса
         this.architectureInput = document.getElementById('architectureInput');
         this.learningRateInput = document.getElementById('learningRateInput');
@@ -57,6 +55,8 @@ class WordClassificationApp {
         this.classifyBtn.addEventListener('click', () => this.classifyWords());
 
         //this.checkWebGPUSupport();
+        await this.getDataHH();
+        await this.initializeWithExamples();
     }
     checkWebGPUSupport() {
         const webgpuStatus = document.getElementById('webgpu-status');
@@ -659,7 +659,7 @@ class WordClassificationApp {
     }
 
     // Инициализация примерами
-    initializeWithExamples() {
+    async initializeWithExamples() {
         // Добавляем примеры категорий и слов
 
         //const obj = {
