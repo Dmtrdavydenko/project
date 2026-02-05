@@ -28,11 +28,11 @@ document.getElementById('getData').addEventListener('click', async function (e) 
                 requirement: items[i].snippet.requirement,
                 responsibility: items[i].snippet.responsibility,
                 schedule: items[i].schedule.name,
-                salary_from: items[i].salary_range?.from,
-                salary_to: items[i].salary_range?.to || items[i].salary_range.from,
-                frequency: items[i].salary_range?.frequency.name,
-                currency: items[i].salary_range?.currency,
-                experience: items[i].salary_range?.experience.name,
+                salary_from: items[i].salary_range?.from || 'Нет данных',
+                salary_to: items[i].salary_range?.to || items[i].salary_range?.from || 'Нет данных',
+                frequency: items[i].salary_range?.frequency.name || 'Нет данных',
+                currency: items[i].salary_range?.currency || 'Нет данных',
+                experience: items[i].salary_range?.experience.name || 'Нет данных',
             }
             console.log(obj);
         }
