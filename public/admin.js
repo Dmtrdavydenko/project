@@ -24,11 +24,11 @@ document.getElementById('getData').addEventListener('click', async function (e) 
         let grafic = new Set();
         for (let i = 0; i < items.length; i++) {
             job.add(items[i].name);
-            grafic.add(items[i].work_schedule_by_days[0].name);
+            grafic.add(items[i].work_schedule_by_days[0]?.name);
             const obj = {
                 name: items[i].name,
-                working_hours: items[i].working_hours[0].name,
-                work_schedule_by_days: items[i].work_schedule_by_days[0].name,
+                working_hours: items[i].working_hours[0]?.name,
+                work_schedule_by_days: items[i].work_schedule_by_days[0]?.name,
                 requirement: items[i].snippet.requirement,
                 responsibility: items[i].snippet.responsibility,
                 schedule: items[i].schedule.name,
@@ -38,7 +38,7 @@ document.getElementById('getData').addEventListener('click', async function (e) 
                 currency: items[i].salary_range?.currency || 'Нет данных',
                 experience: items[i].salary_range?.experience?.name || 'Нет данных',
             }
-            //throw new Error("Значение цикла=",i);
+            console.log(`Обработка элемента ${i}:`, obj.name);
             //console.log(obj);
         }
         // Выводим красиво отформатированный JSON
