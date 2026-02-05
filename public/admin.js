@@ -34,10 +34,11 @@ document.getElementById('getData').addEventListener('click', async function (e) 
                 schedule: items[i].schedule.name,
                 salary_from: items[i].salary_range?.from || 'Нет данных',
                 salary_to: items[i].salary_range?.to || items[i].salary_range?.from || 'Нет данных',
-                frequency: items[i].salary_range?.frequency.name || 'Нет данных',
+                frequency: items[i].salary_range?.frequency?.name || 'Нет данных',
                 currency: items[i].salary_range?.currency || 'Нет данных',
-                experience: items[i].salary_range?.experience.name || 'Нет данных',
+                experience: items[i].salary_range?.experience?.name || 'Нет данных',
             }
+            //throw new Error("Значение цикла=",i);
             //console.log(obj);
         }
         // Выводим красиво отформатированный JSON
