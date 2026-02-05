@@ -23,8 +23,8 @@ document.getElementById('getData').addEventListener('click', async function (e) 
         for (let i = 0; i < 2; i++) {
             const obj = {
                 name: items[i].name,
-                working_hours: items[i].working_hours[i].name,
-                work_schedule_by_days: items[i].work_schedule_by_days[i].name,
+                working_hours: items[i].working_hours[0].name,
+                work_schedule_by_days: items[i].work_schedule_by_days[0].name,
                 requirement: items[i].snippet.requirement,
                 responsibility: items[i].snippet.responsibility,
                 schedule: items[i].schedule.name,
