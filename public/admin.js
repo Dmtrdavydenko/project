@@ -9,7 +9,7 @@ document.getElementById('subscribeForm').addEventListener('submit', async functi
 
 });
 
-document.getElementById('getData').addEventListener('submit', async function (e) {
+document.getElementById('getData').addEventListener('click', async function (e) {
     e.preventDefault();
     try {
         const response = await fetch('hh.json'); // Путь к файлу
