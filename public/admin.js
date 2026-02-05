@@ -13,13 +13,13 @@ document.getElementById('getData').addEventListener('click', async function (e) 
     e.preventDefault();
     try {
         const response = await fetch('hh.json'); // Путь к файлу
-
+        console.log(response);
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
         const items = await response.json(); // Парсим JSON
-
+        console.log(items);
         for (let i = 0; i < 2; i++) {
             const obj = {
                 name: items[i].name,
@@ -41,7 +41,7 @@ document.getElementById('getData').addEventListener('click', async function (e) 
 
     } catch (error) {
         //resultDiv.textContent = `Ошибка: ${error.message}`;
-        //console.error('Ошибка загрузки JSON:', error);
+        console.error('Ошибка загрузки JSON:', error);
     }
 
 });
