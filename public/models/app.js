@@ -100,7 +100,7 @@ class WordClassificationApp {
         }
 
         // Добавляем размер входного слоя (64 - размер вектора слова)
-        architecture.unshift(1024);
+        architecture.unshift(64);
 
         // Добавляем размер выходного слоя (количество категорий)
         const numCategories = Object.keys(this.categories).length;
@@ -228,7 +228,7 @@ class WordClassificationApp {
         const english = "abcdefghijklmnopqrstuvwxyz";
         const number = "0123456789+-'";
         const alphabet = russian + english + number;
-        const embeddingDim = 1024;
+        const embeddingDim = 64;
 
         // Инициализируем только один раз
         if (!this.globalCharEmbeddings) {
@@ -687,7 +687,8 @@ class WordClassificationApp {
 
         for (let i = 0; i < this.dataset.length / 4; i++) {
             const obj = this.dataset[i];
-            examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience].join(" ");
+            //examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience].join(" ");
+            examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience];
         }
         //for (const obj of this.dataset) {
         //    examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience];
@@ -695,14 +696,14 @@ class WordClassificationApp {
         //.join(" ");
 
         for (const [category, words] of Object.entries(examples)) {
-            //words.forEach(word => {
+            words.forEach(word => {
                 if (!this.categories[category]) {
                     this.categories[category] = [];
                     this.categoryColors[category] = this.getRandomColor();
                 }
-            //    this.categories[category].push(word);
-            //});
-            this.categories[category].push(words);
+                this.categories[category].push(word);
+            });
+            //this.categories[category].push(words);
         }
 
         this.updateCategoriesDisplay();
