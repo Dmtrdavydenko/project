@@ -684,8 +684,8 @@ class WordClassificationApp {
             //'города': ['москва', 'париж', 'лондон', 'токио', 'берлин'],
 
         };
-
-        for (let i = 0; i < this.dataset.length / 4; i++) {
+        //this.dataset.length / 4;
+        for (let i = 0; i < 5; i++) {
             const obj = this.dataset[i];
             //examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience].join(" ");
             examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience];
