@@ -2187,7 +2187,9 @@ server.on("request", (req, res) => {
             }
 
             let filePath = path.join(process.cwd(), "/public", pathname);
-            if (pathname ==="/hh.json")
+            if (pathname === "/hh.json")
+                filePath = path.join(process.cwd(), "/public/models", pathname);
+            if (pathname === "/n-n")
                 filePath = path.join(process.cwd(), "/public/models", pathname);
 
             console.log(pathname);
