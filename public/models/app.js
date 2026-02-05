@@ -160,7 +160,7 @@ class WordClassificationApp {
             //resultDiv.textContent = `Ошибка: ${error.message}`;
             console.error('Ошибка загрузки JSON:', error);
         }
-    });
+    };
 
     // Создание вектора для слова
     //createWordVector(word) {

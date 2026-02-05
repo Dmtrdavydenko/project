@@ -9,7 +9,7 @@ document.getElementById('subscribeForm').addEventListener('submit', async functi
 
 });
 const setVacancies = new Set();
-const vertorL = new Set();
+const vectorL = new Set();
 document.getElementById('getData').addEventListener('click', async function (e) {
     e.preventDefault();
     try {
