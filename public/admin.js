@@ -4,8 +4,45 @@ document.getElementById('subscribeForm').addEventListener('submit', async functi
     e.preventDefault();
     const page = document.getElementById('pages').value;
     const n = document.getElementById('count').value;
-    console.log("form", e, this,page,n);
-    await fetchVacancies(page,n);
+    console.log("form", e, this, page, n);
+    await fetchVacancies(page, n);
+
+});
+
+document.getElementById('getData').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    try {
+        const response = await fetch('hh.json'); // Путь к файлу
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const items = await response.json(); // Парсим JSON
+
+        for (let i = 0; i < 2; i++) {
+            const obj = {
+                name: items[i].name,
+                working_hours: items[i].working_hours[i].name,
+                work_schedule_by_days: items[i].work_schedule_by_days[i].name,
+                requirement: items[i].snippet.requirement,
+                responsibility: items[i].snippet.responsibility,
+                schedule: items[i].schedule.name,
+                salary_from: items[i].salary_range.from,
+                salary_to: items[i].salary_range.to || items[i].salary_range.from,
+                frequency: items[i].salary_range.frequency.name,
+                currency: items[i].salary_range.currency,
+                experience: items[i].salary_range.experience.name,
+            }
+            console.log(obj);
+        }
+        // Выводим красиво отформатированный JSON
+        //resultDiv.textContent = JSON.stringify(items, null, 2);
+
+    } catch (error) {
+        //resultDiv.textContent = `Ошибка: ${error.message}`;
+        //console.error('Ошибка загрузки JSON:', error);
+    }
 
 });
 let mydata = [];
