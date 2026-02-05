@@ -9,6 +9,7 @@ document.getElementById('subscribeForm').addEventListener('submit', async functi
 
 });
 const setVacancies = new Set();
+const vertorL = new Set();
 document.getElementById('getData').addEventListener('click', async function (e) {
     e.preventDefault();
     try {
@@ -39,6 +40,7 @@ document.getElementById('getData').addEventListener('click', async function (e) 
             }
             //console.log(`Обработка элемента ${i}:`, obj.name);
             //console.log(obj);
+            vectorL.add(JSON.stringify(obj).length);
         }
         // Выводим красиво отформатированный JSON
         //resultDiv.textContent = JSON.stringify(items, null, 2);

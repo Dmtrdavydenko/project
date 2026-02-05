@@ -55,6 +55,7 @@ class WordClassificationApp {
         this.classifyBtn.addEventListener('click', () => this.classifyWords());
 
         //this.checkWebGPUSupport();
+        getDataHH();
     }
     checkWebGPUSupport() {
         const webgpuStatus = document.getElementById('webgpu-status');
@@ -121,6 +122,46 @@ class WordClassificationApp {
 
     }
 
+    //document.getElementById('getData').addEventListener('click', async function(e)
+    async getDataHH(){
+        try {
+            const response = await fetch('models/hh.json'); // Путь к файлу
+            console.log(response);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const items = await response.json(); // Парсим JSON
+            console.log(items);
+            //let grafic = new Set();
+            for (let i = 0; i < items.length; i++) {
+                setVacancies.add(items[i].name);
+                grafic.add(items[i].work_schedule_by_days[0]?.name);
+                const obj = {
+                    name: items[i].name,
+                    working_hours: items[i].working_hours[0]?.name,
+                    work_schedule_by_days: items[i].work_schedule_by_days[0]?.name,
+                    requirement: items[i].snippet.requirement,
+                    responsibility: items[i].snippet.responsibility,
+                    schedule: items[i].schedule.name,
+                    salary_from: items[i].salary_range?.from || "",
+                    salary_to: items[i].salary_range?.to || items[i].salary_range?.from || "",
+                    frequency: items[i].salary_range?.frequency?.name || "",
+                    currency: items[i].salary_range?.currency || "",
+                    experience: items[i].salary_range?.experience?.name || "",
+                }
+                //vectorL.add(JSON.stringify(obj).length);
+            }
+            // Выводим красиво отформатированный JSON
+            //resultDiv.textContent = JSON.stringify(items, null, 2);
+            //console.log(setVacancies);
+            //console.log(grafic);
+        } catch (error) {
+            //resultDiv.textContent = `Ошибка: ${error.message}`;
+            console.error('Ошибка загрузки JSON:', error);
+        }
+    });
+
     // Создание вектора для слова
     //createWordVector(word) {
     //    const vector = new Array(64).fill(0);
@@ -185,7 +226,8 @@ class WordClassificationApp {
     initializeCharEmbeddings() {
         const russian = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
         const english = "abcdefghijklmnopqrstuvwxyz";
-        const alphabet = russian + english;
+        const number = "0123456789+-'";
+        const alphabet = russian + english + number;
         const embeddingDim = 64;
 
         // Инициализируем только один раз
@@ -205,7 +247,7 @@ class WordClassificationApp {
         //this.Embeddings = embeddingDim;
         //console.log(embeddingDim);
         const vector = Array(embeddingDim).fill(0);
-        const normalizedWord = word.toLowerCase().replace(/[^a-zа-яё]/g, '');
+        const normalizedWord = word.toLowerCase().replace(/[^a-zа-яё0-9+-']/g, '');
 
         if (normalizedWord.length === 0) return vector;
 
@@ -218,9 +260,9 @@ class WordClassificationApp {
         }
 
         // Усреднение
-        for (let i = 0; i < embeddingDim; i++) {
-            vector[i] /= normalizedWord.length;
-        }
+        //for (let i = 0; i < embeddingDim; i++) {
+        //    vector[i] /= normalizedWord.length;
+        //}
 
         // L2 нормализация
         const norm = Math.sqrt(vector.reduce((sum, x) => sum + x * x, 0));
