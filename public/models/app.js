@@ -695,13 +695,14 @@ class WordClassificationApp {
         //.join(" ");
 
         for (const [category, words] of Object.entries(examples)) {
-            words.forEach(word => {
-                if (!this.categories[category]) {
-                    this.categories[category] = [];
-                    this.categoryColors[category] = this.getRandomColor();
-                }
-                this.categories[category].push(word);
-            });
+            //words.forEach(word => {
+            //    if (!this.categories[category]) {
+            //        this.categories[category] = [];
+            //        this.categoryColors[category] = this.getRandomColor();
+            //    }
+            //    this.categories[category].push(word);
+            //});
+            this.categories[category].push(words);
         }
 
         this.updateCategoriesDisplay();
