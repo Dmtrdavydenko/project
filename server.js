@@ -2193,6 +2193,7 @@ server.on("request", (req, res) => {
                 filePath = path.join(process.cwd(), "/public/models", pathname);
 
             console.log(pathname);
+            console.log(filePath);
             fs.exists(filePath, function (exists, err) {
                 if (!exists || !MIMETYPES[ext]) {
                     console.log("File does not exist: " + pathname);
