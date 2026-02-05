@@ -8,7 +8,7 @@ document.getElementById('subscribeForm').addEventListener('submit', async functi
     await fetchVacancies(page, n);
 
 });
-
+const setVacancies = new Set();
 document.getElementById('getData').addEventListener('click', async function (e) {
     e.preventDefault();
     try {
@@ -20,10 +20,9 @@ document.getElementById('getData').addEventListener('click', async function (e) 
 
         const items = await response.json(); // Парсим JSON
         console.log(items);
-        let job = new Set();
         let grafic = new Set();
         for (let i = 0; i < items.length; i++) {
-            job.add(items[i].name);
+            setVacancies.add(items[i].name);
             grafic.add(items[i].work_schedule_by_days[0]?.name);
             const obj = {
                 name: items[i].name,
@@ -32,18 +31,18 @@ document.getElementById('getData').addEventListener('click', async function (e) 
                 requirement: items[i].snippet.requirement,
                 responsibility: items[i].snippet.responsibility,
                 schedule: items[i].schedule.name,
-                salary_from: items[i].salary_range?.from || 'Нет данных',
-                salary_to: items[i].salary_range?.to || items[i].salary_range?.from || 'Нет данных',
-                frequency: items[i].salary_range?.frequency?.name || 'Нет данных',
-                currency: items[i].salary_range?.currency || 'Нет данных',
-                experience: items[i].salary_range?.experience?.name || 'Нет данных',
+                salary_from: items[i].salary_range?.from ||"",
+                salary_to: items[i].salary_range?.to || items[i].salary_range?.from || "",
+                frequency: items[i].salary_range?.frequency?.name || "",
+                currency: items[i].salary_range?.currency || "",
+                experience: items[i].salary_range?.experience?.name || "",
             }
-            console.log(`Обработка элемента ${i}:`, obj.name);
+            //console.log(`Обработка элемента ${i}:`, obj.name);
             //console.log(obj);
         }
         // Выводим красиво отформатированный JSON
         //resultDiv.textContent = JSON.stringify(items, null, 2);
-        console.log(job);
+        console.log(setVacancies);
         console.log(grafic);
     } catch (error) {
         //resultDiv.textContent = `Ошибка: ${error.message}`;
