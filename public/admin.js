@@ -20,7 +20,11 @@ document.getElementById('getData').addEventListener('click', async function (e) 
 
         const items = await response.json(); // Парсим JSON
         console.log(items);
-        for (let i = 0; i < 2; i++) {
+        let job = new Set();
+        let grafic = new Set();
+        for (let i = 0; i < items.length; i++) {
+            job.add(items[i].name);
+            grafic.add(items[i].work_schedule_by_days[0].name);
             const obj = {
                 name: items[i].name,
                 working_hours: items[i].working_hours[0].name,
@@ -34,11 +38,12 @@ document.getElementById('getData').addEventListener('click', async function (e) 
                 currency: items[i].salary_range?.currency || 'Нет данных',
                 experience: items[i].salary_range?.experience.name || 'Нет данных',
             }
-            console.log(obj);
+            //console.log(obj);
         }
         // Выводим красиво отформатированный JSON
         //resultDiv.textContent = JSON.stringify(items, null, 2);
-
+        console.log(job);
+        console.log(grafic);
     } catch (error) {
         //resultDiv.textContent = `Ошибка: ${error.message}`;
         console.error('Ошибка загрузки JSON:', error);
