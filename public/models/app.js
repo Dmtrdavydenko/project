@@ -676,12 +676,12 @@ class WordClassificationApp {
         //    experience: items[i].salary_range?.experience?.name || "",
         //}
 
-        //const examples = {
-        //    'животные': ['кот', 'собака', 'мышь', 'тигр', 'лев'],
-        //    'фрукты': ['яблоко', 'апельсин', 'банан', 'виноград', 'киви'],
-        //    'города': ['москва', 'париж', 'лондон', 'токио', 'берлин'],
+        const examples = {
+            //'животные': ['кот', 'собака', 'мышь', 'тигр', 'лев'],
+            //'фрукты': ['яблоко', 'апельсин', 'банан', 'виноград', 'киви'],
+            //'города': ['москва', 'париж', 'лондон', 'токио', 'берлин'],
 
-        //};
+        };
 
         //for (let i = 0; i < this.dataset.length; i++) {
 
@@ -689,7 +689,7 @@ class WordClassificationApp {
         for (const obj of this.dataset) {
             examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience];
         }
-
+        //.join(" ");
 
         for (const [category, words] of Object.entries(examples)) {
             words.forEach(word => {
