@@ -243,6 +243,7 @@ class WordClassificationApp {
         return { alphabet, embeddingDim };
     }
     createWordVector(word) {
+        console.log(word);
         const { embeddingDim } = this.initializeCharEmbeddings();
         //this.Embeddings = embeddingDim;
         //console.log(embeddingDim);
