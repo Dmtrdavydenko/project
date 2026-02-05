@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Буквенные эмбеддинги: Русский + Английский</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.14.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.5.1/dist/tfjs-vis.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .plot {
+            margin-top: 30px;
+        }
+
+        .word {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid;
+        }
+
+        .russian {
+            border-color: #3498db;
+        }
+
+        .english {
+            border-color: #e74c3c;
+        }
+
+        .center {
+            border-color: #95a5a6;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <h1>Буквенные эмбеддинги: Русский + Английский</h1>
+    <p>Векторы слов строятся как сумма векторов букв. Каждая буква — обучаемый вектор 32D.</p>
+    <div id="plot" class="plot"></div>
+    <div id="words"></div>
+
+    <script>
+        const russian = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+        const english = "abcdefghijklmnopqrstuvwxyz";
+        const alphabet = russian + english;
+        const embeddingDim = 32;
+
+        // Инициализация случайных эмбеддингов букв
+        const charEmbeddings = {};
+        alphabet.split('').forEach(char => {
+            charEmbeddings[char] = Array(embeddingDim).fill().map(() =>
+                (Math.random() - 0.5) * 0.1
+            );
+        });
+
+        function createWordVector(word) {
+            let vector = Array(embeddingDim).fill(0);
+            for (let char of word.toLowerCase()) {
+                if (charEmbeddings[char]) {
+                    for (let i = 0; i < embeddingDim; i++) {
+                        vector[i] += charEmbeddings[char][i];
+                    }
+                }
+            }
+            const norm = Math.sqrt(vector.reduce((sum, x) => sum + x * x, 0));
+            if (norm > 0) {
+                vector = vector.map(x => x / norm);
+            }
+            return vector;
+        }
+
+        // Слова для визуализации
+        const words = [
+            // Русские
+            "яблоко", "груша", "апельсин", "кот", "собака", "мышь", "дом", "машина", "книга",
+            "абвгдеёжзийклмнопрстуфхцчшщъыьэюя", // центр
+            // Английские
+            "apple", "pear", "orange", "cat", "dog", "mouse", "house", "car", "book",
+            "abcdefghijklmnopqrstuvwxyz" // центр
+        ];
+
+        // Создаём векторы
+        const vectors = words.map(word => createWordVector(word));
+        const labels = words.map(word => ({
+            text: word,
+            lang: word.match(/[a-z]/) ? "english" : word.match(/[а-яё]/) ? "russian" : "center"
+        }));
+
+        // Преобразуем в tf.Tensor
+        const tensor = tf.tensor2d(vectors);
+
+        // t-SNE (в браузере — медленно, но работает)
+        async function runTSNE() {
+            const tsne = new tf.vis.TSNE();
+            const tsneResult = await tsne.embed(tensor, { perplexity: 5, learningRate: 200, iterations: 1000 });
+            const points = tsneResult.points.arraySync();
+
+            // Визуализация
+            tf.vis.render.scatterplot(
+                { name: "Буквенные эмбеддинги (t-SNE)" },
+                { values: points },
+                {
+                    xLabel: "t-SNE 1",
+                    yLabel: "t-SNE 2",
+                    pointLabels: labels.map(l => l.text),
+                    xAxisDomain: [-15, 15],
+                    yAxisDomain: [-15, 15],
+                    colorBy: labels.map(l => l.lang === "russian" ? "blue" : l.lang === "english" ? "red" : "gray")
+                }
+            );
+
+            // Выводим список слов
+            const container = document.getElementById("words");
+            words.forEach((word, i) => {
+                const div = document.createElement("div");
+                div.className = `word ${labels[i].lang}`;
+                div.textContent = `${word} → [${vectors[i].slice(0, 3).join(", ")}...]`;
+                container.appendChild(div);
+            });
+        }
+
+        runTSNE();
+    </script>
+</body>
+</html>
