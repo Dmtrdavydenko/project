@@ -79,7 +79,7 @@ ul {
 
 .header {
     grid-area: header;
-    background: linear-gradient(130deg, rgba(0, 255, 0, 0.6) 20%, rgba(0, 0, 0, 0.6) 70%, rgba(255, 0, 0, 0.6) 100%);
+    background: linear-gradient(130deg, rgba(7, 202, 137, 0.6) 20%, rgba(161, 177, 18, 0.6) 70%, rgba(219, 210, 210, 0.842) 100%);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 1rem 2rem;
     display: flex;
