@@ -227,8 +227,7 @@ class WordClassificationApp {
         const russian = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
         const english = "abcdefghijklmnopqrstuvwxyz";
         const number = "0123456789+-'";
-        const alphabet = russian + english;
-            //+ number;
+        const alphabet = russian + english + number;
         const embeddingDim = 1024;
 
         // Инициализируем только один раз
@@ -249,7 +248,8 @@ class WordClassificationApp {
         //this.Embeddings = embeddingDim;
         //console.log(embeddingDim);
         const vector = Array(embeddingDim).fill(0);
-        const normalizedWord = word.replace(/[^a-zа-яё]/gi, '').toLowerCase();
+        word += "";
+        const normalizedWord = word.toLowerCase().replace(/[^a-zа-яё0-9+'-]/g, '');
 
         if (normalizedWord.length === 0) return vector;
 
