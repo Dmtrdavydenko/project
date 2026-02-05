@@ -124,7 +124,7 @@ class WordClassificationApp {
     }
 
     //document.getElementById('getData').addEventListener('click', async function(e)
-    async getDataHH(){
+    async getDataHH() {
         try {
             const response = await fetch('models/hh.json'); // Путь к файлу
             console.log(response);
@@ -685,12 +685,13 @@ class WordClassificationApp {
 
         };
 
-        //for (let i = 0; i < this.dataset.length; i++) {
-
-        //}
-        for (const obj of this.dataset) {
-            examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience];
+        for (let i = 0; i < this.dataset.length / 4; i++) {
+            const obj = this.dataset[i];
+            examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience].join(" ");
         }
+        //for (const obj of this.dataset) {
+        //    examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience];
+        //}
         //.join(" ");
 
         for (const [category, words] of Object.entries(examples)) {
