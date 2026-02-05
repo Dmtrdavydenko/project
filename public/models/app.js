@@ -13,8 +13,10 @@ class WordClassificationApp {
 
         this.globalCharEmbeddings = null;
 
+        this.dataset = [];
         this.initializeUI();
         this.initializeWithExamples();
+        this.getDataHH();
 
 
     }
@@ -55,7 +57,6 @@ class WordClassificationApp {
         this.classifyBtn.addEventListener('click', () => this.classifyWords());
 
         //this.checkWebGPUSupport();
-        this.getDataHH();
     }
     checkWebGPUSupport() {
         const webgpuStatus = document.getElementById('webgpu-status');
@@ -99,7 +100,7 @@ class WordClassificationApp {
         }
 
         // Добавляем размер входного слоя (64 - размер вектора слова)
-        architecture.unshift(64);
+        architecture.unshift(1024);
 
         // Добавляем размер выходного слоя (количество категорий)
         const numCategories = Object.keys(this.categories).length;
@@ -135,8 +136,6 @@ class WordClassificationApp {
             console.log(items);
             //let grafic = new Set();
             for (let i = 0; i < items.length; i++) {
-                setVacancies.add(items[i].name);
-                grafic.add(items[i].work_schedule_by_days[0]?.name);
                 const obj = {
                     name: items[i].name,
                     working_hours: items[i].working_hours[0]?.name,
@@ -151,6 +150,7 @@ class WordClassificationApp {
                     experience: items[i].salary_range?.experience?.name || "",
                 }
                 //vectorL.add(JSON.stringify(obj).length);
+                this.dataset.push(obj);
             }
             // Выводим красиво отформатированный JSON
             //resultDiv.textContent = JSON.stringify(items, null, 2);
@@ -661,11 +661,35 @@ class WordClassificationApp {
     // Инициализация примерами
     initializeWithExamples() {
         // Добавляем примеры категорий и слов
-        const examples = {
-            'животные': ['кот', 'собака', 'мышь', 'тигр', 'лев'],
-            'фрукты': ['яблоко', 'апельсин', 'банан', 'виноград', 'киви'],
-            'города': ['москва', 'париж', 'лондон', 'токио', 'берлин']
-        };
+
+        //const obj = {
+        //    name: items[i].name,
+        //    working_hours: items[i].working_hours[0]?.name,
+        //    work_schedule_by_days: items[i].work_schedule_by_days[0]?.name,
+        //    requirement: items[i].snippet.requirement,
+        //    responsibility: items[i].snippet.responsibility,
+        //    schedule: items[i].schedule.name,
+        //    salary_from: items[i].salary_range?.from || "",
+        //    salary_to: items[i].salary_range?.to || items[i].salary_range?.from || "",
+        //    frequency: items[i].salary_range?.frequency?.name || "",
+        //    currency: items[i].salary_range?.currency || "",
+        //    experience: items[i].salary_range?.experience?.name || "",
+        //}
+
+        //const examples = {
+        //    'животные': ['кот', 'собака', 'мышь', 'тигр', 'лев'],
+        //    'фрукты': ['яблоко', 'апельсин', 'банан', 'виноград', 'киви'],
+        //    'города': ['москва', 'париж', 'лондон', 'токио', 'берлин'],
+
+        //};
+
+        //for (let i = 0; i < this.dataset.length; i++) {
+
+        //}
+        for (const obj of this.dataset) {
+            examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience];
+        }
+
 
         for (const [category, words] of Object.entries(examples)) {
             words.forEach(word => {
