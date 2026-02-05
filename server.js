@@ -2187,6 +2187,9 @@ server.on("request", (req, res) => {
             }
 
             let filePath = path.join(process.cwd(), "/public", pathname);
+            if (pathname ==="/hh.json")
+                filePath = path.join(process.cwd(), "/public/models", pathname);
+
             console.log(pathname);
             fs.exists(filePath, function (exists, err) {
                 if (!exists || !MIMETYPES[ext]) {
