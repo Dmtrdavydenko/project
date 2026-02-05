@@ -55,7 +55,7 @@ class WordClassificationApp {
         this.classifyBtn.addEventListener('click', () => this.classifyWords());
 
         //this.checkWebGPUSupport();
-        getDataHH();
+        this.getDataHH();
     }
     checkWebGPUSupport() {
         const webgpuStatus = document.getElementById('webgpu-status');
