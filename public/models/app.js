@@ -44,7 +44,9 @@ class WordClassificationApp {
         this.legend = document.getElementById('legend');
 
         this.heatmap = document.getElementById('heatmap');
+        this.spaceOS = document.getElementById('fileInput');
         //this.ctxHeatmap = this.canvasHeatmap.getContext('2d');
+
 
 
 
@@ -53,10 +55,12 @@ class WordClassificationApp {
         this.addWordBtn.addEventListener('click', () => this.addWordToCategory());
         this.trainBtn.addEventListener('click', () => this.trainNetwork());
         this.classifyBtn.addEventListener('click', () => this.classifyWords());
+        this.spaceOS.addEventListener('change', (e) => this.loadDataSet(e))
 
         //this.checkWebGPUSupport();
-        await this.getDataHH();
+        //await this.getDataHH();
         await this.initializeWithExamples();
+
     }
     checkWebGPUSupport() {
         const webgpuStatus = document.getElementById('webgpu-status');
@@ -123,10 +127,62 @@ class WordClassificationApp {
 
     }
 
-    //document.getElementById('getData').addEventListener('click', async function(e)
+    async loadDataSet(e) {
+        const file = e.target.files[0];
+
+        if (!file) return; // если файл не выбран
+
+        if (!file.name.endsWith('.json')) {
+            document.getElementById('output').textContent = 'Пожалуйста, выберите JSON-файл.';
+            return;
+        }
+
+        const reader = new FileReader();
+
+        //Use arrow function to preserve 'this' context
+        reader.onload = async (event) => {
+            try {
+                const content = event.target.result;
+                const items = JSON.parse(content); // Парсим JSON
+
+                // ✅ Initialize dataset if not already done
+                if (!this.dataset) this.dataset = [];
+
+                for (let i = 0; i < items.length; i++) {
+                    const obj = {
+                        name: items[i].name,
+                        working_hours: items[i].working_hours?.[0]?.name || "",
+                        work_schedule_by_days: items[i].work_schedule_by_days?.[0]?.name || "",
+                        requirement: items[i].snippet?.requirement || "",
+                        responsibility: items[i].snippet?.responsibility || "",
+                        schedule: items[i].schedule?.name || "",
+                        salary_from: items[i].salary_range?.from || "",
+                        salary_to: items[i].salary_range?.to || items[i].salary_range?.from || "",
+                        frequency: items[i].salary_range?.frequency?.name || "",
+                        currency: items[i].salary_range?.currency || "",
+                        experience: items[i].salary_range?.experience?.name || "",
+                    };
+                    this.dataset.push(obj);
+                }
+
+                console.log('Loaded items:', items);
+                console.log('Dataset size:', this.dataset.length);
+
+                // Await initialization
+                await this.initializeWithExamples();
+
+            } catch (err) {
+                document.getElementById('output').textContent = 'Ошибка при парсинге JSON: ' + err.message;
+                console.error('JSON parsing error:', err);
+            }
+        };
+
+        //Read as text
+        reader.readAsText(file);
+    }
     async getDataHH() {
         try {
-            const response = await fetch('models/hh.json'); // Путь к файлу
+            const response = await fetch('/hh.json'); // Путь к файлу
             console.log(response);
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -243,16 +299,17 @@ class WordClassificationApp {
         return { alphabet, embeddingDim };
     }
     createWordVector(word) {
-        console.log(word);
+        //console.log(word);
         const { embeddingDim } = this.initializeCharEmbeddings();
         //this.Embeddings = embeddingDim;
         //console.log(embeddingDim);
         const vector = Array(embeddingDim).fill(0);
         word += "";
-        const normalizedWord = word.toLowerCase().replace(/[^a-zа-яё0-9+'-]/g, '');
+        const normalizedWord = word.toLowerCase().replace(/[^a-zа-яё0-9+'-]/g, ' ');
 
         if (normalizedWord.length === 0) return vector;
-
+        //console.log(normalizedWord);
+        //console.log(normalizedWord.length);
         for (let char of normalizedWord) {
             if (this.globalCharEmbeddings[char]) {
                 for (let i = 0; i < embeddingDim; i++) {
@@ -310,9 +367,12 @@ class WordClassificationApp {
             const categoryDiv = document.createElement('div');
             categoryDiv.className = 'category-item';
             categoryDiv.innerHTML = `
-                <strong>${category}</strong>: ${[...this.categories[category]]} слов
+                <strong>${category}</strong>: ${this.categories[category]}
                 <button data-category="${category}">×</button>
             `;
+            //<strong>${category}</strong>: ${[...this.categories[category]]} слов
+            //<strong>${category}</strong>: ${ this.categories[category].length }
+
             this.categoriesContainer.appendChild(categoryDiv);
 
             // Удаление категории
@@ -348,6 +408,7 @@ class WordClassificationApp {
 
         // Подготовка данных для обучения
         const { inputs, targets } = this.prepareTrainingData();
+        //console.log(inputs, targets);
         const epochs = parseInt(this.epochsInput.value);
 
         try {
@@ -417,6 +478,7 @@ class WordClassificationApp {
         for (const category of categories) {
             for (const word of this.categories[category]) {
                 // Входной вектор
+                console.log({ category, word });
                 const vector = this.createWordVector(word);
                 const input = vector.map(val => [val]); // Преобразуем в матрицу
                 inputs.push(input);
@@ -677,43 +739,153 @@ class WordClassificationApp {
         //    currency: items[i].salary_range?.currency || "",
         //    experience: items[i].salary_range?.experience?.name || "",
         //}
+        //'Стажёр-разработчик': [
+        //    'Образование: Бакалавр по направлению «Информатика», «Программная инженерия» или смежным (можно без диплома, но с портфолио)',
+        //    'Опыт работы: 0–1 год (стажировки, проекты на GitHub, хакатоны)',
+        //    "Навыки: Основы Python/JavaScript Работа с Git Базовые знания HTML/CSS Понимание принципов ООП Умение работать в команде",
+        //    "Зарплата: 40 000 – 70 000 ₽/мес (Россия, Москва/Санкт-Петербург)",
+        //    "График работы: 5/2, 9:00–18:00, гибридный (2–3 дня в офисе)"
+        //],
+        //"Разработчик": [
+        //    'Образование: Бакалавр или магистр в ИТ - сфере',
+        //    "Опыт работы: 2–4 года в разработке ПО",
+        //    "Навыки: Глубокое знание одного языка(Java, Python, C#) Работа с базами данных(PostgreSQL, MongoDB) REST API, Docker, CI / CD Тестирование(unit / integration) Работа в Agile / Scrum",
+        //    "Зарплата: 90 000 – 150 000 ₽/мес",
+        //    "График работы: 5 / 2, гибкий график(возможен удалённый формат)",
 
-        const examples = {
-            //'животные': ['кот', 'собака', 'мышь', 'тигр', 'лев'],
-            //'фрукты': ['яблоко', 'апельсин', 'банан', 'виноград', 'киви'],
-            //'города': ['москва', 'париж', 'лондон', 'токио', 'берлин'],
+        //],
+        //"Старший разработчик": [
+        //    "Образование: Высшее техническое образование (бакалавр/магистр)",
+        //    "Опыт работы: 5+ лет, ведущая роль в проектах",
+        //    "Навыки: Архитектура систем(микросервисы, event - driven) Оптимизация производительности Наставничество младших разработчиков Работа с облачными платформами(AWS, Azure) Участие в техническом дизайне",
+        //    "Зарплата: 160 000 – 280 000 ₽/мес",
+        //    "График работы: Гибкий (4–5 дней в неделю), возможен полностью удалённый формат",
+        //],
+        //"Руководитель группы разработки": [
+        //    "Образование: Высшее техническое образование, желательно MBA или дополнительное образование в управлении",
+        //    "Опыт работы: 7+ лет в разработке, 2+ года в управлении командой (5–10 человек)",
+        //    "Навыки: Управление проектами(Jira, Confluence) Планирование ресурсов и сроков Рекрутинг и оценка персонала Взаимодействие с продуктом и бизнесом Формирование корпоративной культуры",
+        //    "Зарплата: 250 000 – 450 000 ₽/мес",
+        //    "График работы: 5/2, гибкий, но с обязательными встречами в офисе (1–2 раза в неделю)",
+        //],
+        //"Технический директор": [
+        //    "Образование: Магистр или PhD в области компьютерных наук/инженерии (желательно)",
+        //    "Опыт работы: 10+ лет в ИТ, 5+ лет на позиции руководителя технической команды в масштабных компаниях",
+        //    "Навыки: Стратегическое планирование ИТ - инфраструктуры Выбор технологических стеков на уровне компании Управление R & D, инновациями Взаимодействие с инвесторами, акционерами Понимание бизнес - моделей и рынка",
+        //    "Зарплата: 500 000 – 1 200 000+ ₽/мес (включая бонусы и опционы)",
+        //    "График работы: Гибкий, 6 дней в неделю (по необходимости), часто удалённо, но с частыми встречами и поездками",
+        //]
 
-        };
-        //this.dataset.length / 4;
-        for (let i = 0; i < 5; i++) {
-            const obj = this.dataset[i];
-            //examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience].join(" ");
-            examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience];
-        }
-        //for (const obj of this.dataset) {
-        //    examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience];
-        //}
-        //.join(" ");
+        //'exemple': ['exemple', 'exemple', 'exemple', 'exemple', 'exemple'],
 
-        for (const [category, words] of Object.entries(examples)) {
-            words.forEach(word => {
-                if (!this.categories[category]) {
-                    this.categories[category] = [];
-                    this.categoryColors[category] = this.getRandomColor();
-                }
-                this.categories[category].push(word);
-            });
-            //this.categories[category].push(words);
-        }
+        const examples = [
+            { "Стажёр-разработчик": ["Образование",": Бакалавр по направлению «Информатика», «Программная инженерия» или смежным (можно без диплома, но с портфолио)"] },
+            { "Стажёр-разработчик": ["Образование: Бакалавр по направлению «Информатика», «Программная инженерия» или смежным (можно без диплома, но с портфолио)"] },
+            { "Стажёр-разработчик": ["Опыт работы: 0–1 год (стажировки, проекты на GitHub, хакатоны)"] },
+            { "Стажёр-разработчик": ["Навыки: Основы Python/JavaScript Работа с Git Базовые знания HTML/CSS Понимание принципов ООП Умение работать в команде"] },
+            { "Стажёр-разработчик": ["Зарплата: 40 000 – 70 000 ₽/мес (Россия, Москва/Санкт-Петербург)"] },
+            { "Стажёр-разработчик": ["График работы: 5/2 9:00–18:00 гибридный (2–3 дня в офисе)"] },
+
+            { "Разработчик": ["Образование: Бакалавр", " или магистр в ИТ - сфере"] },
+            { "Разработчик": ["Образование", ": Бакалавр", " или магистр в ИТ - сфере"] },
+            { "Разработчик": ["Опыт работы: 2–4 года в разработке ПО"] },
+            { "Разработчик": ["Навыки: Глубокое знание одного языка(Java, Python, C#) Работа с базами данных(PostgreSQL, MongoDB) REST API, Docker, CI / CD Тестирование(unit / integration) Работа в Agile / Scrum"] },
+            { "Разработчик": ["Зарплата: 90 000 – 150 000 ₽/мес"] },
+            { "Разработчик": ["График работы: 5 / 2, гибкий график(возможен удалённый формат)"] },
+
+            { "Старший разработчик": ["Образование", ": Высшее техническое образование (бакалавр/магистр)"] },
+            { "Старший разработчик": ["Опыт работы: 5+ лет, ведущая роль в проектах"] },
+            { "Старший разработчик": ["Навыки: Архитектура систем(микросервисы, event - driven) Оптимизация производительности Наставничество младших разработчиков Работа с облачными платформами(AWS, Azure) Участие в техническом дизайне"] },
+            { "Старший разработчик": ["Зарплата: 160 000 – 280 000 ₽/мес"] },
+            { "Старший разработчик": ["График работы: Гибкий (4–5 дней в неделю), возможен полностью удалённый формат"] },
+
+            { "Руководитель группы разработки": ["Образование: Высшее техническое образование, желательно MBA или дополнительное образование в управлении"] },
+            { "Руководитель группы разработки": ["Образование", " Высшее техническое образование, желательно MBA или дополнительное образование в управлении"] },
+            { "Руководитель группы разработки": ["Опыт работы: 7+ лет в разработке, 2+ года в управлении командой (5–10 человек)"] },
+            { "Руководитель группы разработки": ["Навыки: Управление проектами(Jira, Confluence) Планирование ресурсов и сроков Рекрутинг и оценка персонала Взаимодействие с продуктом и бизнесом Формирование корпоративной культуры"] },
+            { "Руководитель группы разработки": ["Зарплата: 250 000 – 450 000 ₽/мес"] },
+            { "Руководитель группы разработки": ["График работы: 5/2, гибкий, но с обязательными встречами в офисе (1–2 раза в неделю)"] },
+
+            { "Технический директор": ["Образование: Магистр или PhD в области компьютерных наук/инженерии (желательно)"] },
+            { "Технический директор": ["Образование", ": Магистр или PhD в области компьютерных наук/инженерии (желательно)"] },
+            { "Технический директор": ["Опыт работы: 10+ лет в ИТ, 5+ лет на позиции руководителя технической команды в масштабных компаниях"] },
+            { "Технический директор": ["Навыки: Стратегическое планирование ИТ - инфраструктуры Выбор технологических стеков на уровне компании Управление R & D, инновациями Взаимодействие с инвесторами, акционерами Понимание бизнес - моделей и рынка"] },
+            { "Технический директор": ["Зарплата: 500 000 – 1 200 000+ ₽/мес (включая бонусы и опционы)"] },
+            { "Технический директор": ["График работы: Гибкий, 6 дней в неделю (по необходимости), часто удалённо, но с частыми встречами и поездками"] },
+
+            //{ "Образование": ["Бакалавр по направлению «Информатика», «Программная инженерия» или смежным (можно без диплома, но с портфолио)"] },
+            //{ "Опыт работы": ["Опыт работы 0–1 год (стажировки, проекты на GitHub, хакатоны)"] },
+            //{ "Навыки": ["Навыки Основы Python/JavaScript Работа с Git Базовые знания HTML/CSS Понимание принципов ООП Умение работать в команде"] },
+            //{ "Зарплата": ["Зарплата  40 000 – 70 000 ₽/мес (Россия, Москва/Санкт-Петербург)"] },
+            //{ "График работы": ["График работы  5/2, 9:00–18:00, гибридный (2–3 дня в офисе)"] },
+
+
+
+
+
+            //{ "Образование": ["Образование: Бакалавр или магистр в ИТ - сфере"] },
+            //{ "Опыт работы": ["Опыт работы: 2–4 года в разработке ПО"] },
+            //{ "Навыки": ["Навыки: Глубокое знание одного языка(Java, Python, C#) Работа с базами данных(PostgreSQL, MongoDB) REST API, Docker, CI / CD Тестирование(unit / integration) Работа в Agile / Scrum"] },
+            //{ "Зарплата": ["Зарплата: 90 000 – 150 000 ₽/мес"] },
+            //{ "График работы": ["График работы: 5 / 2, гибкий график(возможен удалённый формат)"] },
+
+           
+
+            //{ "Образование": ["Образование  Высшее техническое образование (бакалавр/магистр)"] },
+            //{ "Опыт работы": ["Опыт работы: 5+ лет, ведущая роль в проектах"] },
+            //{ "Навыки": ["Навыки: Архитектура систем(микросервисы, event - driven) Оптимизация производительности Наставничество младших разработчиков Работа с облачными платформами(AWS, Azure) Участие в техническом дизайне"] },
+            //{ "Зарплата": ["Зарплата: 160 000 – 280 000 ₽/мес"] },
+            //{ "График работы": ["График работы: Гибкий (4–5 дней в неделю), возможен полностью удалённый формат"] },
+
+
+
+            //{ "Образование": ["Образование: Высшее техническое образование, желательно MBA или дополнительное образование в управлении"] },
+            //{ "Опыт работы": ["Опыт работы: 7+ лет в разработке, 2+ года в управлении командой (5–10 человек)"] },
+            //{ "Навыки": ["Навыки: Управление проектами(Jira, Confluence) Планирование ресурсов и сроков Рекрутинг и оценка персонала Взаимодействие с продуктом и бизнесом Формирование корпоративной культуры"] },
+            //{ "Зарплата": ["Зарплата: 250 000 – 450 000 ₽/мес"] },
+            //{ "График работы": ["График работы: 5/2, гибкий, но с обязательными встречами в офисе (1–2 раза в неделю)"] },
+
+
+
+
+            //{ "Образование": ["Образование: Магистр или PhD в области компьютерных наук/инженерии (желательно)"] },
+            //{ "Опыт работы": ["Опыт работы: 10+ лет в ИТ, 5+ лет на позиции руководителя технической команды в масштабных компаниях"] },
+            //{ "Навыки": ["Навыки: Стратегическое планирование ИТ - инфраструктуры Выбор технологических стеков на уровне компании Управление R & D, инновациями Взаимодействие с инвесторами, акционерами Понимание бизнес - моделей и рынка"] },
+            //{ "Зарплата": ["Зарплата: 500 000 – 1 200 000+ ₽/мес (включая бонусы и опционы)"] },
+            //{ "График работы": ["График работы: Гибкий, 6 дней в неделю (по необходимости), часто удалённо, но с частыми встречами и поездками"] },
+        ];
+        examples.forEach(row => {
+            for (const [category, words] of Object.entries(row)) {
+                words.forEach(word => {
+                    if (!this.categories[category]) {
+                        this.categories[category] = [];
+                        this.categoryColors[category] = this.getRandomColor();
+                    }
+                    this.categories[category].push(word);
+                });
+                //this.categories[category].push(words);
+            }
+        })
 
         this.updateCategoriesDisplay();
 
         // Инициализируем сеть с примером архитектуры
         this.architectureInput.value = '16, 8';
         this.learningRateInput.value = '0.1';
-        this.epochsInput.value = '500';
+        this.epochsInput.value = '2500';
 
         this.initializeNetwork();
+
+        //this.dataset.length / 4;
+        //for (let i = 0; i < 5; i++) {
+        //    const obj = this.dataset[i];
+        //    //examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience].join(" ");
+        //    examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience];
+        //}
+        //for (const obj of this.dataset) {
+        //    examples[obj.name] = [obj.working_hours, obj.work_schedule_by_days, obj.requirement, obj.responsibility, obj.schedule, obj.salary_from, obj.salary_to, obj.frequency, obj.currency, obj.experience];
+        //}
+        //.join(" ");
     }
 
     // Метод для получения текущего состояния
@@ -784,252 +956,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
-
-//// В конструкторе добавляем опцию WebGPU
-////class WordClassificationApp {
-////    constructor() {
-////        this.network = null;
-////        this.categories = {};
-////        this.categoryColors = {};
-////        this.trainingData = [];
-////        this.isTraining = false;
-////        this.useWebGPU = false; // Новая опция
-
-////        this.initializeUI();
-////        this.initializeWithExamples();
-////    }
-
-////    // Обновляем метод initializeNetwork()
-////    initializeNetwork() {
-////        const architecture = this.architectureInput.value
-////            .split(',')
-////            .map(layer => parseInt(layer.trim()));
-
-////        const learningRate = parseFloat(this.learningRateInput.value);
-
-////        // Получаем настройку WebGPU из чекбокса
-////        this.useWebGPU = document.getElementById('webgpu-toggle')?.checked || false;
-
-////        if (architecture.some(isNaN) || isNaN(learningRate)) {
-////            alert('Пожалуйста, введите корректные параметры сети');
-////            return;
-////        }
-
-////        // Добавляем размер входного слоя (64 - размер вектора слова)
-////        architecture.unshift(64);
-
-////        // Добавляем размер выходного слоя (количество категорий)
-////        const numCategories = Object.keys(this.categories).length;
-////        architecture.push(numCategories > 0 ? numCategories : 2);
-
-////        // Создаем сеть с опциональной WebGPU поддержкой
-////        this.network = new NeuralNetwork(architecture, learningRate, { useWebGPU: this.useWebGPU });
-
-////        let statusText = `Сеть инициализирована: ${architecture.join(' → ')}`;
-////        if (this.useWebGPU) {
-////            statusText += ' (WebGPU ускорение)';
-////        } else {
-////            statusText += ' (CPU режим)';
-////        }
-
-////        this.networkStatus.innerHTML = `<p>${statusText}</p>`;
-
-////        // Можно добавить индикатор загрузки WebGPU
-////        if (this.useWebGPU) {
-////            this.network.waitForGPU().then(() => {
-////                this.networkStatus.innerHTML += '<p>WebGPU готов к работе!</p>';
-////            }).catch(() => {
-////                this.networkStatus.innerHTML += '<p>WebGPU недоступен, используется CPU</p>';
-////                this.useWebGPU = false;
-////            });
-////        }
-////    }
-
-////    // Обновляем метод trainNetworkAsync() для использования асинхронного обучения
-////    async trainNetworkAsync(inputs, targets, epochs) {
-////        const errors = [];
-
-////        for (let epoch = 0; epoch < epochs; epoch++) {
-////            let totalError = 0;
-
-////            // Используем асинхронное обучение
-////            for (let i = 0; i < inputs.length; i++) {
-////                const error = await this.network.trainSingle(inputs[i], targets[i]);
-////                totalError += error;
-////            }
-
-////            const avgError = totalError / inputs.length;
-////            errors.push(avgError);
-
-////            // Обновление прогресса каждые 10 эпох
-////            if (epoch % 10 === 0) {
-////                this.trainingProgress.innerHTML = `
-////                    <p>Эпоха ${epoch}/${epochs}</p>
-////                    <p>Текущая ошибка: ${avgError.toFixed(6)}</p>
-////                    <p>Режим: ${this.useWebGPU ? 'WebGPU' : 'CPU'}</p>
-////                `;
-
-////                // Даем браузеру обновить интерфейс
-////                await new Promise(resolve => setTimeout(resolve, 0));
-////            }
-////        }
-
-////        return errors;
-////    }
-
-////    // Обновляем метод classifyWords() для асинхронного предсказания
-////    async classifyWords() {
-////        if (!this.network || this.isTraining) {
-////            alert('Сначала обучите нейронную сеть');
-////            return;
-////        }
-
-////        const wordsText = this.newWordsInput.value.trim();
-////        if (!wordsText) {
-////            alert('Пожалуйста, введите слова для классификации');
-////            return;
-////        }
-
-////        const words = wordsText.split(',').map(word => word.trim()).filter(word => word);
-////        const categories = Object.keys(this.categories);
-////        let resultsHTML = '<h3>Результаты классификации:</h3><ul>';
-
-////        // Используем асинхронное предсказание
-////        for (const word of words) {
-////            const vector = this.createWordVector(word);
-////            const input = vector.map(val => [val]);
-////            const output = await this.network.predict(input);
-
-////            // Находим категорию с максимальной вероятностью
-////            const probabilities = output.flat();
-////            const maxIndex = probabilities.indexOf(Math.max(...probabilities));
-////            const category = categories[maxIndex] || 'Не удалось классифицировать';
-
-////            // Форматируем вероятности
-////            const probText = probabilities.map((p, i) =>
-////                `${categories[i]}: ${(p * 100).toFixed(2)}%`
-////            ).join(', ');
-
-////            resultsHTML += `<li><strong>${word}</strong> → ${category} (${probText})</li>`;
-////        }
-
-////        resultsHTML += '</ul>';
-////        this.classificationResults.innerHTML = resultsHTML;
-
-////        // Обновляем визуализацию с новыми словами
-////        this.updateVisualization(words);
-////    }
-////}
-
-
-
-//// Пример: XOR
-//// main.js
-//let nn;
-//let chart;
-
-//(async (WebGPUNeuralNetwork) => {
-//    const status = document.getElementById('status');
-//    const trainBtn = document.getElementById('trainBtn');
-//    const predictBtn = document.getElementById('predictBtn');
-//    const canvas = document.getElementById('outputCanvas');
-//    const ctx = canvas.getContext('2d');
-
-//    try {
-//        status.textContent = "Инициализация WebGPU...";
-//        nn = new WebGPUNeuralNetwork([2, 4, 1], 0.1); // 2 входа, 4 скрытых, 1 выход
-//        status.textContent = "WebGPU инициализирован ✅";
-//    } catch (err) {
-//        status.textContent = `Ошибка: ${err.message}`;
-//        console.error(err);
-//        return;
-//    }
-
-//    // Инициализация графика потерь
-//    //const ctxChart = document.getElementById('loss-chart');
-//    //chart = new Chart(ctxChart, {
-//    //    type: 'line',
-//    //    data: {
-//    //        labels: [],
-//    //        datasets: [{
-//    //            label: 'Среднеквадратичная ошибка',
-//    //            data: [],
-//    //            borderColor: 'rgb(75, 192, 192)',
-//    //            tension: 0.1
-//    //        }]
-//    //    },
-//    //    options: {
-//    //        responsive: true,
-//    //        scales: {
-//    //            y: { beginAtZero: true, title: { display: true, text: 'Loss' } },
-//    //            x: { title: { display: true, text: 'Эпохи' } }
-//    //        }
-//    //    }
-//    //});
-
-//    // Обучение
-//    trainBtn.addEventListener('click', async () => {
-//        trainBtn.disabled = true;
-//        status.textContent = "Обучение... (это может занять 10-30 сек)";
-
-//        const epochs = 1000;
-//        const lossHistory = [];
-
-//        // Данные XOR: [x1, x2] → y
-//        const trainingData = [
-//            { input: [0, 0], target: [0] },
-//            { input: [0, 1], target: [1] },
-//            { input: [1, 0], target: [1] },
-//            { input: [1, 1], target: [0] }
-//        ];
-
-//        for (let epoch = 0; epoch < epochs; epoch++) {
-//            let totalLoss = 0;
-//            for (let i = 0; i < trainingData.length; i++) {
-//                const { input, target } = trainingData[i];
-//                const loss = await nn.trainSingle(
-//                    new Float32Array(input),
-//                    new Float32Array(target)
-//                );
-//                totalLoss += loss;
-//            }
-
-//            const avgLoss = totalLoss / trainingData.length;
-//            lossHistory.push(avgLoss);
-
-//            // Обновляем график каждые 50 эпох
-//            if (epoch % 50 === 0) {
-//                chart.data.labels.push(epoch);
-//                chart.data.datasets[0].data.push(avgLoss);
-//                chart.update();
-//            }
-
-//            if (epoch % 100 === 0) {
-//                status.textContent = `Эпоха ${epoch}/${epochs} | Loss: ${avgLoss.toFixed(4)}`;
-//            }
-//        }
-//        console.log("!");
-//        status.textContent = `Обучение завершено! Средняя ошибка: ${lossHistory[lossHistory.length - 1].toFixed(4)}`;
-//        trainBtn.disabled = false;
-//    });
-
-//    // Предсказание
-//    predictBtn.addEventListener('click', async () => {
-//        const input = new Float32Array([0, 1]); // Пример XOR: 0 XOR 1 = 1
-//        const output = await nn.predict(input);
-//        const result = output[0].toFixed(4);
-//        status.textContent = `Предсказание [0,1] → ${result} (ожидалось: 1)`;
-
-//        // Визуализируем на canvas
-//        ctx.clearRect(0, 0, canvas.width, canvas.height);
-//        ctx.fillStyle = result > 0.5 ? 'red' : 'blue';
-//        ctx.fillRect(0, 0, canvas.width, canvas.height);
-//        ctx.fillStyle = 'white';
-//        ctx.font = '16px Arial';
-//        ctx.fillText(`Result: ${result}`, 10, 50);
-//    });
-
-//    // Проверка работы сразу после загрузки
-//    //predictBtn.click();
-//})(WebGPUNeuralNetwork);
