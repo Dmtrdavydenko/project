@@ -55,7 +55,7 @@ class WordClassificationApp {
         this.addWordBtn.addEventListener('click', () => this.addWordToCategory());
         this.trainBtn.addEventListener('click', () => this.trainNetwork());
         this.classifyBtn.addEventListener('click', () => this.classifyWords());
-        this.spaceOS.addEventListener('change', (e) => this.loadDataSet(e))
+        //this.spaceOS.addEventListener('change', (e) => this.loadDataSet(e));
 
         //this.checkWebGPUSupport();
         //await this.getDataHH();
