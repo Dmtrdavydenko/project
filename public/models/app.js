@@ -507,7 +507,7 @@ class WordClassificationApp {
             return;
         }
 
-        const words = wordsText.split(',').map(word => word.trim()).filter(word => word);
+        const words = wordsText.split(' ').map(word => word.trim()).filter(word => word);
         const categories = Object.keys(this.categories);
         let resultsHTML = '<h3>Результаты классификации:</h3><ul>';
 
