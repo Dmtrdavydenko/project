@@ -962,8 +962,12 @@ async function getTable(body) {
             case "Thread_Parameters":
                 //const field = ["thread_id", "thread_density", "thread_length"];
                 //sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
-                sql = "SELECT * FROM Thread_Parameters";
-
+                //sql = "SELECT * FROM Thread_Parameters";
+                sql = `
+                SELECT thread_id, density FROM Thread_Parameters
+                JOIN Tape ON tape_id = Tape.id
+                ORDER BY density ASC
+                `
                 break;
             case "textile":
                 //const field = ["textile_id", "textile_number", "circular_width", "density", "weft_quantity", "warp_quantity", "warp_name", "warp_name2", "weft_name1", "weft_name2"];

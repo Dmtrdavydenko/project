@@ -1066,8 +1066,7 @@ class ThreadInfo {
     constructor(thread) {
         this.thread = thread;
     }
-
-    get density() { return this.thread.thread_density; }
+    get density() { return this.thread.density; }
     get color() { return this.thread.color; }
     get id() { return this.thread.thread_id; }
     get length() { return `длина: ${this.thread.thread_length}`; }
