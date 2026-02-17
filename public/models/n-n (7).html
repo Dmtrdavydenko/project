@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Обучение XOR на WebGPU</title>
+</head>
+<body>
+    <h1>Обучение XOR на WebGPU</h1>
+    <pre id="output"></pre>
+    <script type="module">
+
+
+        class WebGPUNeuralNetwork {
+            constructor(architecture, learningRate = 0.1) {
+                this.architecture = architecture;
+                this.learningRate = learningRate;
+                this.layers = [];
+                this.device = null;
+                this.initialized = false;
+            }
+
+            async initialize() {
+                if (!navigator.gpu) throw new Error("WebGPU not supported");
+
+                const adapter = await navigator.gpu.requestAdapter();
+                this.device = await adapter.requestDevice();
+
+                // Инициализация буферов для каждого слоя
+                for (let i = 1; i < this.architecture.length; i++) {
+                    const inputSize = this.architecture[i - 1];
+                    const outputSize = this.architecture[i];
+
+                    const layer = {
+                        weights: this.device.createBuffer({
+                            size: inputSize * outputSize * 4, // Float32 = 4 байта
+                            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC
+                        }),
+                        bias: this.device.createBuffer({
+                            size: outputSize * 4,
+                            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC
+                        }),
+                        weightGradients: this.device.createBuffer({
+                            size: inputSize * outputSize * 4,
+                            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST
+                        }),
+                        biasGradients: this.device.createBuffer({
+                            size: outputSize * 4,
+                            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST
+                        })
+                    };
+
+                    // Инициализация весов случайными значениями
+                    const initialWeights = new Float32Array(inputSize * outputSize).fill(0).map(() => Math.random() - 0.5);
+                    const initialBias = new Float32Array(outputSize).fill(0).map(() => Math.random() - 0.5);
+
+                    this.device.queue.writeBuffer(layer.weights, 0, initialWeights);
+                    this.device.queue.writeBuffer(layer.bias, 0, initialBias);
+
+                    this.layers.push(layer);
+                }
+
+                // Создание шейдерных модулей
+                this.forwardShader = this.device.createShaderModule({
+                    code: `
+                    @group(0) @binding(0) var<storage, read> weights: array<f32>;
+                    @group(0) @binding(1) var<storage, read> bias: array<f32>;
+                    @group(0) @binding(2) var<storage, read> input: array<f32>;
+                    @group(0) @binding(3) var<storage, read_write> output: array<f32>;
+
+                    fn sigmoid(x: f32) -> f32 {
+                        return 1.0 / (1.0 + exp(-x));
+                    }
+
+                    @compute @workgroup_size(64)
+                    fn main(@builtin(global_invocation_id) id: vec3<u32>) {
+                        let outputIndex = id.x;
+                        if (outputIndex >= arrayLength(&output)) { return; }
+
+                        var sum: f32 = 0.0;
+                        for (var i: u32 = 0; i < arrayLength(&input); i++) {
+                            let weightIndex = outputIndex * arrayLength(&input) + i;
+                            sum += input[i] * weights[weightIndex];
+                        }
+                        sum += bias[outputIndex];
+                        output[outputIndex] = sigmoid(sum);
+                    }
+                `
+                });
+
+                this.backwardShader = this.device.createShaderModule({
+                    code: `
+                    @group(0) @binding(0) var<storage, read> weights: array<f32>;
+                    @group(0) @binding(1) var<storage, read_write> weightGradients: array<f32>;
+                    @group(0) @binding(2) var<storage, read_write> biasGradients: array<f32>;
+                    @group(0) @binding(3) var<storage, read> input: array<f32>;
+                    @group(0) @binding(4) var<storage, read> outputError: array<f32>;
+                    @group(0) @binding(5) var<storage, read_write> inputError: array<f32>;
+
+                    @compute @workgroup_size(64)
+                    fn main(@builtin(global_invocation_id) id: vec3<u32>) {
+                        let outputIndex = id.x;
+                        if (outputIndex >= arrayLength(&outputError)) { return; }
+
+                        let error = outputError[outputIndex];
+                        let outputDerivative = 1.0; // Упрощение для демонстрации
+
+                        for (var i: u32 = 0; i < arrayLength(&input); i++) {
+                            let weightIndex = outputIndex * arrayLength(&input) + i;
+                            atomicAdd(&weightGradients[weightIndex], error * outputDerivative * input[i]);
+                            atomicAdd(&inputError[i], error * outputDerivative * weights[weightIndex]);
+                        }
+                        atomicAdd(&biasGradients[outputIndex], error * outputDerivative);
+                    }
+                `
+                });
+
+                this.updateShader = this.device.createShaderModule({
+                    code: `
+                    @group(0) @binding(0) var<storage, read_write> weights: array<f32>;
+                    @group(0) @binding(1) var<storage, read_write> bias: array<f32>;
+                    @group(0) @binding(2) var<storage, read> weightGradients: array<f32>;
+                    @group(0) @binding(3) var<storage, read> biasGradients: array<f32>;
+
+                    const learning_rate: f32 = ${this.learningRate};
+
+                    @compute @workgroup_size(64)
+                    fn main(@builtin(global_invocation_id) id: vec3<u32>) {
+                        let index = id.x;
+                        if (index >= arrayLength(&weights)) { return; }
+
+                        weights[index] = weights[index] - learning_rate * weightGradients[index];
+
+                        if (index < arrayLength(&bias)) {
+                            bias[index] = bias[index] - learning_rate * biasGradients[index];
+                        }
+                    }
+                `
+                });
+
+                // Создание пайплайнов
+                this.forwardPipeline = this.device.createComputePipeline({
+                    layout: 'auto',
+                    compute: { module: this.forwardShader, entryPoint: 'main' }
+                });
+
+                this.backwardPipeline = this.device.createComputePipeline({
+                    layout: 'auto',
+                    compute: { module: this.backwardShader, entryPoint: 'main' }
+                });
+
+                this.updatePipeline = this.device.createComputePipeline({
+                    layout: 'auto',
+                    compute: { module: this.updateShader, entryPoint: 'main' }
+                });
+
+                this.initialized = true;
+            }
+
+            async train(data, epochs) {
+                if (!this.initialized) await this.initialize();
+
+                for (let epoch = 0; epoch < epochs; epoch++) {
+                    for (const example of data) {
+                        await this.trainExample(example.input, example.target);
+                    }
+                }
+            }
+
+            async trainExample(input, target) {
+                const commandEncoder = this.device.createCommandEncoder();
+                const activations = [new Float32Array(input)];
+                const layerOutputBuffers = [];
+
+                for (let i = 0; i < this.layers.length; i++) {
+                    const layer = this.layers[i];
+                    const inputSize = this.architecture[i];
+                    const outputSize = this.architecture[i + 1];
+
+                    const inputBuffer = this.device.createBuffer({
+                        size: inputSize * 4,
+                        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST
+                    });
+
+                    const outputBuffer = this.device.createBuffer({
+                        size: outputSize * 4,
+                        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC
+                    });
+
+                    this.device.queue.writeBuffer(inputBuffer, 0, activations[i]);
+
+                    const forwardBindGroup = this.device.createBindGroup({
+                        layout: this.forwardPipeline.getBindGroupLayout(0),
+                        entries: [
+                            { binding: 0, resource: { buffer: layer.weights } },
+                            { binding: 1, resource: { buffer: layer.bias } },
+                            { binding: 2, resource: { buffer: inputBuffer } },
+                            { binding: 3, resource: { buffer: outputBuffer } }
+                        ]
+                    });
+
+                    const pass = commandEncoder.beginComputePass();
+                    pass.setPipeline(this.forwardPipeline);
+                    pass.setBindGroup(0, forwardBindGroup);
+                    pass.dispatchWorkgroups(Math.ceil(outputSize / 64));
+                    pass.end();
+
+                    layerOutputBuffers.push(outputBuffer);
+                }
+
+                const errors = [];
+
+                const finalOutput = await this.readBuffer(layerOutputBuffers[layerOutputBuffers.length - 1]);
+                const outputError = new Float32Array(finalOutput.length);
+                for (let i = 0; i < finalOutput.length; i++) {
+                    outputError[i] = finalOutput[i] - target[i];
+                }
+                errors.push(outputError);
+
+                for (let i = this.layers.length - 1; i >= 0; i--) {
+                    const layer = this.layers[i];
+                    const inputSize = this.architecture[i];
+                    const outputSize = this.architecture[i + 1];
+
+                    const zeroBufferWeights = new Float32Array(inputSize * outputSize).fill(0);
+                    const zeroBufferBias = new Float32Array(outputSize).fill(0);
+                    this.device.queue.writeBuffer(layer.weightGradients, 0, zeroBufferWeights);
+                    this.device.queue.writeBuffer(layer.biasGradients, 0, zeroBufferBias);
+
+                    const inputErrorBuffer = this.device.createBuffer({
+                        size: inputSize * 4,
+                        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC
+                    });
+
+                    const errorBuffer = this.createBufferFromArray(errors[errors.length - 1]);
+
+                    const backwardBindGroup = this.device.createBindGroup({
+                        layout: this.backwardPipeline.getBindGroupLayout(0),
+                        entries: [
+                            { binding: 0, resource: { buffer: layer.weights } },
+                            { binding: 1, resource: { buffer: layer.weightGradients } },
+                            { binding: 2, resource: { buffer: layer.biasGradients } },
+                            { binding: 3, resource: { buffer: layerOutputBuffers[i] } },
+                            { binding: 4, resource: { buffer: errorBuffer } },
+                            { binding: 5, resource: { buffer: inputErrorBuffer } }
+                        ]
+                    });
+
+                    const backwardPass = commandEncoder.beginComputePass();
+                    backwardPass.setPipeline(this.backwardPipeline);
+                    backwardPass.setBindGroup(0, backwardBindGroup);
+                    backwardPass.dispatchWorkgroups(Math.ceil(outputSize / 64));
+                    backwardPass.end();
+
+                    const nextError = await this.readBuffer(inputErrorBuffer);
+                    errors.push(nextError);
+                }
+
+                for (let i = 0; i < this.layers.length; i++) {
+                    const layer = this.layers[i];
+
+                    const updateBindGroup = this.device.createBindGroup({
+                        layout: this.updatePipeline.getBindGroupLayout(0),
+                        entries: [
+                            { binding: 0, resource: { buffer: layer.weights } },
+                            { binding: 1, resource: { buffer: layer.bias } },
+                            { binding: 2, resource: { buffer: layer.weightGradients } },
+                            { binding: 3, resource: { buffer: layer.biasGradients } }
+                        ]
+                    });
+
+                    const updatePass = commandEncoder.beginComputePass();
+                    updatePass.setPipeline(this.updatePipeline);
+                    updatePass.setBindGroup(0, updateBindGroup);
+                    updatePass.dispatchWorkgroups(Math.ceil((this.architecture[i] * this.architecture[i + 1]) / 64));
+                    updatePass.end();
+                }
+
+                this.device.queue.submit([commandEncoder.finish()]);
+            }
+
+            async predict(input) {
+                const commandEncoder = this.device.createCommandEncoder();
+                let currentInput = new Float32Array(input);
+
+                for (let i = 0; i < this.layers.length; i++) {
+                    const layer = this.layers[i];
+                    const outputSize = this.architecture[i + 1];
+
+                    const inputBuffer = this.device.createBuffer({
+                        size: currentInput.length * 4,
+                        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST
+                    });
+
+                    const outputBuffer = this.device.createBuffer({
+                        size: outputSize * 4,
+                        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC
+                    });
+
+                    this.device.queue.writeBuffer(inputBuffer, 0, currentInput);
+
+                    const bindGroup = this.device.createBindGroup({
+                        layout: this.forwardPipeline.getBindGroupLayout(0),
+                        entries: [
+                            { binding: 0, resource: { buffer: layer.weights } },
+                            { binding: 1, resource: { buffer: layer.bias } },
+                            { binding: 2, resource: { buffer: inputBuffer } },
+                            { binding: 3, resource: { buffer: outputBuffer } }
+                        ]
+                    });
+
+                    const pass = commandEncoder.beginComputePass();
+                    pass.setPipeline(this.forwardPipeline);
+                    pass.setBindGroup(0, bindGroup);
+                    pass.dispatchWorkgroups(Math.ceil(outputSize / 64));
+                    pass.end();
+
+                    currentInput = await this.readBuffer(outputBuffer);
+                }
+
+                this.device.queue.submit([commandEncoder.finish()]);
+                return Array.from(currentInput);
+            }
+
+            async readBuffer(buffer) {
+                const size = buffer.size;
+                const readBuffer = this.device.createBuffer({
+                    size: size,
+                    usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ
+                });
+
+                const commandEncoder = this.device.createCommandEncoder();
+                commandEncoder.copyBufferToBuffer(buffer, 0, readBuffer, 0, size);
+                this.device.queue.submit([commandEncoder.finish()]);
+
+                await readBuffer.mapAsync(GPUMapMode.READ);
+                const data = new Float32Array(readBuffer.getMappedRange());
+                const result = new Float32Array(data);
+                readBuffer.unmap();
+
+                return result;
+            }
+
+            createBufferFromArray(array) {
+                const buffer = this.device.createBuffer({
+                    size: array.length * 4,
+                    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST
+                });
+                this.device.queue.writeBuffer(buffer, 0, array);
+                return buffer;
+            }
+        }
+
+        const nn = new WebGPUNeuralNetwork([2, 8, 8, 1], 0.1);
+
+        const xorData = [
+            { input: [0, 0], target: [0] },
+            { input: [0, 1], target: [1] },
+            { input: [1, 0], target: [1] },
+            { input: [1, 1], target: [0] }
+        ];
+
+        async function test() {
+            await nn.train(xorData, 1000);
+
+            console.log('Predictions after training:');
+            for (const example of xorData) {
+                const prediction = await nn.predict(example.input);
+                console.log(`Input: [${example.input}] -> Prediction: ${prediction[0].toFixed(3)}, Target: ${example.target[0]}`);
+            }
+        }
+
+        test().catch(console.error);
+
+
+
+    </script>
+</body>
+</html>

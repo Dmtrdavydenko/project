@@ -1369,6 +1369,58 @@ async function getTime() {
         console.error('Error connection MySQL:', error.message);
     }
 }
+async function devGetTime() {
+    try {
+        const connection = await pool.getConnection();
+        try {
+            console.log('Успешно подключено к базе данных MySQL!');
+            const sql = `
+
+
+            SELECT timestamps.id,
+            UNIX_TIMESTAMP(task_time) / 60 AS task_minutes,
+            UNIX_TIMESTAMP(task_time) AS task_seconds,
+            UNIX_TIMESTAMP(task_time) * 1000 AS task_milliseconds,
+            yarn_name as type,
+
+            Tape.density,
+            color.color,
+            additive.additive_name,
+            Tape.length,
+            Thread_Parameters.thread_speed_id as speed,
+            (Tape.length / Thread_Parameters.thread_speed_id) * 60000 as tape_milliseconds
+
+            FROM timestamps
+
+            JOIN TapeExtrusion ON timestamps.TapeExtrusion_id = TapeExtrusion.id
+
+            JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id
+
+            JOIN Tape   ON Thread_Parameters.tape_id = Tape.id
+
+            JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
+
+            JOIN color ON TapeExtrusion.color_id = color.color_id
+
+            JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
+
+            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 24*3-12 HOUR)
+
+            ORDER BY task_time ASC;
+
+`
+            return await connection.execute(sql);
+        } catch (err) {
+            console.error('Ошибка:', err);
+            throw err;
+        } finally {
+            if (connection) connection.release();
+            console.log("Соединение возвращено.");
+        }
+    } catch (error) {
+        console.error('Error connection MySQL:', error.message);
+    }
+}
 
 
 async function getThreads() {

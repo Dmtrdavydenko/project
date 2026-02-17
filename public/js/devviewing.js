@@ -138,7 +138,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
 (async () => {
     const tape = await Tape.loadData("getTape");
     const thread = await Thread.loadData("getThreads");
-    const task = await Time.loadData("getTime");
+    const task = await Time.loadData("devGetTime");
     //const task = [[]];
 
     console.log(Tape);

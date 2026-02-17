@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Обучение XOR на WebGPU</title>
+</head>
+<body>
+    <h1>Обучение XOR на WebGPU</h1>
+    <pre id="output"></pre>
+    <script type="module">
+        const adapter = await navigator.gpu.requestAdapter();
+        const device = await adapter.requestDevice();
+
+        const trainingCode = `
+    @group(0) @binding(0) var<storage, read_write> weights: array<f32, 2>;
+    @group(0) @binding(1) var<storage, read_write> bias: f32;
+    @group(0) @binding(2) var<storage, read> inputs: array<f32>;
+    @group(0) @binding(3) var<storage, read> targets: array<f32>;
+    @group(0) @binding(4) var<storage, read_write> gradients: array<f32, 2>;
+    @group(0) @binding(5) var<storage, read_write> bias_gradient: f32;
+    
+    const learning_rate: f32 = 0.5;
+    
+    fn sigmoid(x: f32) -> f32 {
+        return 1.0 / (1.0 + exp(-x));
+    }
+    
+    @compute @workgroup_size(4)
+    fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
+        let idx = global_id.x;
+        let input1 = inputs[idx * 2];
+        let input2 = inputs[idx * 2 + 1];
+        let mtarget = targets[idx];
+        
+        let weighted_sum = input1 * weights[0] + input2 * weights[1] + bias;
+        let output = sigmoid(weighted_sum);
+        
+        let error = output - mtarget;
+        let derivative = output * (1.0 - output);
+        
+        gradients[0] = gradients[0] + error * derivative * input1;
+        gradients[1] = gradients[1] + error * derivative * input2;
+        bias_gradient = bias_gradient + error * derivative;
+    }
+`;
+
+        const updateCode = `
+    @group(0) @binding(0) var<storage, read_write> weights: array<f32, 2>;
+    @group(0) @binding(1) var<storage, read_write> bias: f32;
+    @group(0) @binding(2) var<storage, read> gradients: array<f32, 2>;
+    @group(0) @binding(3) var<storage, read> bias_gradient: f32;
+    
+    const learning_rate: f32 = 0.5;
+    const batch_size: f32 = 4.0;
+    
+    @compute @workgroup_size(1)
+    fn main() {
+        weights[0] = weights[0] - learning_rate * gradients[0] / batch_size;
+        weights[1] = weights[1] - learning_rate * gradients[1] / batch_size;
+        bias = bias - learning_rate * bias_gradient / batch_size;
+    }
+`;
+
+        const forwardCode = `
+    @group(0) @binding(0) var<storage, read> weights: array<f32, 2>;
+    @group(0) @binding(1) var<storage, read> bias: f32;
+    @group(0) @binding(2) var<storage, read> inputs: array<f32>;
+    @group(0) @binding(3) var<storage, read_write> outputs: array<f32>;
+    
+    fn sigmoid(x: f32) -> f32 {
+        return 1.0 / (1.0 + exp(-x));
+    }
+    
+    @compute @workgroup_size(4)
+    fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
+        let idx = global_id.x;
+        let input1 = inputs[idx * 2];
+        let input2 = inputs[idx * 2 + 1];
+        
+        let weighted_sum = input1 * weights[0] + input2 * weights[1] + bias;
+        outputs[idx] = sigmoid(weighted_sum);
+    }
+`;
+
+        const trainingShader = device.createShaderModule({ code: trainingCode });
+        const updateShader = device.createShaderModule({ code: updateCode });
+        const forwardShader = device.createShaderModule({ code: forwardCode });
+
+        const trainingPipeline = device.createComputePipeline({
+            layout: 'auto',
+            compute: { module: trainingShader, entryPoint: 'main' }
+        });
+
+        const updatePipeline = device.createComputePipeline({
+            layout: 'auto',
+            compute: { module: updateShader, entryPoint: 'main' }
+        });
+
+        const forwardPipeline = device.createComputePipeline({
+            layout: 'auto',
+            compute: { module: forwardShader, entryPoint: 'main' }
+        });
+
+        const weightsBuffer = device.createBuffer({
+            size: 8,
+            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC
+        });
+
+        const biasBuffer = device.createBuffer({
+            size: 4,
+            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC
+        });
+
+        const inputsBuffer = device.createBuffer({
+            size: 32,
+            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST
+        });
+
+        const targetsBuffer = device.createBuffer({
+            size: 16,
+            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST
+        });
+
+        const gradientsBuffer = device.createBuffer({
+            size: 8,
+            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST
+        });
+
+        const biasGradientBuffer = device.createBuffer({
+            size: 4,
+            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST
+        });
+
+        const outputsBuffer = device.createBuffer({
+            size: 16,
+            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC
+        });
+
+        const stagingBuffer = device.createBuffer({
+            size: 16,
+            usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST
+        });
+
+        const trainingBindGroup = device.createBindGroup({
+            layout: trainingPipeline.getBindGroupLayout(0),
+            entries: [
+                { binding: 0, resource: { buffer: weightsBuffer } },
+                { binding: 1, resource: { buffer: biasBuffer } },
+                { binding: 2, resource: { buffer: inputsBuffer } },
+                { binding: 3, resource: { buffer: targetsBuffer } },
+                { binding: 4, resource: { buffer: gradientsBuffer } },
+                { binding: 5, resource: { buffer: biasGradientBuffer } }
+            ]
+        });
+
+        const updateBindGroup = device.createBindGroup({
+            layout: updatePipeline.getBindGroupLayout(0),
+            entries: [
+                { binding: 0, resource: { buffer: weightsBuffer } },
+                { binding: 1, resource: { buffer: biasBuffer } },
+                { binding: 2, resource: { buffer: gradientsBuffer } },
+                { binding: 3, resource: { buffer: biasGradientBuffer } }
+            ]
+        });
+
+        const forwardBindGroup = device.createBindGroup({
+            layout: forwardPipeline.getBindGroupLayout(0),
+            entries: [
+                { binding: 0, resource: { buffer: weightsBuffer } },
+                { binding: 1, resource: { buffer: biasBuffer } },
+                { binding: 2, resource: { buffer: inputsBuffer } },
+                { binding: 3, resource: { buffer: outputsBuffer } }
+            ]
+        });
+
+        const inputsData = new Float32Array([0, 0, 0, 1, 1, 0, 1, 1]);
+        const targetsData = new Float32Array([0, 1, 1, 0]);
+        const initialWeights = new Float32Array([Math.random() - 0.5, Math.random() - 0.5]);
+        const initialBias = new Float32Array([Math.random() - 0.5]);
+
+        device.queue.writeBuffer(inputsBuffer, 0, inputsData);
+        device.queue.writeBuffer(targetsBuffer, 0, targetsData);
+        device.queue.writeBuffer(weightsBuffer, 0, initialWeights);
+        device.queue.writeBuffer(biasBuffer, 0, initialBias);
+
+        for (let epoch = 0; epoch < 1000; epoch++) {
+            const zeroGradients = new Float32Array(2);
+            const zeroBiasGradient = new Float32Array([0]);
+
+            device.queue.writeBuffer(gradientsBuffer, 0, zeroGradients);
+            device.queue.writeBuffer(biasGradientBuffer, 0, zeroBiasGradient);
+
+            const commandEncoder = device.createCommandEncoder();
+
+            const trainingPass = commandEncoder.beginComputePass();
+            trainingPass.setPipeline(trainingPipeline);
+            trainingPass.setBindGroup(0, trainingBindGroup);
+            trainingPass.dispatchWorkgroups(1);
+            trainingPass.end();
+
+            const updatePass = commandEncoder.beginComputePass();
+            updatePass.setPipeline(updatePipeline);
+            updatePass.setBindGroup(0, updateBindGroup);
+            updatePass.dispatchWorkgroups(1);
+            updatePass.end();
+
+            device.queue.submit([commandEncoder.finish()]);
+            await device.queue.onSubmittedWorkDone();
+        }
+
+        const commandEncoder = device.createCommandEncoder();
+        const forwardPass = commandEncoder.beginComputePass();
+        forwardPass.setPipeline(forwardPipeline);
+        forwardPass.setBindGroup(0, forwardBindGroup);
+        forwardPass.dispatchWorkgroups(1);
+        forwardPass.end();
+
+        commandEncoder.copyBufferToBuffer(outputsBuffer, 0, stagingBuffer, 0, 16);
+        device.queue.submit([commandEncoder.finish()]);
+
+        await stagingBuffer.mapAsync(GPUMapMode.READ, 0, 16);
+        const outputsData = new Float32Array(stagingBuffer.getMappedRange(0, 16));
+        console.log(Array.from(outputsData));
+        stagingBuffer.unmap();
+
+
+    </script>
+</body>
+</html>

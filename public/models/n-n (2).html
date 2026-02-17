@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>WebGPU Neural Network</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #111;
+            color: #eee;
+        }
+
+        pre {
+            background: #222;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        button {
+            margin: 10px;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #444;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 WebGPU Neural Network (Fully GPU-Accelerated)</h1>
+    <p>Architecture: <strong>2 → 8 → 8 → 1</strong> (Sigmoid)</p>
+    <button id="trainBtn">Train 100 Epochs</button>
+    <button id="predictBtn">Predict [0.5, 0.5]</button>
+    <div id="status">Status: Idle</div>
+    <pre id="log"></pre>
+
+    <script>
+        class WebGPUNeuralNetwork {
+            constructor(architecture, learningRate = 0.1) {
+                this.architecture = architecture;
+                this.learningRate = learningRate;
+                this.layers = architecture.length;
+                this.device = null;
+                this.buffers = {};
+                this.bindGroup = null;
+                this.computePipelineForward = null;
+                this.computePipelineBackward = null;
+                this.computePipelineUpdate = null;
+
+                this.layerOffsets = [0]; // Смещения активаций для каждого слоя
+                this.weightOffsets = [0]; // Смещения весов для каждого слоя
+                this.totalWeights = 0;
+                this.totalBiases = 0;
+                this.totalActivations = 0;
+
+                this.bindGroupLayout = null;
+
+                this.init();
+            }
+
+            async init() {
+                if (!navigator.gpu) {
+                    throw new Error('WebGPU not supported in this browser');
+                }
+
+                const adapter = await navigator.gpu.requestAdapter();
+
+
+                this.device = await adapter.requestDevice({
+                    requiredLimits: {
+                        maxStorageBuffersPerShaderStage: 10, // ← You need 9 → request 10
+                        maxComputeWorkgroupStorageSize: 32768, // ← Matches your adapter
+                        maxComputeInvocationsPerWorkgroup: 1024, // ← Matches your adapter
+                        // Optional: add others if you use them
+                        maxUniformBuffersPerShaderStage: 12,
+                        maxSampledTexturesPerShaderStage: 16,
+                        maxStorageTexturesPerShaderStage: 8,
+                    },
+                });
+
+                // 1. Calculate buffer sizes
+                this.calculateBufferSizes();
+
+                // 2. Create buffers (required for bind group layout)
+                this.createBuffers();
+
+                // 3. ✅ CREATE BIND GROUP LAYOUT BEFORE PIPELINES
+                this.createBindGroupLayout(); // ← NEW METHOD — creates layout without bind group
+
+                // 4. ✅ CREATE PIPELINES (now bindGroupLayout exists)
+                //await this.createComputePipelines();
+                this.createComputePipelines();
+
+                // 5. Initialize weights and biases on CPU
+                this.initializeWeightsAndBiases();
+
+                // 6. Upload to GPU
+                this.uploadWeights();
+                this.uploadBiases();
+                this.uploadLayerSizes();
+                this.uploadLayerOffsets();
+                this.uploadWeightOffsets();
+
+                // 7. ✅ CREATE BIND GROUP (after pipelines + buffers + layout)
+                this.createBindGroup();
+
+                console.log('✅ WebGPU Neural Network initialized successfully');
+            }
+
+            calculateBufferSizes() {
+                for (let i = 0; i < this.layers; i++) {
+                    this.totalActivations += this.architecture[i];
+                    if (i < this.layers - 1) {
+                        const weightsInLayer = this.architecture[i] * this.architecture[i + 1];
+                        const biasesInLayer = this.architecture[i + 1];
+                        this.totalWeights += weightsInLayer;
+                        this.totalBiases += biasesInLayer;
+                        this.layerOffsets.push(this.totalActivations);
+                        this.weightOffsets.push(this.totalWeights);
+                    }
+                }
+            }
+
+            createBuffers() {
+                const floatSize = 4; // f32 = 4 bytes
+                const uintSize = 4;  // u32 = 4 bytes
+
+                const MIN_BUFFER_SIZE = 4096; // ✅ Critical: enforce 4KB minimum per storage buffer
+
+                const MAX_ACTIVATIONS = 1000;
+                //const MAX_WEIGHTS = 10000;
+                const MAX_WEIGHTS = 1024;
+                const MAX_LAYERS = 10;
+
+                // Always use at least MIN_BUFFER_SIZE (4096) for storage buffers
+                this.buffers.inputActivations = this.device.createBuffer({
+                    size: Math.max(MAX_ACTIVATIONS * floatSize, MIN_BUFFER_SIZE),
+                    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+                });
+
+                this.buffers.weights = this.device.createBuffer({
+                    size: Math.max(MAX_WEIGHTS * floatSize, MIN_BUFFER_SIZE),
+                    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC,
+                });
+
+                this.buffers.biases = this.device.createBuffer({
+                    size: Math.max(MAX_ACTIVATIONS * floatSize, MIN_BUFFER_SIZE),
+                    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC,
+                });
+
+                this.buffers.outputActivations = this.device.createBuffer({
+                    size: Math.max(MAX_ACTIVATIONS * floatSize, MIN_BUFFER_SIZE),
+                    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC,
+                });
+
+                this.buffers.deltas = this.device.createBuffer({
+                    size: Math.max(MAX_ACTIVATIONS * floatSize, MIN_BUFFER_SIZE),
+                    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+                });
+
+                this.buffers.layerSizes = this.device.createBuffer({
+                    size: Math.max(MAX_LAYERS * uintSize, MIN_BUFFER_SIZE),
+                    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+                });
+
+                this.buffers.layerOffsets = this.device.createBuffer({
+                    size: Math.max(MAX_LAYERS * uintSize, MIN_BUFFER_SIZE),
+                    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+                });
+
+                this.buffers.weightOffsets = this.device.createBuffer({
+                    size: Math.max((MAX_LAYERS - 1) * uintSize, MIN_BUFFER_SIZE), // Only (layers-1) offsets
+                    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+                });
+
+                this.buffers.learningRate = this.device.createBuffer({
+                    size: Math.max(floatSize, MIN_BUFFER_SIZE), // 4 bytes → padded to 4096
+                    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+                });
+
+                console.log('✅ Buffers created with minimum size 4096 bytes each');
+            }
+
+
+
+
+
+            createComputePipelines() {
+                const NUM_LAYERS = this.architecture.length;
+
+                const shaderCode = `
+
+
+                const MAX_ACTIVATIONS: u32 = 1000;
+const MAX_WEIGHTS: u32 = 1024;
+const MAX_LAYERS: u32 = 10;
+const NUM_LAYERS: u32 = 4;
+
+fn sigmoid(x: f32) -> f32 {
+    return 1.0 / (1.0 + exp(-x));
+}
+
+@group(0) @binding(0) var<storage, read> inputActivations: array<f32, MAX_ACTIVATIONS>;
+@group(0) @binding(1) var<storage, read_write> weights: array<f32, MAX_WEIGHTS>;
+@group(0) @binding(2) var<storage, read_write> biases: array<f32, MAX_ACTIVATIONS>;
+@group(0) @binding(3) var<storage, read_write> outputActivations: array<f32, MAX_ACTIVATIONS>;
+@group(0) @binding(4) var<storage, read_write> deltas: array<f32, MAX_ACTIVATIONS>;
+@group(0) @binding(5) var<storage, read> layerSizes: array<u32, MAX_LAYERS>;
+@group(0) @binding(6) var<storage, read> layerOffsets: array<u32, MAX_LAYERS>;
+@group(0) @binding(7) var<storage, read> weightOffsets: array<u32, MAX_LAYERS>;
+@group(0) @binding(8) var<storage, read> learningRate: f32;
+
+@compute @workgroup_size(64)
+fn forward(@builtin(global_invocation_id) id: vec3<u32>) {
+    let layer_idx = id.x;
+    let neuron_idx = id.y;
+
+    if (layer_idx >= NUM_LAYERS - 1 || neuron_idx >= layerSizes[layer_idx + 1]) {
+        return;
+    }
+
+    let input_size = layerSizes[layer_idx];
+    let output_size = layerSizes[layer_idx + 1];
+    let weight_offset = weightOffsets[layer_idx];
+    let input_offset = layerOffsets[layer_idx];
+    let output_offset = layerOffsets[layer_idx + 1];
+
+    var sum: f32 = 0.0;
+    for (var i: u32 = 0; i < input_size; i = i + 1) {
+        let weight_index = weight_offset + i * output_size + neuron_idx;
+        let input_index = input_offset + i;
+        sum += weights[weight_index] * inputActivations[input_index];
+    }
+
+    sum += biases[output_offset + neuron_idx];
+    outputActivations[output_offset + neuron_idx] = sigmoid(sum);
+}
+
+@compute @workgroup_size(64)
+fn backward(@builtin(global_invocation_id) id: vec3<u32>) {
+    let layer_idx = id.x;
+    let neuron_idx = id.y;
+
+    if (layer_idx >= NUM_LAYERS - 1 || neuron_idx >= layerSizes[layer_idx + 1]) {
+        return;
+    }
+
+    let current_layer_size = layerSizes[layer_idx + 1];
+    let activation_offset = layerOffsets[layer_idx + 1];
+    let delta_offset = layerOffsets[layer_idx + 1];
+
+    // Для выходного слоя
+    if (layer_idx == NUM_LAYERS - 2) {
+        let predicted = outputActivations[activation_offset + neuron_idx];
+        let expected_value = inputActivations[activation_offset + neuron_idx]; // target из input buffer
+        let error = predicted - expected_value;
+        let sigmoid_deriv = predicted * (1.0 - predicted);
+        deltas[delta_offset + neuron_idx] = error * sigmoid_deriv;
+    }
+    // Для скрытых слоев
+    else {
+        let next_layer_size = layerSizes[layer_idx + 2];
+        let next_weight_offset = weightOffsets[layer_idx + 1];
+        let next_delta_offset = layerOffsets[layer_idx + 2];
+
+        var sum: f32 = 0.0;
+        for (var i: u32 = 0; i < next_layer_size; i = i + 1) {
+            let weight_index = next_weight_offset + neuron_idx * next_layer_size + i;
+            sum += deltas[next_delta_offset + i] * weights[weight_index];
+        }
+
+        let output_value = outputActivations[activation_offset + neuron_idx];
+        let sigmoid_deriv = output_value * (1.0 - output_value);
+        deltas[delta_offset + neuron_idx] = sum * sigmoid_deriv;
+    }
+}
+
+@compute @workgroup_size(64)
+fn update(@builtin(global_invocation_id) id: vec3<u32>) {
+    let layer_idx = id.x;
+    let neuron_idx = id.y;
+
+    if (layer_idx >= NUM_LAYERS - 1 || neuron_idx >= layerSizes[layer_idx + 1]) {
+        return;
+    }
+
+    let input_size = layerSizes[layer_idx];
+    let output_size = layerSizes[layer_idx + 1];
+    let weight_offset = weightOffsets[layer_idx];
+    let input_offset = layerOffsets[layer_idx];
+    let delta_offset = layerOffsets[layer_idx + 1];
+    let lr = learningRate;
+
+    // Обновление bias
+    let bias_index = layerOffsets[layer_idx + 1] + neuron_idx;
+    biases[bias_index] -= lr * deltas[delta_offset + neuron_idx];
+
+    // Обновление весов
+    for (var i: u32 = 0; i < input_size; i = i + 1) {
+        let weight_index = weight_offset + i * output_size + neuron_idx;
+        let input_activation_index = input_offset + i;
+        let grad = deltas[delta_offset + neuron_idx] * inputActivations[input_activation_index];
+        weights[weight_index] -= lr * grad;
+    }
+}
+
+
+`;
+
+
+
+                const shaderModule = this.device.createShaderModule({ code: shaderCode });
+
+
+                // ✅ СОЗДАЕМ PIPELINE LAYOUT ЯВНО
+                const pipelineLayout = this.device.createPipelineLayout({
+                    bindGroupLayouts: [this.bindGroupLayout] // Используем созданный нами layout
+                });
+
+
+                this.computePipelineForward = this.device.createComputePipeline({
+                    layout: pipelineLayout, // ✅ Now defined!
+                    compute: { module: shaderModule, entryPoint: 'forward' },
+                });
+
+                this.computePipelineBackward = this.device.createComputePipeline({
+                    layout: pipelineLayout, // ✅ Now defined!
+                    compute: { module: shaderModule, entryPoint: 'backward' },
+                });
+
+                this.computePipelineUpdate = this.device.createComputePipeline({
+                    layout: pipelineLayout, // ✅ Now defined!
+                    compute: { module: shaderModule, entryPoint: 'update' },
+                });
+            }
+
+
+            initializeWeightsAndBiases() {
+                this.weights = [];
+                this.biases = [];
+
+                for (let i = 0; i < this.layers - 1; i++) {
+                    const rows = this.architecture[i + 1];
+                    const cols = this.architecture[i];
+                    this.weights[i] = new Array(rows);
+                    this.biases[i] = new Array(rows);
+
+                    for (let r = 0; r < rows; r++) {
+                        this.weights[i][r] = new Array(cols);
+                        for (let c = 0; c < cols; c++) {
+                            this.weights[i][r][c] = (Math.random() - 0.5) * 0.2; // Инициализация Xavier
+                        }
+                        this.biases[i][r] = 0.0;
+                    }
+                }
+            }
+
+            uploadWeights() {
+                const data = new Float32Array(this.totalWeights);
+                let offset = 0;
+                for (let i = 0; i < this.weights.length; i++) {
+                    for (let r = 0; r < this.weights[i].length; r++) {
+                        for (let c = 0; c < this.weights[i][r].length; c++) {
+                            data[offset++] = this.weights[i][r][c];
+                        }
+                    }
+                }
+                this.device.queue.writeBuffer(this.buffers.weights, 0, data);
+            }
+
+            uploadBiases() {
+                const data = new Float32Array(this.totalBiases);
+                let offset = 0;
+                for (let i = 0; i < this.biases.length; i++) {
+                    for (let r = 0; r < this.biases[i].length; r++) {
+                        data[offset++] = this.biases[i][r];
+                    }
+                }
+                this.device.queue.writeBuffer(this.buffers.biases, 0, data);
+            }
+
+            uploadLayerSizes() {
+                const data = new Uint32Array(this.layers);
+                for (let i = 0; i < this.layers; i++) {
+                    data[i] = this.architecture[i];
+                }
+                this.device.queue.writeBuffer(this.buffers.layerSizes, 0, data);
+            }
+
+            uploadLayerOffsets() {
+                const data = new Uint32Array(this.layers);
+                for (let i = 0; i < this.layers; i++) {
+                    data[i] = this.layerOffsets[i];
+                }
+                this.device.queue.writeBuffer(this.buffers.layerOffsets, 0, data);
+            }
+
+            uploadWeightOffsets() {
+                const data = new Uint32Array(this.layers - 1);
+                for (let i = 0; i < this.layers - 1; i++) {
+                    data[i] = this.weightOffsets[i];
+                }
+                this.device.queue.writeBuffer(this.buffers.weightOffsets, 0, data);
+            }
+
+            alignTo256(size) {
+                return Math.ceil(size / 256) * 256;
+            }
+
+            createBindGroupLayout() {
+                const MIN_BUFFER_SIZE = 4096; // ✅ Use same value as buffer creation
+
+                this.bindGroupLayout = this.device.createBindGroupLayout({
+                    entries: [
+                        {
+                            binding: 0,
+                            visibility: GPUShaderStage.COMPUTE,
+                            buffer: {
+                                type: 'read-only-storage',
+                                //minBindingSize: MIN_BUFFER_SIZE
+                            },
+                        },
+                        {
+                            binding: 1,
+                            visibility: GPUShaderStage.COMPUTE,
+                            buffer: {
+                                type: 'storage',
+                                //minBindingSize: MIN_BUFFER_SIZE
+                            },
+                        },
+                        {
+                            binding: 2,
+                            visibility: GPUShaderStage.COMPUTE,
+                            buffer: {
+                                type: 'storage',
+                                //minBindingSize: MIN_BUFFER_SIZE
+                            },
+                        },
+                        {
+                            binding: 3,
+                            visibility: GPUShaderStage.COMPUTE,
+                            buffer: {
+                                type: 'storage',
+                                //minBindingSize: MIN_BUFFER_SIZE
+                            },
+                        },
+                        {
+                            binding: 4,
+                            visibility: GPUShaderStage.COMPUTE,
+                            buffer: {
+                                type: 'storage',
+                                //minBindingSize: MIN_BUFFER_SIZE
+                            },
+                        },
+                        {
+                            binding: 5,
+                            visibility: GPUShaderStage.COMPUTE,
+                            buffer: {
+                                type: 'read-only-storage',
+                                //minBindingSize: MIN_BUFFER_SIZE
+                            },
+                        },
+                        {
+                            binding: 6,
+                            visibility: GPUShaderStage.COMPUTE,
+                            buffer: {
+                                type: 'read-only-storage',
+                                //minBindingSize: MIN_BUFFER_SIZE
+                            },
+                        },
+                        {
+                            binding: 7,
+                            visibility: GPUShaderStage.COMPUTE,
+                            buffer: {
+                                type: 'read-only-storage',
+                                //minBindingSize: MIN_BUFFER_SIZE
+                            },
+                        },
+                        {
+                            binding: 8,
+                            visibility: GPUShaderStage.COMPUTE,
+                            buffer: {
+                                type: 'read-only-storage',
+                                //minBindingSize: MIN_BUFFER_SIZE
+                            },
+                        },
+                    ],
+                });
+            }
+
+
+            createBindGroup() {
+                this.bindGroup = this.device.createBindGroup({
+                    //layout: this.device.createPipelineLayout({ bindGroupLayouts: [this.bindGroupLayout] }),
+                    //layout: this.device.createPipelineLayout({ bindGroupLayouts: [this.bindGroupLayout] }),
+                    //const pipelineLayout = this.computePipelineForward.getBindGroupLayout(0);
+                    layout: this.bindGroupLayout, // ✅ Now this exists!
+                    entries: [
+                        { binding: 0, resource: { buffer: this.buffers.inputActivations } },
+                        { binding: 1, resource: { buffer: this.buffers.weights } },
+                        { binding: 2, resource: { buffer: this.buffers.biases } },
+                        { binding: 3, resource: { buffer: this.buffers.outputActivations } },
+                        { binding: 4, resource: { buffer: this.buffers.deltas } },
+                        { binding: 5, resource: { buffer: this.buffers.layerSizes } },
+                        { binding: 6, resource: { buffer: this.buffers.layerOffsets } },
+                        { binding: 7, resource: { buffer: this.buffers.weightOffsets } },
+                        { binding: 8, resource: { buffer: this.buffers.learningRate } },
+                    ],
+                });
+            }
+
+
+
+
+
+            async forward(input) {
+                if (input.length !== this.architecture[0]) {
+                    throw new Error(`Input size ${input.length} != expected ${this.architecture[0]}`);
+                }
+
+                // 1. Write input to inputActivations
+                const inputFlat = new Float32Array(input);
+                this.device.queue.writeBuffer(this.buffers.inputActivations, 0, inputFlat);
+
+                // 2. Clear outputActivations (optional but clean)
+                const zeros = new Float32Array(this.totalActivations);
+                this.device.queue.writeBuffer(this.buffers.outputActivations, 0, zeros);
+
+                // 3. Encode and submit compute pass
+                const commandEncoder = this.device.createCommandEncoder();
+                const computePass = commandEncoder.beginComputePass();
+                computePass.setPipeline(this.computePipelineForward);
+                computePass.setBindGroup(0, this.bindGroup);
+
+                for (let layer = 0; layer < this.layers - 1; layer++) {
+                    const workgroupX = 1;
+                    const workgroupY = Math.ceil(this.architecture[layer + 1] / 64);
+                    computePass.dispatchWorkgroups(workgroupX, workgroupY, 1);
+                }
+
+                computePass.end();
+                this.device.queue.submit([commandEncoder.finish()]);
+
+                // 4. ✅ READ BACK OUTPUT: Use staging buffer (CORRECT WAY)
+                const outputSize = this.architecture[this.layers - 1];
+                const outputByteSize = outputSize * 4; // Float32 = 4 bytes
+
+                // Create a staging buffer (CPU-readable)
+                const stagingBuffer = this.device.createBuffer({
+                    size: outputByteSize,
+                    usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ,
+                });
+
+                // Copy from outputActivations (GPU) → stagingBuffer (CPU-readable)
+                const copyEncoder = this.device.createCommandEncoder();
+                const outputStartOffset = this.layerOffsets[this.layers - 1] * 4; // byte offset
+                copyEncoder.copyBufferToBuffer(
+                    this.buffers.outputActivations, // source
+                    outputStartOffset,              // source offset
+                    stagingBuffer,                  // destination
+                    0,                              // dest offset
+                    outputByteSize                  // size
+                );
+
+                // Submit the copy command
+                this.device.queue.submit([copyEncoder.finish()]);
+
+                // Wait for staging buffer to be mapped (async)
+                await stagingBuffer.mapAsync(GPUMapMode.READ);
+
+                // Read the data
+                const output = new Float32Array(stagingBuffer.getMappedRange());
+
+                // Clean up staging buffer (optional, but good practice)
+                stagingBuffer.unmap();
+                stagingBuffer.destroy();
+
+                return output;
+            }
+
+
+            async train(input, target, epochs = 100) {
+                const log = document.getElementById('log');
+                const status = document.getElementById('status');
+
+                // Записываем learning rate
+                const lrData = new Float32Array([this.learningRate]);
+                this.device.queue.writeBuffer(this.buffers.learningRate, 0, lrData);
+
+                for (let epoch = 0; epoch < epochs; epoch++) {
+                    // 1. Подготавливаем input данные
+                    const inputFlat = new Float32Array(this.totalActivations);
+
+                    // Записываем входные данные в начало буфера
+                    for (let i = 0; i < input.length; i++) {
+                        inputFlat[this.layerOffsets[0] + i] = input[i];
+                    }
+
+                    // Записываем target в конец буфера (для backward pass)
+                    const targetOffset = this.layerOffsets[this.layers - 1];
+                    for (let i = 0; i < target.length; i++) {
+                        inputFlat[targetOffset + i] = target[i];
+                    }
+
+                    this.device.queue.writeBuffer(this.buffers.inputActivations, 0, inputFlat);
+
+                    // 2. Очищаем output activations и deltas
+                    const zeros = new Float32Array(this.totalActivations);
+                    this.device.queue.writeBuffer(this.buffers.outputActivations, 0, zeros);
+                    this.device.queue.writeBuffer(this.buffers.deltas, 0, zeros);
+
+                    // 3. Forward pass
+                    const forwardEncoder = this.device.createCommandEncoder();
+                    const forwardPass = forwardEncoder.beginComputePass();
+                    forwardPass.setPipeline(this.computePipelineForward);
+                    forwardPass.setBindGroup(0, this.bindGroup);
+
+                    for (let layer = 0; layer < this.layers - 1; layer++) {
+                        const workgroupY = Math.ceil(this.architecture[layer + 1] / 64);
+                        forwardPass.dispatchWorkgroups(1, workgroupY, 1);
+                    }
+                    forwardPass.end();
+                    this.device.queue.submit([forwardEncoder.finish()]);
+
+                    // 4. Backward pass
+                    const backwardEncoder = this.device.createCommandEncoder();
+                    const backwardPass = backwardEncoder.beginComputePass();
+                    backwardPass.setPipeline(this.computePipelineBackward);
+                    backwardPass.setBindGroup(0, this.bindGroup);
+
+                    // Обратный порядок для backward pass
+                    for (let layer = this.layers - 2; layer >= 0; layer--) {
+                        const workgroupY = Math.ceil(this.architecture[layer + 1] / 64);
+                        backwardPass.dispatchWorkgroups(1, workgroupY, 1);
+                    }
+                    backwardPass.end();
+                    this.device.queue.submit([backwardEncoder.finish()]);
+
+                    // 5. Update pass
+                    const updateEncoder = this.device.createCommandEncoder();
+                    const updatePass = updateEncoder.beginComputePass();
+                    updatePass.setPipeline(this.computePipelineUpdate);
+                    updatePass.setBindGroup(0, this.bindGroup);
+
+                    for (let layer = 0; layer < this.layers - 1; layer++) {
+                        const workgroupY = Math.ceil(this.architecture[layer + 1] / 64);
+                        updatePass.dispatchWorkgroups(1, workgroupY, 1);
+                    }
+                    updatePass.end();
+                    this.device.queue.submit([updateEncoder.finish()]);
+
+                    // 6. Логирование каждые 20 эпох
+                    if (epoch % 20 === 0) {
+                        // Читаем выходные активации для вычисления потерь
+                        const outputSize = this.architecture[this.layers - 1];
+                        const stagingBuffer = this.device.createBuffer({
+                            size: outputSize * 4,
+                            usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ,
+                        });
+
+                        const copyEncoder = this.device.createCommandEncoder();
+                        copyEncoder.copyBufferToBuffer(
+                            this.buffers.outputActivations,
+                            this.layerOffsets[this.layers - 1] * 4,
+                            stagingBuffer,
+                            0,
+                            outputSize * 4
+                        );
+                        this.device.queue.submit([copyEncoder.finish()]);
+
+                        await stagingBuffer.mapAsync(GPUMapMode.READ);
+                        const output = new Float32Array(stagingBuffer.getMappedRange());
+                        stagingBuffer.unmap();
+                        stagingBuffer.destroy();
+
+                        const loss = Math.abs(target[0] - output[0]);
+                        log.textContent += `Epoch ${epoch}, loss: ${loss.toFixed(6)}\n`;
+                        status.textContent = `Training... Epoch ${epoch}/${epochs}`;
+
+                        if (isNaN(loss)) {
+                            console.error(`NaN detected at epoch ${epoch}`);
+                            break;
+                        }
+                    }
+
+                    // Добавляем небольшую задержку для стабильности
+                    await new Promise(resolve => setTimeout(resolve, 1));
+                }
+
+                status.textContent = 'Training complete!';
+                log.textContent += '✅ Training completed successfully!\n';
+            }
+
+
+
+
+
+
+            predict(input) {
+                return this.forward(input);
+            }
+
+            getWeights() {
+                // Для отладки — выгрузка весов на CPU
+                const weights = [];
+                const weightsData = new Float32Array(this.totalWeights);
+                this.device.queue.readBuffer(this.buffers.weights, 0, weightsData);
+
+                let offset = 0;
+                for (let i = 0; i < this.layers - 1; i++) {
+                    const rows = this.architecture[i + 1];
+                    const cols = this.architecture[i];
+                    weights[i] = new Array(rows);
+                    for (let r = 0; r < rows; r++) {
+                        weights[i][r] = new Array(cols);
+                        for (let c = 0; c < cols; c++) {
+                            weights[i][r][c] = weightsData[offset++];
+                        }
+                    }
+                }
+                return weights;
+            }
+        }
+
+
+
+
+        // === ИНИЦИАЛИЗАЦИЯ И ИСПОЛЬЗОВАНИЕ ===
+        const nn = new WebGPUNeuralNetwork([2, 8, 8, 1], 0.1);
+
+        document.getElementById('trainBtn').addEventListener('click', async () => {
+            const inputs = [
+                [0, 0], [0, 1], [1, 0], [1, 1]
+            ];
+            const targets = [
+                [0], [1], [1], [0]
+            ]; // XOR
+
+            const log = document.getElementById('log');
+            log.textContent = "Training XOR...\n";
+            await nn.train(inputs[0], targets[0], 100);
+            log.textContent += "✅ Training complete!\n";
+
+            // Проверим предсказания
+            for (let i = 0; i < inputs.length; i++) {
+                const pred = await nn.predict(inputs[i]);
+                log.textContent += `Input: [${inputs[i]}] → Output: ${pred[0].toFixed(4)}\n`;
+            }
+        });
+
+        document.getElementById('predictBtn').addEventListener('click', async () => {
+            const pred = await nn.predict([0.5, 0.5]);
+            document.getElementById('log').textContent += `Predict [0.5, 0.5]: ${pred[0].toFixed(4)}\n`;
+        });
+
+        // Проверка поддержки WebGPU
+        if (!navigator.gpu) {
+            document.getElementById('log').textContent = "❌ WebGPU is not supported in your browser.\nTry Chrome 113+ with 'Enable WebGPU' flag.";
+        }
+    </script>
+</body>
+</html>
