@@ -1067,6 +1067,7 @@ class ThreadInfo {
         this.thread = thread;
     }
     get density() { return this.thread.density; }
+    get speed() { return this.thread.thread_speed_id; }
     get color() { return this.thread.color; }
     get id() { return this.thread.thread_id; }
     get length() { return `длина: ${this.thread.thread_length}`; }
@@ -1358,7 +1359,7 @@ async function generateFormTape() {
             const option = document.createElement('option');
             const threadInfo = new ThreadInfo(thread);
             option.value = threadInfo.id;
-            option.textContent = threadInfo.density;
+            option.textContent = `${threadInfo.density} v${threadInfo.speed}`;
             select.appendChild(option);
         });
         formContainer.append(select);
