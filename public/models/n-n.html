@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Классификация слов по категориям с нейронной сетью</title>
-    <link rel="stylesheet" href="models/nnstyle.css">
+    <link rel="stylesheet" href="nnstyle.css">
 </head>
 <body>
     <div class="container">
@@ -12,7 +12,11 @@
             <h1>Классификация слов по категориям с нейронной сетью</h1>
             <p>Добавьте слова и категории для обучения нейронной сети. Затем введите новые слова для классификации.</p>
         </div>
-
+        <!--<div class="control-group">
+            <label for="webgpu-toggle">WebGPU ускорение:</label>
+            <input type="checkbox" id="webgpu-toggle" checked>
+            <span id="webgpu-status" class="status-info">Проверка поддержки...</span>
+        </div>-->
         <div class="panel">
             <h2>Настройки нейронной сети</h2>
             <div class="controls">
@@ -50,8 +54,8 @@
             </div>
             <div id="classificationResults"></div>
         </div>
-Добавленный блок для управления состоянием
-<div class="panel">
+        Добавленный блок для управления состоянием
+        <div class="panel">
             <h2>Управление состоянием</h2>
             <div class="controls">
                 <button id="saveStateBtn">Сохранить состояние</button>
@@ -66,9 +70,9 @@
 
         </div>
     </div>
-
-    <!--<script src="js/nn2.js"></script>-->
-    <script src="models/nn2-1.js"></script>
-    <script src="models/app.js"></script>
+    <script src="js/nn2.js"></script>
+    <script src="nn2-1.js"></script>
+    <script src="nn2-2.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

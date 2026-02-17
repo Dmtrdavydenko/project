@@ -60,8 +60,50 @@ class WordClassificationApp {
         //this.checkWebGPUSupport();
         //await this.getDataHH();
         await this.initializeWithExamples();
+        this.updateVisualization();
 
+
+
+
+
+        //this.webgpuToggle = document.getElementById('webgpu-toggle');
+        //this.webgpuToggle.addEventListener('change', () => {
+        //    if (this.network) {
+        //        this.initializeNetwork(); // Переинициализируем сеть с новыми настройками
+        //    }
+        //});
+
+        //this.checkWebGPUSupport();
+        //await this.initializeWithExamples();
+        //this.updateVisualization();
     }
+    //checkWebGPUSupport() {
+    //    const webgpuStatus = document.getElementById('webgpu-status');
+    //    const webgpuToggle = document.getElementById('webgpu-toggle');
+
+    //    if (!navigator.gpu) {
+    //        webgpuStatus.innerHTML = 'WebGPU не поддерживается в вашем браузере';
+    //        webgpuStatus.className = 'status-info gpu-unavailable';
+    //        webgpuToggle.disabled = true;
+    //        return;
+    //    }
+
+    //    // Проверяем доступность
+    //    navigator.gpu.requestAdapter().then(adapter => {
+    //        if (adapter) {
+    //            webgpuStatus.innerHTML = 'WebGPU доступен! Можно включить ускорение';
+    //            webgpuStatus.className = 'status-info gpu-available';
+    //        } else {
+    //            webgpuStatus.innerHTML = 'WebGPU адаптер недоступен';
+    //            webgpuStatus.className = 'status-info gpu-unavailable';
+    //            webgpuToggle.disabled = true;
+    //        }
+    //    }).catch(error => {
+    //        webgpuStatus.innerHTML = `Ошибка WebGPU: ${error.message}`;
+    //        webgpuStatus.className = 'status-info gpu-unavailable';
+    //        webgpuToggle.disabled = true;
+    //    });
+    //}
     checkWebGPUSupport() {
         const webgpuStatus = document.getElementById('webgpu-status');
         const webgpuToggle = document.getElementById('webgpu-toggle');
@@ -70,7 +112,8 @@ class WordClassificationApp {
             webgpuStatus.innerHTML = 'WebGPU не поддерживается в вашем браузере';
             webgpuStatus.className = 'status-info gpu-unavailable';
             webgpuToggle.disabled = true;
-            return;
+            webgpuToggle.checked = false;
+            return false;
         }
 
         // Проверяем доступность
@@ -78,17 +121,24 @@ class WordClassificationApp {
             if (adapter) {
                 webgpuStatus.innerHTML = 'WebGPU доступен! Можно включить ускорение';
                 webgpuStatus.className = 'status-info gpu-available';
+                webgpuToggle.disabled = false;
+                return true;
             } else {
                 webgpuStatus.innerHTML = 'WebGPU адаптер недоступен';
                 webgpuStatus.className = 'status-info gpu-unavailable';
                 webgpuToggle.disabled = true;
+                webgpuToggle.checked = false;
+                return false;
             }
         }).catch(error => {
             webgpuStatus.innerHTML = `Ошибка WebGPU: ${error.message}`;
             webgpuStatus.className = 'status-info gpu-unavailable';
             webgpuToggle.disabled = true;
+            webgpuToggle.checked = false;
+            return false;
         });
     }
+
 
     // Инициализация нейронной сети
     initializeNetwork() {
@@ -118,14 +168,65 @@ class WordClassificationApp {
 
         for (let i = 0; i < architecture.length; i++) {
             this.heatmaps[i] = document.createElement("canvas");
-            //this.heatmaps[i].classLicst.style = "imageRendering: pixelated";
             this.heatmaps[i].style.imageRendering = 'pixelated';
-
             this.ctxHeatmap[i] = this.heatmaps[i].getContext('2d');
             this.heatmap.appendChild(this.heatmaps[i]);
         }
 
     }
+    //async initGPU() {
+    //    if (!navigator.gpu) {
+    //        throw new Error('WebGPU не поддерживается');
+    //    }
+
+    //    const adapter = await navigator.gpu.requestAdapter();
+    //    if (!adapter) {
+    //        throw new Error('Не удалось получить GPU адаптер');
+    //    }
+
+    //    const device = await adapter.requestDevice();
+    //    return device;
+    //}
+    //async initializeNetwork() {
+    //    const architecture = this.architectureInput.value
+    //        .split(',')
+    //        .map(layer => parseInt(layer.trim()));
+
+    //    const learningRate = parseFloat(this.learningRateInput.value);
+
+    //    if (architecture.some(isNaN) || isNaN(learningRate)) {
+    //        alert('Пожалуйста, введите корректные параметры сети');
+    //        return;
+    //    }
+
+    //    // Добавляем размер входного слоя (64 - размер вектора слова)
+    //    architecture.unshift(64);
+
+    //    // Добавляем размер выходного слоя (количество категорий)
+    //    const numCategories = Object.keys(this.categories).length;
+    //    architecture.push(numCategories > 0 ? numCategories : 2);
+
+    //    try {
+    //        // Инициализируем WebGPU устройство
+    //        const device = await this.initGPU();
+
+    //        // Создаем сеть с WebGPU ускорением
+    //        this.network = new WebGPUNeuralNetwork(architecture, learningRate, device);
+
+    //        this.networkStatus.innerHTML = `<p>WebGPU сеть инициализирована: ${architecture.join(' → ')}</p>`;
+    //    } catch (error) {
+    //        console.warn('WebGPU недоступен, используем CPU версию:', error);
+    //        this.network = new NeuralNetwork(architecture, learningRate);
+    //        this.networkStatus.innerHTML = `<p>CPU сеть инициализирована: ${architecture.join(' → ')}</p>`;
+    //    }
+
+    //    for (let i = 0; i < architecture.length; i++) {
+    //        this.heatmaps[i] = document.createElement("canvas");
+    //        this.heatmaps[i].style.imageRendering = 'pixelated';
+    //        this.ctxHeatmap[i] = this.heatmaps[i].getContext('2d');
+    //        this.heatmap.appendChild(this.heatmaps[i]);
+    //    }
+    //}
 
     async loadDataSet(e) {
         const file = e.target.files[0];
@@ -469,6 +570,9 @@ class WordClassificationApp {
         });
     }
 
+    
+
+
     // Подготовка данных для обучения
     prepareTrainingData() {
         const inputs = [];
@@ -495,7 +599,55 @@ class WordClassificationApp {
     }
 
     // Классификация слов
-    classifyWords() {
+    //classifyWords() {
+    //    if (!this.network || this.isTraining) {
+    //        alert('Сначала обучите нейронную сеть');
+    //        return;
+    //    }
+
+    //    const wordsText = this.newWordsInput.value.trim();
+    //    if (!wordsText) {
+    //        alert('Пожалуйста, введите слова для классификации');
+    //        return;
+    //    }
+
+    //    const words = wordsText.split(' ').map(word => word.trim()).filter(word => word);
+    //    const categories = Object.keys(this.categories);
+    //    let resultsHTML = '<h3>Результаты классификации:</h3><ul>';
+
+    //    words.forEach(word => {
+    //        const vector = this.createWordVector(word);
+    //        console.log(vector);
+    //        console.log(this.isUnitVector(vector));
+
+    //        const unitVector = vector.map(x => x / Math.sqrt(vector.reduce((s, v) => s + v * v, 0)));
+    //        console.log(unitVector);
+    //        console.log(this.isUnitVector(unitVector));
+
+    //        const input = vector.map(val => [val]);
+    //        const output = this.network.predict(input);
+    //        console.log(output);
+
+    //        // Находим категорию с максимальной вероятностью
+    //        const probabilities = output.flat();
+    //        const maxIndex = probabilities.indexOf(Math.max(...probabilities));
+    //        const category = categories[maxIndex] || 'Не удалось классифицировать';
+
+    //        // Форматируем вероятности
+    //        const probText = probabilities.map((p, i) =>
+    //            `${categories[i]}: ${(p * 100).toFixed(2)}%`
+    //        ).join(', ');
+
+    //        resultsHTML += `<li><strong>${word}</strong> → ${category} (${probText})</li>`;
+    //    });
+
+    //    resultsHTML += '</ul>';
+    //    this.classificationResults.innerHTML = resultsHTML;
+
+    //    // Обновляем визуализацию с новыми словами
+    //    this.updateVisualization(words);
+    //}
+    async classifyWords() {
         if (!this.network || this.isTraining) {
             alert('Сначала обучите нейронную сеть');
             return;
@@ -511,18 +663,19 @@ class WordClassificationApp {
         const categories = Object.keys(this.categories);
         let resultsHTML = '<h3>Результаты классификации:</h3><ul>';
 
-        words.forEach(word => {
+        for (const word of words) {
             const vector = this.createWordVector(word);
-            console.log(vector);
-            console.log(this.isUnitVector(vector));
-
-            const unitVector = vector.map(x => x / Math.sqrt(vector.reduce((s, v) => s + v * v, 0)));
-            console.log(unitVector);
-            console.log(this.isUnitVector(unitVector));
-
             const input = vector.map(val => [val]);
-            const output = this.network.predict(input);
-            console.log(output);
+
+            let output;
+            if (this.network instanceof WebGPUNeuralNetwork) {
+                // Используем GPU предсказание
+                const result = await this.network.gpuForward(input);
+                output = result.activations[result.activations.length - 1];
+            } else {
+                // Используем CPU предсказание
+                output = this.network.predict(input);
+            }
 
             // Находим категорию с максимальной вероятностью
             const probabilities = output.flat();
@@ -535,7 +688,7 @@ class WordClassificationApp {
             ).join(', ');
 
             resultsHTML += `<li><strong>${word}</strong> → ${category} (${probText})</li>`;
-        });
+        }
 
         resultsHTML += '</ul>';
         this.classificationResults.innerHTML = resultsHTML;
@@ -543,6 +696,7 @@ class WordClassificationApp {
         // Обновляем визуализацию с новыми словами
         this.updateVisualization(words);
     }
+
     isUnitVector(vector) {
         // Проверка: массив должен быть непустым и содержать только числа
         if (!Array.isArray(vector) || vector.length === 0) {
@@ -571,21 +725,29 @@ class WordClassificationApp {
         }
     }
     weightToColor(weight) {
-        if (weight < 0) {
-            // От -1 (синий) до 0 (белый)
-            const t = (weight + 1) / 1; // t ∈ [0, 1]
-            const r = 255 * (1 - t);    // от 255 до 0
-            const g = 255 * (1 - t);    // от 255 до 0
-            const b = 255;              // всегда 255 (синий)
-            return [r, g, b];
-        } else {
-            // От 0 (белый) до 1 (красный)
-            const t = weight / 1;       // t ∈ [0, 1]
-            const r = 255;              // всегда 255 (красный)
-            const g = 255 * (1 - t);    // от 255 до 0
-            const b = 255 * (1 - t);    // от 255 до 0
-            return [r, g, b];
-        }
+        //if (weight < 0) {
+        //    // От -1 (синий) до 0 (белый)
+        //    const t = (weight + 1) / 1; // t ∈ [0, 1]
+        //    const r = 255 * (1 - t);    // от 255 до 0
+        //    const g = 255 * (1 - t);    // от 255 до 0
+        //    const b = 255;              // всегда 255 (синий)
+        //    return [r, g, b];
+        //} else {
+        //    // От 0 (белый) до 1 (красный)
+        //    const t = weight / 1;       // t ∈ [0, 1]
+        //    const r = 255;              // всегда 255 (красный)
+        //    const g = 255 * (1 - t);    // от 255 до 0
+        //    const b = 255 * (1 - t);    // от 255 до 0
+        //    return [r, g, b];
+        //}
+
+        //weightToColor(weight) {
+        const intensity = Math.min(1, Math.max(-1, (weight - -1) / (1 - -1)));
+        const r = intensity * 255;        // Красный растет с весом
+        const g = 0;                      // Зеленый отключен
+        const b = (1 - intensity) * 255;  // Синий уменьшается с весом
+        return [r, g, b];
+        //}
     }
     drawWeightHeatmap(weights, canvas, ctxHeatmap) {
         //const canvas = document.getElementById(canvasId);
@@ -614,9 +776,9 @@ class WordClassificationApp {
                 data[pixelIndex + 3] = 255;
             }
         }
-
         ctxHeatmap.putImageData(imageData, 0, 0);
     }
+
 
     // Использование:
 
@@ -627,17 +789,87 @@ class WordClassificationApp {
 
         // Получаем данные для визуализации
         const data = this.getVisualizationData();
+        //const d2 = {
+        //    "0": "x",
+        //    "1": "y"
+        //};
+        //let arr = [1, 2, 3, 4, 6, 7, 8, 9];
+        //let bound = arr.length;
+        //for (let i = 0; i < bound - 1; i++) {
+        //    console.log({
+        //        [d2[i & 1]]: arr[i],
+        //        [d2[++i & 1]]: arr[++i],
+        //    })
+        //}
+
 
         // Рисуем обучающие слова
         data.forEach(item => {
             this.ctx.fillStyle = item.color;
             this.ctx.beginPath();
-            this.ctx.arc(item.x, item.y, 8, 0, Math.PI * 2);
-            this.ctx.fill();
+            //this.ctx.arc(item.x, item.y, 4, 0, Math.PI * 2);
+            //this.ctx.arc(1 *380 + 400, 1 *280+300, 4, 0, Math.PI * 2);
+            //this.ctx.fill();
+            const bound = item.vector.length;
 
+            //for (let i = 0; i < bound - 3; i += 4) {
+            //    const x = item.vector[i];
+            //    const y = item.vector[++i];
+            //    const z = item.vector[++i];
+            //    const w = item.vector[++i];
+            //    //this.ctx.arc(x * 600 + 400, y * 600 + 300, 5, 0, Math.PI * 2);
+            //    //this.ctx.fillRect(x * 600 + 400, y * 600 + 300, z * 100 + w*100, z * 100 + w*100);
+            //    //this.ctx.fill();
+
+            //    this.ctx.fillRect(x * 600 + 400, y * 600 + 300, 10, 10);
+            //    this.ctx.fill();
+            //    this.ctx.fillRect(z * 600 + 400, w * 600 + 300, 10, 10);
+            //    this.ctx.fill();
+            //}
+
+            for (let i = 0; i < bound; i++) {
+
+                const y = item.vector[i];
+                this.ctx.fillRect(i*10 + 400-340, y * 600 + 300, 10, 10);
+                this.ctx.fill();
+
+            }
             this.ctx.fillStyle = '#000';
-            this.ctx.font = '12px Arial';
-            this.ctx.fillText(item.word, item.x + 10, item.y + 5);
+
+
+            //this.ctx.font = '12px Arial';
+            //this.ctx.fillText(item.word, item.x + 10, item.y + 5);
+
+
+            let canvas = document.createElement("canvas");
+            canvas.style.imageRendering = 'pixelated';
+            let ctxHeatmap = canvas.getContext('2d');
+            this.heatmap.appendChild(canvas);
+            let width = 4;
+            let height = 4;
+
+            canvas.width = width;
+            canvas.height = height;
+
+
+            canvas.style.width = width * 40 + "px";
+            canvas.style.height = height * 40 + "px";
+            const imageData = ctxHeatmap.createImageData(width, height);
+            const data = imageData.data;
+            for (let i = 0; i < bound; i++) {
+                const weight = item.vector;
+                //const [r, g, b] = this.weightToColor(weight);
+                //console.log(i);
+                let pixelIndex = i * 4;
+                data[pixelIndex] = weight[pixelIndex] * 255 + (255 / 2);
+                data[++pixelIndex] = weight[pixelIndex] * 255 + (255 / 2);
+                data[++pixelIndex] = weight[pixelIndex] * 255 + (255 / 2);
+                data[++pixelIndex] = weight[pixelIndex] * 255 + (255 / 2);
+            }
+            ctxHeatmap.putImageData(imageData, 0, 0);
+
+            // Масштабируем средствами canvas если нужно
+            //ctxHeatmap.drawImage(ctxHeatmap.canvas, 0, 0, 8, 8, 0, 0, 200, 200);
         });
 
         // Рисуем новые слова для классификации (если есть)
@@ -654,21 +886,46 @@ class WordClassificationApp {
                 const color = this.categoryColors[category] || '#888';
 
                 // Упрощенная проекция на 2D
-                const x = (vector[0] + vector[1]) * 200 + 400;
-                const y = (vector[2] + vector[3]) * 200 + 300;
+                //const x = (vector[0] + vector[1]) * 200 + 400;
+                //const x = 0;
+                //const y = (vector[2] + vector[3]) * 200 + 300;
+                //const y = 0;
+                //console.log({ draw: vector, x: x, y: y });
+
 
                 // Рисуем новый пунктирный круг
-                this.ctx.strokeStyle = color;
-                this.ctx.setLineDash([5, 5]);
-                this.ctx.beginPath();
-                this.ctx.arc(x, y, 12, 0, Math.PI * 2);
-                this.ctx.stroke();
-                this.ctx.setLineDash([]);
+                //this.ctx.strokeStyle = color;
+                //this.ctx.setLineDash([5, 5]);
+                //this.ctx.beginPath();
+                //this.ctx.arc(x, y, 12, 0, Math.PI * 2);
+                //this.ctx.stroke();
+                //this.ctx.setLineDash([]);
 
-                // Подпись нового слова
-                this.ctx.fillStyle = '#000';
-                this.ctx.font = '14px Arial';
-                this.ctx.fillText(`${word} (${category})`, x + 15, y + 5);
+                const bound = vector.length;
+
+                for (let i = 0; i < bound - 1; i++) {
+                    const x = vector[i];
+                    const y = vector[++i];
+
+                    this.ctx.strokeStyle = color;
+                    this.ctx.setLineDash([5, 5]);
+                    this.ctx.beginPath();
+                    this.ctx.arc(x * 600 + 400, y * 600 + 300, 5, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.stroke();
+                    this.ctx.setLineDash([]);
+
+
+
+                    // Подпись нового слова
+                    this.ctx.fillStyle = '#000';
+                    this.ctx.font = '14px Arial';
+                    this.ctx.fillText(`${word} (${category})`, x + 15, y + 5);
+                }
+
+
+
+
             });
         }
 
@@ -689,7 +946,7 @@ class WordClassificationApp {
                 const y = (vector[2] + vector[3]) * 200 + 300;
 
                 data.push({
-                    x, y,
+                    x, y, vector,
                     color: this.categoryColors[category] || '#888',
                     word: word,
                     category: category
@@ -779,12 +1036,15 @@ class WordClassificationApp {
         //'exemple': ['exemple', 'exemple', 'exemple', 'exemple', 'exemple'],
 
         const examples = [
-            { "Стажёр-разработчик": ["Образование",": Бакалавр по направлению «Информатика», «Программная инженерия» или смежным (можно без диплома, но с портфолио)"] },
-            { "Стажёр-разработчик": ["Образование: Бакалавр по направлению «Информатика», «Программная инженерия» или смежным (можно без диплома, но с портфолио)"] },
-            { "Стажёр-разработчик": ["Опыт работы: 0–1 год (стажировки, проекты на GitHub, хакатоны)"] },
-            { "Стажёр-разработчик": ["Навыки: Основы Python/JavaScript Работа с Git Базовые знания HTML/CSS Понимание принципов ООП Умение работать в команде"] },
-            { "Стажёр-разработчик": ["Зарплата: 40 000 – 70 000 ₽/мес (Россия, Москва/Санкт-Петербург)"] },
-            { "Стажёр-разработчик": ["График работы: 5/2 9:00–18:00 гибридный (2–3 дня в офисе)"] },
+            //{ "Стажёр-разработчик": ["Образование",": Бакалавр по направлению «Информатика», «Программная инженерия» или смежным (можно без диплома, но с портфолио)"] },
+            //{ "Стажёр-разработчик": ["Образование: Бакалавр по направлению «Информатика», «Программная инженерия» или смежным (можно без диплома, но с портфолио)"] },
+            //{ "Стажёр-разработчик": ["Опыт работы: 0–1 год (стажировки, проекты на GitHub, хакатоны)"] },
+            //{ "Стажёр-разработчик": ["Навыки: Основы Python/JavaScript Работа с Git Базовые знания HTML/CSS Понимание принципов ООП Умение работать в команде"] },
+            //{ "Стажёр-разработчик": ["Зарплата: 40 000 – 70 000 ₽/мес (Россия, Москва/Санкт-Петербург)"] },
+            //{ "Стажёр-разработчик": ["График работы: 5/2 9:00–18:00 гибридный (2–3 дня в офисе)"] },
+            { "животные": ["собака"] },
+            { "растение": ["яблоко"] },
+
 
             //{ "Разработчик": ["Образование: Бакалавр", " или магистр в ИТ - сфере"] },
             //{ "Разработчик": ["Образование", ": Бакалавр", " или магистр в ИТ - сфере"] },
@@ -806,12 +1066,12 @@ class WordClassificationApp {
             //{ "Руководитель группы разработки": ["Зарплата: 250 000 – 450 000 ₽/мес"] },
             //{ "Руководитель группы разработки": ["График работы: 5/2, гибкий, но с обязательными встречами в офисе (1–2 раза в неделю)"] },
 
-            { "Технический директор": ["Образование: Магистр или PhD в области компьютерных наук/инженерии (желательно)"] },
-            { "Технический директор": ["Образование", ": Магистр или PhD в области компьютерных наук/инженерии (желательно)"] },
-            { "Технический директор": ["Опыт работы: 10+ лет в ИТ, 5+ лет на позиции руководителя технической команды в масштабных компаниях"] },
-            { "Технический директор": ["Навыки: Стратегическое планирование ИТ - инфраструктуры Выбор технологических стеков на уровне компании Управление R & D, инновациями Взаимодействие с инвесторами, акционерами Понимание бизнес - моделей и рынка"] },
-            { "Технический директор": ["Зарплата: 500 000 – 1 200 000+ ₽/мес (включая бонусы и опционы)"] },
-            { "Технический директор": ["График работы: Гибкий, 6 дней в неделю (по необходимости), часто удалённо, но с частыми встречами и поездками"] },
+            //{ "Технический директор": ["Образование: Магистр или PhD в области компьютерных наук/инженерии (желательно)"] },
+            //{ "Технический директор": ["Образование", ": Магистр или PhD в области компьютерных наук/инженерии (желательно)"] },
+            //{ "Технический директор": ["Опыт работы: 10+ лет в ИТ, 5+ лет на позиции руководителя технической команды в масштабных компаниях"] },
+            //{ "Технический директор": ["Навыки: Стратегическое планирование ИТ - инфраструктуры Выбор технологических стеков на уровне компании Управление R & D, инновациями Взаимодействие с инвесторами, акционерами Понимание бизнес - моделей и рынка"] },
+            //{ "Технический директор": ["Зарплата: 500 000 – 1 200 000+ ₽/мес (включая бонусы и опционы)"] },
+            //{ "Технический директор": ["График работы: Гибкий, 6 дней в неделю (по необходимости), часто удалённо, но с частыми встречами и поездками"] },
 
             //{ "Образование": ["Бакалавр по направлению «Информатика», «Программная инженерия» или смежным (можно без диплома, но с портфолио)"] },
             //{ "Опыт работы": ["Опыт работы 0–1 год (стажировки, проекты на GitHub, хакатоны)"] },
@@ -829,7 +1089,7 @@ class WordClassificationApp {
             //{ "Зарплата": ["Зарплата: 90 000 – 150 000 ₽/мес"] },
             //{ "График работы": ["График работы: 5 / 2, гибкий график(возможен удалённый формат)"] },
 
-           
+
 
             //{ "Образование": ["Образование  Высшее техническое образование (бакалавр/магистр)"] },
             //{ "Опыт работы": ["Опыт работы: 5+ лет, ведущая роль в проектах"] },
@@ -872,7 +1132,7 @@ class WordClassificationApp {
         // Инициализируем сеть с примером архитектуры
         this.architectureInput.value = '16, 8';
         this.learningRateInput.value = '0.1';
-        this.epochsInput.value = '2500';
+        this.epochsInput.value = '200';
 
         this.initializeNetwork();
 

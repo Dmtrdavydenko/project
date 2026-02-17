@@ -32,7 +32,7 @@ document.getElementById('getData').addEventListener('click', async function (e) 
                 requirement: items[i].snippet.requirement,
                 responsibility: items[i].snippet.responsibility,
                 schedule: items[i].schedule.name,
-                salary_from: items[i].salary_range?.from ||"",
+                salary_from: items[i].salary_range?.from || "",
                 salary_to: items[i].salary_range?.to || items[i].salary_range?.from || "",
                 frequency: items[i].salary_range?.frequency?.name || "",
                 currency: items[i].salary_range?.currency || "",
@@ -252,9 +252,9 @@ getAllTablesName.addEventListener("click", async function (e) {
         });
         const result = await response.json();
         console.log(result);  // Inspect the result
-        // Make sure the result is an array
+
         if (Array.isArray(result)) {  // Adjust based on actual response structure
-            createSelectOptions(result);
+            createSelectOptions(result, "value");
         } else {
             console.log("Expected an array but got:", result);
         }
@@ -263,12 +263,12 @@ getAllTablesName.addEventListener("click", async function (e) {
     }
 });
 
-function createSelectOptions(dataArray) {
+function createSelectOptions(array_Of_Object, field = "value") {
     selectElement.innerHTML = '';
-    dataArray.forEach(value => {
+    array_Of_Object.forEach(object => {
         const option = document.createElement('option');
-        option.value = value;
-        option.textContent = value;
+        option.value = object[field];
+        option.textContent = object[field];
         selectElement.appendChild(option);
     });
 }
