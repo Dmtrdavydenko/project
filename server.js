@@ -19,6 +19,7 @@ const functionDB = {
     "insert": insert,
     "insertTime": insertTime,
     "getTime": getTime,
+    "devGetTime": devGetTime,
     "getThreads": getThreads,
     "getTape": getTape,
     "select": select,
