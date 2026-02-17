@@ -964,7 +964,7 @@ async function getTable(body) {
                 //sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
                 //sql = "SELECT * FROM Thread_Parameters";
                 sql = `
-                SELECT thread_id, density FROM Thread_Parameters
+                SELECT thread_id, density, thread_speed_id FROM Thread_Parameters
                 JOIN Tape ON tape_id = Tape.id
                 ORDER BY density ASC
                 `
