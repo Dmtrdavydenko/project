@@ -308,13 +308,13 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
 
 
 
-    //function predictYarn(task, i) {
-    //    const range = task[i].task_minutes - task[i - 1].task_minutes;
-    //    const task_length = range * task[i].speed;
-    //    task[i].task_length = task_length;
-    //    task[i].range = range;
-    //    return { range, task_length, ...task[i] };
-    //}
+    function predictYarn(task, i) {
+        const range = task[i].task_minutes - task[i - 1].task_minutes;
+        const task_length = range * task[i].speed;
+        task[i].task_length = task_length;
+        task[i].range = range;
+        return { range, task_length, ...task[i] };
+    }
     //if (Math.abs(item.task_length - item.length) <= 20) {
     //    console.log(`Индекс ${i}: Уток (weft) - task_length: ${item.task_length}, length: ${item.length}`);
     //} else {
@@ -324,11 +324,11 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     let intervalSecondsJob = [0];
 
 
-    //for (let i = 1; i < task[0].length; i++) {
+    for (let i = 1; i < task[0].length; i++) {
 
-    //    intervalSecondsJob.push(predictYarn(task[0],i));
+        intervalSecondsJob.push(predictYarn(task[0],i));
 
-    //}
+    }
 
 
     //console.log(task[0]);
