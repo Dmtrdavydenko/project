@@ -207,7 +207,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //    nameThread.push(foundItem ? foundItem.density + " уток" : "основа");
     //}
 
-    console.log(intervalSecondsJob);
+    //console.log(intervalSecondsJob);
 
 
     const selectDate = document.getElementById('selectDate');
