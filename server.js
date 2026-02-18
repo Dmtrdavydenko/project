@@ -36,6 +36,7 @@ const functionDB = {
     "getSourceTable": getSourceTable,
     "getMetaDataTable": getMetaDataTable,
     "setToDay": setToDay,
+    "getDay": getDay,
 }
 
 const ENCRYPTION_KEY = process.env.HH_ENCRYPTION_KEY;
@@ -1321,6 +1322,29 @@ async function setToDay() {
         console.error('Error connection MySQL:', error.message);
     }
 
+}
+async function getDay() {
+    console.log("CALL=", getDay.name);
+    let connection = null;
+
+    const sql = `
+
+    select date(task_time) as date from timestamps
+
+    GROUP BY date(task_time)
+
+`
+
+    try {
+        connection = await getAwaitConnect();
+        return await connection.execute(sql);
+    } catch (error) {
+        console.error('Ошибка:', error);
+        throw error;
+    } finally {
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
+    }
 }
 async function getTime() {
     try {

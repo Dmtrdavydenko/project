@@ -131,24 +131,24 @@ class DataTape {
 
 
 
-const Tape = new DataTape("https://worktime.up.railway.app/app");
-const Thread = new DataTape("https://worktime.up.railway.app/app");
-const Time = new DataTape("https://worktime.up.railway.app/app");
+const His = new DataTape("https://worktime.up.railway.app/app");
+//const Thread = new DataTape("https://worktime.up.railway.app/app");
+//const Time = new DataTape("https://worktime.up.railway.app/app");
 
 (async () => {
-    const tape = await Tape.loadData("getTape");
-    const thread = await Thread.loadData("getThreads");
-    const task = await Time.loadData("devGetTime");
+    //const tape = await Tape.loadData("getDay");
+    //const thread = await Thread.loadData("getThreads");
+    //const task = await Time.loadData("devGetTime");
     //const task = [[]];
 
-    console.log(Tape);
-    console.log(tape);
+    //console.log(Tape);
+    //console.log(tape);
 
-    console.log(Thread);
-    console.log(thread);
+    //console.log(Thread);
+    //console.log(thread);
 
-    console.log(Time);
-    console.log(task);
+    //console.log(Time);
+    //console.log(task);
 
     
 
@@ -297,13 +297,24 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
 
 
 
-    function predictYarn(task, i) {
-        const range = task[i].task_minutes - task[i - 1].task_minutes;
-        const task_length = range * task[i].speed;
-        task[i].task_length = task_length;
-        task[i].range = range;
-        return { range, task_length, ...task[i] };
-    }
+
+
+    const history = await His.loadData("getDay")[0];
+
+
+
+
+
+
+
+
+    //function predictYarn(task, i) {
+    //    const range = task[i].task_minutes - task[i - 1].task_minutes;
+    //    const task_length = range * task[i].speed;
+    //    task[i].task_length = task_length;
+    //    task[i].range = range;
+    //    return { range, task_length, ...task[i] };
+    //}
     //if (Math.abs(item.task_length - item.length) <= 20) {
     //    console.log(`Индекс ${i}: Уток (weft) - task_length: ${item.task_length}, length: ${item.length}`);
     //} else {
@@ -313,32 +324,32 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     let intervalSecondsJob = [0];
 
 
-    for (let i = 1; i < task[0].length; i++) {
+    //for (let i = 1; i < task[0].length; i++) {
         
-        intervalSecondsJob.push(predictYarn(task[0],i));
+    //    intervalSecondsJob.push(predictYarn(task[0],i));
 
-    }
+    //}
 
 
-    console.log(task[0]);
+    //console.log(task[0]);
     let leftoverMs = 0; 
 
-    const schedule = task[0].map(item => {
-        const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
-        const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
+    //const schedule = task[0].map(item => {
+    //    const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
+    //    const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
 
-        const totalMs = item.task_milliseconds + leftoverMs;
-        const fullMinutes = Math.floor(totalMs / 60000);
-        leftoverMs = totalMs % 60000;
-        const timeHHMM = fullMinutes * 60000;
-        console.log(item.range, warp_or_weft, item.density, item.task_length, item.length, item.speed, Math.abs(item.task_length - item.length));
+    //    const totalMs = item.task_milliseconds + leftoverMs;
+    //    const fullMinutes = Math.floor(totalMs / 60000);
+    //    leftoverMs = totalMs % 60000;
+    //    const timeHHMM = fullMinutes * 60000;
+    //    console.log(item.range, warp_or_weft, item.density, item.task_length, item.length, item.speed, Math.abs(item.task_length - item.length));
 
-        return {
-            time: timeHHMM,
-            name: `${warp_or_weft} ${item.density} ${nameAdd}`
-        };
-    });
-    console.log(schedule);
+    //    return {
+    //        time: timeHHMM,
+    //        name: `${warp_or_weft} ${item.density} ${nameAdd}`
+    //    };
+    //});
+    //console.log(schedule);
 
 
     let nameThread = [];
@@ -350,10 +361,26 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     console.log(intervalSecondsJob);
 
 
+    const selectDate = document.getElementById('selectDate');
 
 
+    selectDate.addEventListener('change', function () {
+        //console.dir(this);
+        //console.log(this.options[this.selectedIndex].value);
+        console.log(this.value);
 
+    });
+    function createSelectOptions(array_Of_Object, field = "date") {
+        selectDate.innerHTML = '';
+        array_Of_Object.forEach(object => {
+            const option = document.createElement('option');
+            option.value = object[field];
+            option.textContent = object[field];
+            selectDate.appendChild(option);
+        });
+    }
     function make() {
+        createSelectOptions(history);
         const timeList = document.createElement("ol");
         const section = document.createElement("section");
         const h2 = document.createElement("h2");
@@ -373,24 +400,24 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
         // Заполнение списка с input type="time"
         const stTime = getCurrentMinutes();
 
-        schedule.forEach((item) => {
-            const li = document.createElement('li');
-            const timeInput = new viewTime(item.time);
-            const threadName = new viewText(item.name);
-            const slotMinutes = item.time;
-            let sum = item.time;
-            if (sum < currentTime) {
-                timeInput.disabled = true;
-            } else {
-                timeInput.classList.add('active');
-            }
+        //schedule.forEach((item) => {
+        //    const li = document.createElement('li');
+        //    //const timeInput = new viewTime(item.time);
+        //    //const threadName = new viewText(item.name);
+        //    const slotMinutes = item.time;
+        //    let sum = item.time;
+        //    if (sum < currentTime) {
+        //        timeInput.disabled = true;
+        //    } else {
+        //        timeInput.classList.add('active');
+        //    }
 
-            li.appendChild(timeInput);
-            li.appendChild(threadName);
-            li.classList.add("time");
+        //    li.appendChild(timeInput);
+        //    li.appendChild(threadName);
+        //    li.classList.add("time");
 
-            timeList.appendChild(li);
-        });
+        //    timeList.appendChild(li);
+        //});
 
 
     }
