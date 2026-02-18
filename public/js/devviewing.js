@@ -299,8 +299,7 @@ const His = new DataTape("https://worktime.up.railway.app/app");
 
 
 
-    const history = await His.loadData("getDay")[0];
-
+    const history = await His.loadData("getDay");
 
 
 

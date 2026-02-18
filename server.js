@@ -1323,6 +1323,9 @@ async function setToDay() {
     }
 
 }
+async function getRows() {
+
+}
 async function getDay() {
     console.log("CALL=", getDay.name);
     let connection = null;
@@ -1332,12 +1335,10 @@ async function getDay() {
     select date(task_time) as date from timestamps
 
     GROUP BY date(task_time)
-
 `
-
     try {
         connection = await getAwaitConnect();
-        return await connection.execute(sql);
+        return (await connection.execute(sql))[0];
     } catch (error) {
         console.error('Ошибка:', error);
         throw error;
