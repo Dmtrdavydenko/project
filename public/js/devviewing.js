@@ -397,8 +397,9 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
             selectDate.appendChild(option);
         });
     }
+    createSelectOptions(history);
+
     function make(schedule) {
-        createSelectOptions(history);
         const timeList = document.createElement("ol");
         const section = document.createElement("section");
         const h2 = document.createElement("h2");
