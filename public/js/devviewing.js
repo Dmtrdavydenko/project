@@ -165,7 +165,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
 
 
     function predictYarn(task, i) {
-        const range = task[i].task_minutes - task[i - 1].task_minutes;
+        const range = task[i+1].task_minutes - task[i].task_minutes;
         const task_length = range * task[i].speed;
         task[i].task_length = task_length;
         task[i].range = range;
@@ -225,8 +225,8 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
 
         let intervalSecondsJob = [0];
 
-        const bound = tasks.length;
-        for (let i = 1; i < bound; i++) {
+        const bound = tasks.length-1;
+        for (let i = 0; i < bound; i++) {
 
             intervalSecondsJob.push(predictYarn(tasks, i));
 
@@ -241,12 +241,12 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
             leftoverMs = totalMs % 60000;
             const timeHHMM = fullMinutes * 60000;
             const o = {};
+            o.speed = item.speed;
             o.range = item.range;
             o.warp_or_weft = warp_or_weft;
             o.density = item.density;
             o.task_length = item.task_length;
             o.length = item.length;
-            o.speed = item.speed;
             console.log(o, Math.abs(item.task_length - item.length));
 
             return {
