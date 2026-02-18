@@ -1381,7 +1381,7 @@ async function getDay(body) {
 
             JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
 
- where date(task_time) = ${body.day}
+ where date(task_time) = "${body.day}"
  
  ORDER BY task_time ASC;
 
