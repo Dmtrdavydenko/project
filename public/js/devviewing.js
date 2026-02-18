@@ -183,22 +183,24 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //console.log(task[0]);
     let leftoverMs = 0;
 
-    const schedule = history.map(item => {
-        const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
-        const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
 
-        const totalMs = item.task_milliseconds + leftoverMs;
-        const fullMinutes = Math.floor(totalMs / 60000);
-        leftoverMs = totalMs % 60000;
-        const timeHHMM = fullMinutes * 60000;
-        console.log(item.range, warp_or_weft, item.density, item.task_length, item.length, item.speed, Math.abs(item.task_length - item.length));
+    let schedule
+    //const schedule = history.map(item => {
+    //    const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
+    //    const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
 
-        return {
-            time: timeHHMM,
-            name: `${warp_or_weft} ${item.density} ${nameAdd}`
-        };
-    });
-    console.log(schedule);
+    //    const totalMs = item.task_milliseconds + leftoverMs;
+    //    const fullMinutes = Math.floor(totalMs / 60000);
+    //    leftoverMs = totalMs % 60000;
+    //    const timeHHMM = fullMinutes * 60000;
+    //    console.log(item.range, warp_or_weft, item.density, item.task_length, item.length, item.speed, Math.abs(item.task_length - item.length));
+
+    //    return {
+    //        time: timeHHMM,
+    //        name: `${warp_or_weft} ${item.density} ${nameAdd}`
+    //    };
+    //});
+    //console.log(schedule);
 
 
     let nameThread = [];
@@ -219,6 +221,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
         console.log(this.value);
 
         const tasks = await His.loadData("getDay", { day: this.value });
+        console.log({ source: tasks });
 
         let intervalSecondsJob = [0];
 
@@ -229,7 +232,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
 
         }
 
-        const schedule = tasks.map(item => {
+        schedule = tasks.map(item => {
             const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
             const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
 
@@ -237,14 +240,21 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
             const fullMinutes = Math.floor(totalMs / 60000);
             leftoverMs = totalMs % 60000;
             const timeHHMM = fullMinutes * 60000;
-            console.log(item.range, warp_or_weft, item.density, item.task_length, item.length, item.speed, Math.abs(item.task_length - item.length));
+            const o = {};
+            o.range = item.range;
+            o.warp_or_weft = warp_or_weft;
+            o.density = item.density;
+            o.task_length = item.task_length;
+            o.length = item.length;
+            o.speed = item.speed;
+            console.log(o, Math.abs(item.task_length - item.length));
 
             return {
                 time: timeHHMM,
                 name: `${warp_or_weft} ${item.density} ${nameAdd}`
             };
         });
-        make(schedule);
+        make();
     });
     function createSelectOptions(array_Of_Object, field = "date") {
         selectDate.innerHTML = '';
@@ -257,7 +267,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     }
     createSelectOptions(history);
 
-    function make(schedule) {
+    function make() {
         const timeList = document.createElement("ol");
         const section = document.createElement("section");
         const h2 = document.createElement("h2");
