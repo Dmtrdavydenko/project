@@ -150,7 +150,7 @@ const His = new DataTape("https://worktime.up.railway.app/app");
     //console.log(Time);
     //console.log(task);
 
-    
+
 
 
 
@@ -299,7 +299,7 @@ const His = new DataTape("https://worktime.up.railway.app/app");
 
 
 
-    const history = await His.loadData("getDay");
+    const history = await His.loadData("getHistory");
 
 
 
@@ -324,14 +324,14 @@ const His = new DataTape("https://worktime.up.railway.app/app");
 
 
     //for (let i = 1; i < task[0].length; i++) {
-        
+
     //    intervalSecondsJob.push(predictYarn(task[0],i));
 
     //}
 
 
     //console.log(task[0]);
-    let leftoverMs = 0; 
+    let leftoverMs = 0;
 
     //const schedule = task[0].map(item => {
     //    const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
@@ -363,10 +363,12 @@ const His = new DataTape("https://worktime.up.railway.app/app");
     const selectDate = document.getElementById('selectDate');
 
 
-    selectDate.addEventListener('change', function () {
+    selectDate.addEventListener('change', async function () {
         //console.dir(this);
         //console.log(this.options[this.selectedIndex].value);
         console.log(this.value);
+
+        await His.loadData("getDay", { day: this.value }).then(console.log);
 
     });
     function createSelectOptions(array_Of_Object, field = "date") {

@@ -36,6 +36,7 @@ const functionDB = {
     "getSourceTable": getSourceTable,
     "getMetaDataTable": getMetaDataTable,
     "setToDay": setToDay,
+    "getHistory": getHistory,
     "getDay": getDay,
 }
 
@@ -1326,8 +1327,8 @@ async function setToDay() {
 async function getRows() {
 
 }
-async function getDay() {
-    console.log("CALL=", getDay.name);
+async function getHistory() {
+    console.log("CALL=", getHistory.name);
     let connection = null;
 
     const sql = `
@@ -1335,6 +1336,55 @@ async function getDay() {
     select date(task_time) as date from timestamps
 
     GROUP BY date(task_time)
+`
+    try {
+        connection = await getAwaitConnect();
+        return (await connection.execute(sql))[0];
+    } catch (error) {
+        console.error('Ошибка:', error);
+        throw error;
+    } finally {
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
+    }
+}
+async function getDay(body) {
+    console.log("CALL=", getDay.name);
+    let connection = null;
+
+    const sql = `
+
+            SELECT timestamps.id,
+            UNIX_TIMESTAMP(task_time) / 60 AS task_minutes,
+            UNIX_TIMESTAMP(task_time) AS task_seconds,
+            UNIX_TIMESTAMP(task_time) * 1000 AS task_milliseconds,
+            yarn_name as type,
+
+            Tape.density,
+            color.color,
+            additive.additive_name,
+            Tape.length,
+            Thread_Parameters.thread_speed_id as speed,
+            (Tape.length / Thread_Parameters.thread_speed_id) * 60000 as tape_milliseconds
+
+            FROM timestamps
+
+            JOIN TapeExtrusion ON timestamps.TapeExtrusion_id = TapeExtrusion.id
+
+            JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id
+
+            JOIN Tape   ON Thread_Parameters.tape_id = Tape.id
+
+            JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
+
+            JOIN color ON TapeExtrusion.color_id = color.color_id
+
+            JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
+
+ where date(task_time) = ${body.day}
+ 
+ ORDER BY task_time ASC;
+
 `
     try {
         connection = await getAwaitConnect();
