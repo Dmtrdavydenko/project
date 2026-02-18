@@ -132,23 +132,24 @@ class DataTape {
 
 
 const His = new DataTape("https://worktime.up.railway.app/app");
-//const Thread = new DataTape("https://worktime.up.railway.app/app");
-//const Time = new DataTape("https://worktime.up.railway.app/app");
+const Tape = new DataTape("https://worktime.up.railway.app/app");
+const Thread = new DataTape("https://worktime.up.railway.app/app");
+const Time = new DataTape("https://worktime.up.railway.app/app");
 
 (async () => {
-    //const tape = await Tape.loadData("getDay");
-    //const thread = await Thread.loadData("getThreads");
-    //const task = await Time.loadData("devGetTime");
+    const tape = await Tape.loadData("getDay");
+    const thread = await Thread.loadData("getThreads");
+    const task = await Time.loadData("devGetTime");
     //const task = [[]];
 
-    //console.log(Tape);
-    //console.log(tape);
+    console.log(Tape);
+    console.log(tape);
 
-    //console.log(Thread);
-    //console.log(thread);
+    console.log(Thread);
+    console.log(thread);
 
-    //console.log(Time);
-    //console.log(task);
+    console.log(Time);
+    console.log(task);
 
 
 
@@ -333,22 +334,22 @@ const His = new DataTape("https://worktime.up.railway.app/app");
     //console.log(task[0]);
     let leftoverMs = 0;
 
-    //const schedule = task[0].map(item => {
-    //    const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
-    //    const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
+    const schedule = history.map(item => {
+        const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
+        const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
 
-    //    const totalMs = item.task_milliseconds + leftoverMs;
-    //    const fullMinutes = Math.floor(totalMs / 60000);
-    //    leftoverMs = totalMs % 60000;
-    //    const timeHHMM = fullMinutes * 60000;
-    //    console.log(item.range, warp_or_weft, item.density, item.task_length, item.length, item.speed, Math.abs(item.task_length - item.length));
+        const totalMs = item.task_milliseconds + leftoverMs;
+        const fullMinutes = Math.floor(totalMs / 60000);
+        leftoverMs = totalMs % 60000;
+        const timeHHMM = fullMinutes * 60000;
+        console.log(item.range, warp_or_weft, item.density, item.task_length, item.length, item.speed, Math.abs(item.task_length - item.length));
 
-    //    return {
-    //        time: timeHHMM,
-    //        name: `${warp_or_weft} ${item.density} ${nameAdd}`
-    //    };
-    //});
-    //console.log(schedule);
+        return {
+            time: timeHHMM,
+            name: `${warp_or_weft} ${item.density} ${nameAdd}`
+        };
+    });
+    console.log(schedule);
 
 
     let nameThread = [];
@@ -401,24 +402,24 @@ const His = new DataTape("https://worktime.up.railway.app/app");
         // Заполнение списка с input type="time"
         const stTime = getCurrentMinutes();
 
-        //schedule.forEach((item) => {
-        //    const li = document.createElement('li');
-        //    //const timeInput = new viewTime(item.time);
-        //    //const threadName = new viewText(item.name);
-        //    const slotMinutes = item.time;
-        //    let sum = item.time;
-        //    if (sum < currentTime) {
-        //        timeInput.disabled = true;
-        //    } else {
-        //        timeInput.classList.add('active');
-        //    }
+        schedule.forEach((item) => {
+            const li = document.createElement('li');
+            const timeInput = new viewTime(item.time);
+            const threadName = new viewText(item.name);
+            const slotMinutes = item.time;
+            let sum = item.time;
+            if (sum < currentTime) {
+                timeInput.disabled = true;
+            } else {
+                timeInput.classList.add('active');
+            }
 
-        //    li.appendChild(timeInput);
-        //    li.appendChild(threadName);
-        //    li.classList.add("time");
+            li.appendChild(timeInput);
+            li.appendChild(threadName);
+            li.classList.add("time");
 
-        //    timeList.appendChild(li);
-        //});
+            timeList.appendChild(li);
+        });
 
 
     }
