@@ -156,150 +156,6 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
 
 
 
-    //task[0] = [
-    //    {
-    //        "id": 1,
-    //        "time_seconds": 1763150400,
-    //        "time_milliseconds": 1763150400000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "светостабилизатор 1,5%"
-    //    },
-    //    {
-    //        "id": 2,
-    //        "time_seconds": 1763152380,
-    //        "time_milliseconds": 1763152380000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 3,
-    //        "time_seconds": 1763154360,
-    //        "time_milliseconds": 1763154360000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 4,
-    //        "time_seconds": 1763156340,
-    //        "time_milliseconds": 1763156340000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 5,
-    //        "time_seconds": 1763158320,
-    //        "time_milliseconds": 1763158320000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 6,
-    //        "time_seconds": 1763160300,
-    //        "time_milliseconds": 1763160300000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 7,
-    //        "time_seconds": 1763162280,
-    //        "time_milliseconds": 1763162280000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 8,
-    //        "time_seconds": 1763164260,
-    //        "time_milliseconds": 1763164260000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 9,
-    //        "time_seconds": 1763169600,
-    //        "time_milliseconds": 1763169600000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 10,
-    //        "time_seconds": 1763172000,
-    //        "time_milliseconds": 1763172000000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 11,
-    //        "time_seconds": 1763174400,
-    //        "time_milliseconds": 1763174400000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 12,
-    //        "time_seconds": 1763176800,
-    //        "time_milliseconds": 1763176800000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 13,
-    //        "time_seconds": 1763179200,
-    //        "time_milliseconds": 1763179200000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 14,
-    //        "time_seconds": 1763181600,
-    //        "time_milliseconds": 1763181600000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 15,
-    //        "time_seconds": 1763184000,
-    //        "time_milliseconds": 1763184000000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 16,
-    //        "time_seconds": 1763186400,
-    //        "time_milliseconds": 1763186400000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    },
-    //    {
-    //        "id": 17,
-    //        "time_seconds": 1763188800,
-    //        "time_milliseconds": 1763188800000,
-    //        "thread_density": 90,
-    //        "color": "белая",
-    //        "additive_name": "нет"
-    //    }
-    //]
-    //option.textContent = `${tape.density} ${item.additive_name === "нет" ? item.color : item.additive_name}`;
-
-
-
-
-
     const history = await His.loadData("getHistory");
 
 
@@ -321,14 +177,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //    console.log(`Индекс ${i}: Основа (warp) - task_length: ${item.task_length}, length: ${item.length}`);
     //}
     //const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.type} ${item.density} ${item.additive_name === "нет" ? item.color : item.additive_name}` }));
-    let intervalSecondsJob = [0];
 
-
-    for (let i = 1; i < task[0].length; i++) {
-
-        intervalSecondsJob.push(predictYarn(task[0],i));
-
-    }
 
 
     //console.log(task[0]);
@@ -370,6 +219,15 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
         console.log(this.value);
 
         const tasks = await His.loadData("getDay", { day: this.value });
+
+        let intervalSecondsJob = [0];
+
+        const bound = tasks.length;
+        for (let i = 1; i < bound; i++) {
+
+            intervalSecondsJob.push(predictYarn(tasks, i));
+
+        }
 
         const schedule = tasks.map(item => {
             const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
