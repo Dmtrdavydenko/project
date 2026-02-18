@@ -369,8 +369,24 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
         //console.log(this.options[this.selectedIndex].value);
         console.log(this.value);
 
-        await His.loadData("getDay", { day: this.value }).then(console.log);
+        const tasks = await His.loadData("getDay", { day: this.value });
 
+        const schedule = tasks.map(item => {
+            const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
+            const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
+
+            const totalMs = item.task_milliseconds + leftoverMs;
+            const fullMinutes = Math.floor(totalMs / 60000);
+            leftoverMs = totalMs % 60000;
+            const timeHHMM = fullMinutes * 60000;
+            console.log(item.range, warp_or_weft, item.density, item.task_length, item.length, item.speed, Math.abs(item.task_length - item.length));
+
+            return {
+                time: timeHHMM,
+                name: `${warp_or_weft} ${item.density} ${nameAdd}`
+            };
+        });
+        make(schedule);
     });
     function createSelectOptions(array_Of_Object, field = "date") {
         selectDate.innerHTML = '';
@@ -381,7 +397,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
             selectDate.appendChild(option);
         });
     }
-    function make() {
+    function make(schedule) {
         createSelectOptions(history);
         const timeList = document.createElement("ol");
         const section = document.createElement("section");
@@ -424,7 +440,6 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
 
     }
 
-    make();
     //make();
     //make();
 
