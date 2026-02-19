@@ -1441,7 +1441,7 @@ async function getTime() {
 
             JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
 
-            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 24*5 HOUR)
+            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 12 HOUR)
 
             ORDER BY task_time ASC;
 
