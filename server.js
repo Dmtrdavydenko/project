@@ -1333,9 +1333,16 @@ async function getHistory() {
 
     const sql = `
 
-    select date(task_time) as date from timestamps
+    -- select date(task_time) as date from timestamps
 
-    GROUP BY date(task_time)
+    -- GROUP BY date(task_time)
+
+    SELECT task_time as date
+FROM timestamps
+WHERE TIME(task_time) BETWEEN '07:30:00' AND '08:10:00'
+   OR TIME(task_time) BETWEEN '19:30:00' AND '20:10:00'
+ORDER BY date;
+
 `
     try {
         connection = await getAwaitConnect();
@@ -1381,7 +1388,7 @@ async function getDay(body) {
 
             JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
 
- where date(task_time) = "${body.day}"
+ where task_time = '${body.day}'
  
  ORDER BY task_time ASC;
 
