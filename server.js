@@ -1388,9 +1388,11 @@ async function getDay(body) {
 
             JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
 
- where task_time = '${body.day}'
- 
- ORDER BY task_time ASC;
+            WHERE  task_time >= '${body.day}'                       -- начало
+
+            AND  task_time <  DATE_ADD('${body.day}', INTERVAL 12 HOUR)  -- +12 ч
+
+            ORDER BY task_time ASC;
 
 `
     try {
