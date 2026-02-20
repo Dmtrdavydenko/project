@@ -21,6 +21,7 @@ const functionDB = {
     "getTime": getTime,
     "devGetTime": devGetTime,
     "getThreads": getThreads,
+    "getTapeDensity": getTapeDensity,
     "getTape": getTape,
     "select": select,
     "drop": dropTable,
@@ -1261,6 +1262,41 @@ async function getTape() {
         connection = await getAwaitConnect();
         //console.log(data);
         return await connection.execute(sql);
+    } catch (error) {
+        console.error('Ошибка:', error);
+        throw error;
+    } finally {
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
+    }
+}
+async function getTapeDensity() {
+    console.log("CALL=", getTapeDensity.name)
+    let connection = null;
+    const sql = `
+    SELECT
+        Tape.density as tape_density,
+        thread_speed_id as tape_speed,
+        Thread_Parameters.thread_id as group_id,
+        length as tape_length,
+        thread_time * 60 as tape_seconds,
+        thread_time * 60000 as tape_milliseconds
+    FROM TapeExtrusion
+        JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id
+
+        JOIN Tape ON Thread_Parameters.tape_id = Tape.id
+        JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
+
+        JOIN color ON TapeExtrusion.color_id = color.color_id
+        JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
+
+    GROUP BY tape_density, tape_speed, group_id, length
+    ORDER BY tape_density ASC
+    `;
+    try {
+        connection = await getAwaitConnect();
+        //console.log(data);
+        return (await connection.execute(sql))[0];
     } catch (error) {
         console.error('Ошибка:', error);
         throw error;

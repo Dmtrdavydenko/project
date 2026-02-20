@@ -728,6 +728,8 @@ localSpace.getThreads = [
 (async (cmd) => {
     const tape = await Tape.loadData("getTape");
     const thread = await Thread.loadData("getThreads");
+    const tapeList = await Thread.loadData("getTapeDensity");
+    console.log(tapeList);
 
 
 
