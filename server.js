@@ -1342,8 +1342,8 @@ async function getHistory() {
             CONVERT_TZ(task_time, '+00:00', '+07:00')
         ) AS client_local_time
     FROM timestamps
-    WHERE TIME(task_time) BETWEEN '07:30:00' AND '08:10:00'
-        OR TIME(task_time) BETWEEN '19:30:00' AND '20:10:00'
+    WHERE TIME(client_local_time) BETWEEN '07:30:00' AND '08:10:00'
+        OR TIME(client_local_time) BETWEEN '19:30:00' AND '20:10:00'
     ORDER BY date;
 
 `
