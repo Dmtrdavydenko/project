@@ -1336,15 +1336,23 @@ async function getHistory() {
     -- GROUP BY date(task_time)
 
     SELECT
-        task_time as date,
-        COALESCE(
-            CONVERT_TZ(task_time, 'UTC', 'Asia/Novosibirsk'),
-            CONVERT_TZ(task_time, '+00:00', '+07:00')
-        ) AS client_local_time
-    FROM timestamps
+        task_time AS date,
+        client_local_time
+    FROM (
+        SELECT
+            task_time,
+            COALESCE(
+                CONVERT_TZ(task_time, 'UTC', 'Asia/Novosibirsk'),
+                CONVERT_TZ(task_time, '+00:00', '+07:00')
+            ) AS client_local_time
+        FROM timestamps
+        WHERE task_time IS NOT NULL
+    ) AS localized
+
     WHERE TIME(client_local_time) BETWEEN '07:30:00' AND '08:10:00'
-        OR TIME(client_local_time) BETWEEN '19:30:00' AND '20:10:00'
+       OR TIME(client_local_time) BETWEEN '19:30:00' AND '20:10:00'
     ORDER BY date;
+
 
 `
     try {
