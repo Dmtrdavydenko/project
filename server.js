@@ -1332,16 +1332,19 @@ async function getHistory() {
     let connection = null;
 
     const sql = `
-
     -- select date(task_time) as date from timestamps
-
     -- GROUP BY date(task_time)
 
-    SELECT task_time as date
-FROM timestamps
-WHERE TIME(task_time) BETWEEN '07:30:00' AND '08:10:00'
-   OR TIME(task_time) BETWEEN '19:30:00' AND '20:10:00'
-ORDER BY date;
+    SELECT
+        task_time as date,
+        COALESCE(
+            CONVERT_TZ(task_time, 'UTC', 'Asia/Novosibirsk'),
+            CONVERT_TZ(task_time, '+00:00', '+07:00')
+        ) AS client_local_time
+    FROM timestamps
+    WHERE TIME(task_time) BETWEEN '07:30:00' AND '08:10:00'
+        OR TIME(task_time) BETWEEN '19:30:00' AND '20:10:00'
+    ORDER BY date;
 
 `
     try {
@@ -1388,7 +1391,7 @@ async function getDay(body) {
 
             JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
 
-            WHERE  task_time >= '${body.day}'                                -- начало
+            WHERE  task_time >= '${body.day}'                                 -- начало
 
                 AND  task_time <  DATE_ADD('${body.day}', INTERVAL 12 HOUR)  -- +12 ч
 
@@ -1518,10 +1521,16 @@ async function getThreads() {
         try {
             console.log('Успешно подключено к базе данных MySQL!');
             const sql = `
-            SELECT thread_id as id, density, length, thread_speed_id as speed, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds
+            SELECT
+                thread_id as id,
+                density,
+                length,
+                thread_speed_id as speed,
+                thread_time * 60 as time_seconds,
+                thread_time * 60 * 1000 as time_milliseconds
             FROM Thread_Parameters
-            JOIN Tape ON Thread_Parameters.tape_id = Tape.id
-            ORDER BY density, speed ASC
+                JOIN Tape ON Thread_Parameters.tape_id = Tape.id
+                ORDER BY density, speed ASC
             `;
             return await connection.execute(sql);
         } catch (err) {

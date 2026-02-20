@@ -256,7 +256,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
         });
         make();
     });
-    function createSelectOptions(array_Of_Object, field = "date") {
+    function createSelectOptions(array_Of_Object, field = "client_local_time") {
         selectDate.innerHTML = '';
         array_Of_Object.forEach(object => {
             const option = document.createElement('option');
