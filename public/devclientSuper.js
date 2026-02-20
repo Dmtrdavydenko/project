@@ -895,8 +895,8 @@ localSpace.getThreads = [
     myThread[0].push({ density: "Время", length: 32000, speed: 400, time_milliseconds: 4800000, id: 0 });
 
     let myTapeList = [];
-    myTapeList[0] = tapeList.slice();
-    myTapeList[0].push({ density: "Время", length: 32000, speed: 400, time_milliseconds: 4800000, id: 0 });
+    myTapeList = tapeList.slice();
+    myTapeList.push({ density: "Время", length: 32000, speed: 400, time_milliseconds: 4800000, id: 0 });
 
     {
         function dropListSelectTex(array, select = document.createElement("select")) {
