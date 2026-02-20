@@ -1372,10 +1372,10 @@ async function getDay(body) {
 
     const sql = `
 
-            SELECT timestamps.id,
-            UNIX_TIMESTAMP(task_time) / 60 AS task_minutes,
-            UNIX_TIMESTAMP(task_time) AS task_seconds,
-            UNIX_TIMESTAMP(task_time) * 1000 AS task_milliseconds,
+            SELECT localized.id,
+            UNIX_TIMESTAMP(client_local_time) / 60 AS task_minutes,
+            UNIX_TIMESTAMP(client_local_time) AS task_seconds,
+            UNIX_TIMESTAMP(client_local_time) * 1000 AS task_milliseconds,
             yarn_name as type,
 
             Tape.density,
@@ -1385,9 +1385,18 @@ async function getDay(body) {
             Thread_Parameters.thread_speed_id as speed,
             (Tape.length / Thread_Parameters.thread_speed_id) * 60000 as tape_milliseconds
 
-            FROM timestamps
+            FROM (
+                  SELECT
+                      task_time,
+                      COALESCE(
+                          CONVERT_TZ(task_time, 'UTC', 'Asia/Novosibirsk'),
+                          CONVERT_TZ(task_time, '+00:00', '+07:00')
+                      ) AS client_local_time
+                  FROM timestamps
+                  WHERE task_time IS NOT NULL
+                ) AS localized
 
-            JOIN TapeExtrusion ON timestamps.TapeExtrusion_id = TapeExtrusion.id
+            JOIN TapeExtrusion ON localized.TapeExtrusion_id = TapeExtrusion.id
 
             JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id
 
@@ -1399,11 +1408,11 @@ async function getDay(body) {
 
             JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
 
-            WHERE  task_time >= '${body.day}'                                 -- начало
+            WHERE  client_local_time >= '${body.day}'                                 -- начало
 
-                AND  task_time <  DATE_ADD('${body.day}', INTERVAL 12 HOUR)  -- +12 ч
+                AND  client_local_time <  DATE_ADD('${body.day}', INTERVAL 12 HOUR)  -- +12 ч
 
-            ORDER BY task_time ASC;
+            ORDER BY client_local_time ASC;
 
 `
     try {
