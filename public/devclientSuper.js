@@ -893,6 +893,11 @@ localSpace.getThreads = [
     let myThread = [];
     myThread[0] = thread[0].slice();
     myThread[0].push({ density: "Время", length: 32000, speed: 400, time_milliseconds: 4800000, id: 0 });
+
+    let myTapeList = [];
+    myTapeList[0] = tapeList.slice();
+    myTapeList[0].push({ density: "Время", length: 32000, speed: 400, time_milliseconds: 4800000, id: 0 });
+
     {
         function dropListSelectTex(array, select = document.createElement("select")) {
             array.forEach((tape) => {
@@ -901,6 +906,17 @@ localSpace.getThreads = [
                 //option.value = tape.time_milliseconds;
                 option.textContent = Number.isInteger(tape.density) ? `${tape.density} ${tape.speed && "v" + tape.speed || ""}` : `${tape.density}`
                 option.name = tape.id;
+                select.append(option);
+            });
+            return select;
+        }
+        function selectTape(array, select = document.createElement("select")) {
+            array.forEach((item) => {
+                let option = document.createElement("option");
+                option.value = item.tape_length / item.tape_speed * 60000;
+                //option.value = item.time_milliseconds;
+                option.textContent = Number.isInteger(item.tape_density) ? `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed || ""}` : `${item.tape_density}`
+                option.name = item.group_id;
                 select.append(option);
             });
             return select;
@@ -1027,7 +1043,8 @@ localSpace.getThreads = [
             time.valueAsNumber = Math.floor(dataTime[counterColunms] / 60000) * 60000 || 0;
             //time.style.display = "none";
             console.log(myThread[0]);
-            let select = dropListSelectTex(myThread[0]);
+            //let select = dropListSelectTex(myThread[0]);
+            let select = selectTape(myTapeList);
             select.name = counterColunms;
 
 
