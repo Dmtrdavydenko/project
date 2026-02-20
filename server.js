@@ -1389,6 +1389,7 @@ async function getDay(body) {
                   SELECT
                       id,
                       task_time,
+                      TapeExtrusion_id,
                       COALESCE(
                           CONVERT_TZ(task_time, 'UTC', 'Asia/Novosibirsk'),
                           CONVERT_TZ(task_time, '+00:00', '+07:00')
