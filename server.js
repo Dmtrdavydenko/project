@@ -1387,6 +1387,7 @@ async function getDay(body) {
 
             FROM (
                   SELECT
+                      id,
                       task_time,
                       COALESCE(
                           CONVERT_TZ(task_time, 'UTC', 'Asia/Novosibirsk'),
