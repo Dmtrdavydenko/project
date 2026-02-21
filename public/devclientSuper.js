@@ -890,26 +890,26 @@ localSpace.getThreads = [
 
 
 
-    let myThread = [];
-    myThread[0] = thread[0].slice();
-    myThread[0].push({ density: "Время", length: 32000, speed: 400, time_milliseconds: 4800000, id: 0 });
+    //let myThread = [];
+    //myThread[0] = thread[0].slice();
+    //myThread[0].push({ density: "Время", length: 32000, speed: 400, time_milliseconds: 4800000, id: 0 });
 
     let myTapeList = [];
     myTapeList = tapeList.slice();
     myTapeList.push({ tape_density: "Время", tape_length: 32000, tape_speed: 400, tape_milliseconds: 4800000, group_id: 0 });
 
     {
-        function dropListSelectTex(array, select = document.createElement("select")) {
-            array.forEach((tape) => {
-                let option = document.createElement("option");
-                option.value = tape.length / tape.speed * 60000;
-                //option.value = tape.time_milliseconds;
-                option.textContent = Number.isInteger(tape.density) ? `${tape.density} ${tape.speed && "v" + tape.speed || ""}` : `${tape.density}`
-                option.name = tape.id;
-                select.append(option);
-            });
-            return select;
-        }
+        //function dropListSelectTex(array, select = document.createElement("select")) {
+        //    array.forEach((tape) => {
+        //        let option = document.createElement("option");
+        //        option.value = tape.length / tape.speed * 60000;
+        //        //option.value = tape.time_milliseconds;
+        //        option.textContent = Number.isInteger(tape.density) ? `${tape.density} ${tape.speed && "v" + tape.speed || ""}` : `${tape.density}`
+        //        option.name = tape.id;
+        //        select.append(option);
+        //    });
+        //    return select;
+        //}
         function selectTape(array, select = document.createElement("select")) {
             array.forEach((item) => {
                 let option = document.createElement("option");
@@ -1574,19 +1574,19 @@ localSpace.getThreads = [
             //}).then((response) => response.json());
 
 
-            //let response = {}
+            let response = {}
 
-            let response = await fetch("https://worktime.up.railway.app/app", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
-                },
-                body: JSON.stringify({
-                    action: "insertTime",
-                    data: timeTape
-                }),
-            }).then((response) => response.json());
-            console.log(response);
+            //let response = await fetch("https://worktime.up.railway.app/app", {
+            //    method: "POST",
+            //    headers: {
+            //        "Content-Type": "application/json;charset=utf-8",
+            //    },
+            //    body: JSON.stringify({
+            //        action: "insertTime",
+            //        data: timeTape
+            //    }),
+            //}).then((response) => response.json());
+            //console.log(response);
 
 
             response = await fetch("https://worktime.up.railway.app/app", {
