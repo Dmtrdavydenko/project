@@ -1161,11 +1161,34 @@ async function insertTime(body) {
 
         //connection.execute("TRUNCATE TABLE timestamps");
         //const times = body.data.map(time => time / 1000);
-        const values = body.data.map(tape => [tape.time / 1000, tape.name]);
-        const placeholders = body.data.map(() => '(FROM_UNIXTIME(?), ?)').join(', ');
-        const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
+        //const values = body.data.map(tape => [tape.time / 1000, tape.name]);
+        //const placeholders = body.data.map(() => '(FROM_UNIXTIME(?), ?)').join(', ');
+        //const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
         // Вставка новой записи
-        return await connection.execute(sql, values.flat());
+
+
+        
+        //const values = body.data.map(tape => [tape.time / 1000, tape.name]);
+        //const placeholders = body.data.map(() => "'(CONVERT_TZ(FROM_UNIXTIME(?), 'Asia/Novosibirsk', 'UTC'), ?)'").join(', ');
+        //const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
+        //return await connection.execute(sql, values.flat());
+
+
+        // tape.time — это **миллисекунды** от эпохи **в таймзоне Asia/Novosibirsk**
+        //const values = body.data.flatMap(tape => [tape.time / 1000, tape.name]);
+
+        // Запрос должен быть: CONVERT_TZ(FROM_UNIXTIME(?), 'Asia/Novosibirsk', '+00:00')
+        const placeholders = body.data.map(() => '(CONVERT_TZ(FROM_UNIXTIME(?), ?, ?), ?)').join(', ');
+        const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
+
+        // Параметры: [unix, 'Asia/Novosibirsk', '+00:00', name] для каждой строки
+        const params = [];
+        body.data.forEach(tape => {
+            params.push(tape.time / 1000, 'Asia/Novosibirsk', 'UTC', tape.name);
+        });
+
+        return await connection.execute(sql, params);
+
 
 
 
