@@ -1483,6 +1483,7 @@ localSpace.getThreads = [
     }
 
     send.addEventListener("click", async function (e) {
+        this.textContent = "Сохраняю";
         const dat = [];
         const dateSave = dtinput.valueAsNumber;
         console.log("data ", dateSave);
@@ -1574,19 +1575,19 @@ localSpace.getThreads = [
             //}).then((response) => response.json());
 
 
-            //let response = {}
+            let response = {}
 
-            let response = await fetch("https://worktime.up.railway.app/app", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
-                },
-                body: JSON.stringify({
-                    action: "insertTime",
-                    data: timeTape
-                }),
-            }).then((response) => response.json());
-            console.log(response);
+            //let response = await fetch("https://worktime.up.railway.app/app", {
+            //    method: "POST",
+            //    headers: {
+            //        "Content-Type": "application/json;charset=utf-8",
+            //    },
+            //    body: JSON.stringify({
+            //        action: "insertTime",
+            //        data: timeTape
+            //    }),
+            //}).then((response) => response.json());
+            //console.log(response);
 
 
             response = await fetch("https://worktime.up.railway.app/app", {
@@ -1603,14 +1604,18 @@ localSpace.getThreads = [
 
             if (response === "pong") {
                 this.classList.add("success");
+                this.textContent = "Успешно";
                 setTimeout(() => {
                     this.classList.remove("success");
+                    this.textContent = "Сохранить";
                 }, 3000);
             } else throw response;
         } catch (error) {
             this.classList.add("reject");
+            this.textContent = "Ошибка";
             setTimeout(() => {
                 this.classList.remove("reject");
+                this.textContent = "Сохранить";
             }, 3000);
             console.warn(response);
             // console.warn(error);
@@ -1728,6 +1733,46 @@ localSpace.getThreads = [
     lineTask = [];
     let selectTapeName = {};
 
+    function updateTime() {
+
+
+
+
+        selectedButtons.forEach((button, i) => {
+            updateColor(box, +button.value);
+
+            lineTask[i].time.name = button.name;
+            listTask[i] = lineTask[i].time;
+
+
+            sum2 += +button.value;
+
+
+            let timeMS = time12(sum2 + mod);
+            let timeS = Math.floor(timeMS / 60000);
+            mod = timeMS % 60000;
+            lineTask[i].time.valueAsNumber = timeS * 60000;
+
+            lineTask[i].select = document.createElement("select");
+            lineTask[i].select.name = button.name;
+            selectName[i] = lineTask[i].select;
+
+
+            let tapeNamesArray = tape[0].filter(current => +lineTask[i].time.name === current.group_id);
+            if (tapeNamesArray.length === 0) {
+                setNameTape(tape[0], lineTask[i].select);
+            } else {
+                setNameTape(tapeNamesArray, lineTask[i].select);
+            }
+
+            console.log(lineTask);
+
+
+            box.append(lineTask[i].time, lineTask[i].select);
+            ol.append(box);
+            console.log(sum2);
+        });
+    }
     function handleCalculation(event) {
         section.innerHTML = "";
         select.innerHTML = "";
@@ -1758,20 +1803,25 @@ localSpace.getThreads = [
         section.append(dropListSelect([{ name: "День" }, { name: "Ночь" }], select));
         section.append(ol);
 
+
+
+
+
+
         let sum2 = start.valueAsNumber;
         const box = document.createElement("li");
         const time = document.createElement("input");
         time.type = "time";
         time.valueAsNumber = sum2;
         time.setAttribute("disabled", true);
-        box.append(time);
 
         const startTapeName = document.createElement("select");
 
         setNameTape(tape[0], startTapeName);
         selectTapeName = startTapeName;
-        box.append(startTapeName);
 
+
+        box.append(time, startTapeName);
         ol.append(box);
 
 
@@ -1822,8 +1872,7 @@ localSpace.getThreads = [
             console.log(lineTask);
 
 
-            box.append(lineTask[i].time);
-            box.append(lineTask[i].select);
+            box.append(lineTask[i].time, lineTask[i].select);
             ol.append(box);
             console.log(sum2);
         });
@@ -1847,6 +1896,8 @@ localSpace.getThreads = [
             });
         });
     }
+
+
 
     button.addEventListener("click", handleCalculation);
 
