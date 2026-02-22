@@ -773,9 +773,10 @@ localSpace.getThreads = [
         TimeStart.type = "time";
         TimeStart.valueAsNumber = 28800000;
 
-        TimeStart.addEventListener("input", setTimeTask);
+        
         //TimeStart.addEventListener("input", handleCalculation);
-        TimeStart.addEventListener("change", handleCalculation);
+        TimeStart.addEventListener("input", setTimeTask);
+        TimeStart.addEventListener("change", setTimeTask);
 
         const TimeEnd = document.createElement("input");
         TimeEnd.type = "time";
@@ -1832,12 +1833,12 @@ localSpace.getThreads = [
                 setNameTape(tapeNamesArray, lineTask[i].select);
             }
 
-            console.log(lineTask);
+            //console.log(lineTask);
 
 
             box.append(lineTask[i].time, lineTask[i].select);
             ol.append(box);
-            console.log(sum2);
+            //console.log(sum2);
         });
         section.append(send);
 
