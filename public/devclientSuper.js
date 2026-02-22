@@ -773,7 +773,8 @@ localSpace.getThreads = [
         TimeStart.type = "time";
         TimeStart.valueAsNumber = 28800000;
 
-        TimeStart.addEventListener("input", handleCalculation);
+        TimeStart.addEventListener("input", setTimeTask);
+        //TimeStart.addEventListener("input", handleCalculation);
         TimeStart.addEventListener("change", handleCalculation);
 
         const TimeEnd = document.createElement("input");
@@ -1669,6 +1670,7 @@ localSpace.getThreads = [
         tape.ms = 0;
         tape.sumMs = start.valueAsNumber;
         tape.mod = 0;
+
         selectedButtons.forEach((item, i) => {
             tape.name = +item.name;
             tape.ms = +item.value;
@@ -1684,12 +1686,12 @@ localSpace.getThreads = [
             //selectName[i]
 
 
-            let tapeNamesArray = tapeMap.filter(current => +item.name === current.group_id);
-            if (tapeNamesArray.length === 0) {
-                setNameTape(tapeMap, selectName[i]);
-            } else {
-                setNameTape(tapeNamesArray, selectName[i]);
-            }
+            //let tapeNamesArray = tapeMap.filter(current => +item.name === current.group_id);
+            //if (tapeNamesArray.length === 0) {
+            //    setNameTape(tapeMap, selectName[i]);
+            //} else {
+            //    setNameTape(tapeNamesArray, selectName[i]);
+            //}
 
             //const box = document.createElement("li");
             //updateColor(box, +item.value);
@@ -1733,46 +1735,7 @@ localSpace.getThreads = [
     lineTask = [];
     let selectTapeName = {};
 
-    function updateTime() {
 
-
-
-
-        selectedButtons.forEach((button, i) => {
-            updateColor(box, +button.value);
-
-            lineTask[i].time.name = button.name;
-            listTask[i] = lineTask[i].time;
-
-
-            sum2 += +button.value;
-
-
-            let timeMS = time12(sum2 + mod);
-            let timeS = Math.floor(timeMS / 60000);
-            mod = timeMS % 60000;
-            lineTask[i].time.valueAsNumber = timeS * 60000;
-
-            lineTask[i].select = document.createElement("select");
-            lineTask[i].select.name = button.name;
-            selectName[i] = lineTask[i].select;
-
-
-            let tapeNamesArray = tape[0].filter(current => +lineTask[i].time.name === current.group_id);
-            if (tapeNamesArray.length === 0) {
-                setNameTape(tape[0], lineTask[i].select);
-            } else {
-                setNameTape(tapeNamesArray, lineTask[i].select);
-            }
-
-            console.log(lineTask);
-
-
-            box.append(lineTask[i].time, lineTask[i].select);
-            ol.append(box);
-            console.log(sum2);
-        });
-    }
     function handleCalculation(event) {
         section.innerHTML = "";
         select.innerHTML = "";
