@@ -1154,10 +1154,10 @@ async function insert(body) {
     }
 }
 async function insertTime(body) {
-    const connection = await pool.getConnection();
+    //const connection = await pool.getConnection();
 
-    try {
-        console.log('Успешно подключено к базе данных MySQL!');
+    //try {
+        //console.log('Успешно подключено к базе данных MySQL!');
 
         //connection.execute("TRUNCATE TABLE timestamps");
         //const times = body.data.map(time => time / 1000);
@@ -1167,7 +1167,7 @@ async function insertTime(body) {
         // Вставка новой записи
 
 
-        
+
         //const values = body.data.map(tape => [tape.time / 1000, tape.name]);
         //const placeholders = body.data.map(() => "'(CONVERT_TZ(FROM_UNIXTIME(?), 'Asia/Novosibirsk', 'UTC'), ?)'").join(', ');
         //const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
@@ -1178,16 +1178,7 @@ async function insertTime(body) {
         //const values = body.data.flatMap(tape => [tape.time / 1000, tape.name]);
 
         // Запрос должен быть: CONVERT_TZ(FROM_UNIXTIME(?), 'Asia/Novosibirsk', '+00:00')
-        const placeholders = body.data.map(() => '(CONVERT_TZ(FROM_UNIXTIME(?), ?, ?), ?)').join(', ');
-        const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
 
-        // Параметры: [unix, 'Asia/Novosibirsk', '+00:00', name] для каждой строки
-        const params = [];
-        body.data.forEach(tape => {
-            params.push(tape.time / 1000, 'Asia/Novosibirsk', 'UTC', tape.name);
-        });
-
-        return await connection.execute(sql, params);
 
 
 
@@ -1202,9 +1193,35 @@ async function insertTime(body) {
         //delete body.table.name;
         //delete body.table;
         //return await manual.insertManual(transformKeys(body));
-    } catch (err) {
-        console.error('Ошибка:', err);
-        throw err;
+    //} catch (err) {
+    //    console.error('Ошибка:', err);
+    //    throw err;
+    //} finally {
+    //    if (connection) connection.release();
+    //    console.log("Соединение возвращено.");
+    //}
+
+
+    console.log("CALL=", insertTime.name);
+    let connection = null;
+    const placeholders = body.data.map(() => '(CONVERT_TZ(FROM_UNIXTIME(?), ?, ?), ?)').join(', ');
+    const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
+    // Параметры: [unix, 'Asia/Novosibirsk', '+00:00', name] для каждой строки
+    const params = [];
+    body.data.forEach(tape => {
+        params.push(tape.time / 1000, 'Asia/Novosibirsk', 'UTC', tape.name);
+    });
+
+
+
+    try {
+        connection = await getAwaitConnect();
+        //console.log(data);
+        //return await connection.execute(sql);
+        return await connection.execute(sql, params);
+    } catch (error) {
+        console.error('Ошибка:', error);
+        throw error;
     } finally {
         if (connection) connection.release();
         console.log("Соединение возвращено.");
