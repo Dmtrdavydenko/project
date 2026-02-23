@@ -1511,9 +1511,9 @@ async function getTime() {
 
 
             SELECT timestamps.id,
-            UNIX_TIMESTAMP(task_time) / 60 AS task_minutes,
-            UNIX_TIMESTAMP(task_time) AS task_seconds,
-            UNIX_TIMESTAMP(task_time) * 1000 AS task_milliseconds,
+            UNIX_TIMESTAMP(client_local_time) / 60 AS task_minutes,
+            UNIX_TIMESTAMP(client_local_time) AS task_seconds,
+            UNIX_TIMESTAMP(client_local_time) * 1000 AS task_milliseconds,
             yarn_name as type,
 
             Tape.density,
@@ -1529,7 +1529,7 @@ async function getTime() {
                       COALESCE(
                           CONVERT_TZ(task_time, 'UTC', 'Asia/Novosibirsk'),
                           CONVERT_TZ(task_time, '+00:00', '+07:00')
-                      ) AS task_time
+                      ) AS client_local_time
                   FROM timestamps
                   WHERE task_time IS NOT NULL
                 ) AS timestamps
