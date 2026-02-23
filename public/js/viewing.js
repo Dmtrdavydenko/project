@@ -365,10 +365,8 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
         main.appendChild(section);
 
         const now = new Date();
-
-        //const startOfDay2 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 7, now.getMinutes(), 0, 0);
-        const startOfDay2 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), 0, 0);
-
+        const startOfDay2 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 7, now.getMinutes(), 0, 0);
+        //const startOfDay2 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), 0, 0);
         const currentTime = startOfDay2.getTime();
 
         // Заполнение списка с input type="time"
@@ -380,6 +378,8 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
             const threadName = new viewText(item.name);
             const slotMinutes = item.time;
             let sum = item.time;
+            console.log({ sum: sum, current: currentTime });
+            console.log(sum < currentTime);
             if (sum < currentTime) {
                 timeInput.disabled = true;
             } else {
@@ -395,7 +395,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
 
 
     }
-
+    console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
     make();
     //make();
     //make();
