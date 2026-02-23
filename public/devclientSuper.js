@@ -1669,9 +1669,8 @@ localSpace.getThreads = [
         const tape = {};
         tape.name = 0;
         tape.ms = 0;
-        tape.sumMs = start.valueAsNumber;
+        timeStart.valueAsNumber = tape.sumMs = start.valueAsNumber;
         tape.mod = 0;
-
         selectedButtons.forEach((item, i) => {
             tape.name = +item.name;
             tape.ms = +item.value;
@@ -1735,6 +1734,7 @@ localSpace.getThreads = [
     selectName = [];
     lineTask = [];
     let selectTapeName = {};
+    let timeStart = null;
 
 
     function handleCalculation(event) {
@@ -1774,10 +1774,10 @@ localSpace.getThreads = [
 
         let sum2 = start.valueAsNumber;
         const box = document.createElement("li");
-        const time = document.createElement("input");
-        time.type = "time";
-        time.valueAsNumber = sum2;
-        time.setAttribute("disabled", true);
+        timeStart = document.createElement("input");
+        timeStart.type = "time";
+        timeStart.valueAsNumber = sum2;
+        timeStart.setAttribute("disabled", true);
 
         const startTapeName = document.createElement("select");
 
@@ -1785,7 +1785,7 @@ localSpace.getThreads = [
         selectTapeName = startTapeName;
 
 
-        box.append(time, startTapeName);
+        box.append(timeStart, startTapeName);
         ol.append(box);
 
 
