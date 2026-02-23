@@ -832,6 +832,7 @@ localSpace.getThreads = [
         quan.addEventListener("pointerdown", handleInput2);
         quan.addEventListener("change", handleInput2);
         const select = document.createElement("select");
+        select.addEventListener("change", handleCalculation); 
         return { TimeStart, TimeEnd, TimeDx, dx1, sum, fix, quan, select };
     }
     function time12(time) {
@@ -1790,13 +1791,16 @@ localSpace.getThreads = [
         timeStart.valueAsNumber = sum2;
         timeStart.setAttribute("disabled", true);
 
-        const startTapeName = document.createElement("select");
+        const selectStartTapeName = document.createElement("select");
 
-        setNameTape(tape[0], startTapeName);
-        selectTapeName = startTapeName;
+        
+
+        let tapeNamesArray = tape[0].filter(current => +selectDensitySpeed.options[selectDensitySpeed.selectedIndex].name === current.group_id);
+        setNameTape(tapeNamesArray, selectStartTapeName);
+        selectTapeName = selectStartTapeName;
 
 
-        box.append(timeStart, startTapeName);
+        box.append(timeStart, selectStartTapeName);
         ol.append(box);
 
 
