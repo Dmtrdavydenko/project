@@ -366,7 +366,8 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
 
         const now = new Date();
 
-        const startOfDay2 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 7, now.getMinutes(), 0, 0);
+        //const startOfDay2 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 7, now.getMinutes(), 0, 0);
+        const startOfDay2 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), 0, 0);
 
         const currentTime = startOfDay2.getTime();
 
