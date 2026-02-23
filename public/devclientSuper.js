@@ -831,7 +831,8 @@ localSpace.getThreads = [
         quan.addEventListener("input", handleInput2);
         quan.addEventListener("pointerdown", handleInput2);
         quan.addEventListener("change", handleInput2);
-        return { TimeStart, TimeEnd, TimeDx, dx1, sum, fix, quan };
+        const select = document.createElement("select");
+        return { TimeStart, TimeEnd, TimeDx, dx1, sum, fix, quan, select };
     }
     function time12(time) {
         if (time < 46800000) {
@@ -842,6 +843,7 @@ localSpace.getThreads = [
     }
     const INIT_INPUT_DATA = create3();
     const start = INIT_INPUT_DATA.TimeStart;
+    const selectDensitySpeed = INIT_INPUT_DATA.select;
     const end = INIT_INPUT_DATA.TimeEnd;
     const timeDx = INIT_INPUT_DATA.TimeDx;
     const dx = INIT_INPUT_DATA.dx1;
@@ -900,6 +902,20 @@ localSpace.getThreads = [
     myTapeList = tapeList.slice();
     myTapeList.push({ tape_density: "Время", tape_length: 32000, tape_speed: 400, tape_milliseconds: 4800000, group_id: 0 });
 
+    function selectTape(array, select = document.createElement("select")) {
+        array.forEach((item) => {
+            let option = document.createElement("option");
+            option.value = item.tape_length / item.tape_speed * 60000;
+            //option.value = item.time_milliseconds;
+            option.textContent = Number.isInteger(item.tape_density) ? `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed || ""}` : `${item.tape_density}`
+            option.name = item.group_id;
+            select.append(option);
+        });
+        return select;
+    }
+
+    selectTape(tapeList, selectDensitySpeed);
+
     {
         //function dropListSelectTex(array, select = document.createElement("select")) {
         //    array.forEach((tape) => {
@@ -912,17 +928,7 @@ localSpace.getThreads = [
         //    });
         //    return select;
         //}
-        function selectTape(array, select = document.createElement("select")) {
-            array.forEach((item) => {
-                let option = document.createElement("option");
-                option.value = item.tape_length / item.tape_speed * 60000;
-                //option.value = item.time_milliseconds;
-                option.textContent = Number.isInteger(item.tape_density) ? `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed || ""}` : `${item.tape_density}`
-                option.name = item.group_id;
-                select.append(option);
-            });
-            return select;
-        }
+
         function handleSelect(event) {
             console.log(this, event.target.value)
             if (event.target.value === "4800000") {
@@ -1114,8 +1120,13 @@ localSpace.getThreads = [
 
 
 
+
+
+
+
+
         const thead = document.createElement("thead");
-        main.append(start);
+        main.append(start, selectDensitySpeed);
         main.append(aViewTime);
         main.append(setTime);
         thead.append(timeLine);
