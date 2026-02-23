@@ -1523,7 +1523,16 @@ async function getTime() {
             Thread_Parameters.thread_speed_id as speed,
             (Tape.length / Thread_Parameters.thread_speed_id) * 60000 as tape_milliseconds
 
-            FROM timestamps
+            FROM (
+                  SELECT
+                      timestamps.*,
+                      COALESCE(
+                          CONVERT_TZ(task_time, 'UTC', 'Asia/Novosibirsk'),
+                          CONVERT_TZ(task_time, '+00:00', '+07:00')
+                      ) AS task_time
+                  FROM timestamps
+                  WHERE task_time IS NOT NULL
+                ) AS timestamps
 
             JOIN TapeExtrusion ON timestamps.TapeExtrusion_id = TapeExtrusion.id
 
