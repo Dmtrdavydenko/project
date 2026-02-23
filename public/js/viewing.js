@@ -2,8 +2,8 @@
 class viewTime {
     constructor(time) {
         const timeInput = document.createElement('input');
-        timeInput.type = 'time';
-        //timeInput.type = 'datetime-local';
+        //timeInput.type = 'time';
+        timeInput.type = 'datetime-local';
 
         timeInput.readOnly = true; // readonly для просмотра на мониторе
         timeInput.valueAsNumber = time;
