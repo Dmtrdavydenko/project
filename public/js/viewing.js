@@ -387,8 +387,8 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
             }
 
             li.appendChild(timeInput);
-            li.appendChild(new viewTime(currentTime));
-            li.appendChild(new viewTime(Date.now()));
+            //li.appendChild(new viewTime(currentTime));
+            //li.appendChild(new viewTime(Date.now()));
             li.appendChild(threadName);
             li.classList.add("time");
 

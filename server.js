@@ -1384,7 +1384,7 @@ async function setToDay() {
 
             DELETE FROM timestamps
 
-            WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 12 HOUR)
+            WHERE task_time >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 12 HOUR)
 
             `;
             return await connection.execute(sql);
