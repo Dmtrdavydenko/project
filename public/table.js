@@ -377,10 +377,10 @@ async function dispatchClicks() {
 
 
     //canvas.width/38;
-    let dx0 = 15;
-    let dy0 = 15;
-    for (let y = 0; y < 32; y++) {
-        for (let x = 0; x < 32; x++) {
+    let dx0 = 16.38;
+    let dy0 = 16.38;
+    for (let y = 0; y < 38; y++) {
+        for (let x = 0; x < 38; x++) {
             if ((y + x) & 1) {
                 let newClick = new MouseEvent('click', {
                     clientX: dx0 * x,
@@ -404,7 +404,11 @@ async function dispatchClicks() {
                     let delayMS = 80;
                     await delay(delayMS);
                 }
-                color.push({ button: +document.activeElement.id.match(/\d+/g), point: newClick, clientX: newClick.clientX });
+                color.push({
+                    button: +document.activeElement.id.match(/\d+/g),
+                    clientY: newClick.clientY,
+                    clientX: newClick.clientX,
+                });
             }
         }
     }
@@ -422,8 +426,8 @@ async function dispatchClicks() {
         let t = btn[color[i].button - 1];
         t.click();
         let newClick = new MouseEvent('click', {
-            clientX: color[i].point.clientX,
-            clientY: color[i].point.clientY,
+            clientX: color[i].clientX,
+            clientY: color[i].clientY,
             bubbles: true,
             cancelable: true,
             button: 0,
@@ -484,12 +488,14 @@ dispatchClicks();
 
 
 
+
+
 const canvas = document.getElementById('shape') || document.createElement('canvas');
 canvas.style.position = "absolute";
 canvas.style.top = "0px";
 canvas.style.left = "0px";
 canvas.style.backgroundColor = "rgba(0, 0, 0, .3)";
-canvas.width = 800;
+canvas.width = 600;
 canvas.height = 600;
 canvas.style.imageRendering = 'pixelated';
 canvas.id = "shape";
@@ -497,7 +503,7 @@ document.body.appendChild(canvas);
 
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
-ctx.fillStyle = 'red';
+ctx.fillStyle = 'white';
 const centerX = Math.floor(canvas.width / 2);
 const centerY = Math.floor(canvas.height / 2);
 // ctx.fillRect(centerX, centerY, 1, 1);
@@ -505,8 +511,8 @@ let widthXheight = Math.floor(Math.sqrt(1075));
 
 
 //canvas.width/38;
-let dx0 = 15;
-let dy0 = 15;
+let dx0 = 16.4;
+let dy0 = 16.4;
 for (let y = 0; y < 38; y++) {
     for (let x = 0; x < 38; x++) {
         ctx.fillRect(dy0 * x, dy0 * y, 1, 1);
@@ -516,8 +522,8 @@ document.body.append(canvas);
 const showB = document.createElement('button');
 showB.textContent = "W";
 showB.style.position = "absolute";
-showB.style.top = "500px";
-showB.style.left = "800px";
+showB.style.top = "600px";
+showB.style.left = "600px";
 showB.addEventListener("click", function () {
     if (canvas.style.display === "none")
         canvas.style.display = "";
@@ -533,6 +539,7 @@ let clickEventTg = new MouseEvent('click', {
 clickEventTg._isTrusted = true;
 let pin = document.querySelector('button.btn.btn-circle.btn-sm.btn-ghost');
 pin.dispatchEvent(clickEventTg);
+
 
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
