@@ -124,8 +124,8 @@ function createTable(data) {
 }
 class WebGPUCV {
     constructor(canvasId) {
-        this.canvas = document.getElementById(canvasId);
-        this.ctx = this.canvas.getContext("webgpu");
+        //this.canvas = document.getElementById(canvasId);
+        //this.ctx = this.canvas.getContext("webgpu");
     }
 
     async init() {
@@ -136,11 +136,11 @@ class WebGPUCV {
         this.device = await adapter.requestDevice();
         this.format = navigator.gpu.getPreferredCanvasFormat();
 
-        this.ctx.configure({
-            device: this.device,
-            format: this.format,
-            alphaMode: "opaque"
-        });
+        //this.ctx.configure({
+        //    device: this.device,
+        //    format: this.format,
+        //    alphaMode: "opaque"
+        //});
     }
 }
 (async () => {
