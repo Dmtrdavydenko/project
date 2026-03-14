@@ -908,7 +908,8 @@ localSpace.getThreads = [
             let option = document.createElement("option");
             option.value = item.tape_length / item.tape_speed * 60000;
             //option.value = item.time_milliseconds;
-            option.textContent = Number.isInteger(item.tape_density) ? `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed || ""}` : `${item.tape_density}`
+            //option.textContent = Number.isInteger(item.tape_density) ? `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed || ""}` : `${item.tape_density}`
+            option.textContent = `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed}`
             option.name = item.group_id;
             select.append(option);
         });

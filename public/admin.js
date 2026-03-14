@@ -122,6 +122,31 @@ function createTable(data) {
 
     return table;
 }
+class WebGPUCV {
+    constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext("webgpu");
+    }
+
+    async init() {
+        if (!navigator.gpu) throw new Error("WebGPU не поддерживается");
+        if (navigator.gpu) console.log("WebGPU поддерживается");
+
+        const adapter = await navigator.gpu.requestAdapter();
+        this.device = await adapter.requestDevice();
+        this.format = navigator.gpu.getPreferredCanvasFormat();
+
+        this.ctx.configure({
+            device: this.device,
+            format: this.format,
+            alphaMode: "opaque"
+        });
+    }
+}
+(async () => {
+    const gpuCV = new WebGPUCV("canvas");
+    await gpuCV.init();
+})();
 
 
 
