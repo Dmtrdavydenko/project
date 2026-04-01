@@ -875,6 +875,29 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                 break;
 
             default:
+                const isEmpty = async (table) => {
+                    const query = `
+                    SELECT 1
+                    FROM information_schema.TABLES
+                    WHERE TABLE_SCHEMA = DATABASE()
+                    AND TABLE_NAME = ?
+                    `;
+                    const [rows] = await connection.execute(query, [table.name]);
+                    return rows.length > 0;
+                };
+                const getColumns = async (table) => {
+                    const query = `
+                        SELECT COLUMN_NAME, DATA_TYPE, COLUMN_TYPE, IS_NULLABLE, COLUMN_KEY
+                        FROM information_schema.COLUMNS
+                        WHERE TABLE_SCHEMA = DATABASE()
+                        AND TABLE_NAME = ?
+                        `;
+                    const [columns] = await connection.execute(query, [table.name]);
+                    return columns;
+                };
+                if (isEmpty(body.table)) {
+                    return getColumns(body.table);
+                }
                 sql = 'SELECT * FROM `' + body.table.name + "`";
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
@@ -1157,42 +1180,42 @@ async function insertTime(body) {
     //const connection = await pool.getConnection();
 
     //try {
-        //console.log('Успешно подключено к базе данных MySQL!');
+    //console.log('Успешно подключено к базе данных MySQL!');
 
-        //connection.execute("TRUNCATE TABLE timestamps");
-        //const times = body.data.map(time => time / 1000);
-        //const values = body.data.map(tape => [tape.time / 1000, tape.name]);
-        //const placeholders = body.data.map(() => '(FROM_UNIXTIME(?), ?)').join(', ');
-        //const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
-        // Вставка новой записи
-
-
-
-        //const values = body.data.map(tape => [tape.time / 1000, tape.name]);
-        //const placeholders = body.data.map(() => "'(CONVERT_TZ(FROM_UNIXTIME(?), 'Asia/Novosibirsk', 'UTC'), ?)'").join(', ');
-        //const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
-        //return await connection.execute(sql, values.flat());
-
-
-        // tape.time — это **миллисекунды** от эпохи **в таймзоне Asia/Novosibirsk**
-        //const values = body.data.flatMap(tape => [tape.time / 1000, tape.name]);
-
-        // Запрос должен быть: CONVERT_TZ(FROM_UNIXTIME(?), 'Asia/Novosibirsk', '+00:00')
+    //connection.execute("TRUNCATE TABLE timestamps");
+    //const times = body.data.map(time => time / 1000);
+    //const values = body.data.map(tape => [tape.time / 1000, tape.name]);
+    //const placeholders = body.data.map(() => '(FROM_UNIXTIME(?), ?)').join(', ');
+    //const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
+    // Вставка новой записи
 
 
 
+    //const values = body.data.map(tape => [tape.time / 1000, tape.name]);
+    //const placeholders = body.data.map(() => "'(CONVERT_TZ(FROM_UNIXTIME(?), 'Asia/Novosibirsk', 'UTC'), ?)'").join(', ');
+    //const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
+    //return await connection.execute(sql, values.flat());
 
 
-        //console.log('Inserted ID:', insertResult.insertId);
+    // tape.time — это **миллисекунды** от эпохи **в таймзоне Asia/Novosibirsk**
+    //const values = body.data.flatMap(tape => [tape.time / 1000, tape.name]);
 
-        // Получаем все данные из таблицы после вставки
-        //const [rows] = await connection.execute(
-        //    'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
-        //);
-        //delete body.action;
-        //delete body.table.name;
-        //delete body.table;
-        //return await manual.insertManual(transformKeys(body));
+    // Запрос должен быть: CONVERT_TZ(FROM_UNIXTIME(?), 'Asia/Novosibirsk', '+00:00')
+
+
+
+
+
+    //console.log('Inserted ID:', insertResult.insertId);
+
+    // Получаем все данные из таблицы после вставки
+    //const [rows] = await connection.execute(
+    //    'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
+    //);
+    //delete body.action;
+    //delete body.table.name;
+    //delete body.table;
+    //return await manual.insertManual(transformKeys(body));
     //} catch (err) {
     //    console.error('Ошибка:', err);
     //    throw err;
