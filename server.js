@@ -883,7 +883,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                     AND TABLE_NAME = ?
                     `;
                     const [rows] = await connection.execute(query, [table.name]);
-                    return rows.length > 0;
+                    return rows.length === 0;
                 };
                 const getColumns = async (table) => {
                     const query = `
