@@ -895,8 +895,47 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                     const [columns] = await connection.execute(query, [table.name]);
                     return columns;
                 };
+                const buildFormSchema = (columns) => {
+                    return columns.map(col => {
+                        let inputType = 'text';
+
+                        switch (col.DATA_TYPE) {
+                            case 'tinyint':
+                            case 'smallint':
+                            case 'int':
+                                inputType = 'number';
+                                break;
+                            case 'decimal':
+                            case 'float':
+                            case 'double':
+                                inputType = 'number';
+                                break;
+                            case 'date':
+                                inputType = 'date';
+                                break;
+                            case 'datetime':
+                            case 'timestamp':
+                                inputType = 'datetime-local';
+                                break;
+                            case 'enum':
+                                inputType = 'select';
+                                break;
+                            case 'varchar':
+                            case 'text':
+                            default:
+                                inputType = 'text';
+                        }
+
+                        return {
+                            name: col.COLUMN_NAME,
+                            type: inputType,
+                            nullable: col.IS_NULLABLE === 'YES',
+                            dbType: col.COLUMN_TYPE
+                        };
+                    });
+                };
                 if (isEmpty(body.table)) {
-                    return getColumns(body.table);
+                    return buildFormSchema(getColumns(body.table));
                 }
                 sql = 'SELECT * FROM `' + body.table.name + "`";
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
