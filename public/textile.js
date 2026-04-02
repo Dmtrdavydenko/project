@@ -573,7 +573,7 @@ async function loadTable() {
     console.log(result);
 
 
-    result.all[1] = result.all[1].map(meta => (decodeMetadata(meta)));
+    //result.all[1] = result.all[1].map(meta => (decodeMetadata(meta)));
     //result.get2[1]=result.get2[1].map(meta => (decodeMetadata(meta)));
     //result.get3[1]=result.get3[1].map(meta => (decodeMetadata(meta)));
 
