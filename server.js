@@ -925,7 +925,8 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                             name: col.COLUMN_NAME,
                             type: inputType,
                             nullable: col.IS_NULLABLE === 'YES',
-                            dbType: col.COLUMN_TYPE
+                            dbType: col.COLUMN_TYPE,
+                            COLUMN_KEY: col.COLUMN_KEY
                         };
                     });
                 };
@@ -957,7 +958,13 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                     const columns = buildFormSchema(col);
 
                     const result = {};
-
+                    for (const column of columns) {
+                        //column.COLUMN_KEY === "MUL"
+                        result[column.name] = {
+                            type: 'input',
+                            data_type: column.type
+                        };
+                    }
                     for (const rel of relations) {
                         let labelColumn = 'id';
 
@@ -974,12 +981,6 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         result[rel.COLUMN_NAME] = {
                             type: 'select',
                             options
-                        };
-                    }
-                    for (const column of columns) {
-                        result[column.name] = {
-                            type: 'input',
-                            data_type: column.type
                         };
                     }
 
