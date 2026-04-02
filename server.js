@@ -951,17 +951,35 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                     const [rows] = await connection.execute(query);
                     return rows;
                 };
+                const buildSelectFields = async (table) => {
+                    const relations = await getParentRelations(table);
 
+                    const result = {};
+
+                    for (const rel of relations) {
+                        let labelColumn = 'id';
+
+                        if (rel.REFERENCED_TABLE_NAME === 'tape_density') {
+                            labelColumn = 'density';
+                        }
+
+                        const options = await getSelectOptions(
+                            rel.REFERENCED_TABLE_NAME,
+                            rel.REFERENCED_COLUMN_NAME,
+                            labelColumn
+                        );
+
+                        result[rel.COLUMN_NAME] = {
+                            type: 'select',
+                            options
+                        };
+                    }
+
+                    return result;
+                };
 
                 if (await isEmpty(body.table)) {
-                    const [rel] = await getParentRelations(body.table);
-                    let labelColumn = 'density';
-                    const options = await getSelectOptions(
-                        rel.REFERENCED_TABLE_NAME,
-                        rel.REFERENCED_COLUMN_NAME, // обычно id
-                        labelColumn
-                    );
-                    return options;
+                    return await buildSelectFields(body.table);
                 }
                 sql = 'SELECT * FROM `' + body.table.name + "`";
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
