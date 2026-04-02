@@ -954,7 +954,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
 
                 if (await isEmpty(body.table)) {
-                    const [rel] = getParentRelations(body.table);
+                    const [rel] = await getParentRelations(body.table);
                     let labelColumn = 'density';
                     const options = await getSelectOptions(
                         rel.REFERENCED_TABLE_NAME,
