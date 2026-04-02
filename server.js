@@ -876,13 +876,8 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
             default:
                 const isEmpty = async (table) => {
-                    const query = `
-                    SELECT 1
-                    FROM information_schema.TABLES
-                    WHERE TABLE_SCHEMA = DATABASE()
-                    AND TABLE_NAME = ?
-                    `;
-                    const [rows] = await connection.execute(query, [table.name]);
+                    const query = `SELECT 1 FROM \`${table.name}\` LIMIT 1`;
+                    const [rows] = await connection.execute(query);
                     return rows.length === 0;
                 };
                 const getColumns = async (table) => {
@@ -934,8 +929,9 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         };
                     });
                 };
-                if (isEmpty(body.table)) {
-                    return buildFormSchema(getColumns(body.table));
+                if (await isEmpty(body.table)) {
+                    const columns = await getColumns(body.table);
+                    return buildFormSchema(columns);
                 }
                 sql = 'SELECT * FROM `' + body.table.name + "`";
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
