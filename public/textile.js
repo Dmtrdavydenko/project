@@ -582,7 +582,23 @@ async function loadTable() {
     const container = document.getElementById('table-container');
     container.innerHTML = '';
 
+    function renderSelect(fieldName, fieldData) {
+        const select = document.createElement('select');
+        select.name = fieldName;
 
+        fieldData.options.forEach(opt => {
+            const option = document.createElement('option');
+            option.value = opt.value;
+            option.textContent = opt.label;
+            select.appendChild(option);
+        });
+
+        return select;
+    }
+
+    // использование
+    const selectElement = renderSelect('density_id', result.density_id);
+    document.body.appendChild(selectElement);
 
 
 
