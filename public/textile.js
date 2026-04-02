@@ -595,10 +595,90 @@ async function loadTable() {
 
         return select;
     }
+    function renderForm(schema) {
+        const form = document.createElement('form');
+
+        Object.entries(schema).forEach(([name, field]) => {
+
+            // ❗ пропускаем id (auto_increment)
+            if (field.COLUMN_KEY === 'PRI') return;
+
+            const wrapper = document.createElement('div');
+
+            const label = document.createElement('label');
+            label.textContent = name;
+
+            let input;
+
+            if (field.type === 'select') {
+                input = document.createElement('select');
+                input.name = name;
+
+                field.options.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt.value;
+                    option.textContent = opt.label;
+                    input.appendChild(option);
+                });
+
+            } else {
+                input = document.createElement('input');
+                input.name = name;
+
+                if (field.DATA_TYPE === 'number') {
+                    input.type = 'number';
+
+                    // авто min/max
+                    if (field.COLUMN_TYPE.includes('tinyint')) {
+                        input.min = 0;
+                        input.max = 255;
+                    }
+
+                    if (field.COLUMN_TYPE.includes('smallint')) {
+                        input.min = 0;
+                        input.max = 65535;
+                    }
+
+                } else {
+                    input.type = 'text';
+                }
+            }
+
+            wrapper.appendChild(label);
+            wrapper.appendChild(document.createElement('br'));
+            wrapper.appendChild(input);
+
+            form.appendChild(wrapper);
+        });
+
+        // submit
+        const btn = document.createElement('button');
+        btn.type = 'submit';
+        btn.textContent = 'Сохранить';
+        form.appendChild(btn);
+
+        // обработка отправки
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const result = {};
+
+            for (let [key, value] of formData.entries()) {
+                result[key] = Number(value);
+            }
+
+            console.log('Отправка:', result);
+
+            // fetch('/api', { method: 'POST', body: JSON.stringify(result) })
+        });
+
+        return form;
+    }
 
     // использование
     const selectElement = renderSelect('density_id', result.density_id);
-    document.body.appendChild(selectElement);
+    document.body.appendChild(renderForm(result));
 
 
 
