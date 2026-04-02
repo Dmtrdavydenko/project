@@ -929,9 +929,20 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         };
                     });
                 };
+                const getParentTables = async (table) => {
+                    const query = `SELECT DISTINCT 
+                    REFERENCED_TABLE_NAME AS parent_table
+                    FROM information_schema.KEY_COLUMN_USAGE
+                    WHERE TABLE_SCHEMA = DATABASE()
+                    AND TABLE_NAME = ?
+                    AND REFERENCED_TABLE_NAME IS NOT NULL;`
+                    const [tables] = await connection.execute(query, [table.name]);
+                    return tables
+                }
                 if (await isEmpty(body.table)) {
                     const columns = await getColumns(body.table);
-                    return buildFormSchema(columns);
+                    //return buildFormSchema(columns);
+                    return getParentTables(body.table);
                 }
                 sql = 'SELECT * FROM `' + body.table.name + "`";
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
