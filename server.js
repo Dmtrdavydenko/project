@@ -929,20 +929,39 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         };
                     });
                 };
-                const getParentTables = async (table) => {
-                    const query = `SELECT DISTINCT 
-                    REFERENCED_TABLE_NAME AS parent_table
+                const getParentRelations = async (table) => {
+                    const query = `
+                    SELECT 
+                        COLUMN_NAME,
+                        REFERENCED_TABLE_NAME,
+                        REFERENCED_COLUMN_NAME
                     FROM information_schema.KEY_COLUMN_USAGE
                     WHERE TABLE_SCHEMA = DATABASE()
                     AND TABLE_NAME = ?
-                    AND REFERENCED_TABLE_NAME IS NOT NULL;`
-                    const [tables] = await connection.execute(query, [table.name]);
-                    return tables
-                }
+                    AND REFERENCED_TABLE_NAME IS NOT NULL
+                    `;
+                    const [rows] = await connection.execute(query, [table.name]);
+                    return rows;
+                };
+                const getSelectOptions = async (tableName, valueColumn, labelColumn) => {
+                    const query = `
+                    SELECT \`${valueColumn}\` AS value, \`${labelColumn}\` AS label
+                    FROM \`${tableName}\`
+                    `;
+                    const [rows] = await connection.execute(query);
+                    return rows;
+                };
+
+
                 if (await isEmpty(body.table)) {
-                    const columns = await getColumns(body.table);
-                    //return buildFormSchema(columns);
-                    return getParentTables(body.table);
+                    const [rel] = getParentRelations(body.table);
+                    let labelColumn = 'density';
+                    const options = await getSelectOptions(
+                        rel.REFERENCED_TABLE_NAME,
+                        rel.REFERENCED_COLUMN_NAME, // обычно id
+                        labelColumn
+                    );
+                    return options;
                 }
                 sql = 'SELECT * FROM `' + body.table.name + "`";
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
