@@ -953,6 +953,9 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                 };
                 const buildSelectFields = async (table) => {
                     const relations = await getParentRelations(table);
+                    //const columns = buildFormSchema(await getColumns(table));
+                    const col = await getColumns(table).then(buildFormSchema);
+                    const columns = buildFormSchema(col);
 
                     const result = {};
 
@@ -972,6 +975,12 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         result[rel.COLUMN_NAME] = {
                             type: 'select',
                             options
+                        };
+                    }
+                    for (const column of columns) {
+                        result[column.name] = {
+                            type: 'input',
+                            data_type: column.type
                         };
                     }
 
