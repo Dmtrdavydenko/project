@@ -926,7 +926,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                             type: inputType,
                             nullable: col.IS_NULLABLE === 'YES',
                             dbType: col.COLUMN_TYPE,
-                            COLUMN_KEY: col.COLUMN_KEY
+                            COLUMN_KEY: col.COLUMN_KEY,
                         };
                     });
                 };
@@ -962,7 +962,9 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         //column.COLUMN_KEY === "MUL"
                         result[column.name] = {
                             type: 'input',
-                            data_type: column.type
+                            DATA_TYPE: column.type,
+                            COLUMN_TYPE: column.dbType,
+                            COLUMN_KEY: column.COLUMN_KEY
                         };
                     }
                     for (const rel of relations) {
