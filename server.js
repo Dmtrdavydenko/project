@@ -536,7 +536,7 @@ async function select(body) {
                 //const field = ["thread_id", "thread_density", "thread_length"];
                 sql = `
                 SELECT * FROM tape_length
-                LEFT JOIN tape_density td ON tape_length.density_id = td.
+                LEFT JOIN tape_density td ON tape_length.density_id = td.id
                 `;
                 //sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
                 break;
@@ -2175,7 +2175,7 @@ async function sql(body) {
         else
             all = await connection.query(body.query);
 
-        console.log('Результаты запроса:', all);
+        //console.log('Результаты запроса:', all);
         return all; // Возвращаем результаты запроса
     } catch (err) {
         console.error('Ошибка при выполнении запроса:', err);
