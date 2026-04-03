@@ -658,7 +658,7 @@ async function loadTable() {
         form.appendChild(btn);
 
         // обработка отправки
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const formData = new FormData(form);
@@ -668,9 +668,30 @@ async function loadTable() {
                 result[key] = Number(value);
             }
 
-            console.log('Отправка:', result);
+            try {
+                const response = await fetch('/api/tape/insert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(result)
+                });
 
-            // fetch('/api', { method: 'POST', body: JSON.stringify(result) })
+                const data = await response.json();
+
+                console.log('Ответ сервера:', data);
+
+                if (response.ok) {
+                    alert('Сохранено!');
+                    form.reset();
+                } else {
+                    alert('Ошибка: ' + data.message);
+                }
+
+            } catch (err) {
+                console.error('Ошибка запроса:', err);
+                alert('Ошибка сети');
+            }
         });
 
         return form;

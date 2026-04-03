@@ -2654,6 +2654,78 @@ server.on("request", (req, res) => {
                 console.error("Flow error:", error);
             });
         }
+    } else if (req.url === "/api/tape/insert") {
+        if (req.method === "POST") {
+            let chunks = [];
+
+            req.on("data", (chunk) => {
+                chunks.push(chunk);
+            });
+
+            req.on("end", async () => {
+                let connection;
+
+                try {
+                    if (chunks.length === 0) {
+                        throw new Error("Empty request body");
+                    }
+
+                    const buffer = Buffer.concat(chunks);
+                    const data = JSON.parse(buffer.toString());
+
+                    console.log("Received:", data);
+
+                    const { density_id, length, diameter } = data;
+
+                    // простая валидация
+                    if (!density_id || !length || !diameter) {
+                        throw new Error("Missing fields");
+                    }
+
+                    const query = `
+                INSERT INTO tape_length (density_id, length, diameter)
+                VALUES (?, ?, ?)
+            `;
+
+                    connection = await getAwaitConnect();
+
+                    const [result] = await connection.execute(query, [
+                        density_id,
+                        length,
+                        diameter
+                    ]);
+
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({
+                        success: true,
+                        insertId: result.insertId
+                    }));
+
+                } catch (error) {
+                    console.error("Ошибка:", error);
+
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({
+                        error: error.message
+                    }));
+
+                } finally {
+                    if (connection) {
+                        connection.release();
+                        console.log("Соединение закрыто");
+                    }
+                }
+            });
+
+            req.on("error", (error) => {
+                console.error("Stream error:", error);
+
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({
+                    error: "Internal server error"
+                }));
+            });
+        } else { }
     } else {
         if (req.method === "POST") {
             let body = [];
