@@ -355,7 +355,7 @@ async function getTableName() {
             }),
         });
         const result = await response.json();
-        if (Array.isArray(result)) {  
+        if (Array.isArray(result)) {
             createSelectOptions(result);
         } else {
             console.log("Expected an array but got:", result);
@@ -448,9 +448,9 @@ async function createSourceTable(name = selectTableName.value) {
     let meta = await getSourceMetaDataTable(name)
     const infoTable = meta.get3[0];
 
-    meta.get1[1]=meta.get1[1].map(meta => (decodeMetadata(meta)));
-    meta.get2[1]=meta.get2[1].map(meta => (decodeMetadata(meta)));
-    meta.get3[1]=meta.get3[1].map(meta => (decodeMetadata(meta)));
+    meta.get1[1] = meta.get1[1].map(meta => (decodeMetadata(meta)));
+    meta.get2[1] = meta.get2[1].map(meta => (decodeMetadata(meta)));
+    meta.get3[1] = meta.get3[1].map(meta => (decodeMetadata(meta)));
 
     console.log(meta);
     await getTypeMySqlForm(infoTable);
@@ -582,19 +582,7 @@ async function loadTable() {
     const container = document.getElementById('table-container');
     container.innerHTML = '';
 
-    function renderSelect(fieldName, fieldData) {
-        const select = document.createElement('select');
-        select.name = fieldName;
 
-        fieldData.options.forEach(opt => {
-            const option = document.createElement('option');
-            option.value = opt.value;
-            option.textContent = opt.label;
-            select.appendChild(option);
-        });
-
-        return select;
-    }
     function renderForm(schema) {
         const form = document.createElement('form');
 
@@ -697,14 +685,14 @@ async function loadTable() {
         return form;
     }
 
-    // использование
-    const selectElement = renderSelect('density_id', result.density_id);
-    document.body.appendChild(renderForm(result));
 
 
 
     if (result.rows && Array.isArray(result.rows) && result.rows.length > 0) {
         const table = createTable(result.rows);
+        if (selectTableName.value === "tape_length") {
+            document.body.appendChild(renderForm(result));
+        }
         if (selectTableName.value === "looms") {
             myfilter(result.rows);
         }
@@ -875,7 +863,7 @@ async function queryTarget(event) {
                 columnName: headers[td.cellIndex].textContent,
                 whereColum: colum_id,
                 value: td.textContent
-                });
+            });
             try {
                 const result = await sqlWhere({
                     tableName: selectTableName.value,
