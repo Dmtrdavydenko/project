@@ -686,12 +686,13 @@ async function loadTable() {
     }
 
 
-
+    const formContainer = document.getElementById('form-container');
+    formContainer.innerHTML = '';
 
     if (result.rows && Array.isArray(result.rows) && result.rows.length > 0) {
         const table = createTable(result.rows);
         if (selectTableName.value === "tape_length") {
-            document.body.appendChild(renderForm(result.k));
+            formContainer.appendChild(renderForm(result.k));
         }
         if (selectTableName.value === "looms") {
             myfilter(result.rows);
