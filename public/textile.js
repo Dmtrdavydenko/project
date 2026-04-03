@@ -691,7 +691,7 @@ async function loadTable() {
     if (result.rows && Array.isArray(result.rows) && result.rows.length > 0) {
         const table = createTable(result.rows);
         if (selectTableName.value === "tape_length") {
-            document.body.appendChild(renderForm(result));
+            document.body.appendChild(renderForm(result.k));
         }
         if (selectTableName.value === "looms") {
             myfilter(result.rows);

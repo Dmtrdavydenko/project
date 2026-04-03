@@ -418,15 +418,125 @@ async function select(body) {
         let sql;
         let descRows;
         console.log("Запрос от клиента имя таблицы " + body.table.name);
+        const isEmpty = async (table) => {
+            const query = `SELECT 1 FROM \`${table.name}\` LIMIT 1`;
+            const [rows] = await connection.execute(query);
+            return rows.length === 0;
+        };
+        const getColumns = async (table) => {
+            const query = `
+                        SELECT COLUMN_NAME, DATA_TYPE, COLUMN_TYPE, IS_NULLABLE, COLUMN_KEY
+                        FROM information_schema.COLUMNS
+                        WHERE TABLE_SCHEMA = DATABASE()
+                        AND TABLE_NAME = ?
+                        `;
+            const [columns] = await connection.execute(query, [table.name]);
+            return columns;
+        };
+        const buildFormSchema = (columns) => {
+            return columns.map(col => {
+                let inputType = 'text';
+
+                switch (col.DATA_TYPE) {
+                    case 'tinyint':
+                    case 'smallint':
+                    case 'int':
+                        inputType = 'number';
+                        break;
+                    case 'decimal':
+                    case 'float':
+                    case 'double':
+                        inputType = 'number';
+                        break;
+                    case 'date':
+                        inputType = 'date';
+                        break;
+                    case 'datetime':
+                    case 'timestamp':
+                        inputType = 'datetime-local';
+                        break;
+                    case 'enum':
+                        inputType = 'select';
+                        break;
+                    case 'varchar':
+                    case 'text':
+                    default:
+                        inputType = 'text';
+                }
+
+                return {
+                    name: col.COLUMN_NAME,
+                    type: inputType,
+                    nullable: col.IS_NULLABLE === 'YES',
+                    dbType: col.COLUMN_TYPE,
+                    COLUMN_KEY: col.COLUMN_KEY,
+                };
+            });
+        };
+        const getParentRelations = async (table) => {
+            const query = `
+                    SELECT 
+                        COLUMN_NAME,
+                        REFERENCED_TABLE_NAME,
+                        REFERENCED_COLUMN_NAME
+                    FROM information_schema.KEY_COLUMN_USAGE
+                    WHERE TABLE_SCHEMA = DATABASE()
+                    AND TABLE_NAME = ?
+                    AND REFERENCED_TABLE_NAME IS NOT NULL
+                    `;
+            const [rows] = await connection.execute(query, [table.name]);
+            return rows;
+        };
+        const getSelectOptions = async (tableName, valueColumn, labelColumn) => {
+            const query = `
+                    SELECT \`${valueColumn}\` AS value, \`${labelColumn}\` AS label
+                    FROM \`${tableName}\`
+                    `;
+            const [rows] = await connection.execute(query);
+            return rows;
+        };
+        const buildSelectFields = async (table) => {
+            const relations = await getParentRelations(table);
+            const col = await getColumns(table);
+            const columns = buildFormSchema(col);
+
+            const result = {};
+            for (const column of columns) {
+                //column.COLUMN_KEY === "MUL"
+                result[column.name] = {
+                    type: 'input',
+                    DATA_TYPE: column.type,
+                    COLUMN_TYPE: column.dbType,
+                    COLUMN_KEY: column.COLUMN_KEY
+                };
+            }
+            for (const rel of relations) {
+                let labelColumn = 'id';
+
+                if (rel.REFERENCED_TABLE_NAME === 'tape_density') {
+                    labelColumn = 'density';
+                }
+
+                const options = await getSelectOptions(
+                    rel.REFERENCED_TABLE_NAME,
+                    rel.REFERENCED_COLUMN_NAME,
+                    labelColumn
+                );
+
+                result[rel.COLUMN_NAME] = {
+                    type: 'select',
+                    options
+                };
+            }
+
+            return result;
+        };
         switch (body.table.name) {
             case "tape_length":
                 //const field = ["thread_id", "thread_density", "thread_length"];
                 sql = `
-
                 SELECT * FROM tape_length
-                LEFT JOIN tape_density td ON tape_length.density_id = td.id
-
-
+                LEFT JOIN tape_density td ON tape_length.density_id = td.
                 `;
                 //sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
                 break;
@@ -886,123 +996,6 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                 break;
 
             default:
-                const isEmpty = async (table) => {
-                    const query = `SELECT 1 FROM \`${table.name}\` LIMIT 1`;
-                    const [rows] = await connection.execute(query);
-                    return rows.length === 0;
-                };
-                const getColumns = async (table) => {
-                    const query = `
-                        SELECT COLUMN_NAME, DATA_TYPE, COLUMN_TYPE, IS_NULLABLE, COLUMN_KEY
-                        FROM information_schema.COLUMNS
-                        WHERE TABLE_SCHEMA = DATABASE()
-                        AND TABLE_NAME = ?
-                        `;
-                    const [columns] = await connection.execute(query, [table.name]);
-                    return columns;
-                };
-                const buildFormSchema = (columns) => {
-                    return columns.map(col => {
-                        let inputType = 'text';
-
-                        switch (col.DATA_TYPE) {
-                            case 'tinyint':
-                            case 'smallint':
-                            case 'int':
-                                inputType = 'number';
-                                break;
-                            case 'decimal':
-                            case 'float':
-                            case 'double':
-                                inputType = 'number';
-                                break;
-                            case 'date':
-                                inputType = 'date';
-                                break;
-                            case 'datetime':
-                            case 'timestamp':
-                                inputType = 'datetime-local';
-                                break;
-                            case 'enum':
-                                inputType = 'select';
-                                break;
-                            case 'varchar':
-                            case 'text':
-                            default:
-                                inputType = 'text';
-                        }
-
-                        return {
-                            name: col.COLUMN_NAME,
-                            type: inputType,
-                            nullable: col.IS_NULLABLE === 'YES',
-                            dbType: col.COLUMN_TYPE,
-                            COLUMN_KEY: col.COLUMN_KEY,
-                        };
-                    });
-                };
-                const getParentRelations = async (table) => {
-                    const query = `
-                    SELECT 
-                        COLUMN_NAME,
-                        REFERENCED_TABLE_NAME,
-                        REFERENCED_COLUMN_NAME
-                    FROM information_schema.KEY_COLUMN_USAGE
-                    WHERE TABLE_SCHEMA = DATABASE()
-                    AND TABLE_NAME = ?
-                    AND REFERENCED_TABLE_NAME IS NOT NULL
-                    `;
-                    const [rows] = await connection.execute(query, [table.name]);
-                    return rows;
-                };
-                const getSelectOptions = async (tableName, valueColumn, labelColumn) => {
-                    const query = `
-                    SELECT \`${valueColumn}\` AS value, \`${labelColumn}\` AS label
-                    FROM \`${tableName}\`
-                    `;
-                    const [rows] = await connection.execute(query);
-                    return rows;
-                };
-                const buildSelectFields = async (table) => {
-                    const relations = await getParentRelations(table);
-                    const col = await getColumns(table);
-                    const columns = buildFormSchema(col);
-
-                    const result = {};
-                    for (const column of columns) {
-                        //column.COLUMN_KEY === "MUL"
-                        result[column.name] = {
-                            type: 'input',
-                            DATA_TYPE: column.type,
-                            COLUMN_TYPE: column.dbType,
-                            COLUMN_KEY: column.COLUMN_KEY
-                        };
-                    }
-                    for (const rel of relations) {
-                        let labelColumn = 'id';
-
-                        if (rel.REFERENCED_TABLE_NAME === 'tape_density') {
-                            labelColumn = 'density';
-                        }
-
-                        const options = await getSelectOptions(
-                            rel.REFERENCED_TABLE_NAME,
-                            rel.REFERENCED_COLUMN_NAME,
-                            labelColumn
-                        );
-
-                        result[rel.COLUMN_NAME] = {
-                            type: 'select',
-                            options
-                        };
-                    }
-
-                    return result;
-                };
-
-                if (await isEmpty(body.table)) {
-                    return await buildSelectFields(body.table);
-                }
                 sql = 'SELECT * FROM `' + body.table.name + "`";
                 [descRows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
                 const primaryKeyColumn = descRows.find(row => row.Key === 'PRI')?.Field || null;
@@ -1051,7 +1044,16 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
         console.log("Клиент " + sql);
 
-
+        if (body.table.name === "tape_length") {
+            return {
+                all,
+                rows,
+                k:await buildSelectFields(body.table)
+                //Field: select.fields,
+                //F: select.sqlFields,
+                //key: select.pri,
+            };
+        }
 
 
         //console.log("ROW ",get1[[1]]);
