@@ -620,6 +620,7 @@ async function loadTable() {
                     if (field.COLUMN_TYPE.includes('tinyint')) {
                         input.min = 0;
                         input.max = 255;
+                        input.step = 0.1;
                     }
 
                     if (field.COLUMN_TYPE.includes('smallint')) {
