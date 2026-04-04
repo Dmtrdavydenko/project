@@ -710,6 +710,8 @@ async function loadTable() {
         await getTypeTableHeder();
         await getTypeKey();
     } else {
+        formContainer.appendChild(renderForm(result.k));
+
         container.textContent = "Empty";
     }
 

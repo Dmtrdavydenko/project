@@ -535,7 +535,7 @@ async function select(body) {
             case "tape_length":
                 //const field = ["thread_id", "thread_density", "thread_length"];
                 sql = `
-                SELECT * FROM tape_length
+                SELECT tape_length.*,tape_density.* FROM tape_length
                 LEFT JOIN tape_density td ON tape_length.density_id = td.id
                 `;
                 //sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
