@@ -633,7 +633,6 @@ async function loadTable() {
             }
 
             wrapper.appendChild(label);
-            wrapper.appendChild(document.createElement('br'));
             wrapper.appendChild(input);
 
             form.appendChild(wrapper);
