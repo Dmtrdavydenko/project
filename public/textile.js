@@ -617,7 +617,7 @@ async function loadTable() {
                     input.type = 'number';
 
                     // авто min/max
-                    if (field.COLUMN_TYPE.includes('tinyint')) {
+                    if (field.COLUMN_TYPE.includes('decimal')) {
                         input.min = 0;
                         input.max = 255;
                         input.step = 0.1;
