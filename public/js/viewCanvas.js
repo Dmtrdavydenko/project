@@ -111,11 +111,11 @@ class DataTape {
     const Tape = new DataTape("https://worktime.up.railway.app/app");
     const [data] = await Tape.loadData("getTapeKnowledge");
     // Сюда передаёшь свои данные
-    const data = [
-        { density: 130, length: 423, diameter: "51.1" },
-        { density: 220, length: 772, diameter: "61.0" }
-        // ...вставь весь массив сюда
-    ];
+    //const data = [
+    //    { density: 130, length: 423, diameter: "51.1" },
+    //    { density: 220, length: 772, diameter: "61.0" }
+    //    // ...вставь весь массив сюда
+    //];
 
     const canvas = document.getElementById("chart");
     const ctx = canvas.getContext("2d");
