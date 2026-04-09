@@ -1063,7 +1063,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
         return {
             all,
             rows,
-            k: await buildSelectFields(body.table);
+            k: await buildSelectFields(body.table),
             //Field: select.fields,
             //F: select.sqlFields,
             //key: select.pri,
