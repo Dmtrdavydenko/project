@@ -231,6 +231,30 @@ class DataTape {
         ctx.rotate(-Math.PI / 2);
         ctx.fillText("Диаметр", 0, 0);
         ctx.restore();
+
+
+
+        // дополнительные метки по X для diameter <= 110
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillStyle = "#000";
+
+        data.forEach(d => {
+            const diameter = parseFloat(d.diameter);
+
+            if (diameter <= 110) {
+                const px = scaleX(d.length);
+
+                // маленькая засечка
+                ctx.beginPath();
+                ctx.moveTo(px, paddingTop + plotHeight);
+                ctx.lineTo(px, paddingTop + plotHeight + 8);
+                ctx.stroke();
+
+                // подпись (метры)
+                ctx.fillText(d.length, px, paddingTop + plotHeight + 10);
+            }
+        });
     }
 
     function chooseStep(range) {
@@ -291,35 +315,29 @@ class DataTape {
         const entries = Object.keys(colors);
 
         const boxSize = 12;
-        const gap = 6;
-        const padding = 10;
+        const gap = 8;
+        const itemSpacing = 70;
 
-        const startX = canvas.width - paddingRight - 120;
-        let startY = paddingTop + 10;
+        const startY = canvas.height - 25;
+        let startX = paddingLeft;
 
         ctx.font = "12px Arial";
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
 
-        // заголовок
-        ctx.fillStyle = "#000";
-        ctx.fillText("Density", startX, startY);
-        startY += 16;
-
         entries.forEach(density => {
-            // цветной квадратик
+            // цвет
             ctx.fillStyle = colors[density];
-            ctx.fillRect(startX, startY, boxSize, boxSize);
+            ctx.fillRect(startX, startY - boxSize / 2, boxSize, boxSize);
 
-            // рамка
             ctx.strokeStyle = "#000";
-            ctx.strokeRect(startX, startY, boxSize, boxSize);
+            ctx.strokeRect(startX, startY - boxSize / 2, boxSize, boxSize);
 
             // текст
             ctx.fillStyle = "#000";
-            ctx.fillText(density, startX + boxSize + gap, startY + boxSize / 2);
+            ctx.fillText(density, startX + boxSize + gap, startY);
 
-            startY += boxSize + 6;
+            startX += itemSpacing;
         });
     }
 
