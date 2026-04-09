@@ -901,7 +901,7 @@ localSpace.getThreads = [
 
     let myTapeList = [];
     myTapeList = tapeList.slice();
-    myTapeList.push({ tape_density: "Время1", tape_length: 32000, tape_speed: 400, tape_milliseconds: 4800000, group_id: 0 });
+    myTapeList.push({ tape_density: "t", tape_length: 32000, tape_speed: 400, tape_milliseconds: 4800000, group_id: 0 });
 
     function selectTape(array, select = document.createElement("select")) {
         array.forEach((item) => {
@@ -1045,6 +1045,8 @@ localSpace.getThreads = [
 
 
             const time = document.createElement("input");
+            const length = document.createElement("input");
+            length.type = "number";
             const td = document.createElement("td");
             const br = document.createElement("br");
             time.name = counterColunms;
@@ -1059,6 +1061,8 @@ localSpace.getThreads = [
 
 
             td.append(select);
+            td.append(br);
+            td.append(length);
             td.append(br);
             td.append(time);
 
