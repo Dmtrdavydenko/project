@@ -1,28 +1,3 @@
-
-class viewTime {
-    constructor(time) {
-        const timeInput = document.createElement('input');
-        //timeInput.type = 'time';
-        timeInput.type = 'datetime-local';
-
-        timeInput.readOnly = true; // readonly для просмотра на мониторе
-        timeInput.valueAsNumber = time;
-        //console.log(timeInput.valueAsNumber);
-        return timeInput;
-    }
-}
-class viewText {
-    constructor(name) {
-        const timeInput = document.createElement('label');
-        //timeInput.type = 'text';
-        //timeInput.type = 'datetime-local';
-
-        //timeInput.readOnly = true; // readonly для просмотра на мониторе
-        timeInput.textContent = name;
-        //console.log(timeInput.valueAsNumber);
-        return timeInput;
-    }
-}
 class DataTape {
     constructor(apiUrl) {
         this.apiUrl = apiUrl;
@@ -132,8 +107,6 @@ class DataTape {
 
 
 const Tape = new DataTape("https://worktime.up.railway.app/app");
-const Thread = new DataTape("https://worktime.up.railway.app/app");
-const Time = new DataTape("https://worktime.up.railway.app/app");
 
 (async () => {
     const [data] = await Tape.loadData("getTapeKnowledge");
