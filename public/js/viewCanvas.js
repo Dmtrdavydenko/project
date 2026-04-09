@@ -287,10 +287,46 @@ class DataTape {
         ctx.textBaseline = "middle";
         ctx.fillText(text, boxX + 8, boxY + boxH / 2);
     }
+    function drawLegend() {
+        const entries = Object.keys(colors);
+
+        const boxSize = 12;
+        const gap = 6;
+        const padding = 10;
+
+        const startX = canvas.width - paddingRight - 120;
+        let startY = paddingTop + 10;
+
+        ctx.font = "12px Arial";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+
+        // заголовок
+        ctx.fillStyle = "#000";
+        ctx.fillText("Density", startX, startY);
+        startY += 16;
+
+        entries.forEach(density => {
+            // цветной квадратик
+            ctx.fillStyle = colors[density];
+            ctx.fillRect(startX, startY, boxSize, boxSize);
+
+            // рамка
+            ctx.strokeStyle = "#000";
+            ctx.strokeRect(startX, startY, boxSize, boxSize);
+
+            // текст
+            ctx.fillStyle = "#000";
+            ctx.fillText(density, startX + boxSize + gap, startY + boxSize / 2);
+
+            startY += boxSize + 6;
+        });
+    }
 
     function render() {
         drawAxes();
         drawPoints();
+        drawLegend();
         if (hoveredPoint) drawTooltip(hoveredPoint);
     }
 
@@ -354,7 +390,7 @@ class DataTape {
         const diameter = parseFloat(d.diameter);
 
         // допуск (чтобы не только ровно 110)
-        if (Math.abs(diameter - 110) <= 0.5) {
+        if (Math.abs(diameter - 110) <= 0.9) {
             const x = scaleX(d.length);
 
             ctx.fillStyle = "#000";
