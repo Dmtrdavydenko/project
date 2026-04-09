@@ -133,6 +133,7 @@ const Tape = new DataTape("https://worktime.up.railway.app/app");
     const minY = Math.min(...diameters);
     const maxY = Math.max(...diameters);
 
+
     // отступы
     const padding = 40;
     const width = canvas.width - padding * 2;
