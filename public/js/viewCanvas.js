@@ -235,26 +235,72 @@ class DataTape {
 
 
         // дополнительные метки по X для diameter <= 110
+        //ctx.textAlign = "center";
+        //ctx.textBaseline = "top";
+        //ctx.fillStyle = "#000";
+
+        //data.forEach(d => {
+        //    const diameter = parseFloat(d.diameter);
+
+        //    if (diameter <= 110 && diameter >= 108) {
+        //        const px = scaleX(d.length);
+
+        //        // маленькая засечка
+        //        ctx.beginPath();
+        //        ctx.moveTo(px, paddingTop + plotHeight);
+        //        ctx.lineTo(px, paddingTop + plotHeight + 8);
+        //        ctx.stroke();
+
+        //        // подпись (метры)
+        //        ctx.fillText(d.length, px, paddingTop + plotHeight + 40);
+        //    }
+        //});
+
+        // метки по X: по одной на density (ближайшая к 110 в диапазоне 105–110)
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
         ctx.fillStyle = "#000";
 
+        // сгруппировать по density и выбрать лучшую точку
+        const bestPoints = {};
+
         data.forEach(d => {
             const diameter = parseFloat(d.diameter);
+            const density = d.density;
 
-            if (diameter <= 110 && diameter >= 108) {
-                const px = scaleX(d.length);
+            if (diameter >= 105 && diameter <= 110) {
+                const diff = Math.abs(110 - diameter);
 
-                // маленькая засечка
-                ctx.beginPath();
-                ctx.moveTo(px, paddingTop + plotHeight);
-                ctx.lineTo(px, paddingTop + plotHeight + 8);
-                ctx.stroke();
-
-                // подпись (метры)
-                ctx.fillText(d.length, px, paddingTop + plotHeight + 40);
+                if (
+                    !bestPoints[density] ||
+                    diff < bestPoints[density].diff
+                ) {
+                    bestPoints[density] = {
+                        ...d,
+                        diff
+                    };
+                }
             }
         });
+
+        // рисуем только выбранные точки
+        Object.values(bestPoints).forEach(d => {
+            const px = scaleX(d.length);
+
+            // засечка
+            ctx.beginPath();
+            ctx.moveTo(px, paddingTop + plotHeight);
+            ctx.lineTo(px, paddingTop + plotHeight + 10);
+            ctx.stroke();
+
+            // подпись (метры)
+            ctx.fillText(
+                d.length,
+                px,
+                paddingTop + plotHeight + 18
+            );
+        });
+
     }
 
     function chooseStep(range) {
