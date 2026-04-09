@@ -242,7 +242,7 @@ class DataTape {
         data.forEach(d => {
             const diameter = parseFloat(d.diameter);
 
-            if (diameter <= 110) {
+            if (diameter <= 110 && diameter >= 108) {
                 const px = scaleX(d.length);
 
                 // маленькая засечка
@@ -252,7 +252,7 @@ class DataTape {
                 ctx.stroke();
 
                 // подпись (метры)
-                ctx.fillText(d.length, px, paddingTop + plotHeight + 10);
+                ctx.fillText(d.length, px, paddingTop + plotHeight + 40);
             }
         });
     }
