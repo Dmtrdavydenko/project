@@ -39,6 +39,7 @@ const functionDB = {
     "setToDay": setToDay,
     "getHistory": getHistory,
     "getDay": getDay,
+    "getTapeKnowledge": getTapeKnowledge,
 }
 
 const ENCRYPTION_KEY = process.env.HH_ENCRYPTION_KEY;
@@ -408,7 +409,8 @@ async function getMetaDataTable(body) {
     };
 }
 async function select(body) {
-    const connection = await pool.getConnection();
+    
+    const connection = await getAwaitConnect();;
 
     try {
         console.log('Успешно подключено к базе данных MySQL!');
@@ -532,10 +534,10 @@ async function select(body) {
             return result;
         };
         switch (body.table.name) {
-            case "tape_length":
+            case "tape_knowledge":
                 //const field = ["thread_id", "thread_density", "thread_length"];
                 sql = `
-                SELECT * FROM tape_length
+                SELECT * FROM ${body.table.name}
                 LEFT JOIN tape_density td ON tape_length.density_id = td.id
                 `;
                 //sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
@@ -1429,6 +1431,26 @@ async function getTape() {
         "JOIN color ON TapeExtrusion.color_id = color.color_id " +
         "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
         "ORDER BY density ASC";
+    try {
+        connection = await getAwaitConnect();
+        //console.log(data);
+        return await connection.execute(sql);
+    } catch (error) {
+        console.error('Ошибка:', error);
+        throw error;
+    } finally {
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
+    }
+}
+async function getTapeKnowledge() {
+    console.log("CALL=", getTape.name)
+    let connection = null;
+    const sql = `
+    select density, length, diameter from tape_knowledge
+    LEFT JOIN tape_density ON tape_knowledge.density_id = tape_density.id
+    order by length ASC
+    `
     try {
         connection = await getAwaitConnect();
         //console.log(data);
