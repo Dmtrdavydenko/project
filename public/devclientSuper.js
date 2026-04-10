@@ -1200,6 +1200,7 @@ localSpace.getTapeDensity = [
 
             for (let button of buttons) {
                 button.value = interval;
+                button.name = formula.group_id;
             }
 
             handleCalculation();
