@@ -1103,8 +1103,8 @@ localSpace.getTapeDensity = [
         function handleSelect(event) {
             console.log(this, event.target.value)
             const formula = myTapeList.find(item => item.group_id === +event.target.value);
-            event.target.value = formula.tape_length / formula.tape_speed * 60000;
-
+            const interval = formula.tape_length / formula.tape_speed * 60000;
+            console.log(interval);
 
             if (event.target.value === "4800000") {
                 //    //infoTime[this.name].style.display = "inline-block";
