@@ -1096,14 +1096,7 @@ localSpace.getTapeDensity = [
         array.forEach((item) => {
             let option = document.createElement("option");
             option.value = item.group_id;
-            //option.value = item;
-            //option.value = item.tape_length / item.tape_speed * 60000;
-            //option.value = item.time_milliseconds;
-            //option.textContent = Number.isInteger(item.tape_density) ? `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed || ""}` : `${item.tape_density}`
-            //option.textContent = `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed}`
             option.textContent = `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed}`
-            //option.textContent = item;
-            //option.name = item.group_id;
             select.append(option);
         });
         return select;
@@ -2065,7 +2058,7 @@ localSpace.getTapeDensity = [
 
 
         console.log(tape);
-        let tapeNamesArray = tape[0].filter(current => +selectDensitySpeed.options[selectDensitySpeed.selectedIndex].name === current.group_id);
+        let tapeNamesArray = tape[0].filter(current => Number(selectDensitySpeed.value) === current.group_id);
         setNameTape(tapeNamesArray, selectStartTapeName);
         selectTapeName = selectStartTapeName;
 
@@ -2111,9 +2104,9 @@ localSpace.getTapeDensity = [
             selectName[i] = lineTask[i].select;
 
 
-            let tapeNamesArray = tape.filter(current => +lineTask[i].time.name === current.group_id);
+            let tapeNamesArray = tape[0].filter(current => +lineTask[i].time.name === current.group_id);
             if (tapeNamesArray.length === 0) {
-                setNameTape(tape, lineTask[i].select);
+                setNameTape(tape[0], lineTask[i].select);
             } else {
                 setNameTape(tapeNamesArray, lineTask[i].select);
             }
