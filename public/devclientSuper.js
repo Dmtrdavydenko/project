@@ -26,7 +26,7 @@ class DataTape {
 
             this.data = await response.json(); // Предполагаем, что API возвращает массив объектов
             console.info("Load server sql space data");
-            return this.data;
+            return this.data[0];
         } catch (error) {
             if (error.message === "No load connection") {
                 this.data = localSpace[action];
