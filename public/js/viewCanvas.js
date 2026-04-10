@@ -110,7 +110,6 @@ class DataTape {
 (async () => {
     const Tape = new DataTape("https://worktime.up.railway.app/app");
     const [data] = await Tape.loadData("getTapeKnowledge");
-    
 
     const canvas = document.getElementById("chart");
     const ctx = canvas.getContext("2d");
@@ -226,52 +225,6 @@ class DataTape {
         ctx.rotate(-Math.PI / 2);
         ctx.fillText("Диаметр", 0, 0);
         ctx.restore();
-
-        // метки по X: по одной на density (ближайшая к 110 в диапазоне 105–110)
-        ctx.textAlign = "center";
-        ctx.textBaseline = "top";
-        ctx.fillStyle = "#000";
-
-        // сгруппировать по density и выбрать лучшую точку
-        const bestPoints = {};
-
-        data.forEach(d => {
-            const diameter = parseFloat(d.diameter);
-            const density = d.density;
-
-            if (diameter >= 105 && diameter <= 110) {
-                const diff = Math.abs(110 - diameter);
-
-                if (
-                    !bestPoints[density] ||
-                    diff < bestPoints[density].diff
-                ) {
-                    bestPoints[density] = {
-                        ...d,
-                        diff
-                    };
-                }
-            }
-        });
-
-        // рисуем только выбранные точки
-        Object.values(bestPoints).forEach(d => {
-            const px = scaleX(d.length);
-
-            // засечка
-            ctx.beginPath();
-            ctx.moveTo(px, paddingTop + plotHeight);
-            ctx.lineTo(px, paddingTop + plotHeight + 20);
-            ctx.stroke();
-
-            // подпись (метры)
-            ctx.fillText(
-                d.length,
-                px,
-                paddingTop + plotHeight  + 28
-            );
-        });
-
     }
 
     function chooseStep(range) {
@@ -406,10 +359,7 @@ class DataTape {
     // рисуем линию
     ctx.strokeStyle = "#ff0000";
     ctx.lineWidth = 1.5;
-    //ctx.beginPath();
-    //ctx.moveTo(paddingLeft, py110);
-    //ctx.lineTo(paddingLeft + plotWidth, py110);
-    //ctx.stroke();
+
 
     // подпись "110"
     ctx.fillStyle = "#ff0000";
@@ -421,23 +371,6 @@ class DataTape {
     ctx.textAlign = "center";
     ctx.textBaseline = "bottom";
 
-    //data.forEach(d => {
-    //    const diameter = parseFloat(d.diameter);
-
-    //    // допуск (чтобы не только ровно 110)
-    //    if (Math.abs(diameter - 110) <= 1.5) {
-    //        const x = scaleX(d.length);
-
-    //        ctx.fillStyle = "#000";
-    //        ctx.fillText(d.length, x, py110 - 5);
-
-    //        // маленькая засечка
-    //        ctx.beginPath();
-    //        ctx.moveTo(x, py110 - 3);
-    //        ctx.lineTo(x, py110 + 3);
-    //        ctx.stroke();
-    //    }
-    //});
 
 
 
@@ -467,80 +400,10 @@ class DataTape {
     Object.values(bestPoints).forEach(d => {
         const x = scaleX(d.length);
 
-        // засечка
-        //ctx.beginPath();
-        //ctx.moveTo(px, paddingTop + plotHeight);
-        //ctx.lineTo(px, paddingTop + plotHeight + 20);
-        //ctx.stroke();
-
         ctx.beginPath();
         ctx.moveTo(x, py110 - 3);
         ctx.lineTo(x, py110 + 3);
         ctx.stroke();
         ctx.fillText(d.length, x, py110);
-
-        // подпись (метры)
-        //ctx.fillText(
-        //    d.length,
-        //    px,
-        //    paddingTop + plotHeight + 28
-        //);
     });
-
-
-    //const canvas = document.getElementById('chart');
-    //const ctx = canvas.getContext('2d');
-
-    //// цвета для разных density
-    //const colors = {
-    //    78: 'red',
-    //    90: 'blue',
-    //    105: 'green',
-    //    130: 'orange',
-    //    170: 'purple',
-    //    220: 'black'
-    //};
-
-    //// находим границы
-    //const lengths = data.map(d => d.length);
-    //const diameters = data.map(d => parseFloat(d.diameter));
-
-    //const minX = Math.min(...lengths);
-    //const maxX = Math.max(...lengths);
-    //const minY = Math.min(...diameters);
-    //const maxY = Math.max(...diameters);
-
-
-    //// отступы
-    //const padding = 40;
-    //const width = canvas.width - padding * 2;
-    //const height = canvas.height - padding * 2;
-
-    //// функция масштабирования
-    //function scaleX(x) {
-    //    return padding + (x - minX) / (maxX - minX) * width;
-    //}
-
-    //function scaleY(y) {
-    //    return canvas.height - padding - (y - minY) / (maxY - minY) * height;
-    //}
-
-    //// оси
-    //ctx.beginPath();
-    //ctx.moveTo(padding, padding);
-    //ctx.lineTo(padding, canvas.height - padding);
-    //ctx.lineTo(canvas.width - padding, canvas.height - padding);
-    //ctx.stroke();
-
-    //// точки
-    //data.forEach(d => {
-    //    const x = scaleX(d.length);
-    //    const y = scaleY(parseFloat(d.diameter));
-
-    //    ctx.fillStyle = colors[d.density] || 'gray';
-
-    //    ctx.beginPath();
-    //    ctx.arc(x, y, 3, 0, Math.PI * 2);
-    //    ctx.fill();
-    //});
 })();
