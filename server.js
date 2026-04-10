@@ -1789,7 +1789,8 @@ async function getThreads() {
                 thread_time * 60 as time_seconds,
                 thread_time * 60 * 1000 as time_milliseconds
             FROM Thread_Parameters
-                JOIN Tape ON Thread_Parameters.density_id = tape_density.id
+                JOIN tape_density ON Thread_Parameters.density_id = tape_density.id
+                JOIN Tape ON Thread_Parameters.density_id = Tape.id
                 ORDER BY density, speed ASC
             `;
             return await connection.execute(sql);
