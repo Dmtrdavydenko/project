@@ -1428,7 +1428,8 @@ async function getTape() {
         "color, additive_name, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
         "FROM TapeExtrusion " +
         "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
-        "JOIN Tape   ON Thread_Parameters.tape_id = Tape.id " +
+        "JOIN Tape ON Thread_Parameters.density_id = Tape.id " +
+        "JOIN tape_density ON Thread_Parameters.density_id = tape_density.id " +
         "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
         "JOIN color ON TapeExtrusion.color_id = color.color_id " +
         "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +

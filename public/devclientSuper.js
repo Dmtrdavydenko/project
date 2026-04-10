@@ -1101,12 +1101,11 @@ localSpace.getTapeDensity = [
         //}
 
         function handleSelect(event) {
-            console.log(this, event.target.value)
             const formula = myTapeList.find(item => item.group_id === +event.target.value);
             const interval = formula.tape_length / formula.tape_speed * 60000;
-            console.log(interval);
+            console.log(this, event.target.value, interval)
 
-            if (event.target.value === "4800000") {
+            if (interval === "4800000") {
                 //    //infoTime[this.name].style.display = "inline-block";
                 infoTime[this.name].removeAttribute("disabled");
             } else {
@@ -1114,7 +1113,7 @@ localSpace.getTapeDensity = [
                 infoTime[this.name].setAttribute("disabled", true);
 
             }
-            infoTime[this.name].valueAsNumber = Math.floor(event.target.value / 60000) * 60000;
+            infoTime[this.name].valueAsNumber = Math.floor(interval / 60000) * 60000;
 
             // ## dev
             //setTimeTask();
@@ -1129,7 +1128,7 @@ localSpace.getTapeDensity = [
                 }
             }
             for (let button of buttons) {
-                button.value = event.target.value;
+                button.value = interval;
                 //button.value = this.valueAsNumber;
                 //button.textContent = Math.floor(infoTime[this.name].valueAsNumber / 60000);
                 //button.textContent = infoTime[this.name].valueAsNumber % 60000;
