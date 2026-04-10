@@ -29,7 +29,7 @@ class DataTape {
             return this.data;
         } catch (error) {
             if (error.message === "No load connection") {
-                this.data = [localSpace[action]];
+                this.data = localSpace[action];
                 console.info("Load local space data");
                 return this.data;
             }
@@ -112,6 +112,8 @@ class DataTape {
 }
 const Tape = new DataTape("https://worktime.up.railway.app/app");
 const Thread = new DataTape("https://worktime.up.railway.app/app");
+
+
 const localSpace = {};
 localSpace.getTape = [
     {
@@ -723,9 +725,174 @@ localSpace.getThreads = [
     }
 ];
 
+localSpace.getTapeDensity = [
+    {
+        "tape_density": 50,
+        "tape_speed": 410,
+        "group_id": 13,
+        "tape_length": 25420,
+        "tape_seconds": 3720,
+        "tape_milliseconds": 3720000
+    },
+    {
+        "tape_density": 64,
+        "tape_speed": 350,
+        "group_id": 1,
+        "tape_length": 20300,
+        "tape_seconds": 3480,
+        "tape_milliseconds": 3480000
+    },
+    {
+        "tape_density": 78,
+        "tape_speed": 350,
+        "group_id": 14,
+        "tape_length": 16000,
+        "tape_seconds": 2742.857894897461,
+        "tape_milliseconds": 2742857.894897461
+    },
+    {
+        "tape_density": 78,
+        "tape_speed": 400,
+        "group_id": 17,
+        "tape_length": 16000,
+        "tape_seconds": 2400,
+        "tape_milliseconds": 2400000
+    },
+    {
+        "tape_density": 78,
+        "tape_speed": 450,
+        "group_id": 2,
+        "tape_length": 16000,
+        "tape_seconds": 2181.8161010742188,
+        "tape_milliseconds": 2181816.1010742188
+    },
+    {
+        "tape_density": 90,
+        "tape_speed": 350,
+        "group_id": 15,
+        "tape_length": 14000,
+        "tape_seconds": 2400,
+        "tape_milliseconds": 2400000
+    },
+    {
+        "tape_density": 90,
+        "tape_speed": 400,
+        "group_id": 16,
+        "tape_length": 14000,
+        "tape_seconds": 2100,
+        "tape_milliseconds": 2100000
+    },
+    {
+        "tape_density": 90,
+        "tape_speed": 450,
+        "group_id": 3,
+        "tape_length": 14000,
+        "tape_seconds": 1866.665954589844,
+        "tape_milliseconds": 1866665.954589844
+    },
+    {
+        "tape_density": 102,
+        "tape_speed": 350,
+        "group_id": 10,
+        "tape_length": 11900,
+        "tape_seconds": 2040,
+        "tape_milliseconds": 2040000
+    },
+    {
+        "tape_density": 105,
+        "tape_speed": 350,
+        "group_id": 18,
+        "tape_length": 11550,
+        "tape_seconds": 1980,
+        "tape_milliseconds": 1980000
+    },
+    {
+        "tape_density": 105,
+        "tape_speed": 400,
+        "group_id": 4,
+        "tape_length": 11550,
+        "tape_seconds": 1732.5,
+        "tape_milliseconds": 1732500
+    },
+    {
+        "tape_density": 110,
+        "tape_speed": 350,
+        "group_id": 19,
+        "tape_length": 10850,
+        "tape_seconds": 1860,
+        "tape_milliseconds": 1860000
+    },
+    {
+        "tape_density": 110,
+        "tape_speed": 400,
+        "group_id": 5,
+        "tape_length": 10850,
+        "tape_seconds": 1620,
+        "tape_milliseconds": 1620000
+    },
+    {
+        "tape_density": 112,
+        "tape_speed": 350,
+        "group_id": 6,
+        "tape_length": 10500,
+        "tape_seconds": 1800,
+        "tape_milliseconds": 1800000
+    },
+    {
+        "tape_density": 130,
+        "tape_speed": 300,
+        "group_id": 20,
+        "tape_length": 9328,
+        "tape_seconds": 1865.4000091552732,
+        "tape_milliseconds": 1865400.0091552732
+    },
+    {
+        "tape_density": 130,
+        "tape_speed": 350,
+        "group_id": 11,
+        "tape_length": 9328,
+        "tape_seconds": 1599.0839767456057,
+        "tape_milliseconds": 1599083.9767456057
+    },
+    {
+        "tape_density": 140,
+        "tape_speed": 300,
+        "group_id": 7,
+        "tape_length": 8400,
+        "tape_seconds": 1680,
+        "tape_milliseconds": 1680000
+    },
+    {
+        "tape_density": 170,
+        "tape_speed": 250,
+        "group_id": 8,
+        "tape_length": 7000,
+        "tape_seconds": 1680,
+        "tape_milliseconds": 1680000
+    },
+    {
+        "tape_density": 220,
+        "tape_speed": 200,
+        "group_id": 9,
+        "tape_length": 5200,
+        "tape_seconds": 1560,
+        "tape_milliseconds": 1560000
+    },
+    {
+        "tape_density": 240,
+        "tape_speed": 200,
+        "group_id": 12,
+        "tape_length": 4400,
+        "tape_seconds": 1320,
+        "tape_milliseconds": 1320000
+    }
+];
+
+
 
 
 (async (cmd) => {
+
     const tape = await Tape.loadData("getTape");
     const thread = await Thread.loadData("getThreads");
     const tapeList = await Thread.loadData("getTapeDensity");
@@ -773,7 +940,7 @@ localSpace.getThreads = [
         TimeStart.type = "time";
         TimeStart.valueAsNumber = 28800000;
 
-        
+
         //TimeStart.addEventListener("input", handleCalculation);
         TimeStart.addEventListener("input", setTimeTask);
         TimeStart.addEventListener("change", setTimeTask);
@@ -832,7 +999,7 @@ localSpace.getThreads = [
         quan.addEventListener("pointerdown", handleInput2);
         quan.addEventListener("change", handleInput2);
         const select = document.createElement("select");
-        select.addEventListener("change", handleCalculation); 
+        select.addEventListener("change", handleCalculation);
         return { TimeStart, TimeEnd, TimeDx, dx1, sum, fix, quan, select };
     }
     function time12(time) {
@@ -904,13 +1071,15 @@ localSpace.getThreads = [
     myTapeList.push({ tape_density: "t", tape_length: 32000, tape_speed: 400, tape_milliseconds: 4800000, group_id: 0 });
 
     function selectTape(array, select = document.createElement("select")) {
+        console.log(array);
         array.forEach((item) => {
             let option = document.createElement("option");
-            option.value = item.tape_length / item.tape_speed * 60000;
+            option.value = item.group_id;
+            //option.value = item.tape_length / item.tape_speed * 60000;
             //option.value = item.time_milliseconds;
             //option.textContent = Number.isInteger(item.tape_density) ? `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed || ""}` : `${item.tape_density}`
             option.textContent = `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed}`
-            option.name = item.group_id;
+            //option.name = item.group_id;
             select.append(option);
         });
         return select;
@@ -933,6 +1102,10 @@ localSpace.getThreads = [
 
         function handleSelect(event) {
             console.log(this, event.target.value)
+            const formula = myTapeList.find(item => item.group_id === +event.target.value);
+            event.target.value = formula.tape_length / formula.tape_speed * 60000;
+
+
             if (event.target.value === "4800000") {
                 //    //infoTime[this.name].style.display = "inline-block";
                 infoTime[this.name].removeAttribute("disabled");
@@ -1798,7 +1971,7 @@ localSpace.getThreads = [
 
         const selectStartTapeName = document.createElement("select");
 
-        
+
 
         let tapeNamesArray = tape[0].filter(current => +selectDensitySpeed.options[selectDensitySpeed.selectedIndex].name === current.group_id);
         setNameTape(tapeNamesArray, selectStartTapeName);

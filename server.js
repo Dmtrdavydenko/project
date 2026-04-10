@@ -491,7 +491,7 @@ async function select(body) {
         };
         const getSelectOptions = async (tableName, valueColumn, labelColumn) => {
             const query = `
-                    SELECT \`${valueColumn}\` AS value, \`${labelColumn}\` AS label
+                    SELECT \`${valueColumn}\` AS value, \`${valueColumn}\` AS label
                     FROM \`${tableName}\`
                     `;
             const [rows] = await connection.execute(query);
@@ -538,7 +538,7 @@ async function select(body) {
                 //const field = ["thread_id", "thread_density", "thread_length"];
                 sql = `
                 SELECT * FROM ${body.table.name}
-                LEFT JOIN tape_density td ON tape_length.density_id = td.id
+                LEFT JOIN tape_density ON ${body.table.name}.density_id = tape_density.id
                 `;
                 //sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
                 break;
@@ -857,7 +857,9 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
                 FROM Thread_Parameters
 
-                JOIN Tape   ON Thread_Parameters.tape_id = Tape.id
+                JOIN tape_density ON Thread_Parameters.density_id = tape_density.id
+                JOIN Tape ON Thread_Parameters.density_id = Tape.id
+                ORDER BY tape_density.density ASC
 
                 ORDER BY density ASC
 
@@ -990,9 +992,8 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                     `;
                 break;
             case "Tape":
-                sql = "SELECT * " +
-                    "FROM Tape " +
-                    "-- JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
+                sql = "SELECT * from Tape "+
+                    "JOIN tape_density ON Tape.density_id = tape_density.id "+
 
                     "ORDER BY density ASC";
                 break;
@@ -1101,8 +1102,9 @@ async function getTable(body) {
                 //sql = "SELECT * FROM Thread_Parameters";
                 sql = `
                 SELECT thread_id, density, thread_speed_id FROM Thread_Parameters
-                JOIN Tape ON tape_id = Tape.id
-                ORDER BY density ASC
+                JOIN tape_density ON Thread_Parameters.density_id = tape_density.id
+                JOIN Tape ON Thread_Parameters.density_id = Tape.id
+                ORDER BY tape_density.density ASC
                 `
                 break;
             case "textile":
@@ -1468,7 +1470,7 @@ async function getTapeDensity() {
     let connection = null;
     const sql = `
     SELECT
-        Tape.density as tape_density,
+        tape_density.density as tape_density,
         thread_speed_id as tape_speed,
         Thread_Parameters.thread_id as group_id,
         length as tape_length,
@@ -1477,7 +1479,9 @@ async function getTapeDensity() {
     FROM TapeExtrusion
         JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id
 
-        JOIN Tape ON Thread_Parameters.tape_id = Tape.id
+        JOIN Tape ON Thread_Parameters.density_id = Tape.id
+        JOIN tape_density ON Thread_Parameters.density_id = tape_density.id
+
         JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
 
         JOIN color ON TapeExtrusion.color_id = color.color_id
@@ -2719,14 +2723,16 @@ server.on("request", (req, res) => {
                     }
 
                     const query = `
-                INSERT INTO tape_length (density_id, length, diameter)
-                VALUES (?, ?, ?)
-            `;
+                        INSERT INTO tape_knowledge (density_id, length, diameter)
+                        SELECT id, ?, ?
+                        FROM tape_density
+                        WHERE density = ?
+                        `;
 
                     connection = await getAwaitConnect();
 
                     const [result] = await connection.execute(query, [
-                        density_id,
+                        density,
                         length,
                         diameter
                     ]);
