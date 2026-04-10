@@ -1356,6 +1356,10 @@ localSpace.getTapeDensity = [
         aViewTime.href = "/viewTime";
         aViewTime.textContent = "Просмотр";
 
+        const knowledge = document.createElement("a");
+        knowledge.href = "/tapeKnowledge";
+        knowledge.textContent = "Записи";
+
         const setTime = document.createElement("button");
         setTime.textContent = "setToDay";
 
@@ -1384,6 +1388,7 @@ localSpace.getTapeDensity = [
 
         const thead = document.createElement("thead");
         main.append(start, selectDensitySpeed);
+        main.append(knowledge);
         main.append(aViewTime);
         main.append(setTime);
         thead.append(timeLine);
