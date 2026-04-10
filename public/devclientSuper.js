@@ -26,7 +26,7 @@ class DataTape {
 
             this.data = await response.json(); // Предполагаем, что API возвращает массив объектов
             console.info("Load server sql space data");
-            return this.data[0];
+            return this.data;
         } catch (error) {
             if (error.message === "No load connection") {
                 this.data = localSpace[action];
@@ -2065,7 +2065,7 @@ localSpace.getTapeDensity = [
 
 
         console.log(tape);
-        let tapeNamesArray = tape.filter(current => +selectDensitySpeed.options[selectDensitySpeed.selectedIndex].name === current.group_id);
+        let tapeNamesArray = tape[0].filter(current => +selectDensitySpeed.options[selectDensitySpeed.selectedIndex].name === current.group_id);
         setNameTape(tapeNamesArray, selectStartTapeName);
         selectTapeName = selectStartTapeName;
 
