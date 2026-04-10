@@ -80,7 +80,7 @@ ol {
     border-width: .1px;
     border-color: black;
     /*   padding: 0px; */
-}
+}   
 
 main {
     color: black;
@@ -212,7 +212,22 @@ main > section {
     font-family: sans-serif;
     font-size: 12pt;
 }
+.block td > input[type="number"] {
+    /*     margin-right: 5px; */
+    /*    width: 60px;*/
+    /*    padding: 3px;*/
+    /* Фиксированная ширина для полей ввода */
 
+
+    width: 100%;
+    box-sizing: border-box;
+    /*    padding: 0;*/
+    /*    margin: 0;*/
+    /*    border: none;*/
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 12pt;
+}
 .block input[type="number"] {
     /*     margin-right: 5px; */
     width: 57px;
@@ -439,8 +454,14 @@ select {
 
 
 
-
-
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+td> select {
+/*    width: 100%;*/
+}
 
 
 

@@ -1029,6 +1029,7 @@ localSpace.getTapeDensity = [
     }
 
     let infoTime = [];
+    let infoLength = [];
     const getSum = new CustomEvent("getSum", {
         bubbles: true, // Позволяет событию всплывать
         cancelable: true, // Позволяет событию быть отменяемым
@@ -1068,24 +1069,47 @@ localSpace.getTapeDensity = [
 
     let myTapeList = [];
     myTapeList = tapeList.slice();
-    myTapeList.push({ tape_density: "t", tape_length: 32000, tape_speed: 400, tape_milliseconds: 4800000, group_id: 0 });
+    myTapeList.push({ tape_density: "Время", tape_length: 32000, tape_speed: 400, tape_milliseconds: 4800000, group_id: 0 });
 
+    let uniqueDensity = [...new Set(
+        myTapeList.map(item => item.tape_density)
+    )];
     function selectTape(array, select = document.createElement("select")) {
         console.log(array);
         array.forEach((item) => {
             let option = document.createElement("option");
-            option.value = item.group_id;
+            //option.value = item.group_id;
+            option.value = item;
             //option.value = item.tape_length / item.tape_speed * 60000;
             //option.value = item.time_milliseconds;
             //option.textContent = Number.isInteger(item.tape_density) ? `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed || ""}` : `${item.tape_density}`
+            //option.textContent = `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed}`
+            //option.textContent = `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed}`
+            option.textContent = item;
+            //option.name = item.group_id;
+            select.append(option);
+        });
+        return select;
+    }
+    function selectTape2(array, select = document.createElement("select")) {
+        console.log(array);
+        array.forEach((item) => {
+            let option = document.createElement("option");
+            option.value = item.group_id;
+            //option.value = item;
+            //option.value = item.tape_length / item.tape_speed * 60000;
+            //option.value = item.time_milliseconds;
+            //option.textContent = Number.isInteger(item.tape_density) ? `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed || ""}` : `${item.tape_density}`
+            //option.textContent = `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed}`
             option.textContent = `${item.tape_density} ${item.tape_speed && "v" + item.tape_speed}`
+            //option.textContent = item;
             //option.name = item.group_id;
             select.append(option);
         });
         return select;
     }
 
-    selectTape(tapeList, selectDensitySpeed);
+    selectTape2(tapeList, selectDensitySpeed);
 
     {
         //function dropListSelectTex(array, select = document.createElement("select")) {
@@ -1100,46 +1124,94 @@ localSpace.getTapeDensity = [
         //    return select;
         //}
 
-        function handleSelect(event) {
-            const formula = myTapeList.find(item => item.group_id === +event.target.value);
+        function handleSelectDensity(event) {
+            const selectedDensity = Number(event.target.value);
+
+            const selectSpeed = this.parentElement.querySelector("select:nth-of-type(2)");
+            selectSpeed.innerHTML = "";
+            const filtered = myTapeList.filter(item => item.tape_density === selectedDensity);
+            const speeds = [...new Set(filtered.map(item => item.tape_speed))];
+
+
+            dropListArraySelect(speeds, selectSpeed);
+
+
+            //const formula = myTapeList.find(item => item.group_id === Number(event.target.value));
+            //const interval = formula.tape_length / formula.tape_speed * 60000;
+            //console.log(this, event.target.value, interval);
+
+
+            //if (interval === "4800000") {
+            //    //    //infoTime[this.name].style.display = "inline-block";
+            //    infoTime[this.name].removeAttribute("disabled");
+            //} else {
+            //    //    //infoTime[this.name].style.display = "none";
+            //    infoTime[this.name].setAttribute("disabled", true);
+
+            //}
+            //infoTime[this.name].valueAsNumber = Math.floor(interval / 60000) * 60000;
+            //infoLength[this.name].value = formula.tape_length;
+
+            //// ## dev
+            ////setTimeTask();
+
+            //let tape = {};
+            //tape.name = 0;
+            //const buttons = buttonRow[this.name];
+            //if (this.options) {
+            //    tape.name = this.options[this.selectedIndex].name;
+            //    for (let button of buttons) {
+            //        button.name = tape.name;
+            //    }
+            //}
+            //for (let button of buttons) {
+            //    button.value = interval;
+            //    //button.value = this.valueAsNumber;
+            //    //button.textContent = Math.floor(infoTime[this.name].valueAsNumber / 60000);
+            //    //button.textContent = infoTime[this.name].valueAsNumber % 60000;
+            //    //button.textContent = infoTime[this.name].value;
+            //    //button.textContent = infoTime[this.name].value.slice(0, 5);
+            //    //button.textContent = "";
+            //}
+            ////const fullMinutes = Math.floor(totalMs / 60000);
+            ////leftoverMs = totalMs % 60000;
+            //handleCalculation();
+        }
+        function handleSelectSpeed(event) {
+            const speed = Number(event.target.value);
+
+            const col = this.name;
+
+            const selectDensity = this.parentElement.querySelector("select");
+            const density = Number(selectDensity.value);
+
+            const formula = myTapeList.find(item =>
+                item.tape_density === density &&
+                item.tape_speed === speed
+            );
+
+            if (!formula) return;
+
             const interval = formula.tape_length / formula.tape_speed * 60000;
-            console.log(this, event.target.value, interval)
 
-            if (interval === "4800000") {
-                //    //infoTime[this.name].style.display = "inline-block";
-                infoTime[this.name].removeAttribute("disabled");
+            if (interval === 4800000) {
+                infoTime[col].removeAttribute("disabled");
             } else {
-                //    //infoTime[this.name].style.display = "none";
-                infoTime[this.name].setAttribute("disabled", true);
-
+                infoTime[col].setAttribute("disabled", true);
             }
-            infoTime[this.name].valueAsNumber = Math.floor(interval / 60000) * 60000;
 
-            // ## dev
-            //setTimeTask();
+            infoTime[col].valueAsNumber = Math.floor(interval / 60000) * 60000;
+            infoLength[col].value = formula.tape_length;
 
-            let tape = {};
-            tape.name = 0;
-            const buttons = buttonRow[this.name];
-            if (this.options) {
-                tape.name = this.options[this.selectedIndex].name;
-                for (let button of buttons) {
-                    button.name = tape.name;
-                }
-            }
+            const buttons = buttonRow[col];
+
             for (let button of buttons) {
                 button.value = interval;
-                //button.value = this.valueAsNumber;
-                //button.textContent = Math.floor(infoTime[this.name].valueAsNumber / 60000);
-                //button.textContent = infoTime[this.name].valueAsNumber % 60000;
-                //button.textContent = infoTime[this.name].value;
-                //button.textContent = infoTime[this.name].value.slice(0, 5);
-                //button.textContent = "";
             }
-            //const fullMinutes = Math.floor(totalMs / 60000);
-            //leftoverMs = totalMs % 60000;
+
             handleCalculation();
         }
+
         function handleSetButtonColumn(event) {
             console.log(handleSetButtonColumn.name, event.target.value, infoTime[this.name].valueAsNumber, this.valueAsNumber);
             let tape = {};
@@ -1218,9 +1290,9 @@ localSpace.getTapeDensity = [
 
             const time = document.createElement("input");
             const length = document.createElement("input");
+            length.name = counterColunms;
             length.type = "number";
             const td = document.createElement("td");
-            const br = document.createElement("br");
             time.name = counterColunms;
             time.type = "time";
             time.placeholder = "с";
@@ -1228,19 +1300,31 @@ localSpace.getTapeDensity = [
             //time.style.display = "none";
             //console.log(myThread[0]);
             //let select = dropListSelectTex(myThread[0]);
-            let select = selectTape(myTapeList);
-            select.name = counterColunms;
+            let selectDensity = selectTape(uniqueDensity);
+            selectDensity.name = counterColunms;
+
+            let selectSpeed = document.createElement("select");
+            selectSpeed.name = counterColunms;
 
 
-            td.append(select);
-            td.append(br);
+
+
+
+
+
+
+            td.append(selectDensity);
+            td.append(document.createElement("br"));
+            td.append(selectSpeed);
+            td.append(document.createElement("br"));
             td.append(length);
-            td.append(br);
+            td.append(document.createElement("br"));
             td.append(time);
 
 
             timeLine.append(td);
             infoTime.push(time);
+            infoLength.push(length);
 
 
             //     panel button tap
@@ -1262,7 +1346,8 @@ localSpace.getTapeDensity = [
                 tbody.childNodes[j].append(cell);
             }
 
-            select.addEventListener('change', handleSelect);
+            selectDensity.addEventListener('change', handleSelectDensity);
+            selectSpeed.addEventListener('change', handleSelectSpeed);
 
             time.addEventListener("input", handleSetButtonColumn);
             time.addEventListener("change", handleSetButtonColumn);
@@ -1813,6 +1898,14 @@ localSpace.getTapeDensity = [
         }
     });
 
+    function dropListArraySelect(array, select) {
+        array.forEach((data) => {
+            let option = document.createElement("option");
+            option.value = data;
+            option.textContent = data;
+            select.append(option);
+        });
+    }
     function dropListSelectS(array, select) {
         let option = document.createElement("option");
         array.forEach((data) => {
@@ -1971,8 +2064,8 @@ localSpace.getTapeDensity = [
         const selectStartTapeName = document.createElement("select");
 
 
-
-        let tapeNamesArray = tape[0].filter(current => +selectDensitySpeed.options[selectDensitySpeed.selectedIndex].name === current.group_id);
+        console.log(tape);
+        let tapeNamesArray = tape.filter(current => +selectDensitySpeed.options[selectDensitySpeed.selectedIndex].name === current.group_id);
         setNameTape(tapeNamesArray, selectStartTapeName);
         selectTapeName = selectStartTapeName;
 
@@ -2018,9 +2111,9 @@ localSpace.getTapeDensity = [
             selectName[i] = lineTask[i].select;
 
 
-            let tapeNamesArray = tape[0].filter(current => +lineTask[i].time.name === current.group_id);
+            let tapeNamesArray = tape.filter(current => +lineTask[i].time.name === current.group_id);
             if (tapeNamesArray.length === 0) {
-                setNameTape(tape[0], lineTask[i].select);
+                setNameTape(tape, lineTask[i].select);
             } else {
                 setNameTape(tapeNamesArray, lineTask[i].select);
             }
