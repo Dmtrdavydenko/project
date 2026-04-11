@@ -80,11 +80,12 @@ ol {
     border-width: .1px;
     border-color: black;
     /*   padding: 0px; */
-}   
+}
 
 main {
     color: black;
     width: min-content;
+    min-width: 286px;
 }
 
 body {
@@ -460,7 +461,7 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 td> select {
-/*    width: 100%;*/
+    width: 100%;
 }
 
 

@@ -893,7 +893,7 @@ localSpace.getTapeDensity = [
 
 (async (cmd) => {
 
-    const tape = await Tape.loadData("getTape");
+    let tape = await Tape.loadData("getTape");
     const thread = await Thread.loadData("getThreads");
     const tapeList = await Thread.loadData("getTapeDensity");
     console.log(tapeList);
@@ -904,7 +904,7 @@ localSpace.getTapeDensity = [
 
 
 
-
+    tape = [tape];
     console.log(tape);
     console.log(thread);
 
@@ -1030,6 +1030,7 @@ localSpace.getTapeDensity = [
 
     let infoTime = [];
     let infoLength = [];
+    let infoSpeed = [];
     const getSum = new CustomEvent("getSum", {
         bubbles: true, // Позволяет событию всплывать
         cancelable: true, // Позволяет событию быть отменяемым
@@ -1205,6 +1206,44 @@ localSpace.getTapeDensity = [
 
             handleCalculation();
         }
+        function handleSelectLength(event) {
+            const length = Number(event.target.value);
+
+            const col = this.name;
+
+            const selectDensity = this.parentElement.querySelector("select");
+            const selectSpeed = infoSpeed[col];
+
+            const density = Number(selectDensity.value);
+            const speed = Number(selectSpeed.value);
+
+            const formula = myTapeList.find(item =>
+                item.tape_density === density &&
+                item.tape_speed === speed
+            );
+
+            if (!formula) return;
+
+            const interval = length / formula.tape_speed * 60000;
+
+            if (interval === 4800000) {
+                infoTime[col].removeAttribute("disabled");
+            } else {
+                infoTime[col].setAttribute("disabled", true);
+            }
+
+            infoTime[col].valueAsNumber = Math.floor(interval / 60000) * 60000;
+            infoLength[col].value = length;
+
+            const buttons = buttonRow[col];
+
+            for (let button of buttons) {
+                button.value = interval;
+                button.name = formula.group_id;
+            }
+
+            handleCalculation();
+        }
 
         function handleSetButtonColumn(event) {
             console.log(handleSetButtonColumn.name, event.target.value, infoTime[this.name].valueAsNumber, this.valueAsNumber);
@@ -1317,8 +1356,9 @@ localSpace.getTapeDensity = [
 
 
             timeLine.append(td);
-            infoTime.push(time);
+            infoSpeed.push(selectSpeed);
             infoLength.push(length);
+            infoTime.push(time);
 
 
             //     panel button tap
@@ -1342,6 +1382,8 @@ localSpace.getTapeDensity = [
 
             selectDensity.addEventListener('change', handleSelectDensity);
             selectSpeed.addEventListener('change', handleSelectSpeed);
+            length.addEventListener('change', handleSelectLength);
+            length.addEventListener('input', handleSelectLength);
 
             time.addEventListener("input", handleSetButtonColumn);
             time.addEventListener("change", handleSetButtonColumn);
