@@ -893,7 +893,7 @@ localSpace.getTapeDensity = [
 
 (async (cmd) => {
 
-    let tape = await Tape.loadData("getTape");
+    const tape = await Tape.loadData("getTape");
     const thread = await Thread.loadData("getThreads");
     const tapeList = await Thread.loadData("getTapeDensity");
     console.log(tapeList);
@@ -904,7 +904,7 @@ localSpace.getTapeDensity = [
 
 
 
-    tape = [tape];
+    //tape = [tape];
     console.log(tape);
     console.log(thread);
 
