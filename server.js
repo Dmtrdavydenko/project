@@ -1,7 +1,4 @@
 
-
-
-
 const https = require('https');
 const querystring = require('querystring');
 const http = require("http"); // To use the HTTP interfaces in Node.js
