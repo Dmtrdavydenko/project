@@ -1379,7 +1379,7 @@ localSpace.getTapeDensity = [
 
 
             //     panel button tap
-            for (let j = 0; j < 23; j++) {
+            for (let j = 0; j < 30; j++) {
                 const tapButton = document.createElement("button");
 
 
