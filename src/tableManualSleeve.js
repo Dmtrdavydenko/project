@@ -78,7 +78,7 @@ class ManualRepository {
                     WHEN type.yarn_id = 2 THEN weft.weft_quantity
                     ELSE NULL
                 END as quantity,
-                Tape.density,
+                Tape.density_id,
                 c.color,
                 ad.additive_name,
                 m.created_at,
@@ -114,8 +114,12 @@ class ManualRepository {
                     rows: rows,
                     all:all
                 };
+            } catch (err) {
+                console.error('Ошибка:', err);
+                throw err;
             } finally {
-                connection.release();
+                if (connection) connection.release();
+                console.log("Соединение возвращено.");
             }
         } catch (error) {
             console.error('Error selecting manual data:', error);
