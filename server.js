@@ -987,8 +987,6 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                     JOIN color ON TapeExtrusion.color_id = color.color_id
                     JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
                     ORDER BY Tape.density_id ASC
-
-
                     `;
                 break;
             case "Tape":
