@@ -1302,7 +1302,7 @@ localSpace.getTapeDensity = [
 
         // ol.append(start, end);
 
-        for (let i = 0; i < 23; i++) {
+        for (let i = 0; i < 30; i++) {
             const line = document.createElement("tr");
             line.id = i;
             // ## loatd
