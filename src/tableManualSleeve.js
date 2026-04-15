@@ -1,7 +1,7 @@
 const mysql = require('mysql2/promise');
 class ManualRepository {
-    constructor(pool) {
-        //this.pool = mysql.createPool({
+    constructor(connect) {
+        //this.connect = mysql.createPool({
         //    host: process.env.DB_HOST,
         //    user: process.env.DB_USER,
         //    password: process.env.DB_PASSWORD,
@@ -10,7 +10,7 @@ class ManualRepository {
         //    connectionLimit: 10,
         //    queueLimit: 0
         //});
-        this.pool = pool;
+        this.getConnection = connect;
     }
 
     /**
@@ -63,7 +63,7 @@ class ManualRepository {
     }
     async select(filters = {}) {
         try {
-            const connection = await this.pool.getConnection();
+            const connection = await this.getConnection();
 
             try {
                 const { whereClause, values } = this.buildWhereClause(filters);
@@ -125,7 +125,7 @@ class ManualRepository {
     }
     async update() {
         try {
-            const connection = await this.pool.getConnection();
+            const connection = await this.getConnection();
             const query = `
             UPDATE \`manual\` m 
             JOIN sleeve_width_density swd       ON m.sleeve_w_d_id =         swd.sleeve_width_density_id
@@ -167,7 +167,7 @@ class ManualRepository {
             // Валидация данных
             this.validateManualData(data);
 
-            const connection = await this.pool.getConnection();
+            const connection = await this.getConnection();
 
             try {
                 const query = `
@@ -208,7 +208,7 @@ class ManualRepository {
      * Пакетная вставка данных
      */
     async insertMultipleManuals(dataArray) {
-        const connection = await this.pool.getConnection();
+        const connection = await this.getConnection();
 
         try {
             await connection.beginTransaction();

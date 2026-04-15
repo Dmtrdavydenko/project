@@ -1239,7 +1239,7 @@ async function insertGenerate(body) {
         console.log("Соединение возвращено.");
     }
 }
-const manual = new ManualTableTextileUse(pool);
+const manual = new ManualTableTextileUse(getAwaitConnect);
 async function insert(body) {
     const connection = await pool.getConnection();
 
