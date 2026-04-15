@@ -1188,11 +1188,11 @@ localSpace.getTapeDensity = [
 
             const interval = formula.tape_length / formula.tape_speed * 60000;
 
-            if (interval === 4800000) {
-                infoTime[col].removeAttribute("disabled");
-            } else {
-                infoTime[col].setAttribute("disabled", true);
-            }
+            //if (interval === 4800000) {
+            //    infoTime[col].removeAttribute("disabled");
+            //} else {
+            //    infoTime[col].setAttribute("disabled", true);
+            //}
 
             infoTime[col].valueAsNumber = Math.floor(interval / 60000) * 60000;
             infoLength[col].value = formula.tape_length;
@@ -1226,11 +1226,11 @@ localSpace.getTapeDensity = [
 
             const interval = length / formula.tape_speed * 60000;
 
-            if (interval === 4800000) {
-                infoTime[col].removeAttribute("disabled");
-            } else {
-                infoTime[col].setAttribute("disabled", true);
-            }
+            //if (interval === 4800000) {
+            //    infoTime[col].removeAttribute("disabled");
+            //} else {
+            //    infoTime[col].setAttribute("disabled", true);
+            //}
 
             infoTime[col].valueAsNumber = Math.floor(interval / 60000) * 60000;
             infoLength[col].value = length;
@@ -1247,23 +1247,40 @@ localSpace.getTapeDensity = [
 
         function handleSetButtonColumn(event) {
             console.log(handleSetButtonColumn.name, event.target.value, infoTime[this.name].valueAsNumber, this.valueAsNumber);
-            let tape = {};
-            tape.name = 0;
-            const buttons = buttonRow[this.name];
-            if (this.options) {
-                tape.name = this.options[this.selectedIndex].name;
-                for (let button of buttons) {
-                    button.name = tape.name;
-                }
-            }
+            const col = this.name;
+
+            const selectDensity = this.parentElement.querySelector("select");
+            const selectSpeed = infoSpeed[col];
+
+            const density = Number(selectDensity.value);
+            const speed = Number(selectSpeed.value);
+
+            const formula = myTapeList.find(item =>
+                item.tape_density === density &&
+                item.tape_speed === speed
+            );
+
+            if (!formula) return;
+
+            const length = formula.tape_speed * (event.target.valueAsNumber / 60000);
+            const interval = length / formula.tape_speed * 60000;
+
+
+            //if (interval === 4800000) {
+            //    infoTime[col].removeAttribute("disabled");
+            //} else {
+            //    infoTime[col].setAttribute("disabled", true);
+            //}
+
+            //infoTime[col].valueAsNumber = event.target.value;
+            //infoTime[col].valueAsNumber = Math.floor(interval / 60000) * 60000;
+            infoLength[col].value = length;
+
+            const buttons = buttonRow[col];
+
             for (let button of buttons) {
-                button.value = this.valueAsNumber;
-                //button.value = this.valueAsNumber;
-                //button.textContent = Math.floor(infoTime[this.name].valueAsNumber / 60000);
-                //button.textContent = infoTime[this.name].valueAsNumber % 60000;
-                //button.textContent = infoTime[this.name].value;
-                //button.textContent = infoTime[this.name].value.slice(0, 5);
-                //button.textContent = "";
+                button.value = interval;
+                button.name = formula.group_id;
             }
             //const fullMinutes = Math.floor(totalMs / 60000);
             //leftoverMs = totalMs % 60000;
