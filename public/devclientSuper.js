@@ -1024,10 +1024,11 @@ localSpace.getTapeDensity = [
     const buttonLine = [];
     const buttonRow = [];
 
-    for (let j = 0; j < 27; j++) {
+    for (let j = 0; j < 25; j++) {
         buttonLine.push([]);
     }
-
+    console.log(buttonLine);
+    const buttonLine_length = buttonLine.length;
     let infoTime = [];
     let infoLength = [];
     let infoSpeed = [];
@@ -1302,7 +1303,11 @@ localSpace.getTapeDensity = [
 
         // ol.append(start, end);
 
+<<<<<<< HEAD
         for (let i = 0; i < 30; i++) {
+=======
+        for (let i = 0; i < buttonLine_length; i++) {
+>>>>>>> 9ee4720 (check edit)
             const line = document.createElement("tr");
             line.id = i;
             // ## loatd
@@ -1330,8 +1335,13 @@ localSpace.getTapeDensity = [
             tbody.append(line);
         }
 
+<<<<<<< HEAD
         let dataTime = [0, 0, 0, 0,0,0,0,0,0,0];
         for (let counterColunms = 0; counterColunms < 10; counterColunms++) {
+=======
+        let dataTime = [0, 0, 0, 0];
+        for (let counterColunms = 0; counterColunms < 14; counterColunms++) {
+>>>>>>> 9ee4720 (check edit)
             buttonRow.push([]);
             //######################################################################### calc
 
@@ -1379,7 +1389,11 @@ localSpace.getTapeDensity = [
 
 
             //     panel button tap
+<<<<<<< HEAD
             for (let j = 0; j < 24; j++) {
+=======
+            for (let j = 0; j < buttonLine_length; j++) {
+>>>>>>> 9ee4720 (check edit)
                 const tapButton = document.createElement("button");
 
 
