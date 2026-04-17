@@ -1272,8 +1272,6 @@ async function insert(body) {
         //    additive: 2
         //}
 
-
-
         //return body;
     } catch (err) {
         console.error('Ошибка:', err);
