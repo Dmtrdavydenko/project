@@ -1332,7 +1332,7 @@ localSpace.getTapeDensity = [
         }
 
         let dataTime = [0, 0, 0, 0,0,0,0,0,0,0];
-        for (let counterColunms = 0; counterColunms < 10; counterColunms++) {
+        for (let counterColunms = 0; counterColunms < 14; counterColunms++) {
             buttonRow.push([]);
             //######################################################################### calc
 
