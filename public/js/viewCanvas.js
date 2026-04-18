@@ -110,6 +110,7 @@ class DataTape {
 (async () => {
     const Tape = new DataTape("https://worktime.up.railway.app/app");
     const [data] = await Tape.loadData("getTapeKnowledge");
+    console.info({ data: data });
 
     const canvas = document.getElementById("chart");
     const ctx = canvas.getContext("2d");
@@ -126,12 +127,14 @@ class DataTape {
     let hoveredPoint = null;
     const colorsHEX = ["#893b3b", "#c91d1d", "#a3a133", "#e5e110", "#669732", "#7de909", "#64b996", "#00ff9", "#389ca7", "#00e6ff", "#6c81d3", "#0034ff", "#9b4e9f", "#dc0ce7"];
     const uniqueDensities = [...new Set(data.map(item => item.density))].sort((a, b) => a - b);
+    console.info({ uniqueDensities: uniqueDensities });
 
     let colors = {};
     uniqueDensities.forEach((item,index) => {
         colors[item] = colorsHEX[index];
 
     });
+    console.info(colors);
     //const colors = {
     //    78: "#e74c3c",
     //    90: "#3498db",
