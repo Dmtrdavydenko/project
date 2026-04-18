@@ -417,4 +417,58 @@ class DataTape {
         ctx.stroke();
         ctx.fillText(d.length, x, py110);
     });
+    function spoolDiameterMm(tex, lengthM) {
+        const D0 = 47.0;   // диаметр втулки, мм
+        const b = 0.989;   // общий показатель по длине, по твоим данным
+
+        // Калибровка по твоей таблице:
+        // tex -> коэффициент a(tex) в формуле D = sqrt(D0^2 + a(tex) * length^b)
+        const coeffs = [
+            [78, 0.6818082908],
+            [90, 0.8040206266],
+            [105, 0.9254341990],
+            [130, 1.1492611173],
+            [140, 1.3169122802],
+            [170, 1.5959130860],
+            [220, 2.0872955168],
+        ];
+
+        if (!Number.isFinite(tex) || !Number.isFinite(lengthM) || tex <= 0 || lengthM < 0) {
+            return NaN;
+        }
+
+        function interpA(t) {
+            if (t <= coeffs[0][0]) return coeffs[0][1];
+            if (t >= coeffs[coeffs.length - 1][0]) return coeffs[coeffs.length - 1][1];
+
+            for (let i = 0; i < coeffs.length - 1; i++) {
+                const [t0, a0] = coeffs[i];
+                const [t1, a1] = coeffs[i + 1];
+                if (t >= t0 && t <= t1) {
+                    const k = (t - t0) / (t1 - t0);
+                    return a0 + k * (a1 - a0);
+                }
+            }
+            return coeffs[coeffs.length - 1][1];
+        }
+
+        const a = interpA(tex);
+        return Math.sqrt(D0 * D0 + a * Math.pow(lengthM, b));
+    }
+    const tex = document.createElement("input");
+    tex.type = "number";
+    tex.placeholder = "Текс";
+    const length = document.createElement("input");
+    length.type = "number";
+    length.placeholder = "Длина";
+    const label = document.createElement("label");
+    tex.addEventListener("input", () => {
+        label.textContent = spoolDiameterMm(tex.valueAsNumber, length.valueAsNumber)||0
+    })
+    length.addEventListener("input", () => {
+        label.textContent = spoolDiameterMm(tex.valueAsNumber, length.valueAsNumber)||0
+    })
+    document.body.append(tex);
+    document.body.append(length);
+    document.body.append(label);
 })();
