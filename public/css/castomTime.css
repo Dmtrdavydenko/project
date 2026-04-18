@@ -1,0 +1,58 @@
+input[type="time"]::-webkit-calendar-picker-indicator {
+    margin-left: 0px;
+    display: none;
+}
+section input[type="time"], main > input[type="time"] {
+    /*    width: 62.2px;*/
+    /*     width: 67px; */
+    /*     width: 55px; */
+    width: auto;
+    padding: 4px;
+    font-size: 12pt;
+    font-family: 'Courier New', monospace;
+    /* color: black; */
+    font-weight: bold;
+}
+.block input[type="time"] {
+    /*     margin-right: 5px; */
+    /*    width: 60px;*/
+    /*    padding: 3px;*/
+    /* Фиксированная ширина для полей ввода */
+
+
+    width: 100%;
+    box-sizing: border-box;
+    /*    padding: 0;*/
+    /*    margin: 0;*/
+    /*    border: none;*/
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 12pt;
+}
+section input[type="time"]::-webkit-date-and-time-value {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    margin-left: 0px;
+    display: none;
+}
+/*input[type="date"],*/
+/*input[type="datetime-local"],*/
+section input[type="time"] {
+    appearance: none;
+    /*    -webkit-appearance: none;*/
+    /* Для WebKit (Samsung Internet, Chrome, Safari) */
+    /*    -moz-appearance: none; */
+    /* Для Firefox */
+    /* Стандарт для всех */
+    /* Убираем пространство под индикатор, чтобы текст не обрезался */
+    /*        padding-right: 0 !important;*/
+    /* Важно: переопределяем дефолтный padding справа */
+    /* background: transparent; */ /* Опционально: убирает фон, если нужно */
+    /*    border: 1px solid #ccc;*/
+    /* Добавьте свой border, если нужно */
+    /*    width: 100%;*/
+    /* Убеждаемся, что поле занимает всю ширину */
+}
