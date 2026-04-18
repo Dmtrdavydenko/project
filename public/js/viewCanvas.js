@@ -124,16 +124,23 @@ class DataTape {
 
     const pointRadius = 1.5;
     let hoveredPoint = null;
+    const colorsHEX = ["#893b3b", "#c91d1d", "#a3a133", "#e5e110", "#669732", "#7de909", "#64b996", "#00ff9", "#389ca7", "#00e6ff", "#6c81d3", "#0034ff", "#9b4e9f", "#dc0ce7"];
+    const uniqueDensities = [...new Set(data.map(item => item.density))].sort((a, b) => a - b);
 
-    const colors = {
-        78: "#e74c3c",
-        90: "#3498db",
-        105: "#27ae60",
-        130: "#f39c12",
-        140: "#3498db",
-        170: "#8e44ad",
-        220: "#2c3e50"
-    };
+    let colors = {};
+    uniqueDensities.forEach((item,index) => {
+        colors[item] = colorsHEX[index];
+
+    });
+    //const colors = {
+    //    78: "#e74c3c",
+    //    90: "#3498db",
+    //    105: "#27ae60",
+    //    130: "#f39c12",
+    //    140: "#3498db",
+    //    170: "#8e44ad",
+    //    220: "#2c3e50"
+    //};
 
     const lengths = data.map(d => d.length);
     const diameters = data.map(d => parseFloat(d.diameter));
