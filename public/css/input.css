@@ -485,7 +485,7 @@ td> select {
 
 /* Сброс счётчиков один раз — например, на таблице */
 tbody {
-    counter-reset: col1 col2 col3 col4 col5;
+    counter-reset: col1 col2 col3 col4 col5 col6 col7 col8 col9 col10 col11 col12 col13 col14;
 }
 
 /* Увеличиваем счётчик при встрече .tg в нужной колонке */
@@ -508,6 +508,35 @@ td:nth-child(4) .tg {
 td:nth-child(5) .tg {
     counter-increment: col5;
 }
+td:nth-child(6) .tg {
+    counter-increment: col6;
+}
+td:nth-child(7) .tg {
+    counter-increment: col7;
+}
+td:nth-child(8) .tg {
+    counter-increment: col8;
+}
+td:nth-child(9) .tg {
+    counter-increment: col9;
+}
+td:nth-child(10) .tg {
+    counter-increment: col10;
+}
+td:nth-child(11) .tg {
+    counter-increment: col11;
+}
+td:nth-child(12) .tg {
+    counter-increment: col12;
+}
+td:nth-child(13) .tg {
+    counter-increment: col13;
+}
+td:nth-child(14) .tg {
+    counter-increment: col14;
+}
+
+
 
 /* Отображаем номер перед содержимым .tg */
 td:nth-child(1) .tg::before {
@@ -528,4 +557,31 @@ td:nth-child(4) .tg::before {
 
 td:nth-child(5) .tg::before {
     content: counter(col5);
+}
+td:nth-child(6) .tg::before {
+    content: counter(col6);
+}
+td:nth-child(7) .tg::before {
+    content: counter(col7);
+}
+td:nth-child(8) .tg::before {
+    content: counter(col8);
+}
+td:nth-child(9) .tg::before {
+    content: counter(col9);
+}
+td:nth-child(10) .tg::before {
+    content: counter(col10);
+}
+td:nth-child(11) .tg::before {
+    content: counter(col11);
+}
+td:nth-child(12) .tg::before {
+    content: counter(col12);
+}
+td:nth-child(13) .tg::before {
+    content: counter(col13);
+}
+td:nth-child(14) .tg::before {
+    content: counter(col14);
 }
