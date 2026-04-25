@@ -71,15 +71,14 @@ class ManualRepository {
                 SELECT
                 m.type_id,
                 sw.sleeve_width,
-                d.density,
+                d.sleeve_density,
                 type.yarn_name,
                 CASE
                     WHEN type.yarn_id = 1 THEN warp.warp_quantity
                     WHEN type.yarn_id = 2 THEN weft.weft_quantity
                     ELSE NULL
                 END as quantity,
-                Tape.density_id,
-                tape_density.density,
+                tape_density.density as tape_density,
                 c.color,
                 ad.additive_name,
                 m.created_at,
