@@ -79,6 +79,7 @@ class ManualRepository {
                     ELSE NULL
                 END as quantity,
                 Tape.density_id,
+                Tape.density,
                 c.color,
                 ad.additive_name,
                 m.created_at,

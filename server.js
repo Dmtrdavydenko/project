@@ -534,8 +534,9 @@ async function select(body) {
             case "tape_knowledge":
                 //const field = ["thread_id", "thread_density", "thread_length"];
                 sql = `
-                SELECT * FROM ${body.table.name}
-                LEFT JOIN tape_density ON ${body.table.name}.density_id = tape_density.id
+                SELECT tape_knowledge.id as id, tape_knowledge.density_id, tape_density.density, tape_knowledge.diameter, tape_knowledge.length  FROM tape_knowledge
+                JOIN tape_density ON tape_knowledge.density_id = tape_density.id
+                ORDER BY tape_density.density, tape_knowledge.diameter ASC
                 `;
                 //sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
                 break;
