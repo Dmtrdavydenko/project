@@ -643,7 +643,9 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                 
                 `;
 
-                sql = `SELECT 
+                sql = `
+
+                SELECT 
                         -- l.loom_id,
                         l.loom_number,
                         -- machine.machine_name,
@@ -679,7 +681,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                             ELSE NULL
                         END as quantity_weft,
 
-                        Tape.density_id as tape_density,
+                        tape_density.density as tape_density,
                         c.color,
                         ad.additive_name
                         -- l.loom_nameId,
@@ -698,6 +700,8 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                      LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
                      LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
                      LEFT JOIN Tape ON thread.density_id = Tape.id
+                     LEFT JOIN tape_density ON thread.density_id = Tape.density_id
+
                      LEFT JOIN color c ON m.color_id = c.color_id
                      LEFT JOIN additive ad ON m.additive_id = ad.additive_id
 
@@ -711,7 +715,6 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                      -- GROUP BY type.yarn_name, thread.thread_density, c.color, ad.additive_name
 
                      ORDER BY fabric_width ASC, fabric_density ASC
-
 
 
                      `;
