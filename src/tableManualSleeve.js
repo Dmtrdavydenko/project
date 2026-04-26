@@ -81,8 +81,8 @@ class ManualRepository {
                 tape_density.density as tape_density,
                 c.color,
                 ad.additive_name,
-                m.created_at,
-                m.updated_at
+                -- m.created_at,
+                -- m.updated_at
                 FROM \`manual\` m
                 JOIN sleeve_width_density swd                    ON m.sleeve_w_d_id = swd.sleeve_width_density_id
                 JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id

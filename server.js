@@ -650,7 +650,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         -- s.speed,
                         -- machine.shuttle,
                         sw.sleeve_width as fabric_width,
-                        d.density as fabric_density,
+                        d.sleeve_density as fabric_density,
                         -- l.modifier_id,
                         type.yarn_name,
                         CASE
