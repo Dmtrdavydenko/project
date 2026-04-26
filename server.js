@@ -687,7 +687,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         -- m.*
                      FROM looms l
 
-                     JOIN machine ON l.machine_id = machine.machine_id
+                     JOIN loom_machine ON l.machine_id = loom_machine.id
                      LEFT JOIN speed s ON machine.speed_id = s.speed_id
 
 
