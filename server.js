@@ -959,7 +959,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
                 const { whereClause, whereValues } = where(body.table.where);
                 //const where = body.table?.where.length ? `WHERE ${body.table.where}` : '';
-                sql = "SELECT swd.sleeve_width_density_id, swd.sleeve_width_id, swd.sleeve_density_id, sleeve_width, density " +
+                sql = "SELECT swd.sleeve_width_density_id, swd.sleeve_width_id, swd.sleeve_density_id, sleeve_width, sleeve_density " +
                     "FROM sleeve_width_density swd " +
                     "JOIN sleeve_width sw   ON swd.sleeve_width_id = sw.sleeve_width_id " +
                     "JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id " +
