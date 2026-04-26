@@ -80,7 +80,7 @@ class ManualRepository {
                 END as quantity,
                 tape_density.density as tape_density,
                 c.color,
-                ad.additive_name,
+                ad.additive_name
                 -- m.created_at,
                 -- m.updated_at
                 FROM \`manual\` m
