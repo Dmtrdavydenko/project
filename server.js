@@ -732,6 +732,102 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
 
                      `;
+
+
+                sql = `
+                     
+                SELECT 
+    l.loom_id,
+    l.loom_number,
+
+    loom_machine.name as loom_machine_name,
+    loom_machine.ppm as loom_machine_ppm,
+    loom_machine.shuttle as loom_machine_shuttle,
+
+    sw.sleeve_width as fabric_width,
+    sd.sleeve_density as fabric_density,
+    m.type_id as textile_id,
+
+    thread.thread_speed_id as tape_speed,
+    Tape.length as tape_length,
+    tape_density.density as tape_density,
+    c.color as tape_color,
+    ad.additive_name,
+
+    -- WEFT
+    MAX(CASE 
+        WHEN type.yarn_id = 2 
+        THEN weft.weft_quantity 
+    END) as weft_quantity,
+
+    MAX(CASE 
+        WHEN type.yarn_id = 2 AND weft.weft_quantity > 25 
+        THEN CEIL(weft.weft_quantity * 0.1 * sw.sleeve_width * 2 * loom_machine.ppm * 720 / (weft.weft_quantity * 10) * 0.89)
+        WHEN type.yarn_id = 2 AND weft.weft_quantity < 25 
+        THEN CEIL(weft.weft_quantity * 0.1 * sw.sleeve_width * 2 * loom_machine.ppm * 720 / (weft.weft_quantity * 20) * 0.89)
+    END) as weft_length,
+
+    MAX(CASE 
+        WHEN type.yarn_id = 2 AND weft.weft_quantity > 25 
+        THEN CEIL(loom_machine.ppm * 720 / (weft.weft_quantity * 10) * 0.89)
+        WHEN type.yarn_id = 2 AND weft.weft_quantity < 25 
+        THEN CEIL(loom_machine.ppm * 720 / (weft.weft_quantity * 20) * 0.89)
+    END) as productivity,
+
+    MAX(CASE 
+        WHEN type.yarn_id = 2 AND weft.weft_quantity > 25 
+        THEN CEIL(weft.weft_quantity * 0.1 * sw.sleeve_width * 2 * loom_machine.ppm * 720 / (weft.weft_quantity * 10) * 0.89 / Tape.length)
+        WHEN type.yarn_id = 2 AND weft.weft_quantity < 25 
+        THEN CEIL(weft.weft_quantity * 0.1 * sw.sleeve_width * 2 * loom_machine.ppm * 720 / (weft.weft_quantity * 20) * 0.89 / Tape.length)
+    END) as weft_bobbins,
+
+    -- WARP
+    MAX(CASE 
+        WHEN type.yarn_id = 1 
+        THEN warp.warp_quantity 
+    END) as warp_quantity
+
+FROM looms l
+
+JOIN loom_machine ON l.machine_id = loom_machine.id
+
+LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
+LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
+LEFT JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id
+
+LEFT JOIN \`manual\` m 
+    ON l.type_id = m.sleeve_w_d_id 
+   AND l.modifier_id = m.additive_id
+
+LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
+LEFT JOIN Tape ON thread.density_id = Tape.id
+LEFT JOIN tape_density ON thread.density_id = tape_density.id
+
+LEFT JOIN color c ON m.color_id = c.color_id
+LEFT JOIN additive ad ON m.additive_id = ad.additive_id
+
+LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
+LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
+LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
+
+GROUP BY 
+    l.loom_id,
+    l.loom_number,
+    loom_machine.name,
+    loom_machine.ppm,
+    loom_machine.shuttle,
+    sw.sleeve_width,
+    sd.sleeve_density,
+    m.type_id,
+    thread.thread_speed_id,
+    Tape.length,
+    tape_density.density,
+    c.color,
+    ad.additive_name
+
+ORDER BY fabric_width ASC, fabric_density ASC;
+
+                `
                 //                sql = `SELECT 
                 //    d.density,  -- Поле для группировки
                 //    SUM(CASE

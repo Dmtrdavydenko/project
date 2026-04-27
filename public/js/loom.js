@@ -136,7 +136,7 @@ async function loadAndRenderButtons(field = "loom_number") {
         const [allNumbers] = await response.json();
         console.log(allNumbers);
 
-        const requiredCount = buttonsPerBlock * totalBlocks + 12;
+        const requiredCount = buttonsPerBlock * totalBlocks + 13;
         if (!Array.isArray(allNumbers) || allNumbers.length < requiredCount) {
             console.error(`Недостаточно номеров в базе. Требуется минимум ${requiredCount}.`);
             return;
