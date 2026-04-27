@@ -271,7 +271,7 @@ async function sendUpdateTextileId(update) {
 (async () => {
     //console.log((await getSelectedValueT()));
 
-    const field = ["loom_number", "type_id", "density", "sleeve_width", "sleeve_width_density"];
+    const field = ["loom_number", "type_id", "sleeve_density", "sleeve_width", "sleeve_width_density"];
     //const field = (await getSelectedValue()).F.map(item => {
     //    const parts = item.split('.');
     //    return parts[parts.length - 1];
@@ -464,5 +464,5 @@ class SleeveWidthDensityInfo {
     get sleeve_width_id() { return this.table.sleeve_width_id; }
     get sleeve_density_id() { return this.table.sleeve_density_id; }
     get width() { return this.table.sleeve_width; }
-    get density() { return this.table.density; }
+    get density() { return this.table.sleeve_density; }
 }
