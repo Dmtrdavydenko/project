@@ -828,6 +828,77 @@ GROUP BY
 ORDER BY fabric_width ASC, fabric_density ASC;
 
                 `
+
+                sql = 
+                    `
+                    SELECT 
+    l.loom_number,
+    -- loom_machine.name AS loom_machine_name,
+
+    sw.sleeve_width AS fabric_width,
+    sd.sleeve_density AS fabric_density,
+
+
+    -- pivot
+    MAX(CASE WHEN type.yarn_name = 'warp' THEN warp.warp_quantity END) AS warp,
+    MAX(CASE WHEN type.yarn_name = 'weft' THEN weft.weft_quantity END) AS weft
+
+FROM looms l
+
+JOIN loom_machine 
+    ON l.machine_id = loom_machine.id
+
+LEFT JOIN sleeve_width_density swd 
+    ON l.type_id = swd.sleeve_width_density_id
+
+LEFT JOIN sleeve_width sw 
+    ON swd.sleeve_width_id = sw.sleeve_width_id
+
+LEFT JOIN sleeve_density sd 
+    ON swd.sleeve_density_id = sd.sleeve_density_id
+
+LEFT JOIN \`manual\` m 
+    ON m.sleeve_w_d_id = swd.sleeve_width_density_id
+   AND m.additive_id = l.modifier_id
+
+LEFT JOIN Thread_Parameters thread 
+    ON m.thread_densiti_id = thread.thread_id
+
+LEFT JOIN Tape 
+    ON thread.density_id = Tape.id
+
+LEFT JOIN tape_density 
+    ON thread.density_id = tape_density.id
+
+LEFT JOIN color c 
+    ON m.color_id = c.color_id
+
+LEFT JOIN additive ad 
+    ON m.additive_id = ad.additive_id
+
+LEFT JOIN yarn_type type 
+    ON m.yarn_id = type.yarn_id
+
+LEFT JOIN warp_quantity warp 
+    ON m.quantity_id = warp.warp_id
+
+LEFT JOIN weft_quantity weft 
+    ON m.quantity_id = weft.weft_id
+
+GROUP BY 
+    l.loom_id,
+    l.loom_number,
+    loom_machine.name,
+    sw.sleeve_width,
+    sd.sleeve_density,
+    m.type_id,
+    c.color,
+    ad.additive_name
+
+ORDER BY l.loom_number ASC;
+                
+                    
+                    `
                 //                sql = `SELECT 
                 //    d.density,  -- Поле для группировки
                 //    SUM(CASE
