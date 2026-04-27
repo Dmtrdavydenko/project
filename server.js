@@ -646,13 +646,28 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                 sql = `
 
                 SELECT 
-                        -- l.loom_id,
+                        l.loom_id,
                         l.loom_number,
-                        -- machine.machine_name,
-                        loom_machine.name,
-                        -- machine.shuttle,
+                        l.machine_id as l_machine_id,
+                        l.type_id as l_type_id,
+                        l.modifier_id as l_modifier_id,
+
+                        loom_machine.id as loom_machine_id,
+                        loom_machine.name as loom_machine_name,
+                        loom_machine.ppm as loom_machine_ppm,
+                        loom_machine.shuttle as loom_machine_shuttle,
+
                         sw.sleeve_width as fabric_width,
-                        d.sleeve_density as fabric_density,
+                        sd.sleeve_density as fabric_density,
+                        m.type_id as textile_id,
+                        thread.thread_speed_id as tape_speed,
+                        Tape.length as tape_length,
+                        tape_density.density as tape_density,
+
+                        c.color as tape_color,
+                        ad.additive_name,
+
+
                         -- l.modifier_id,
                         type.yarn_name,
                         CASE
@@ -681,9 +696,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                             ELSE NULL
                         END as quantity_weft,
 
-                        tape_density.density as tape_density,
-                        c.color,
-                        ad.additive_name
+                        
                         -- l.loom_nameId,
                         -- l.weft
                         -- m.*
@@ -695,12 +708,13 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
 
                      LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
                      LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
-                     LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
+                     LEFT JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id
+
 
                      LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
                      LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
                      LEFT JOIN Tape ON thread.density_id = Tape.id
-                     LEFT JOIN tape_density ON Tape.density_id = tape_density.id
+                     LEFT JOIN tape_density ON thread.density_id = tape_density.id
 
                      LEFT JOIN color c ON m.color_id = c.color_id
                      LEFT JOIN additive ad ON m.additive_id = ad.additive_id
