@@ -694,7 +694,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                             WHEN type.yarn_id = 2 AND weft.weft_quantity > 25 THEN CEIL(weft.weft_quantity * 0.1 * sw.sleeve_width * 2 * loom_machine.ppm * 720 / (weft.weft_quantity * 10) * 0.89 / Tape.length)
                             WHEN type.yarn_id = 2 AND weft.weft_quantity < 25 THEN CEIL(weft.weft_quantity * 0.1 * sw.sleeve_width * 2 * loom_machine.ppm * 720 / (weft.weft_quantity * 20) * 0.89 / Tape.length)
                             ELSE NULL
-                        END as quantity_weft,
+                        END as quantity_weft
 
                         
                         -- l.loom_nameId,
