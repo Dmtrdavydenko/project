@@ -52,8 +52,8 @@ const dbConfig = {
 
 const mysql = require('mysql2/promise');
 const ManualTableTextileUse = require('./src/tableManualSleeve');
+const { loadSQL } = require('./src/utils');
 //const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
-
 
 const pool = mysql.createPool(dbConfig); // создаём пул подключений
 let copyQuerySql;
@@ -551,6 +551,24 @@ async function select(body) {
                 //sql = "SELECT l.loom_id, l.loom_number, l.loom_name_str, l.loom_nameId, s.speed AS loom_speed, l.weft FROM looms l JOIN speed s ON l.loom_speed = s.speed_id";
                 break;
             case "looms":
+
+
+                sql = loadSQL("src/sql/looms/getFull.sql");
+
+                try {
+                    connection = await getAwaitConnect();
+                    return (await connection.execute(sql))[0];
+                } catch (error) {
+                    console.error('Ошибка:', error);
+                    throw error;
+                } finally {
+                    if (connection) connection.release();
+                    console.log("Соединение возвращено.");
+                }
+
+                break;
+
+
                 //const field = ["thread_id", "thread_density", "thread_length"];
                 //sql = `SELECT
                 //    loom_number,
