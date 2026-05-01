@@ -51,7 +51,7 @@ const dbConfig = {
 };
 
 import { ManualRepository } from "./src/tableManualSleeve.js";
-import { loadSQL } from "./src/utils/loadSQL.js";
+import { loadSQL } from "./src/utils.js";
 //const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
 
 const pool = mysql.createPool(dbConfig); // создаём пул подключений
