@@ -553,20 +553,20 @@ async function select(body) {
             case "looms":
 
 
-                sql = loadSQL("src/sql/looms/getFull.sql");
+                //sql = loadSQL("src/sql/looms/getFull.sql");
 
-                try {
-                    connection = await getAwaitConnect();
-                    return (await connection.execute(sql))[0];
-                } catch (error) {
-                    console.error('Ошибка:', error);
-                    throw error;
-                } finally {
-                    if (connection) connection.release();
-                    console.log("Соединение возвращено.");
-                }
+                //try {
+                //    connection = await getAwaitConnect();
+                //    return (await connection.execute(sql))[0];
+                //} catch (error) {
+                //    console.error('Ошибка:', error);
+                //    throw error;
+                //} finally {
+                //    if (connection) connection.release();
+                //    console.log("Соединение возвращено.");
+                //}
 
-                break;
+                //break;
 
 
                 //const field = ["thread_id", "thread_density", "thread_length"];
