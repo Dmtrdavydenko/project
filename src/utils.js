@@ -1,5 +1,5 @@
-const fs = require("fs"); // For interacting with the file system
-const path = require("path"); // For working with file and directory paths
+import fs from "fs";
+import path from "path";
 
 const cache = {};
 

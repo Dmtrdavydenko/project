@@ -1,11 +1,11 @@
-
-const https = require('https');
-const querystring = require('querystring');
-const http = require("http"); // To use the HTTP interfaces in Node.js
-const fs = require("fs"); // For interacting with the file system
-const path = require("path"); // For working with file and directory paths
-const url = require("url"); // For URL resolution and parsing
-const crypto = require('crypto');
+import https from "https";
+import querystring from "querystring";
+import http from "http";
+import fs from "fs";
+import path from "path";
+import url from "url";
+import crypto from "crypto";
+import mysql from "mysql2/promise";
 
 //const mysql = require('mysql2/promise');
 
@@ -50,9 +50,8 @@ const dbConfig = {
     port: process.env.MYSQLPORT || 3306, // Укажите порт по умолчанию, если переменная не установлена
 };
 
-const mysql = require('mysql2/promise');
-const ManualTableTextileUse = require('./src/tableManualSleeve');
-const loadSQL = require('./src/utils');
+import ManualTableTextileUse from "./src/tableManualSleeve.js";
+import { loadSQL } from "./src/utils/loadSQL.js";
 //const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
 
 const pool = mysql.createPool(dbConfig); // создаём пул подключений
@@ -553,20 +552,20 @@ async function select(body) {
             case "looms":
 
 
-                //sql = loadSQL("src/sql/looms/getFull.sql");
+                sql = loadSQL("src/sql/looms/getFull.sql");
 
-                //try {
-                //    connection = await getAwaitConnect();
-                //    return (await connection.execute(sql))[0];
-                //} catch (error) {
-                //    console.error('Ошибка:', error);
-                //    throw error;
-                //} finally {
-                //    if (connection) connection.release();
-                //    console.log("Соединение возвращено.");
-                //}
+                try {
+                    connection = await getAwaitConnect();
+                    return (await connection.execute(sql))[0];
+                } catch (error) {
+                    console.error('Ошибка:', error);
+                    throw error;
+                } finally {
+                    if (connection) connection.release();
+                    console.log("Соединение возвращено.");
+                }
 
-                //break;
+                break;
 
 
                 //const field = ["thread_id", "thread_density", "thread_length"];
