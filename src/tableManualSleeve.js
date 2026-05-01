@@ -1,5 +1,5 @@
-const mysql = require('mysql2/promise');
-class ManualRepository {
+import mysql from "mysql2/promise";
+export class ManualRepository {
     constructor(connect) {
         //this.connect = mysql.createPool({
         //    host: process.env.DB_HOST,
@@ -270,4 +270,3 @@ async function Usage() {
         console.error('Insert failed:', error.message);
     }
 }
-module.exports = ManualRepository;

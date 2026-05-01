@@ -50,7 +50,7 @@ const dbConfig = {
     port: process.env.MYSQLPORT || 3306, // Укажите порт по умолчанию, если переменная не установлена
 };
 
-import ManualTableTextileUse from "./src/tableManualSleeve.js";
+import { ManualRepository } from "./src/tableManualSleeve.js";
 import { loadSQL } from "./src/utils/loadSQL.js";
 //const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
 
@@ -552,20 +552,20 @@ async function select(body) {
             case "looms":
 
 
-                sql = loadSQL("src/sql/looms/getFull.sql");
+                //sql = loadSQL("src/sql/looms/getFull.sql");
 
-                try {
-                    connection = await getAwaitConnect();
-                    return (await connection.execute(sql))[0];
-                } catch (error) {
-                    console.error('Ошибка:', error);
-                    throw error;
-                } finally {
-                    if (connection) connection.release();
-                    console.log("Соединение возвращено.");
-                }
+                //try {
+                //    connection = await getAwaitConnect();
+                //    return (await connection.execute(sql))[0];
+                //} catch (error) {
+                //    console.error('Ошибка:', error);
+                //    throw error;
+                //} finally {
+                //    if (connection) connection.release();
+                //    console.log("Соединение возвращено.");
+                //}
 
-                break;
+                //break;
 
 
                 //const field = ["thread_id", "thread_density", "thread_length"];
@@ -1144,7 +1144,7 @@ ORDER BY l.loom_number ASC;
                     }
                 }
                 keysToDelete.forEach(key => delete body[key]);
-                //const manual = new ManualTableTextileUse(pool);
+                //const manual = new ManualRepository(pool);
                 try {
                     //return await manual.insertManual(transformKeys(body));
                     return await manual.select(transformKeys(body));
@@ -1438,7 +1438,7 @@ async function insertGenerate(body) {
         console.log("Соединение возвращено.");
     }
 }
-const manual = new ManualTableTextileUse(getAwaitConnect);
+const manual = new ManualRepository(getAwaitConnect);
 async function insert(body) {
     const connection = await pool.getConnection();
 
