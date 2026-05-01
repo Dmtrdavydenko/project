@@ -2988,7 +2988,3 @@ server.on("request", (req, res) => {
 });
 server.listen(PORT);
 console.log("Server listening on " + PORT);
-
-
-module.exports = combined;
-
