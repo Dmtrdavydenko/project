@@ -69,7 +69,7 @@ export class ManualRepository {
                 const { whereClause, values } = this.buildWhereClause(filters);
                 const query = `
                 SELECT
-                m.type_id,
+                m.fabric_recipe_id,
                 sw.sleeve_width,
                 d.sleeve_density,
                 type.yarn_name,
@@ -84,17 +84,17 @@ export class ManualRepository {
                 -- m.created_at,
                 -- m.updated_at
                 FROM fabric_recipe m
-                JOIN sleeve_width_density swd                    ON m.sleeve_w_d_id = swd.sleeve_width_density_id
-                JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
-                JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
-                JOIN Thread_Parameters thread                    ON m.thread_densiti_id = thread.thread_id
-                JOIN Tape ON thread.density_id = Tape.id
-                JOIN tape_density ON thread.density_id = tape_density.id
-                JOIN color c                    ON m.color_id = c.color_id
-                JOIN additive ad                    ON m.additive_id = ad.additive_id
-                LEFT JOIN warp_quantity warp                    ON m.quantity_id = warp.warp_id
-                LEFT JOIN weft_quantity weft                    ON m.quantity_id = weft.weft_id
-                JOIN yarn_type type                    ON m.yarn_id = type.yarn_id
+                JOIN sleeve_width_density swd ON m.sleeve_w_d_id = swd.sleeve_width_density_id
+                JOIN sleeve_width sw          ON swd.sleeve_width_id = sw.sleeve_width_id
+                JOIN sleeve_density sd        ON swd.sleeve_density_id = sd.sleeve_density_id
+                JOIN tape_speed               ON m.thread_densiti_id = thread.thread_id
+                JOIN tape_length              ON tape_speed.density_id = tape_length.density_id
+                JOIN tape_density             ON tape_speed.density_id = tape_density.id
+                JOIN color c                  ON m.color_id = c.color_id
+                JOIN additive ad              ON m.additive_id = ad.additive_id
+                LEFT JOIN warp_quantity warp  ON m.quantity_id = warp.warp_id
+                LEFT JOIN weft_quantity weft  ON m.quantity_id = weft.weft_id
+                JOIN yarn_type type           ON m.yarn_id = type.yarn_id
                 ${whereClause};
                 `;
                 //const query = `
