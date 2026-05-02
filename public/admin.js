@@ -507,37 +507,34 @@ async function sqlQuery(sqlQueryString) {
                 "Content-Type": "application/json;charset=utf-8",
             },
             body: JSON.stringify({
-                action: "sql", // Измените на нужное действие, если необходимо
-                query: sqlQueryString, // Отправляем SQL-запрос
+                action: "sql",
+                query: sqlQueryString,
             }),
         });
 
-        // Проверка на успешный ответ
+        // Получаем тело ответа как текст (чтобы не падало на некорректном JSON)
+        const responseText = await response.text();
+
         if (!response.ok) {
-            throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+            // Если статус не 200-299, выводим полный текст ошибки
+            throw new Error(`Ошибка сервера (${response.status}): ${responseText}`);
         }
 
-        const result = await response.json(); // Получаем JSON-ответ
-        console.log(result); // Выводим результат в консоль
-        console.log(result[1].map(meta => ({
-            name: meta.name,
-            table: getTableNameFromMetadata(meta),
-            all: decodeMetadata(meta)
-        })));
-        console.log(result[1].map(meta => (decodeMetadata(meta))));
-        let decodedMetadata = result[1].map(meta => (decodeMetadata(meta)))
-
-        for (const meta of decodedMetadata) {
-            if (meta.orgName === meta.orgTable) {
-                const sql = `SELECT \`${meta.orgName}\` FROM \`${meta.orgTable}\``;
-                console.log(sql);
-                //data[meta.orgName] = (await connection.execute(sql))[0];
-            }
+        // Попытка распарсить JSON, если он корректный
+        let result;
+        try {
+            result = JSON.parse(responseText);
+        } catch (jsonError) {
+            console.warn("Не удалось распарсить JSON, выводим текст ответа:");
+            console.log(responseText);
+            throw new Error(`Некорректный JSON от сервера: ${responseText}`);
         }
-        //textAsk.value = response;
-        textAsk.value = JSON.stringify(result);
+
+        console.log("Результат запроса:", result);
+
     } catch (error) {
-        console.error('Ошибка при выполнении запроса:', error); // Обработка ошибок
+        // Полный вывод ошибки
+        console.error('Ошибка при выполнении запроса:', error);
     }
 }
 
