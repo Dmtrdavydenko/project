@@ -1134,7 +1134,7 @@ ORDER BY l.loom_number ASC;
                 sql = `SELECT *, 'weft_quantity' AS type FROM weft_quantity`;
 
                 break;
-            case "manual":
+            case "fabric_recipe":
 
 
 

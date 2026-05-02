@@ -83,7 +83,7 @@ export class ManualRepository {
                 ad.additive_name
                 -- m.created_at,
                 -- m.updated_at
-                FROM \`manual\` m
+                FROM fabric_recipe m
                 JOIN sleeve_width_density swd                    ON m.sleeve_w_d_id = swd.sleeve_width_density_id
                 JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
                 JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
@@ -132,7 +132,7 @@ export class ManualRepository {
         try {
             const connection = await this.getConnection();
             const query = `
-            UPDATE \`manual\` m 
+            UPDATE fabric_recipe m
             JOIN sleeve_width_density swd       ON m.sleeve_w_d_id =         swd.sleeve_width_density_id
             JOIN sleeve_width sw                ON swd.sleeve_width_id =     sw.sleeve_width_id
             JOIN sleeve_density d               ON swd.sleeve_density_id =   d.sleeve_density_id
@@ -176,7 +176,7 @@ export class ManualRepository {
 
             try {
                 const query = `
-                INSERT INTO \`manual\` (
+                INSERT INTO fabric_recipe (
                     \`type_id\`, \`sleeve_w_d_id\`, \`yarn_id\`, \`quantity_id\`,
                     \`thread_densiti_id\`, \`color_id\`, \`additive_id\`
                 ) VALUES (?, ?, ?, ?, ?, ?, ?)
