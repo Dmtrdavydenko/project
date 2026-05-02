@@ -71,7 +71,7 @@ export class ManualRepository {
                 SELECT
                 m.fabric_recipe_id,
                 sw.sleeve_width,
-                d.sleeve_density,
+                sd.sleeve_density,
                 type.yarn_name,
                 CASE
                     WHEN type.yarn_id = 1 THEN warp.warp_quantity
