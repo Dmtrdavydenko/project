@@ -87,7 +87,7 @@ export class ManualRepository {
                 JOIN sleeve_width_density swd ON m.sleeve_w_d_id = swd.sleeve_width_density_id
                 JOIN sleeve_width sw          ON swd.sleeve_width_id = sw.sleeve_width_id
                 JOIN sleeve_density sd        ON swd.sleeve_density_id = sd.sleeve_density_id
-                JOIN tape_speed               ON m.thread_densiti_id = thread.thread_id
+                JOIN tape_speed               ON m.tape_recipe_id = tape_speed.recipe_id
                 JOIN tape_length              ON tape_speed.density_id = tape_length.density_id
                 JOIN tape_density             ON tape_speed.density_id = tape_density.id
                 JOIN color c                  ON m.color_id = c.color_id
