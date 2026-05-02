@@ -1139,20 +1139,20 @@ ORDER BY l.loom_number ASC;
 
 
 
-                //const keysToDelete = [];
-                //for (const key in body) {
-                //    if (body[key] === 0 || body[key] === "") {
-                //        keysToDelete.push(key);
-                //    }
-                //}
-                //keysToDelete.forEach(key => delete body[key]);
-                ////const manual = new ManualRepository(pool);
-                //try {
-                //    //return await manual.insertManual(transformKeys(body));
-                //    return await manual.select(transformKeys(body));
-                //} catch (error) {
-                //    console.log('select failed: ' + error.message);
-                //}
+                const keysToDelete = [];
+                for (const key in body) {
+                    if (body[key] === 0 || body[key] === "") {
+                        keysToDelete.push(key);
+                    }
+                }
+                keysToDelete.forEach(key => delete body[key]);
+                //const manual = new ManualRepository(pool);
+                try {
+                    //return await manual.insertManual(transformKeys(body));
+                    return await manual.select(transformKeys(body));
+                } catch (error) {
+                    console.log('select failed: ' + error.message);
+                }
 
                 break;
             case "sleeve_width_density":
