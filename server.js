@@ -916,7 +916,7 @@ ORDER BY l.loom_number ASC;
                 
                     
                     `
-
+                        
                 sql = loadSQL("./src/sql/looms/manager.sql");
                 //                sql = `SELECT 
                 //    d.density,  -- Поле для группировки
