@@ -1137,7 +1137,8 @@ ORDER BY l.loom_number ASC;
             case "fabric_recipe":
 
 
-
+                if (connection) connection.release();
+                console.log("Соединение возвращено.");
 
                 const keysToDelete = [];
                 for (const key in body) {

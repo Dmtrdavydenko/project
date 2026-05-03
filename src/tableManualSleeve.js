@@ -97,17 +97,7 @@ export class ManualRepository {
                 JOIN yarn_type type           ON m.yarn_id = type.yarn_id
                 ${whereClause};
                 `;
-                //const query = `
-                //SELECT * FROM \`manual\` 
-                //${whereClause};
-                
-                //`
 
-
-
-                //thread_density
-
-                console.log(query, values);
                 const all = await connection.execute(query, values);
                 const [rows] = all;
                 return {
@@ -125,7 +115,6 @@ export class ManualRepository {
         } catch (error) {
             console.error('Error selecting manual data:', error);
             throw new Error(`Database operation failed: ${error.message}`);
-
         }
     }
     async update() {
