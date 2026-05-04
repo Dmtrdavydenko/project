@@ -35,11 +35,14 @@ class DataTape {
                 const data = JSON.parse(text);
                 this.data = data;
                 return { ok: true, data };
-            } catch (e) {
+            } catch (error) {
                 console.log("\x1b[33m "+text);
-                console.dir(e);
-                if (e.message.includes("is not valid JSON")) {
+                console.dir(error);
+                if (error.message.includes("is not valid JSON")) {
                     throw new Error("is not valid JSON");
+                }
+                if (error.message === "Unexpected end of JSON input") {
+                    throw error;
                 }
             }
 
