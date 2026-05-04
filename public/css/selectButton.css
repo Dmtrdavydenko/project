@@ -3,19 +3,22 @@
 }*/
 .container-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-    gap: 8px; /* расстояние между кнопками */
-    max-width: 400px; /* можно задать ширину контейнера */
+    grid-template-columns: repeat(auto-fill, minmax(47px, 1fr));
+    grid-auto-rows: 32px;
+    gap: 15px;
+    border: 0.7px dashed black;
+    padding: 7px;
 }
 
-.select-button {
+/*.select-button {
     padding: 10px;
     font-size: 14px;
     text-align: center;
     border: 1px solid #ccc;
-/*    background: #fff;*/
+    background: #fff;
     cursor: pointer;
     border-radius: 4px;
     width: 100%;
     box-sizing: border-box;
 }
+*/

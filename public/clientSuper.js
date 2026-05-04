@@ -34,6 +34,7 @@ class DataTape {
                 return this.data;
             }
             console.error("Ошибка при загрузке данных:", error);   
+            console.dir(error);   
         }
     }
     getAll() {
