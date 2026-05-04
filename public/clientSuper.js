@@ -7,6 +7,7 @@ class DataTape {
         try {
             if (document.location.hostname === "localhost") {
                 throw new Error("No load connection");
+                throw new Error("No load connection");
             }
 
             const response = await fetch(this.apiUrl, {
@@ -28,8 +29,8 @@ class DataTape {
             for (const [key, value] of response.headers.entries()) {
                 console.log(key, value);
             }
-
-
+            const contentType = response.headers.get('content-type');
+            console.log(contentType);
             const text = await response.text();
 
             try {
@@ -37,6 +38,7 @@ class DataTape {
                 this.data = data;
                 return { ok: true, data };
             } catch (e) {
+                console.dir(e);
                 return { ok: false, error: text };
             }
 
