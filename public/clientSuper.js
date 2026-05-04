@@ -7,7 +7,6 @@ class DataTape {
         try {
             if (document.location.hostname === "localhost") {
                 throw new Error("No load connection");
-                throw new Error("No load connection");
             }
 
             const response = await fetch(this.apiUrl, {
@@ -39,13 +38,20 @@ class DataTape {
                 return { ok: true, data };
             } catch (e) {
                 console.dir(e);
-                return { ok: false, error: text };
+                if (e.message.includes("is not valid JSON")) {
+                    throw new Error("is not valid JSON");
+                }
             }
 
             console.info("Load server sql space data");
             return this.data;
         } catch (error) {
             if (error.message === "No load connection") {
+                this.data = [localSpace[action]];
+                console.info("Load local space data");
+                return this.data;
+            }
+            if (error.message === "is not valid JSON") {
                 this.data = [localSpace[action]];
                 console.info("Load local space data");
                 return this.data;
