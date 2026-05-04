@@ -24,7 +24,22 @@ class DataTape {
                 throw new Error(`Ошибка HTTP: ${response.status}`);
             }
 
-            this.data = await response.json(); // Предполагаем, что API возвращает массив объектов
+
+            for (const [key, value] of response.headers.entries()) {
+                console.log(key, value);
+            }
+
+
+            const text = await response.text();
+
+            try {
+                const data = JSON.parse(text);
+                this.data = data;
+                return { ok: true, data };
+            } catch (e) {
+                return { ok: false, error: text };
+            }
+
             console.info("Load server sql space data");
             return this.data;
         } catch (error) {
