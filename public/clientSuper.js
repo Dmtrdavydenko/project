@@ -45,6 +45,7 @@ class DataTape {
             console.info("Load server sql space data");
             return this.data;
         } catch (error) {
+            console.log([localSpace[action]]);
             if (error.message === "No load connection") {
                 this.data = [localSpace[action]];
                 console.info("Load local space data");
