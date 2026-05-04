@@ -25,7 +25,7 @@ class DataTape {
             }
 
             for (const [key, value] of response.headers.entries()) {
-                console.log("\x1b[34m "+key, value);
+                console.log("\x1b[34m "+key+", "+value);
             }
             const contentType = response.headers.get('content-type');
             console.log("\x1b[33m "+contentType);
@@ -36,6 +36,7 @@ class DataTape {
                 this.data = data;
                 return { ok: true, data };
             } catch (e) {
+                console.log("\x1b[33m "+text);
                 console.dir(e);
                 if (e.message.includes("is not valid JSON")) {
                     throw new Error("is not valid JSON");
