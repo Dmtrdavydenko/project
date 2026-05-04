@@ -24,12 +24,11 @@ class DataTape {
                 throw new Error(`Ошибка HTTP: ${response.status}`);
             }
 
-
             for (const [key, value] of response.headers.entries()) {
-                console.log(key, value);
+                console.log("\x1b[34m "+key, value);
             }
             const contentType = response.headers.get('content-type');
-            console.log(contentType);
+            console.log("\x1b[33m "+contentType);
             const text = await response.text();
 
             try {
