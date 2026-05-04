@@ -57,6 +57,11 @@ class DataTape {
                 console.info("Load local space data");
                 return this.data;
             }
+            if (error.message === "Unexpected end of JSON input") {
+                this.data = [localSpace[action]];
+                console.info("Load local space data");
+                return this.data;
+            }
             console.error("Ошибка при загрузке данных:", error);   
             console.dir(error);   
         }
