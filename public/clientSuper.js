@@ -762,13 +762,6 @@ localSpace.getThreads = [
     const tape = await Tape.loadData("getTape");
     const thread = await Thread.loadData("getThreads");
 
-
-
-
-
-
-
-
     console.log(tape);
     console.log(thread);
 
@@ -923,29 +916,49 @@ localSpace.getThreads = [
     let myThread = [];
     myThread[0] = thread[0].slice();
     myThread[0].push({ density: "Время", length: 32000, speed: 400, time_milliseconds: 4800000, id: 0 });
+    let uniqueDensity = [...new Set(
+        myThread[0].map(item => item.density)
+    )];
+    console.log(uniqueDensity);
     {
         function dropListSelectTex(array, select = document.createElement("select")) {
             array.forEach((tape) => {
                 let option = document.createElement("option");
-                option.value = tape.length / tape.speed * 60000;
+                //option.value = tape.length / tape.speed * 60000;
                 //option.value = tape.time_milliseconds;
-                option.textContent = Number.isInteger(tape.density) ? `${tape.density} ${tape.speed && "v" + tape.speed || ""}` : `${tape.density}`
-                option.name = tape.id;
+                //option.textContent = Number.isInteger(tape.density) ? `${tape.density} ${tape.speed && "v" + tape.speed || ""}` : `${tape.density}`
+                //option.name = tape.id;
+
+                option.value = tape;
+                option.textContent = tape;
                 select.append(option);
             });
             return select;
         }
         function handleSelect(event) {
-            console.log(this, event.target.value)
+            console.log(this, event.currentTarget);
+            console.log(this, event.target.value);
+
+            const selectedDensity = Number(event.target.value);
+            const tape_sample = myThread[0].find(item => item.density === selectedDensity);
+            const tapeLength = event.currentTarget.parentElement.querySelector("input:nth-of-type(1)");
+            tapeLength.value = tape_sample.length;
+            const tapeSpeed = event.currentTarget.parentElement.querySelector("input:nth-of-type(2)");
+            tapeSpeed.value = tape_sample.speed;
+
+            const tapeTime = event.currentTarget.parentElement.querySelector("input:nth-of-type(3)");
+            const interval = tape_sample.length / tape_sample.speed * 60000;
+            tapeTime.valueAsNumber = Math.floor(interval / 60000) * 60000;
+
             if (event.target.value === "4800000") {
                 //    //infoTime[this.name].style.display = "inline-block";
-                infoTime[this.name].removeAttribute("disabled");
+                //infoTime[this.name].removeAttribute("disabled");
             } else {
                 //    //infoTime[this.name].style.display = "none";
-                infoTime[this.name].setAttribute("disabled", true);
+                //infoTime[this.name].setAttribute("disabled", true);
 
             }
-            infoTime[this.name].valueAsNumber = Math.floor(event.target.value / 60000) * 60000;
+            //tapeTime.valueAsNumber = Math.floor(event.target.value / 60000) * 60000;
 
             // ## dev
             //setTimeTask();
@@ -960,7 +973,7 @@ localSpace.getThreads = [
                 }
             }
             for (let button of buttons) {
-                button.value = event.target.value;
+                button.value = interval;
                 //button.value = this.valueAsNumber;
                 //button.textContent = Math.floor(infoTime[this.name].valueAsNumber / 60000);
                 //button.textContent = infoTime[this.name].valueAsNumber % 60000;
@@ -972,7 +985,54 @@ localSpace.getThreads = [
             //leftoverMs = totalMs % 60000;
             handleCalculation();
         }
+        function handleLength(event) {
+            const tapeLength = Number(event.target.value);
+
+            const tapeSpeed = event.currentTarget.parentElement.querySelector("input:nth-of-type(2)");
+            const tape_speed = Number(tapeSpeed.value);
+
+            const tapeTime = event.currentTarget.parentElement.querySelector("input:nth-of-type(3)");
+            const interval = tapeLength / tape_speed * 60000;
+            tapeTime.valueAsNumber = Math.floor(interval / 60000) * 60000;
+
+
+            const buttons = buttonRow[this.name];
+            for (let button of buttons) {
+                button.value = interval;
+            }
+            handleCalculation();
+        }
+        function handleSpeed(event) {
+            const tapeSpeed = Number(event.target.value);
+
+            const tapeLength = event.currentTarget.parentElement.querySelector("input:nth-of-type(1)");
+            const length = Number(tapeLength.value)
+
+            const tapeTime = event.currentTarget.parentElement.querySelector("input:nth-of-type(3)");
+            const interval = length / tapeSpeed * 60000;
+            tapeTime.valueAsNumber = Math.floor(interval / 60000) * 60000;
+
+
+            const buttons = buttonRow[this.name];
+            for (let button of buttons) {
+                button.value = interval;
+            }
+            handleCalculation();
+        }
         function handleSetButtonColumn(event) {
+            const tapeSpeed = event.currentTarget.parentElement.querySelector("input:nth-of-type(2)");
+            const speed = Number(tapeSpeed.value);
+            const length = speed * (event.target.valueAsNumber / 60000);
+
+            console.log(this, event.currentTarget);
+            console.log(this, event.target.value);
+
+            const tapeLength = event.currentTarget.parentElement.querySelector("input:nth-of-type(1)");
+            tapeLength.value = length;
+
+
+
+
             console.log(handleSetButtonColumn.name, event.target.value, infoTime[this.name].valueAsNumber, this.valueAsNumber);
             let tape = {};
             tape.name = 0;
@@ -1012,7 +1072,7 @@ localSpace.getThreads = [
 
         // ol.append(start, end);
 
-        for (let i = 0; i < 23; i++) {
+        for (let i = 0; i < 25; i++) {
             const line = document.createElement("tr");
             line.id = i;
             // ## loatd
@@ -1041,28 +1101,43 @@ localSpace.getThreads = [
         }
 
         let dataTime = [0, 0, 0, 0];
-        for (let counterColunms = 0; counterColunms < 5; counterColunms++) {
+        for (let counterColunms = 0; counterColunms < 14; counterColunms++) {
             buttonRow.push([]);
             //######################################################################### calc
 
             //main.append(dropListSelectTex(thread[0]));
 
+            const td = document.createElement("td");
+            let select = dropListSelectTex(uniqueDensity);
+            select.name = counterColunms;
+
+            const length = document.createElement("input");
+            length.type = "number";
+            length.name = counterColunms;
+            length.placeholder = "Метр";
+
+            const speed = document.createElement("input");
+            speed.type = "number";
+            speed.name = counterColunms;
+            speed.placeholder = "Скорость";
+
 
             const time = document.createElement("input");
-            const td = document.createElement("td");
-            const br = document.createElement("br");
             time.name = counterColunms;
             time.type = "time";
             time.placeholder = "с";
             time.valueAsNumber = Math.floor(dataTime[counterColunms] / 60000) * 60000 || 0;
             //time.style.display = "none";
             console.log(myThread[0]);
-            let select = dropListSelectTex(myThread[0]);
-            select.name = counterColunms;
+
 
 
             td.append(select);
-            td.append(br);
+            td.append(document.createElement("br"));
+            td.append(length);
+            td.append(document.createElement("br"));
+            td.append(speed);
+            td.append(document.createElement("br"));
             td.append(time);
 
 
@@ -1071,7 +1146,7 @@ localSpace.getThreads = [
 
 
             //     panel button tap
-            for (let j = 0; j < 23; j++) {
+            for (let j = 0; j < 25; j++) {
                 const tapButton = document.createElement("button");
 
 
@@ -1090,6 +1165,10 @@ localSpace.getThreads = [
             }
 
             select.addEventListener('change', handleSelect);
+            length.addEventListener('change', handleLength);
+            length.addEventListener('input', handleLength);
+            speed.addEventListener('change', handleSpeed);
+            speed.addEventListener('input', handleSpeed);
 
             time.addEventListener("input", handleSetButtonColumn);
             time.addEventListener("change", handleSetButtonColumn);
@@ -1106,10 +1185,11 @@ localSpace.getThreads = [
 
 
         const thead = document.createElement("thead");
-        main.append(start);
         thead.append(timeLine);
         table.append(thead, tbody);
         main.append(table);
+        main.append(start);
+
     }
 
     {

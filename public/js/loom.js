@@ -90,7 +90,7 @@ const state = [];
 class LoomsRow {
     constructor(reference, loom) {
         this.reference = reference;
-        this.loom = +loom;
+        this.loom = Number(loom);
     }
 }
 function handleClickBtn(e) {
