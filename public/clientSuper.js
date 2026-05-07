@@ -51,6 +51,7 @@ class DataTape {
                 console.log(this.data, action);
                 return this.data;
             }
+            this.data = [this.loadState(action)];
         } catch (error) {
             console.log(error.message);
             if (error.message === "No load connection") {
