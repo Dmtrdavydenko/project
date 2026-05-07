@@ -45,13 +45,13 @@ class DataTape {
     }
     async loadData(action, params = {}) {
         try {
-            console.log("3");
+            console.log("1");
             if (document.location.hostname === "localhost") {
                 this.data = [await this.loadState(action)];
                 console.log(this.data, action);
                 return this.data;
             }
-            this.data = [await this.loadState(action)];
+            return this.data = [await this.loadState(action)];
         } catch (error) {
             console.log(error.message);
             if (error.message === "No load connection") {
@@ -177,7 +177,7 @@ class DataTape {
             const saved = localStorage.getItem('tapeSettings');
             if (saved) {
                 try {
-                    console.info("Load localStorage space data");
+                    console.info("Load localStorage",saved);
                     localData = JSON.parse(saved);
                     return localData;
                 } catch (e) {
