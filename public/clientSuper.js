@@ -51,7 +51,7 @@ class DataTape {
                 console.log(this.data, action);
                 return this.data;
             }
-            this.data = [await this.loadState(action)];
+            this.data = [this.loadState(action)];
         } catch (error) {
             console.log(error.message);
             if (error.message === "No load connection") {
@@ -163,7 +163,8 @@ class DataTape {
             }
         }
     }
-    async loadState(action) {
+    loadState(action) {
+        console.log(action);
         let localData = null;
         if (action === "getThreads") {
             const saved = localStorage.getItem('tapeSettings');
