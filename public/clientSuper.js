@@ -25,10 +25,9 @@ class DataTape {
         const contentType = response.headers.get('content-type');
         console.log("\x1b[33m [" + contentType + "]");
         const text = await response.text();
-
+        let data = null;
         try {
-            const data = JSON.parse(text);
-            this.data = data;
+            data = JSON.parse(text);
             return { ok: true, data };
         } catch (error) {
             console.log("\x1b[33m [" + text + "]");
@@ -42,7 +41,7 @@ class DataTape {
         }
 
         console.info("Load server sql space data");
-        return this.data;
+        return data;
     }
     async loadData(action, params = {}) {
         try {
@@ -70,8 +69,8 @@ class DataTape {
                 return this.data;
             }
             if (error.message === "No load localStorage") {
-                this.data = [localSpace[action]];
-                //await this.request(action, params);
+                //this.data = [localSpace[action]];
+                this.data = await this.request(action, params);
                 this.saveState(action, this.data);
                 console.info("Load sql and save local space data");
                 return this.data;
@@ -177,8 +176,7 @@ class DataTape {
                     throw new Error("No load localStorage");
                 }
             }
-            //throw new Error("No load localStorage");
-        } else throw new Error("No load connection");
+        } else throw new Error("No load localStorage");
 
     }
 }
