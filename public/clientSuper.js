@@ -70,14 +70,13 @@ class DataTape {
                 return this.data;
             }
             if (error.message === "No load localStorage") {
-                //this.data = [localSpace[action
                 try {
                     this.data = await this.request(action, params);
                     this.saveState(action, this.data);
                     console.info("Load sql and save local space data");
                     return this.data;
                 } catch (error) {
-                    if (error.message === "is not valid JSON") {
+                    if (error.message === "is not valid JSON" || error.message === "Unexpected end of JSON input") {
                         this.data = [localSpace[action]];
                         console.info("Load local space data");
                         return this.data;
