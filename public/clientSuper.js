@@ -45,13 +45,13 @@ class DataTape {
     }
     async loadData(action, params = {}) {
         try {
-            console.log("2");
+            console.log("3");
             if (document.location.hostname === "localhost") {
                 this.data = [await this.loadState(action)];
                 console.log(this.data, action);
                 return this.data;
             }
-            this.data = [this.loadState(action)];
+            this.data = [await this.loadState(action)];
         } catch (error) {
             console.log(error.message);
             if (error.message === "No load connection") {
@@ -170,7 +170,7 @@ class DataTape {
             }
         }
     }
-    loadState(action) {
+    async loadState(action) {
         console.log(action);
         let localData = null;
         if (action === "getThreads") {
@@ -185,7 +185,6 @@ class DataTape {
                 }
             } else throw new Error("No load localStorage");
         } else throw new Error("No load localStorage");
-
     }
 }
 const Tape = new DataTape("https://worktime.up.railway.app/app");
