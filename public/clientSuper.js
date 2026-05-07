@@ -45,7 +45,7 @@ class DataTape {
     }
     async loadData(action, params = {}) {
         try {
-            console.log("1");
+            console.log("2");
             if (document.location.hostname === "localhost") {
                 this.data = [await this.loadState(action)];
                 console.log(this.data, action);
@@ -183,7 +183,7 @@ class DataTape {
                 } catch (e) {
                     throw new Error("No load localStorage");
                 }
-            }
+            } else throw new Error("No load localStorage");
         } else throw new Error("No load localStorage");
 
     }
