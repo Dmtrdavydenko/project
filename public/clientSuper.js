@@ -45,6 +45,7 @@ class DataTape {
     }
     async loadData(action, params = {}) {
         try {
+            console.log("1");
             if (document.location.hostname === "localhost") {
                 this.data = [await this.loadState(action)];
                 console.log(this.data, action);
