@@ -3,56 +3,59 @@ class DataTape {
         this.apiUrl = apiUrl;
         this.data = [];
     }
+    async request(action, params = {}) {
+        const response = await fetch(this.apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+            body: JSON.stringify({
+                action: action, // Например, "getThreads", "getTasks"
+                ...params
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
+
+        for (const [key, value] of response.headers.entries()) {
+            console.log("\x1b[34m [" + key + "][" + value + "]");
+        }
+        const contentType = response.headers.get('content-type');
+        console.log("\x1b[33m [" + contentType + "]");
+        const text = await response.text();
+
+        try {
+            const data = JSON.parse(text);
+            this.data = data;
+            return { ok: true, data };
+        } catch (error) {
+            console.log("\x1b[33m [" + text + "]");
+            console.dir(error);
+            if (error.message.includes("is not valid JSON")) {
+                throw new Error("is not valid JSON");
+            }
+            if (error.message === "Unexpected end of JSON input") {
+                throw error;
+            }
+        }
+
+        console.info("Load server sql space data");
+        return this.data;
+    }
     async loadData(action, params = {}) {
         try {
             if (document.location.hostname === "localhost") {
-                throw new Error("No load connection");
+                this.data = [this.loadState(action)];
+                console.log(this.data, action);
+                return this.data;
             }
-
-            const response = await fetch(this.apiUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
-                },
-                body: JSON.stringify({
-                    action: action, // Например, "getThreads", "getTasks"
-                    ...params
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error(`Ошибка HTTP: ${response.status}`);
-            }
-
-            for (const [key, value] of response.headers.entries()) {
-                console.log("\x1b[34m [" + key + "][" + value + "]");
-            }
-            const contentType = response.headers.get('content-type');
-            console.log("\x1b[33m [" + contentType + "]");
-            const text = await response.text();
-
-            try {
-                const data = JSON.parse(text);
-                this.data = data;
-                return { ok: true, data };
-            } catch (error) {
-                console.log("\x1b[33m [" + text + "]");
-                console.dir(error);
-                if (error.message.includes("is not valid JSON")) {
-                    throw new Error("is not valid JSON");
-                }
-                if (error.message === "Unexpected end of JSON input") {
-                    throw error;
-                }
-            }
-
-            console.info("Load server sql space data");
-            return this.data;
         } catch (error) {
-            console.log([localSpace[action]]);
+            console.log(error.message);
             if (error.message === "No load connection") {
                 this.data = [localSpace[action]];
-                console.info("Load local space data");
+                console.info("Load local space data, no connection server");
                 return this.data;
             }
             if (error.message === "is not valid JSON") {
@@ -63,6 +66,13 @@ class DataTape {
             if (error.message === "Unexpected end of JSON input") {
                 this.data = [localSpace[action]];
                 console.info("Load local space data");
+                return this.data;
+            }
+            if (error.message === "No load localStorage") {
+                this.data = [localSpace[action]];
+                //await this.request(action, params);
+                this.saveState(action, this.data);
+                console.info("Load sql and save local space data");
                 return this.data;
             }
             console.error("Ошибка при загрузке данных:", error);
@@ -141,6 +151,33 @@ class DataTape {
     }
     sort(compareFunction) {
         return [...this.data].sort(compareFunction);
+    }
+
+    saveState(action, tapeData) {
+        if (action === "getThreads") {
+            try {
+                localStorage.setItem('tapeSettings', JSON.stringify(tapeData));
+            } catch (e) {
+                console.error('Ошибка при сохранении в localStorage:', e);
+            }
+        }
+    }
+    loadState(action) {
+        let localData = null;
+        if (action === "getThreads") {
+            const saved = localStorage.getItem('tapeSettings');
+            if (saved) {
+                try {
+                    console.info("Load localStorage space data");
+                    localData = JSON.parse(saved);
+                    return localData;
+                } catch (e) {
+                    throw new Error("No load localStorage");
+                }
+            }
+            //throw new Error("No load localStorage");
+        } else throw new Error("No load connection");
+
     }
 }
 const Tape = new DataTape("https://worktime.up.railway.app/app");
@@ -760,15 +797,15 @@ localSpace.getThreads = [
 
 (async (cmd) => {
     const tape = await Tape.loadData("getTape");
-    const thread = await Thread.loadData("getThreads");
+    const threadi = await Thread.loadData("getThreads");
 
     console.log(tape);
-    console.log(thread);
+    console.log(threadi);
 
     console.log(tape[0]);
-    console.log(thread[0]);
+    console.log(threadi[0]);
     console.log(cmd);
-    const result = thread[0].map(({ id, density, speed, length }) => ({
+    const thread = threadi[0].map(({ id, density, speed, length }) => ({
         id,
         density,
         speed,
@@ -795,6 +832,14 @@ localSpace.getThreads = [
     const event = new PointerEvent("pointerdown", {
         bubbles: true, // Allows the event to bubble up
         cancelable: true, // Allows the event to be cancelable
+    });
+    document.addEventListener("visibilitychange", () => {
+
+        if (document.hidden) {
+            //Thread.data = myThread;
+            localStorage.setItem('tapeSettings', JSON.stringify(myThread));
+            console.log(myThread);
+        }
     });
     function create3() {
         const TimeStart = document.createElement("input");
@@ -919,11 +964,122 @@ localSpace.getThreads = [
 
 
     let myThread = [];
-    myThread = thread[0].slice();
-    let uniqueDensity = [...new Set(
-        myThread.map(item => item.density)
-    )];
+    myThread = thread.slice();
+    let uniqueDensity = [...new Set(myThread.map(item => item.density))];
     console.log(uniqueDensity);
+    console.log(myThread);
+    function saveState() {
+        try {
+            localStorage.setItem('tapeSettings', JSON.stringify(myThread));
+        } catch (e) {
+            console.error('Ошибка при сохранении в localStorage:', e);
+        }
+    }
+    function loadState() {
+        const saved = localStorage.getItem('tapeSettings');
+        if (!saved) return; // ничего не делать, если данных нет
+
+        try {
+            const parsed = JSON.parse(saved);
+            // Проверка, что это массив/объект, как ожидалось
+            if (Array.isArray(parsed) || typeof parsed === 'object') {
+                myThread = parsed;
+            } else {
+                console.warn('Данные в localStorage некорректного формата');
+            }
+        } catch (e) {
+            console.error('Ошибка при чтении JSON из localStorage:', e);
+        }
+    }
+    //function initJobTime() {
+    //    const time = document.createElement("input");
+    //    time.type = "time";
+    //    time.valueAsNumber = INIT_INPUT_DATA.TimeStart.valueAsNumber;
+
+    //    time.addEventListener("change", () => handleCalculation());
+    //    time.addEventListener("input", () => handleCalculation());
+    //    const label = document.createElement("label");
+    //    label.textContent = "Ввод начала";
+
+    //    const li = document.createElement("li");
+    //    const ol = document.createElement("ol");
+
+    //    li.append(time, label);
+    //    ol.append(li);
+    //    section.append(ol);
+    //    return { ol, start: time }
+    //}
+    //function initJobTime() {
+    //    const time = document.createElement("input");
+    //    time.type = "time";
+    //    time.valueAsNumber = INIT_INPUT_DATA.TimeStart.valueAsNumber;
+
+    //    time.addEventListener("change", () => handleCalculation());
+    //    time.addEventListener("input", () => handleCalculation());
+
+    //    const label = document.createElement("label");
+    //    label.textContent = "Ввод начала";
+
+    //    // ссылка редактирования
+    //    const editLink = document.createElement("a");
+    //    editLink.href = "#";
+    //    editLink.textContent = "Редактировать";
+
+    //    editLink.addEventListener("click", (e) => {
+    //        e.preventDefault();
+
+    //        // фокус на input
+    //        time.focus();
+
+    //        // открыть выбор времени
+    //        time.showPicker?.();
+    //    });
+
+    //    const li = document.createElement("li");
+    //    const ol = document.createElement("ol");
+
+    //    li.append(time, label, editLink);
+    //    ol.append(li);
+
+    //    section.append(ol);
+
+    //    return { ol, start: time };
+    //}
+    function initJobTime() {
+        const time = document.createElement("input");
+
+        // id нужен для связи с label
+        time.id = "job-time-start";
+
+        time.type = "time";
+        time.valueAsNumber = INIT_INPUT_DATA.TimeStart.valueAsNumber;
+
+        time.addEventListener("change", () => handleCalculation());
+        time.addEventListener("input", () => handleCalculation());
+
+        const label = document.createElement("label");
+        label.textContent = "Ввод начала";
+
+        // связываем label с input
+        label.htmlFor = time.id;
+        label.addEventListener("click", () => {
+            time.showPicker?.();
+        });
+
+        const li = document.createElement("li");
+        const ol = document.createElement("ol");
+
+        li.append(time, label);
+        ol.append(li);
+
+        section.append(ol);
+
+        return { ol, start: time };
+    }
+    const TaskList = initJobTime();
+    TaskList.reference = [];
+    let compactSelectBtn = [];
+
     {
         function dropListSelectTex(array, select = document.createElement("select")) {
             array.forEach((tape) => {
@@ -1095,8 +1251,8 @@ localSpace.getThreads = [
         //################################################################################################
 
         function calculate(select, length, speed, time, action) {
-            const d = Number(select.value);
-            const tape = myThread.find(item => item.density === d);
+            const density = Number(select.value);
+            const tape = myThread.find(item => item.density === density);
 
             const l = parseFloat(length.value);
             const s = parseFloat(speed.value);
@@ -1112,6 +1268,7 @@ localSpace.getThreads = [
                 time.valueAsNumber = Math.floor(interval / 60000) * 60000;
                 for (let button of buttonRow[length.dataset.colunms]) {
                     button.value = interval;
+                    button.dataset.density = density;
                 }
                 updateTimeTask();
             }
@@ -1128,7 +1285,7 @@ localSpace.getThreads = [
                 for (let button of buttonRow[length.dataset.colunms]) {
                     button.value = interval;
                 }
-                update(d, s);
+                update(density, s);
                 handleCalculation();
             }
             if ("length" === action) {
@@ -1702,32 +1859,16 @@ localSpace.getThreads = [
     }
     selectName = [];
     let selectTapeName = {};
-    function initJobTime() {
-        const time = document.createElement("input");
-        time.type = "time";
-        time.valueAsNumber = INIT_INPUT_DATA.TimeStart.valueAsNumber;
-
-        time.addEventListener("change", () => handleCalculation());
-        time.addEventListener("input", () => handleCalculation());
-        const li = document.createElement("li");
-        const ol = document.createElement("ol");
-
-        li.append(time);
-        ol.append(li);
-        section.append(ol);
-        return { ol, start: time }
-    }
-    const TaskList = initJobTime();
-    TaskList.reference = [];
     function updateTimeTask() {
         let sum = TaskList.start.valueAsNumber;
         let mod = 0;
-        selectedButtons.forEach((item, i) => {
-
+        compactSelectBtn.forEach((item, i) => {
             const ref = TaskList.reference[i];
 
-            const time = ref.time;
             const li = ref.li;
+            const time = ref.time;
+            const small = ref.small;
+            small.textContent = item.dataset.density;
 
             updateColor(li, +item.value);
 
@@ -1782,7 +1923,8 @@ localSpace.getThreads = [
         //console.log(intervalSecondsJob);
 
         console.log(selectedButtons);
-        const needCount = selectedButtons.length;
+        compactSelectBtn = selectedButtons.filter(item => item != null);
+        const needCount = compactSelectBtn.length;
         while (TaskList.reference.length > needCount) {
             const last = TaskList.reference.pop();
             last.time.remove();
@@ -1795,13 +1937,17 @@ localSpace.getThreads = [
             const time = document.createElement("input");
             time.type = "time";
             time.disabled = true;
+            const small = document.createElement("small");
 
-            li.append(time);
+            small.classList.add("small");
+
+            li.append(time, small);
             ol.append(li);
 
             TaskList.reference.push({
                 li,
-                time
+                time,
+                small
             });
         }
         updateTimeTask();
@@ -1860,7 +2006,7 @@ localSpace.getThreads = [
         // console.log(pixelValue);
 
         // Добавляем базовое значение для смещения
-        return pixelValue; // Начинаем с 20 пикселей для 20 минут
+        return pixelValue > 900 ? 900 : pixelValue; // Начинаем с 20 пикселей для 20 минут
     }
 
     function getLinearGradientColor(minutes) {

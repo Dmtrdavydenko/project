@@ -450,7 +450,11 @@ select {
     padding: 6px 0px;
     font-size: 10pt;
 }
-
+.small{
+    font-size: 1.2rem;
+    color: white;
+    padding-left: 9px;
+}
 
 
 
