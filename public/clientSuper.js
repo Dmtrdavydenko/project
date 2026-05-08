@@ -42,14 +42,16 @@ class DataTape {
     }
     async loadData(action, params = {}) {
         try {
-            console.log("1");
+            console.log("2");
             if (document.location.hostname === "localhost") {
-                this.data = [this.loadState()];
+                //this.data = [this.loadState(action)];
+                this.data = [localSpace[action]];
+
                 console.info("Loaded localStorage no localhost");
                 return this.data;
             }
             console.info("Loaded localStorage");
-            return this.data = [this.loadState()];
+            return this.data = [this.loadState(action)];
         } catch (error) {
             console.warn("Local load failed:", error.message);
 
@@ -183,8 +185,9 @@ class DataTape {
             }
         }
     }
-    loadState() {
+    loadState(action) {
         try {
+            if (action !== "getThreads") throw new Error("No load localStorage");
             const saved = localStorage.getItem('tapeSettings');
             if (!saved) throw new Error("No load localStorage");
             return JSON.parse(saved);
