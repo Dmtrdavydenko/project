@@ -45,13 +45,13 @@ class DataTape {
     }
     async loadData(action, params = {}) {
         try {
-            console.log("1");
+            console.log("3");
             if (document.location.hostname === "localhost") {
-                this.data = [await this.loadState(action)];
+                this.data = [this.loadState(action)];
                 console.log(this.data, action);
                 return this.data;
             }
-            return this.data = [await this.loadState(action)];
+            return this.data = [this.loadState(action)];
         } catch (error) {
             console.log(error.message);
             if (error.message === "No load connection") {
@@ -170,7 +170,7 @@ class DataTape {
             }
         }
     }
-    async loadState(action) {
+    loadState(action) {
         console.log(action);
         let localData = null;
         if (action === "getThreads") {
@@ -178,8 +178,7 @@ class DataTape {
             if (saved) {
                 try {
                     console.info("Load localStorage",saved);
-                    localData = JSON.parse(saved);
-                    return localData;
+                    return JSON.parse(saved);;
                 } catch (e) {
                     throw new Error("No load localStorage");
                 }
