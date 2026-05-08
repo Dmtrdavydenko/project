@@ -44,8 +44,14 @@ class DataTape {
         try {
             console.log("2");
             if (document.location.hostname === "localhost") {
-                //this.data = [this.loadState(action)];
-                this.data = [localSpace[action]];
+
+                try {
+                    this.data = [this.loadState(action)];
+                    return this.data;
+                } catch (e) {
+                    this.data = [localSpace[action]];
+                    return this.data;
+                }
 
                 console.info("Loaded localStorage no localhost");
                 return this.data;
@@ -68,36 +74,6 @@ class DataTape {
                 return this.data;
 
             }
-
-            //if (error.message === "No load connection") {
-            //    this.data = [localSpace[action]];
-            //    console.info("Load local space data, no connection server");
-            //    return this.data;
-            //}
-            //if (error.message === "is not valid JSON") {
-            //    this.data = [localSpace[action]];
-            //    console.info("Load local space data");
-            //    return this.data;
-            //}
-            //if (error.message === "Unexpected end of JSON input") {
-            //    this.data = [localSpace[action]];
-            //    console.info("Load local space data");
-            //    return this.data;
-            //}
-            //if (error.message === "No load localStorage") {
-            //    try {
-            //        this.data = await this.request(action, params);
-            //        this.saveState(action, this.data);
-            //        console.info("Load sql and save local space data");
-            //        return this.data;
-            //    } catch (error) {
-            //        if (error.message === "is not valid JSON" || error.message === "Unexpected end of JSON input") {
-            //            this.data = [localSpace[action]];
-            //            console.info("Load local space data");
-            //            return this.data;
-            //        }
-            //    }
-            //}
             console.error("Ошибка при загрузке данных:", error);
             console.dir(error);
         }
@@ -857,6 +833,9 @@ localSpace.getThreads = [
             console.log(myThread);
         }
     });
+    window.addEventListener("beforeunload", () => {
+        localStorage.setItem('tapeSettings', JSON.stringify(myThread));
+    });
     function create3() {
         const TimeStart = document.createElement("input");
         TimeStart.type = "time";
@@ -938,12 +917,12 @@ localSpace.getThreads = [
     const quantity = INIT_INPUT_DATA.quan;
     //main.append(start);
     //main.append(end);
-    const buttonLine = [];
-    const buttonRow = [];
+    //const buttonLine = [];
+    //const buttonRow = [];
 
-    for (let j = 0; j < 27; j++) {
-        buttonLine.push([]);
-    }
+    //for (let j = 0; j < 27; j++) {
+    //    buttonLine.push([]);
+    //}
 
     let infoTime = [];
     const saveSate = [];
@@ -969,9 +948,8 @@ localSpace.getThreads = [
 
 
 
-    let selectedButtons = [];
     let listTask = [];
-    const section = document.createElement("section");
+    const section = document.getElementById("section");
     const select = document.createElement("select");
 
     let dtinput = null;
@@ -979,88 +957,11 @@ localSpace.getThreads = [
 
 
 
-    let myThread = [];
-    myThread = thread.slice();
+    //let myThread = [];
+    let myThread = thread.slice();
     let uniqueDensity = [...new Set(myThread.map(item => item.density))];
     console.log(uniqueDensity);
     console.log(myThread);
-    function saveState() {
-        try {
-            localStorage.setItem('tapeSettings', JSON.stringify(myThread));
-        } catch (e) {
-            console.error('Ошибка при сохранении в localStorage:', e);
-        }
-    }
-    function loadState() {
-        const saved = localStorage.getItem('tapeSettings');
-        if (!saved) return; // ничего не делать, если данных нет
-
-        try {
-            const parsed = JSON.parse(saved);
-            // Проверка, что это массив/объект, как ожидалось
-            if (Array.isArray(parsed) || typeof parsed === 'object') {
-                myThread = parsed;
-            } else {
-                console.warn('Данные в localStorage некорректного формата');
-            }
-        } catch (e) {
-            console.error('Ошибка при чтении JSON из localStorage:', e);
-        }
-    }
-    //function initJobTime() {
-    //    const time = document.createElement("input");
-    //    time.type = "time";
-    //    time.valueAsNumber = INIT_INPUT_DATA.TimeStart.valueAsNumber;
-
-    //    time.addEventListener("change", () => handleCalculation());
-    //    time.addEventListener("input", () => handleCalculation());
-    //    const label = document.createElement("label");
-    //    label.textContent = "Ввод начала";
-
-    //    const li = document.createElement("li");
-    //    const ol = document.createElement("ol");
-
-    //    li.append(time, label);
-    //    ol.append(li);
-    //    section.append(ol);
-    //    return { ol, start: time }
-    //}
-    //function initJobTime() {
-    //    const time = document.createElement("input");
-    //    time.type = "time";
-    //    time.valueAsNumber = INIT_INPUT_DATA.TimeStart.valueAsNumber;
-
-    //    time.addEventListener("change", () => handleCalculation());
-    //    time.addEventListener("input", () => handleCalculation());
-
-    //    const label = document.createElement("label");
-    //    label.textContent = "Ввод начала";
-
-    //    // ссылка редактирования
-    //    const editLink = document.createElement("a");
-    //    editLink.href = "#";
-    //    editLink.textContent = "Редактировать";
-
-    //    editLink.addEventListener("click", (e) => {
-    //        e.preventDefault();
-
-    //        // фокус на input
-    //        time.focus();
-
-    //        // открыть выбор времени
-    //        time.showPicker?.();
-    //    });
-
-    //    const li = document.createElement("li");
-    //    const ol = document.createElement("ol");
-
-    //    li.append(time, label, editLink);
-    //    ol.append(li);
-
-    //    section.append(ol);
-
-    //    return { ol, start: time };
-    //}
     function initJobTime() {
         const time = document.createElement("input");
 
@@ -1097,313 +998,435 @@ localSpace.getThreads = [
     let compactSelectBtn = [];
 
     {
-        function dropListSelectTex(array, select = document.createElement("select")) {
-            array.forEach((tape) => {
-                let option = document.createElement("option");
-                option.value = tape;
-                option.textContent = tape;
-                select.append(option);
-            });
-            return select;
-        }
-        function handleSelect(event) {
-            console.log(this, event.currentTarget);
-            console.log(this, event.target.value);
 
-            const selectedDensity = Number(event.target.value);
-            const tape_sample = myThread.find(item => item.density === selectedDensity);
-            const tapeLength = event.currentTarget.parentElement.querySelector("input:nth-of-type(1)");
-            const tapeSpeed = event.currentTarget.parentElement.querySelector("input:nth-of-type(2)");
-            const tapeTime = event.currentTarget.parentElement.querySelector("input:nth-of-type(3)");
-
-            tapeLength.value = tape_sample.length;
-            tapeSpeed.value = tape_sample.speed;
-            const interval = tape_sample.length / tape_sample.speed * 60000;
-            tapeTime.valueAsNumber = Math.floor(interval / 60000) * 60000;
-
-            console.log(tape_sample);
-
-            let tape = {};
-            tape.name = 0;
-            const buttons = buttonRow[this.dataset.colunms];
-            if (this.options) {
-                tape.name = this.options[this.selectedIndex].name;
-                for (let button of buttons) {
-                    button.name = tape.name;
-                }
-            }
-            for (let button of buttons) {
-                button.value = interval;
-                //button.value = this.valueAsNumber;
-                //button.textContent = Math.floor(infoTime[this.name].valueAsNumber / 60000);
-                //button.textContent = infoTime[this.name].valueAsNumber % 60000;
-                //button.textContent = infoTime[this.name].value;
-                //button.textContent = infoTime[this.name].value.slice(0, 5);
-                //button.textContent = "";
-            }
-            //const fullMinutes = Math.floor(totalMs / 60000);
-            //leftoverMs = totalMs % 60000;
-            handleCalculation();
-        }
-        function handleLength(event) {
-            const tapeLength = Number(event.target.value);
-
-            const tapeSpeed = event.currentTarget.parentElement.querySelector("input:nth-of-type(2)");
-            const tape_speed = Number(tapeSpeed.value);
-
-            const tapeTime = event.currentTarget.parentElement.querySelector("input:nth-of-type(3)");
-            const interval = tapeLength / tape_speed * 60000;
-            tapeTime.valueAsNumber = Math.floor(interval / 60000) * 60000;
-
-
-            const buttons = buttonRow[this.dataset.colunms];
-            for (let button of buttons) {
-                button.value = interval;
-            }
-            handleCalculation();
-        }
-        function handleSpeed(event) {
-            const tapeSpeed = Number(event.target.value);
-
-            const tapeLength = event.currentTarget.parentElement.querySelector("input:nth-of-type(1)");
-            const length = Number(tapeLength.value)
-
-            const tapeTime = event.currentTarget.parentElement.querySelector("input:nth-of-type(3)");
-            const interval = length / tapeSpeed * 60000;
-            tapeTime.valueAsNumber = Math.floor(interval / 60000) * 60000;
-
-
-            const buttons = buttonRow[this.dataset.colunms];
-            for (let button of buttons) {
-                button.value = interval;
-            }
-            handleCalculation();
-        }
-        function handleSetButtonColumn(event) {
-            const tapeSpeed = event.currentTarget.parentElement.querySelector("input:nth-of-type(2)");
-            const speed = Number(tapeSpeed.value);
-            const length = speed * (event.target.valueAsNumber / 60000);
-
-            console.log(this, event.currentTarget);
-            console.log(this, event.target.value);
-
-            const tapeLength = event.currentTarget.parentElement.querySelector("input:nth-of-type(1)");
-            tapeLength.value = length;
-
-
-
-
-            console.log(handleSetButtonColumn.name, event.target.value, infoTime[this.dataset.colunms].valueAsNumber, this.valueAsNumber);
-            let tape = {};
-            tape.name = 0;
-            const buttons = buttonRow[this.dataset.colunms];
-            if (this.options) {
-                tape.name = this.options[this.selectedIndex].name;
-                for (let button of buttons) {
-                    button.name = tape.name;
-                }
-            }
-            for (let button of buttons) {
-                button.value = this.valueAsNumber;
-                //button.value = this.valueAsNumber;
-                //button.textContent = Math.floor(infoTime[this.name].valueAsNumber / 60000);
-                //button.textContent = infoTime[this.name].valueAsNumber % 60000;
-                //button.textContent = infoTime[this.name].value;
-                //button.textContent = infoTime[this.name].value.slice(0, 5);
-                //button.textContent = "";
-            }
-            //const fullMinutes = Math.floor(totalMs / 60000);
-            //leftoverMs = totalMs % 60000;
-            handleCalculation();
-        }
-        //background: linear - gradient(to right, #06d327b0 0 % 56 %, #00eeff6b 0 % 100 %);
-
-        const timeLine = document.createElement("tr");
-
-
-        const table = document.createElement("table");
 
         const eve = new CustomEvent("calc", {
             bubbles: true, // Позволяет событию всплывать
             cancelable: true, // Позволяет событию быть отменяемым
         });
 
-        const tbody = document.createElement("tbody");
+        //################################################################################################
+        //################################################################################################
+        //################################################################################################
+        //################################################################################################
+        //################################################################################################
 
-        // ol.append(start, end);
 
-        for (let i = 0; i < 25; i++) {
-            const line = document.createElement("tr");
-            line.id = i;
-            // ## loatd
-            line.addEventListener("click", function (e) {
-                if (!e.target.closest("button")) return;
-                if (selectedButtons[this.id] === e.target) {
-                    e.target.classList.remove("tg");
-                    //selectedButtons[this.id].textContent = 0;  
-                    delete selectedButtons[this.id];
-                } else {
-                    selectedButtons[this.id] && selectedButtons[this.id].classList.remove("tg");
-                    selectedButtons[this.id] = e.target;
-                    e.target.classList.add("tg");
+    }
+    function dropListSelectTex(array, select = document.createElement("select")) {
+        array.forEach((tape) => {
+            let option = document.createElement("option");
+            option.value = tape;
+            option.textContent = tape;
+            select.append(option);
+        });
+        return select;
+    }
+    function calculate(select, length, speed, time, buttons, action) {
+        const density = Number(select.value);
+        const tape = myThread.find(item => item.density === density);
 
-                    //selectedButtons[this.id].textContent = i;  
-                    console.log(selectedButtons);
-                    console.log({
-                        name: selectedButtons[this.id].name,
-                        textContent: selectedButtons[this.id].textContent,
-                        value: selectedButtons[this.id].value
-                    });
-                }
-                handleCalculation(event);
-            });
-            tbody.append(line);
+        const l = parseFloat(length.value);
+        const s = parseFloat(speed.value);
+        const t = parseFloat(time.valueAsNumber);
+
+        //console.log(tape);
+
+        let interval = 0;
+        if ("density" === action) {
+            length.value = tape.length;
+            speed.value = tape.speed;
+            interval = tape.length / tape.speed * 60000;
+            time.valueAsNumber = Math.floor(interval / 60000) * 60000;
+            for (let button of buttons) {
+                button.value = interval;
+                button.dataset.density = density;
+            }
+            updateTimeTask();
         }
-
-        let dataTime = [0, 0, 0, 0];
-        //################################################################################################
-        //################################################################################################
-        //################################################################################################
-        //################################################################################################
-
-        function calculate(select, length, speed, time, action) {
-            const density = Number(select.value);
-            const tape = myThread.find(item => item.density === density);
-
-            const l = parseFloat(length.value);
-            const s = parseFloat(speed.value);
-            const t = parseFloat(time.valueAsNumber);
-
-            //console.log(tape);
-
-            let interval = 0;
-            if ("select" === action) {
-                length.value = tape.length;
-                speed.value = tape.speed;
-                interval = tape.length / tape.speed * 60000;
-                time.valueAsNumber = Math.floor(interval / 60000) * 60000;
-                for (let button of buttonRow[length.dataset.colunms]) {
-                    button.value = interval;
-                    button.dataset.density = density;
-                }
-                updateTimeTask();
+        if ("interval" === action) {
+            length.value = s * (time.valueAsNumber / 60000);
+            for (let button of buttons) {
+                button.value = time.valueAsNumber;
             }
-            if ("time" === action) {
-                length.value = s * (time.valueAsNumber / 60000);
-                for (let button of buttonRow[length.dataset.colunms]) {
-                    button.value = time.valueAsNumber;
-                }
-                handleCalculation();
-            }
-            if ("speed" === action) {
-                const interval = l / s * 60000;
-                time.valueAsNumber = Math.floor(interval / 60000) * 60000;
-                for (let button of buttonRow[length.dataset.colunms]) {
-                    button.value = interval;
-                }
-                update(density, s);
-                handleCalculation();
-            }
-            if ("length" === action) {
-                const interval = l / s * 60000;
-                time.valueAsNumber = Math.floor(interval / 60000) * 60000;
-                for (let button of buttonRow[length.dataset.colunms]) {
-                    button.value = interval;
-                }
-                handleCalculation();
-                //tape.length = l;
-            }
+            handleCalculation();
         }
-        function update(density, speed) {
-            const tape = myThread.find(item => item.density === density);
-            tape.speed = speed;
+        if ("speed" === action) {
+            const interval = l / s * 60000;
+            time.valueAsNumber = Math.floor(interval / 60000) * 60000;
+            for (let button of buttons) {
+                button.value = interval;
+            }
+            update(density, s);
+            handleCalculation();
         }
-        for (let counterColunms = 0; counterColunms < 14; counterColunms++) {
-            buttonRow.push([]);
-            const td = document.createElement("td");
-            let select = dropListSelectTex(uniqueDensity);
-            select.name = "density";
-            select.dataset.colunms = counterColunms;
+        if ("length" === action) {
+            const interval = l / s * 60000;
+            time.valueAsNumber = Math.floor(interval / 60000) * 60000;
+            for (let button of buttons) {
+                button.value = interval;
+            }
+            handleCalculation();
+            //tape.length = l;
+        }
+    }
+    function update(density, speed) {
+        const tape = myThread.find(item => item.density === density);
+        tape.speed = speed;
+    }
+    function handleCalculation(event) {
+        //section.innerHTML = "";
+        //select.innerHTML = "";
 
-            const length = document.createElement("input");
-            length.name = "length";
-            length.type = "number";
-            length.dataset.colunms = counterColunms;
-            length.placeholder = "Метр";
+        const ol = TaskList.ol;
+        //console.log(selectedButtons);
+        //console.log(buttonLine);
+        //dtinput = document.createElement("input");
+        //dtinput.type = "date";
+        //// Получаем текущую дату
+        //const now = new Date();
+        //// Создаём дату для начала сегодняшнего дня: год, месяц, день, 0 часов, 0 минут, 0 секунд, 0 миллисекунд
+        //const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+        //// Получаем timestamp в миллисекундах
+        //const timestampInMs = startOfDay.getTime() + 3600000 * 7;
+        //dtinput.valueAsNumber = timestampInMs;
+        //dateSave = timestampInMs;
 
-            const speed = document.createElement("input");
-            speed.name = "speed";
-            speed.type = "number";
-            speed.dataset.colunms = counterColunms;
-            speed.placeholder = "Скорость";
 
+        console.log(selectedButtons);
+        compactSelectBtn = selectedButtons.filter(item => item != null);
+        console.log(compactSelectBtn);
+
+        const schedule = compactSelectBtn.map(({ column: { select, length } }) => ({ density: select.value, length: length.value }));
+
+        const sequence = groupSequence(schedule);
+
+        const grouped = groupAll(schedule);
+        localStorage.setItem('tapeSequence', JSON.stringify(sequence));
+        console.log(sequence);
+        console.log(grouped);
+
+        stats.innerHTML = grouped.map(item => `
+        <b>${item.density}</b>
+        Количество: <span>${item.count}</span><span> Катушек ${item.count * 230}</span> 
+        <hr>
+        `).join("");
+
+
+        const needCount = compactSelectBtn.length;
+        while (TaskList.reference.length > needCount) {
+            const last = TaskList.reference.pop();
+            last.time.remove();
+            last.li.remove();
+        }
+        while (TaskList.reference.length < needCount) {
+
+            const li = document.createElement("li");
 
             const time = document.createElement("input");
-            time.name = "interval";
-            time.dataset.colunms = counterColunms;
             time.type = "time";
-            time.placeholder = "с";
-            time.valueAsNumber = Math.floor(dataTime[counterColunms] / 60000) * 60000 || 0;
+            time.disabled = true;
+            const small = document.createElement("small");
+
+            small.classList.add("small");
+
+            li.append(time, small);
+            ol.append(li);
+
+            TaskList.reference.push({
+                li,
+                time,
+                small
+            });
+        }
+        updateTimeTask();
+    }
+    //################################################################################################
+    //################################################################################################
+    //################################################################################################
+    //################################################################################################
 
 
 
-            td.append(select);
-            td.append(document.createElement("br"));
-            td.append(length);
-            td.append(document.createElement("br"));
-            td.append(speed);
-            td.append(document.createElement("br"));
-            td.append(time);
 
+    const columns = [];
 
-            timeLine.append(td);
-            infoTime.push(time);
-            saveSate.push({ select, length, speed, time });
+    const buttonRow = [];
+    const buttonLine = [];
 
-            //     panel button tap
-            for (let j = 0; j < 25; j++) {
-                const cell = document.createElement("td");
-                const tapButton = document.createElement("button");
-                tapButton.classList.add("tap");
+    const ROW_BUTTONS = 25;
+    const COLS = 14;
 
-                buttonLine[j].push(tapButton);
-                buttonRow[counterColunms].push(tapButton);
+    // ------------------------------------
+    // подготовка структур
+    // ------------------------------------
+    const selectedButtons = new Array(ROW_BUTTONS).fill(null);
 
-                tapButton.dataset.colunms = counterColunms;
+    const grid = document.getElementById("grid");
+    grid.addEventListener("click", function (e) {
 
+        const btn = e.target.closest("button.tap");
+        if (!btn) return;
 
-                cell.append(tapButton);
-                tbody.childNodes[j].append(cell);
-            }
+        const row = btn.row;
 
-            //select.addEventListener('change', handleSelect);
-            select.addEventListener('change', () => calculate(select, length, speed, time, "select"));
-            length.addEventListener('change', () => calculate(select, length, speed, time, "length"));
-            length.addEventListener('input', () => calculate(select, length, speed, time, "length"));
-            speed.addEventListener('change', () => calculate(select, length, speed, time, "speed"));
-            speed.addEventListener('input', () => calculate(select, length, speed, time, "speed"));
-
-            time.addEventListener("change", () => calculate(select, length, speed, time, "time"));
-            time.addEventListener("input", () => calculate(select, length, speed, time, "time"));
-            select.dispatchEvent(new MouseEvent("change", {}));
-            //time.dispatchEvent(new MouseEvent("change", {}));
-
+        const prev = selectedButtons[row];
+        // если уже есть активная в строке — снимаем
+        if (prev && prev !== btn) {
+            prev.classList.remove("tg");
         }
 
-        table.classList.add("block");
+        // если клик по уже активной → выключаем
+        if (prev === btn) {
+            btn.classList.remove("tg");
+            selectedButtons[row] = null;
+            handleCalculation(event);
+            return;
+        }
 
-        const thead = document.createElement("thead");
-        thead.append(timeLine);
-        table.append(thead, tbody);
-        main.append(table);
-        //main.append(start);
+        // ставим новую
+        btn.classList.add("tg");
+        selectedButtons[row] = btn;
+        //console.log(selectedButtons);
+        handleCalculation(event);
+    });
+
+    for (let col = 0; col < COLS; col++) {
+
+        columns[col] = {};
+
+        buttonRow[col] = [];
     }
 
+    for (let row = 0; row < ROW_BUTTONS; row++) {
 
-    //################################################################################################
-    //################################################################################################
-    //################################################################################################
-    //################################################################################################
+        buttonLine[row] = [];
+    }
+
+    // ------------------------------------
+    // 1 строка SELECT
+    // ------------------------------------
+
+    for (let col = 0; col < COLS; col++) {
+
+        const select = dropListSelectTex(uniqueDensity);
+
+        select.name = "density";
+        columns[col].select = select;
+
+        select.column = columns[col];
+
+        grid.append(select);
+    }
+
+    // ------------------------------------
+    // 2 строка LENGTH
+    // ------------------------------------
+
+    for (let col = 0; col < COLS; col++) {
+
+        const length = document.createElement("input");
+
+        length.type = "number";
+
+        length.name = "length";
+
+        length.placeholder = "Метр";
+
+        length.dataset.colunms = col;
+
+        columns[col].length = length;
+
+        length.column = columns[col];
+
+        grid.append(length);
+    }
+
+    // ------------------------------------
+    // 3 строка SPEED
+    // ------------------------------------
+
+    for (let col = 0; col < COLS; col++) {
+
+        const speed = document.createElement("input");
+
+        speed.type = "number";
+
+        speed.name = "speed";
+
+        speed.placeholder = "Скорость";
+
+        columns[col].speed = speed;
+
+        speed.column = columns[col];
+
+        grid.append(speed);
+    }
+
+    // ------------------------------------
+    // 4 строка TIME
+    // ------------------------------------
+
+    for (let col = 0; col < COLS; col++) {
+
+        const time = document.createElement("input");
+
+        time.type = "time";
+
+        time.name = "interval";
+
+        time.valueAsNumber = 10 * 60000;
+        //Math.floor(dataTime[col] / 60000) * 60000 || 0;
+
+        columns[col].time = time;
+
+        time.column = columns[col];
+
+        grid.append(time);
+    }
+
+    // ------------------------------------
+    // КНОПКИ
+    // ------------------------------------
+
+    for (let row = 0; row < ROW_BUTTONS; row++) {
+
+        for (let col = 0; col < COLS; col++) {
+
+            const tapButton = document.createElement("button");
+
+            tapButton.classList.add("tap");
+            tapButton.classList.add("col-" + col);
+
+            tapButton.column = columns[col];
+
+            tapButton.row = row;
+
+            buttonRow[col].push(tapButton);
+
+            buttonLine[row].push(tapButton);
+
+            columns[col].buttons ??= [];
+
+            columns[col].buttons.push(tapButton);
+
+            grid.append(tapButton);
+        }
+    }
+
+    // ------------------------------------
+    // СОБЫТИЯ
+    // ------------------------------------
+
+    function handleInput(event) {
+        const column = event.target.column;
+        console.log(column);
+        //column.select.value = "90";
+        calculate(
+            column.select,
+            column.length,
+            column.speed,
+            column.time,
+            column.buttons,
+            event.target.name
+        );
+    }
+    for (let col = 0; col < COLS; col++) {
+
+        const column = columns[col];
+
+        column.select.addEventListener(
+            "change",
+            handleInput
+        );
+
+        column.length.addEventListener(
+            "input",
+            handleInput
+        );
+
+        column.speed.addEventListener(
+            "input",
+            handleInput
+        );
+
+        column.time.addEventListener(
+            "input",
+            handleInput
+        );
+
+        column.select.dispatchEvent(
+            new Event("change")
+        );
+    }
+    console.log(columns);
+
+    const saved = localStorage.getItem('tapeSequence');
+    if (saved) {
+        const loadState = JSON.parse(saved);
+
+        // ####### STATE #######
+        //const loadState = [
+        //    { density: 78, length: 16000, count: 6 },
+        //    { density: 90, length: 13800, count: 3 },
+        //    { density: 90, length: 32000, count: 1 },
+        //    { density: 90, length: 31000, count: 1 },
+        //    { density: 78, length: 16000, count: 3 }
+        //];
+
+
+        const columnMap = new Map();
+
+        let nextColumnIndex = 0;
+        let globalCounter = 0;
+        console.log(loadState);
+        loadState.forEach(item => {
+
+            const key = `${item.density}_${item.length}`;
+
+            // если колонка уже была
+            if (!columnMap.has(key)) {
+
+                columnMap.set(key, nextColumnIndex);
+
+                nextColumnIndex++;
+            }
+
+            // берем старый colIndex
+            const colIndex = columnMap.get(key);
+
+            const col = columns[colIndex];
+
+            if (!col) return;
+
+            // select
+            col.select.value = item.density;
+            col.select.dispatchEvent(
+                new Event("change", { bubbles: true })
+            );
+
+            // length
+            col.length.value = item.length;
+            col.length.dispatchEvent(
+                new Event("input", { bubbles: true })
+            );
+
+            // buttons
+            for (let i = 0; i < item.count; i++) {
+
+                const btn = col.buttons[globalCounter];
+
+                if (!btn) continue;
+
+                btn.dispatchEvent(
+                    new Event("click", { bubbles: true })
+                );
+
+                globalCounter++;
+            }
+        });
+        console.log(columnMap);
+    }
 
 
     {
@@ -1571,7 +1594,7 @@ localSpace.getThreads = [
     //get.textContent = "Загрузить";
     //main.append(get);
 
-    main.append(section);
+    //main.append(section);
 
     let listMS = [];
 
@@ -1899,75 +1922,60 @@ localSpace.getThreads = [
             time.valueAsNumber = timeS * 60000;
         });
     }
-    function handleCalculation(event) {
-        //section.innerHTML = "";
-        //select.innerHTML = "";
+    function groupSequence(arr) {
 
-        const ol = TaskList.ol;
-        //console.log(selectedButtons);
-        //console.log(buttonLine);
-        dtinput = document.createElement("input");
-        dtinput.type = "date";
-        // Получаем текущую дату
-        const now = new Date();
-        // Создаём дату для начала сегодняшнего дня: год, месяц, день, 0 часов, 0 минут, 0 секунд, 0 миллисекунд
-        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-        // Получаем timestamp в миллисекундах
-        const timestampInMs = startOfDay.getTime() + 3600000 * 7;
-        dtinput.valueAsNumber = timestampInMs;
-        dateSave = timestampInMs;
-        //section.append(dtinput);
+        const result = [];
 
-        //section.append(dropListSelect([{ name: "День" }, { name: "Ночь" }], select));
+        let current = null;
 
+        for (const item of arr) {
 
+            if (
+                current &&
+                current.density === item.density &&
+                current.length === item.length
+            ) {
 
+                current.count++;
 
+            } else {
 
-        const startTapeName = document.createElement("select");
-        setNameTape(tape[0], startTapeName);
-        //selectTapeName = startTapeName;
-        //box.append(startTapeName);
+                current = {
+                    density: item.density,
+                    length: item.length,
+                    count: 1
+                };
 
-
-
-        //let intervalSecondsJob = [start.valueAsNumber / 60000];
-
-        //for (let i = 1; i < selectedButtons.length; i++) {
-        //    intervalSecondsJob.push(selectedButtons[i].value / 60000);
-        //}
-        //console.log(intervalSecondsJob);
-
-        console.log(selectedButtons);
-        compactSelectBtn = selectedButtons.filter(item => item != null);
-        const needCount = compactSelectBtn.length;
-        while (TaskList.reference.length > needCount) {
-            const last = TaskList.reference.pop();
-            last.time.remove();
-            last.li.remove();
+                result.push(current);
+            }
         }
-        while (TaskList.reference.length < needCount) {
 
-            const li = document.createElement("li");
-
-            const time = document.createElement("input");
-            time.type = "time";
-            time.disabled = true;
-            const small = document.createElement("small");
-
-            small.classList.add("small");
-
-            li.append(time, small);
-            ol.append(li);
-
-            TaskList.reference.push({
-                li,
-                time,
-                small
-            });
-        }
-        updateTimeTask();
+        return result;
     }
+    function groupAll(arr) {
+
+        const map = new Map();
+
+        for (const item of arr) {
+
+            const key =
+                `${item.density}_${item.length}`;
+
+            if (!map.has(key)) {
+
+                map.set(key, {
+                    density: item.density,
+                    length: item.length,
+                    count: 0
+                });
+            }
+
+            map.get(key).count++;
+        }
+
+        return [...map.values()];
+    }
+
 
     button.addEventListener("click", handleCalculation);
 
