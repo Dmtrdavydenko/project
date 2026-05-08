@@ -14,20 +14,20 @@ class DataTape {
                 ...params
             }),
         });
-
-        if (!response.ok) {
-            throw new Error(`Ошибка HTTP: ${response.status}`);
-        }
-
         for (const [key, value] of response.headers.entries()) {
             console.log("\x1b[34m [" + key + "][" + value + "]");
         }
         const contentType = response.headers.get('content-type');
         console.log("\x1b[33m [" + contentType + "]");
+
+        if (!response.ok) {
+            throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
         const text = await response.text();
-        let data = null;
+
         try {
-            data = JSON.parse(text);
+            const data = JSON.parse(text);
+            console.info("Load server sql");
             return { ok: true, data };
         } catch (error) {
             console.log("\x1b[33m [" + text + "]");
@@ -39,50 +39,63 @@ class DataTape {
                 throw error;
             }
         }
-
-        console.info("Load server sql space data");
-        return data;
     }
     async loadData(action, params = {}) {
         try {
-            console.log("3");
+            console.log("1");
             if (document.location.hostname === "localhost") {
-                this.data = [this.loadState(action)];
-                console.log(this.data, action);
+                this.data = [this.loadState()];
+                console.info("Loaded localStorage no localhost");
                 return this.data;
             }
-            return this.data = [this.loadState(action)];
+            console.info("Loaded localStorage");
+            return this.data = [this.loadState()];
         } catch (error) {
-            console.log(error.message);
-            if (error.message === "No load connection") {
-                this.data = [localSpace[action]];
-                console.info("Load local space data, no connection server");
+            console.warn("Local load failed:", error.message);
+
+            try {
+                this.data = await this.request(action, params);
+                this.saveState(action, this.data);
+                console.info("Load sql and save local space data");
                 return this.data;
-            }
-            if (error.message === "is not valid JSON") {
-                this.data = [localSpace[action]];
-                console.info("Load local space data");
-                return this.data;
-            }
-            if (error.message === "Unexpected end of JSON input") {
+
+            } catch (serverError) {
+                console.error("Server load failed:", serverError.message);
                 this.data = [localSpace[action]];
                 console.info("Load local space data");
                 return this.data;
+
             }
-            if (error.message === "No load localStorage") {
-                try {
-                    this.data = await this.request(action, params);
-                    this.saveState(action, this.data);
-                    console.info("Load sql and save local space data");
-                    return this.data;
-                } catch (error) {
-                    if (error.message === "is not valid JSON" || error.message === "Unexpected end of JSON input") {
-                        this.data = [localSpace[action]];
-                        console.info("Load local space data");
-                        return this.data;
-                    }
-                }
-            }
+
+            //if (error.message === "No load connection") {
+            //    this.data = [localSpace[action]];
+            //    console.info("Load local space data, no connection server");
+            //    return this.data;
+            //}
+            //if (error.message === "is not valid JSON") {
+            //    this.data = [localSpace[action]];
+            //    console.info("Load local space data");
+            //    return this.data;
+            //}
+            //if (error.message === "Unexpected end of JSON input") {
+            //    this.data = [localSpace[action]];
+            //    console.info("Load local space data");
+            //    return this.data;
+            //}
+            //if (error.message === "No load localStorage") {
+            //    try {
+            //        this.data = await this.request(action, params);
+            //        this.saveState(action, this.data);
+            //        console.info("Load sql and save local space data");
+            //        return this.data;
+            //    } catch (error) {
+            //        if (error.message === "is not valid JSON" || error.message === "Unexpected end of JSON input") {
+            //            this.data = [localSpace[action]];
+            //            console.info("Load local space data");
+            //            return this.data;
+            //        }
+            //    }
+            //}
             console.error("Ошибка при загрузке данных:", error);
             console.dir(error);
         }
@@ -170,20 +183,14 @@ class DataTape {
             }
         }
     }
-    loadState(action) {
-        console.log(action);
-        let localData = null;
-        if (action === "getThreads") {
+    loadState() {
+        try {
             const saved = localStorage.getItem('tapeSettings');
-            if (saved) {
-                try {
-                    console.info("Load localStorage",saved);
-                    return JSON.parse(saved);;
-                } catch (e) {
-                    throw new Error("No load localStorage");
-                }
-            } else throw new Error("No load localStorage");
-        } else throw new Error("No load localStorage");
+            if (!saved) throw new Error("No load localStorage");
+            return JSON.parse(saved);
+        } catch (e) {
+            throw new Error("No load localStorage");
+        }
     }
 }
 const Tape = new DataTape("https://worktime.up.railway.app/app");
