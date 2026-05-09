@@ -577,8 +577,8 @@ async function select(body) {
                 LEFT JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
                 LEFT JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
                 LEFT JOIN Thread_Parameters thread                    ON m.thread_densiti_id = thread.thread_id
-                LEFT JOIN color c                    ON m.color_id = c.color_id
-                LEFT JOIN additive ad                    ON m.additive_id = ad.additive_id
+                LEFT JOIN color c                    ON m.color_id = c.id
+                LEFT JOIN additive ad                    ON m.additive_id = ad.id
                 LEFT JOIN warp_quantity warp                    ON m.quantity_id = warp.warp_id
                 LEFT JOIN weft_quantity weft                    ON m.quantity_id = weft.weft_id
                 LEFT JOIN yarn_type type                    ON m.yarn_id = type.yarn_id`;
@@ -601,7 +601,7 @@ async function select(body) {
                 //        thread.thread_density as t_density,
                 //        c.color,
                 //        thread.thread_length as t_length,
-                //        ad.additive_name,
+                //        ad.additive,
                 //        m.*
                 //     FROM looms l
                 //     JOIN speed s ON l.loom_speed = s.speed_id
@@ -611,7 +611,7 @@ async function select(body) {
                 //     LEFT JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
                 //     LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
                 //     LEFT JOIN additive ad ON m.additive_id = ad.id
-                //     LEFT JOIN color c ON m.color_id = c.color_id
+                //     LEFT JOIN color c ON m.color_id = c.id
                 //     LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
                 //     LEFT JOIN warp_quantity warp                    ON m.quantity_id = warp.warp_id
                 //     LEFT JOIN weft_quantity weft                    ON m.quantity_id = weft.weft_id
@@ -634,7 +634,7 @@ SELECT
     END) AS quantity,
     NULL AS thread_density,
     NULL AS color,
-    NULL AS additive_name,
+    NULL AS additive,
     NULL AS type_id,
     NULL AS sleeve_w_d_id,
     NULL AS yarn_id,
@@ -651,12 +651,12 @@ LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
 LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
 LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
 LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
-LEFT JOIN color c ON m.color_id = c.color_id
+LEFT JOIN color c ON m.color_id = c.id
 LEFT JOIN additive ad ON m.additive_id = ad.id
 LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
 LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
 LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
-WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_name = 'светостабилизатор';
+WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive = 'светостабилизатор';
                 
                 `;
 
@@ -682,7 +682,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                         tape_density.density as tape_density,
 
                         c.color as tape_color,
-                        ad.additive_name,
+                        ad.additive,
 
 
                         -- l.modifier_id,
@@ -733,17 +733,17 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
                      LEFT JOIN Tape ON thread.density_id = Tape.id
                      LEFT JOIN tape_density ON thread.density_id = tape_density.id
 
-                     LEFT JOIN color c ON m.color_id = c.color_id
-                     LEFT JOIN additive ad ON m.additive_id = ad.additive_id
+                     LEFT JOIN color c ON m.color_id = c.id
+                     LEFT JOIN additive ad ON m.additive_id = ad.id
 
 
                      LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
                      LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
                      LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
 
-                     -- WHERE type.yarn_name = "warp" and thread.thread_density = "105" and ad.additive_name = "светостабилизатор"
+                     -- WHERE type.yarn_name = "warp" and thread.thread_density = "105" and ad.additive = "светостабилизатор"
 
-                     -- GROUP BY type.yarn_name, thread.thread_density, c.color, ad.additive_name
+                     -- GROUP BY type.yarn_name, thread.thread_density, c.color, ad.additive
 
                      ORDER BY fabric_width ASC, fabric_density ASC
 
@@ -769,7 +769,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive_na
     Tape.length as tape_length,
     tape_density.density as tape_density,
     c.color as tape_color,
-    ad.additive_name,
+    ad.additive,
 
     -- WEFT
     MAX(CASE 
@@ -820,8 +820,8 @@ LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
 LEFT JOIN Tape ON thread.density_id = Tape.id
 LEFT JOIN tape_density ON thread.density_id = tape_density.id
 
-LEFT JOIN color c ON m.color_id = c.color_id
-LEFT JOIN additive ad ON m.additive_id = ad.additive_id
+LEFT JOIN color c ON m.color_id = c.id
+LEFT JOIN additive ad ON m.additive_id = ad.id
 
 LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
 LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
@@ -840,7 +840,7 @@ GROUP BY
     Tape.length,
     tape_density.density,
     c.color,
-    ad.additive_name
+    ad.additive
 
 ORDER BY fabric_width ASC, fabric_density ASC;
 
@@ -888,10 +888,10 @@ LEFT JOIN tape_density
     ON thread.density_id = tape_density.id
 
 LEFT JOIN color c 
-    ON m.color_id = c.color_id
+    ON m.color_id = c.id
 
 LEFT JOIN additive ad 
-    ON m.additive_id = ad.additive_id
+    ON m.additive_id = ad.id
 
 LEFT JOIN yarn_type type 
     ON m.yarn_id = type.yarn_id
@@ -910,7 +910,7 @@ GROUP BY
     sd.sleeve_density,
     m.type_id,
     c.color,
-    ad.additive_name
+    ad.additive
 
 ORDER BY l.loom_number ASC;
                 
@@ -955,7 +955,7 @@ ORDER BY l.loom_number ASC;
                 //LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id  -- Источник density
                 //LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
                 //LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
-                //LEFT JOIN color c ON m.color_id = c.color_id
+                //LEFT JOIN color c ON m.color_id = c.id
                 //LEFT JOIN additive ad ON m.additive_id = ad.id
                 //LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
                 //LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
@@ -1002,7 +1002,7 @@ ORDER BY l.loom_number ASC;
                 //LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id  -- Пока оставил JOIN, но density не используется в выводе
                 //LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
                 //LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
-                //LEFT JOIN color c ON m.color_id = c.color_id
+                //LEFT JOIN color c ON m.color_id = c.id
                 //LEFT JOIN additive ad ON m.additive_id = ad.id
                 //LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
                 //LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
@@ -1032,7 +1032,7 @@ ORDER BY l.loom_number ASC;
                 //    NULL AS weft_length, --Не суммируем, так как не указано
                 //                "78" AS thread_density,
                 //                    "белая" AS color,
-                //                        "нет" AS additive_name,
+                //                        "нет" AS additive,
                 //                            NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL-- NULL для всех полей m.* (замените на конкретные, если знаете)
                 //FROM looms l
                 //JOIN speed s ON l.loom_speed = s.speed_id 
@@ -1041,18 +1041,18 @@ ORDER BY l.loom_number ASC;
                 //LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
                 //LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
                 //LEFT JOIN Thread_Parameters thread ON m.thread_densiti_id = thread.thread_id
-                //LEFT JOIN color c ON m.color_id = c.color_id
+                //LEFT JOIN color c ON m.color_id = c.id
                 //LEFT JOIN additive ad ON m.additive_id = ad.id
                 //LEFT JOIN yarn_type type ON m.yarn_id = type.yarn_id
                 //LEFT JOIN warp_quantity warp ON m.quantity_id = warp.warp_id
                 //LEFT JOIN weft_quantity weft ON m.quantity_id = weft.weft_id
-                //WHERE type.yarn_name = 'warp' AND thread.thread_density = 78 AND c.color = 'белая' AND ad.additive_name = 'нет'  -- Фильтр для группы
+                //WHERE type.yarn_name = 'warp' AND thread.thread_density = 78 AND c.color = 'белая' AND ad.additive = 'нет'  -- Фильтр для группы
 
                 //ORDER BY width ASC, density ASC
                 break;
             case "Thread_Parameters":
                 const field = ["thread_id", "thread_density", "thread_length"];
-                //sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
+                //sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.id";
                 sql = `
                 SELECT density, length, thread_speed_id, thread_time
 
@@ -1186,8 +1186,8 @@ ORDER BY l.loom_number ASC;
                     JOIN Tape ON Thread_Parameters.density_id = Tape.id
                     JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
 
-                    JOIN color ON TapeExtrusion.color_id = color.color_id
-                    JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
+                    JOIN color ON TapeExtrusion.color_id = color.id
+                    JOIN additive ON TapeExtrusion.additive_id = additive.id
                     ORDER BY Tape.density_id ASC
                     `;
                 break;
@@ -1298,7 +1298,7 @@ async function getTable(body) {
                 break;
             case "Thread_Parameters":
                 //const field = ["thread_id", "thread_density", "thread_length"];
-                //sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.color_id";
+                //sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.id";
                 //sql = "SELECT * FROM Thread_Parameters";
                 sql = `
                 SELECT thread_id, density, thread_speed_id FROM Thread_Parameters
@@ -1360,8 +1360,8 @@ async function getTable(body) {
                 sql = "SELECT * " +
                     "FROM TapeExtrusion " +
                     "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
-                    "JOIN color ON TapeExtrusion.color_id = color.color_id " +
-                    "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
+                    "JOIN color ON TapeExtrusion.color_id = color.id " +
+                    "JOIN additive ON TapeExtrusion.additive_id = additive.id " +
                     "ORDER BY thread_density ASC";
                 break;
             default:
@@ -1572,13 +1572,13 @@ async function insertTime(body) {
 //            try {
 //                console.log('Успешно подключено к базе данных MySQL!');
 //                const sql = "SELECT TapeExtrusion.id as id, Thread_Parameters.thread_id as group_id, density, yarn_name as type, " +
-//                    "color, additive_name, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
+//                    "color, additive, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
 //                    "FROM TapeExtrusion " +
 //                    "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
 //                    "JOIN Tape   ON Thread_Parameters.tape_id = Tape.id " +
 //                    "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
-//                    "JOIN color ON TapeExtrusion.color_id = color.color_id " +
-//                    "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
+//                    "JOIN color ON TapeExtrusion.color_id = color.id " +
+//                    "JOIN additive ON TapeExtrusion.additive_id = additive.id " +
 //                    "ORDER BY density ASC";
 //                //const data = await connection.execute(sql);
 //                //console.log(data);
@@ -1622,14 +1622,14 @@ async function getTape() {
     console.log("CALL=", getTape.name)
     let connection = null;
     const sql = "SELECT TapeExtrusion.id as id, Thread_Parameters.thread_id as group_id, density, yarn_name as type, " +
-        "color, additive_name, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
+        "color, additive, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
         "FROM TapeExtrusion " +
         "JOIN Thread_Parameters ON TapeExtrusion.thread_id = Thread_Parameters.thread_id " +
         "JOIN Tape ON Thread_Parameters.density_id = Tape.id " +
         "JOIN tape_density ON Thread_Parameters.density_id = tape_density.id " +
         "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
-        "JOIN color ON TapeExtrusion.color_id = color.color_id " +
-        "JOIN additive ON TapeExtrusion.additive_id = additive.additive_id " +
+        "JOIN color ON TapeExtrusion.color_id = color.id " +
+        "JOIN additive ON TapeExtrusion.additive_id = additive.id " +
         "ORDER BY density ASC";
     try {
         connection = await getAwaitConnect();
@@ -1682,8 +1682,8 @@ async function getTapeDensity() {
 
         JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
 
-        JOIN color ON TapeExtrusion.color_id = color.color_id
-        JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
+        JOIN color ON TapeExtrusion.color_id = color.id
+        JOIN additive ON TapeExtrusion.additive_id = additive.id
 
     GROUP BY tape_density, tape_speed, group_id, length
     ORDER BY tape_density ASC
@@ -1811,7 +1811,7 @@ async function getDay(body) {
 
             Tape.density,
             color.color,
-            additive.additive_name,
+            additive.additive,
             Tape.length,
             Thread_Parameters.thread_speed_id as speed,
             (Tape.length / Thread_Parameters.thread_speed_id) * 60000 as tape_milliseconds
@@ -1835,9 +1835,9 @@ async function getDay(body) {
 
             JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
 
-            JOIN color ON TapeExtrusion.color_id = color.color_id
+            JOIN color ON TapeExtrusion.color_id = color.id
 
-            JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
+            JOIN additive ON TapeExtrusion.additive_id = additive.id
 
             WHERE  client_local_time >= '${body.day}'                                 -- начало
 
@@ -1873,7 +1873,7 @@ async function getTime() {
 
             Tape.density,
             color.color,
-            additive.additive_name,
+            additive.additive,
             Tape.length,
             Thread_Parameters.thread_speed_id as speed,
             (Tape.length / Thread_Parameters.thread_speed_id) * 60000 as tape_milliseconds
@@ -1897,9 +1897,9 @@ async function getTime() {
 
             JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
 
-            JOIN color ON TapeExtrusion.color_id = color.color_id
+            JOIN color ON TapeExtrusion.color_id = color.id
 
-            JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
+            JOIN additive ON TapeExtrusion.additive_id = additive.id
 
             -- WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 12 HOUR)
             WHERE task_time >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 12 HOUR)
@@ -1935,7 +1935,7 @@ async function devGetTime() {
 
             Tape.density,
             color.color,
-            additive.additive_name,
+            additive.additive,
             Tape.length,
             Thread_Parameters.thread_speed_id as speed,
             (Tape.length / Thread_Parameters.thread_speed_id) * 60000 as tape_milliseconds
@@ -1950,9 +1950,9 @@ async function devGetTime() {
 
             JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
 
-            JOIN color ON TapeExtrusion.color_id = color.color_id
+            JOIN color ON TapeExtrusion.color_id = color.id
 
-            JOIN additive ON TapeExtrusion.additive_id = additive.additive_id
+            JOIN additive ON TapeExtrusion.additive_id = additive.id
 
             WHERE task_time >= DATE_SUB(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 HOUR), INTERVAL 24*3-12 HOUR)
 

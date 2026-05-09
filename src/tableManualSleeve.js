@@ -80,7 +80,7 @@ export class ManualRepository {
                 END as quantity,
                 tape_density.density as tape_density,
                 c.color,
-                ad.additive_name
+                ad.additive
                 -- m.created_at,
                 -- m.updated_at
                 FROM fabric_recipe m
@@ -90,8 +90,8 @@ export class ManualRepository {
                 JOIN tape_speed               ON m.tape_recipe_id = tape_speed.recipe_id
                 JOIN tape_length              ON tape_speed.density_id = tape_length.density_id
                 JOIN tape_density             ON tape_speed.density_id = tape_density.id
-                JOIN color c                  ON m.color_id = c.color_id
-                JOIN additive ad              ON m.additive_id = ad.additive_id
+                JOIN color c                  ON m.color_id = c.id
+                JOIN additive ad              ON m.additive_id = ad.id
                 LEFT JOIN warp_quantity warp  ON m.quantity_id = warp.warp_id
                 LEFT JOIN weft_quantity weft  ON m.quantity_id = weft.weft_id
                 JOIN yarn_type type           ON m.yarn_id = type.yarn_id
@@ -127,7 +127,7 @@ export class ManualRepository {
             JOIN sleeve_density d               ON swd.sleeve_density_id =   d.sleeve_density_id
 
             JOIN Thread_Parameters tp           ON m.thread_densiti_id =     tp.thread_id
-            JOIN color c                        ON m.color_id =              c.color_id
+            JOIN color c                        ON m.color_id =              c.id
             JOIN additive a                     ON m.additive_id =           a.id
 
             JOIN warp_quantity waq              ON m.quantity_id =           waq.warp_id
@@ -141,7 +141,7 @@ export class ManualRepository {
             density = 65        and
             yarn_name = "warp"  and
             thread_density = 90 and
-            additive_name = "нет";
+            additive = "нет";
             `
 
 

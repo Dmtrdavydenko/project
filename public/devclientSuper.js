@@ -122,7 +122,7 @@ localSpace.getTape = [
         "density": 50,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 62,
         "time_seconds": 3720,
         "time_milliseconds": 3720000
@@ -133,7 +133,7 @@ localSpace.getTape = [
         "density": 64,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 58,
         "time_seconds": 3480,
         "time_milliseconds": 3480000
@@ -144,7 +144,7 @@ localSpace.getTape = [
         "density": 64,
         "type": "уток",
         "color": "оранжевая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 58,
         "time_seconds": 3480,
         "time_milliseconds": 3480000
@@ -155,7 +155,7 @@ localSpace.getTape = [
         "density": 78,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 36.36360168457031,
         "time_seconds": 2181.8161010742188,
         "time_milliseconds": 2181816.1010742188
@@ -166,7 +166,7 @@ localSpace.getTape = [
         "density": 78,
         "type": "уток",
         "color": "цветная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 36.36360168457031,
         "time_seconds": 2181.8161010742188,
         "time_milliseconds": 2181816.1010742188
@@ -177,7 +177,7 @@ localSpace.getTape = [
         "density": 78,
         "type": "уток",
         "color": "желтая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 36.36360168457031,
         "time_seconds": 2181.8161010742188,
         "time_milliseconds": 2181816.1010742188
@@ -188,7 +188,7 @@ localSpace.getTape = [
         "density": 78,
         "type": "уток",
         "color": "зелёная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 45.714298248291016,
         "time_seconds": 2742.857894897461,
         "time_milliseconds": 2742857.894897461
@@ -199,7 +199,7 @@ localSpace.getTape = [
         "density": 78,
         "type": "уток",
         "color": "оранжевая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 36.36360168457031,
         "time_seconds": 2181.8161010742188,
         "time_milliseconds": 2181816.1010742188
@@ -210,7 +210,7 @@ localSpace.getTape = [
         "density": 78,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 1,5%",
+        "additive": "светостаб 1,5%",
         "thread_time": 36.36360168457031,
         "time_seconds": 2181.8161010742188,
         "time_milliseconds": 2181816.1010742188
@@ -221,7 +221,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "серая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -232,7 +232,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "цветная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 40,
         "time_seconds": 2400,
         "time_milliseconds": 2400000
@@ -243,7 +243,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "чёрная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -254,7 +254,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "красная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -265,7 +265,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "оранжевая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -276,7 +276,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "прозрачная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -287,7 +287,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "синяя",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -298,7 +298,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 1,5%",
+        "additive": "светостаб 1,5%",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -309,7 +309,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -320,7 +320,7 @@ localSpace.getTape = [
         "density": 102,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 1,5%",
+        "additive": "светостаб 1,5%",
         "thread_time": 34,
         "time_seconds": 2040,
         "time_milliseconds": 2040000
@@ -331,7 +331,7 @@ localSpace.getTape = [
         "density": 105,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 1,5%",
+        "additive": "светостаб 1,5%",
         "thread_time": 28.875,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
@@ -342,7 +342,7 @@ localSpace.getTape = [
         "density": 105,
         "type": "уток",
         "color": "зелёная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28.875,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
@@ -353,7 +353,7 @@ localSpace.getTape = [
         "density": 105,
         "type": "уток",
         "color": "бирюзовая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28.875,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
@@ -364,7 +364,7 @@ localSpace.getTape = [
         "density": 105,
         "type": "уток",
         "color": "цветная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28.875,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
@@ -375,7 +375,7 @@ localSpace.getTape = [
         "density": 105,
         "type": "уток",
         "color": "чёрная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28.875,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
@@ -386,7 +386,7 @@ localSpace.getTape = [
         "density": 105,
         "type": "уток",
         "color": "красная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28.875,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
@@ -397,7 +397,7 @@ localSpace.getTape = [
         "density": 110,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 27,
         "time_seconds": 1620,
         "time_milliseconds": 1620000
@@ -408,7 +408,7 @@ localSpace.getTape = [
         "density": 110,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 2%",
+        "additive": "светостаб 2%",
         "thread_time": 27,
         "time_seconds": 1620,
         "time_milliseconds": 1620000
@@ -419,7 +419,7 @@ localSpace.getTape = [
         "density": 110,
         "type": "уток",
         "color": "чёрная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 27,
         "time_seconds": 1620,
         "time_milliseconds": 1620000
@@ -430,7 +430,7 @@ localSpace.getTape = [
         "density": 110,
         "type": "уток",
         "color": "желтая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 27,
         "time_seconds": 1620,
         "time_milliseconds": 1620000
@@ -441,7 +441,7 @@ localSpace.getTape = [
         "density": 110,
         "type": "уток",
         "color": "темно-синяя",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 27,
         "time_seconds": 1620,
         "time_milliseconds": 1620000
@@ -452,7 +452,7 @@ localSpace.getTape = [
         "density": 110,
         "type": "уток",
         "color": "синяя",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 27,
         "time_seconds": 1620,
         "time_milliseconds": 1620000
@@ -463,7 +463,7 @@ localSpace.getTape = [
         "density": 112,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 30,
         "time_seconds": 1800,
         "time_milliseconds": 1800000
@@ -474,7 +474,7 @@ localSpace.getTape = [
         "density": 112,
         "type": "уток",
         "color": "цветная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 30,
         "time_seconds": 1800,
         "time_milliseconds": 1800000
@@ -485,7 +485,7 @@ localSpace.getTape = [
         "density": 130,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 26.651399612426758,
         "time_seconds": 1599.0839767456055,
         "time_milliseconds": 1599083.9767456055
@@ -496,7 +496,7 @@ localSpace.getTape = [
         "density": 130,
         "type": "уток",
         "color": "синяя",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 26.651399612426758,
         "time_seconds": 1599.0839767456055,
         "time_milliseconds": 1599083.9767456055
@@ -507,7 +507,7 @@ localSpace.getTape = [
         "density": 130,
         "type": "уток",
         "color": "чёрная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 26.651399612426758,
         "time_seconds": 1599.0839767456055,
         "time_milliseconds": 1599083.9767456055
@@ -518,7 +518,7 @@ localSpace.getTape = [
         "density": 140,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28,
         "time_seconds": 1680,
         "time_milliseconds": 1680000
@@ -529,7 +529,7 @@ localSpace.getTape = [
         "density": 140,
         "type": "уток",
         "color": "цветная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28,
         "time_seconds": 1680,
         "time_milliseconds": 1680000
@@ -540,7 +540,7 @@ localSpace.getTape = [
         "density": 170,
         "type": "уток",
         "color": "цветная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28,
         "time_seconds": 1680,
         "time_milliseconds": 1680000
@@ -551,7 +551,7 @@ localSpace.getTape = [
         "density": 170,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28,
         "time_seconds": 1680,
         "time_milliseconds": 1680000
@@ -562,7 +562,7 @@ localSpace.getTape = [
         "density": 170,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 2%",
+        "additive": "светостаб 2%",
         "thread_time": 28,
         "time_seconds": 1680,
         "time_milliseconds": 1680000
@@ -573,7 +573,7 @@ localSpace.getTape = [
         "density": 220,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 26,
         "time_seconds": 1560,
         "time_milliseconds": 1560000
@@ -584,7 +584,7 @@ localSpace.getTape = [
         "density": 220,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 2%",
+        "additive": "светостаб 2%",
         "thread_time": 26,
         "time_seconds": 1560,
         "time_milliseconds": 1560000
@@ -595,7 +595,7 @@ localSpace.getTape = [
         "density": 240,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 2%",
+        "additive": "светостаб 2%",
         "thread_time": 22,
         "time_seconds": 1320,
         "time_milliseconds": 1320000
@@ -1989,7 +1989,7 @@ localSpace.getTapeDensity = [
             option.value = tape.id;
 
             //option.textContent = `${tape.color}`;
-            option.textContent = `${tape.density} ${tape.additive_name === "нет" ? tape.color : tape.additive_name}`;
+            option.textContent = `${tape.density} ${tape.additive === "нет" ? tape.color : tape.additive}`;
             select.append(option);
         });
         return select;

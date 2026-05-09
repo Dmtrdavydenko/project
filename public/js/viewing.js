@@ -162,7 +162,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763150400000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "светостабилизатор 1,5%"
+    //        "additive": "светостабилизатор 1,5%"
     //    },
     //    {
     //        "id": 2,
@@ -170,7 +170,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763152380000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 3,
@@ -178,7 +178,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763154360000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 4,
@@ -186,7 +186,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763156340000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 5,
@@ -194,7 +194,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763158320000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 6,
@@ -202,7 +202,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763160300000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 7,
@@ -210,7 +210,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763162280000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 8,
@@ -218,7 +218,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763164260000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 9,
@@ -226,7 +226,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763169600000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 10,
@@ -234,7 +234,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763172000000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 11,
@@ -242,7 +242,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763174400000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 12,
@@ -250,7 +250,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763176800000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 13,
@@ -258,7 +258,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763179200000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 14,
@@ -266,7 +266,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763181600000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 15,
@@ -274,7 +274,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763184000000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 16,
@@ -282,7 +282,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763186400000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    },
     //    {
     //        "id": 17,
@@ -290,10 +290,10 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //        "time_milliseconds": 1763188800000,
     //        "thread_density": 90,
     //        "color": "белая",
-    //        "additive_name": "нет"
+    //        "additive": "нет"
     //    }
     //]
-    //option.textContent = `${tape.density} ${item.additive_name === "нет" ? item.color : item.additive_name}`;
+    //option.textContent = `${tape.density} ${item.additive === "нет" ? item.color : item.additive}`;
 
 
 
@@ -309,7 +309,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //} else {
     //    console.log(`Индекс ${i}: Основа (warp) - task_length: ${item.task_length}, length: ${item.length}`);
     //}
-    //const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.type} ${item.density} ${item.additive_name === "нет" ? item.color : item.additive_name}` }));
+    //const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.type} ${item.density} ${item.additive === "нет" ? item.color : item.additive}` }));
     let intervalSecondsJob = [0];
 
 
@@ -325,7 +325,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
 
     const schedule = task[0].map(item => {
         const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
-        const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
+        const nameAdd = item.additive === "нет" ? item.color : item.additive;
 
         const totalMs = item.task_milliseconds + leftoverMs;
         const fullMinutes = Math.floor(totalMs / 60000);

@@ -176,7 +176,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     //} else {
     //    console.log(`Индекс ${i}: Основа (warp) - task_length: ${item.task_length}, length: ${item.length}`);
     //}
-    //const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.type} ${item.density} ${item.additive_name === "нет" ? item.color : item.additive_name}` }));
+    //const schedule = task[0].map(item => ({ time: item.time_milliseconds, name: `${item.type} ${item.density} ${item.additive === "нет" ? item.color : item.additive}` }));
 
 
 
@@ -187,7 +187,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
     let schedule
     //const schedule = history.map(item => {
     //    const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
-    //    const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
+    //    const nameAdd = item.additive === "нет" ? item.color : item.additive;
 
     //    const totalMs = item.task_milliseconds + leftoverMs;
     //    const fullMinutes = Math.floor(totalMs / 60000);
@@ -234,7 +234,7 @@ const Time = new DataTape("https://worktime.up.railway.app/app");
 
         schedule = tasks.map(item => {
             const warp_or_weft = Math.abs(item.task_length - item.length) <= 450 ? item.type : 'основа';
-            const nameAdd = item.additive_name === "нет" ? item.color : item.additive_name;
+            const nameAdd = item.additive === "нет" ? item.color : item.additive;
 
             const totalMs = item.task_milliseconds + leftoverMs;
             const fullMinutes = Math.floor(totalMs / 60000);

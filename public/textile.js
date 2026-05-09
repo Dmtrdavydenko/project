@@ -551,7 +551,7 @@ async function getTable() {
 }
 let dev = [];
 function myfilter(arr) {
-    const filteredThreadType = arr.filter(item => item.yarn_name === "warp" && item.thread_density === 78 && item.color === "белая" && item.additive_name === "нет");
+    const filteredThreadType = arr.filter(item => item.yarn_name === "warp" && item.thread_density === 78 && item.color === "белая" && item.additive === "нет");
     const sum = filteredThreadType.reduce((sum, current) => sum + +current.quantity, 0);
     dev = filteredThreadType;
     console.log(filteredThreadType);
@@ -1196,7 +1196,7 @@ class Color {
     async fet(name) {
         (await slect(name)).rows.forEach(color => {
             const option = document.createElement('option');
-            option.value = color.color_id;
+            option.value = color.id;
             option.textContent = color.color;
             this.select.appendChild(option);
         });
@@ -1207,7 +1207,7 @@ class AdditiveInfo {
         this.yarn = yarn;
     }
     get id() { return this.yarn.additive_id; }
-    get name() { return this.yarn.additive_name; }
+    get name() { return this.yarn.additive; }
 
 }
 class SleeveWidthDensityInfo {
@@ -1677,7 +1677,7 @@ function generateUpdateSQL(data, update) {
             JOIN sleeve_density       d         ON swd.sleeve_density_id =   d.sleeve_density_id
 
             JOIN Thread_Parameters    tp        ON m.thread_densiti_id =     tp.thread_id
-            JOIN color                c         ON m.color_id =              c.color_id
+            JOIN color                c         ON m.color_id =              c.id
             JOIN additive             a         ON m.additive_id =           a.id
 
             JOIN warp_quantity        waq       ON m.quantity_id =           waq.warp_id

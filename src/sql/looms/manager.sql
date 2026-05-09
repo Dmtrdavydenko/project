@@ -14,11 +14,11 @@ SELECT
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN color_tape.color END) AS color_warp,
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN color_tape.color END) AS color_weft,
 
-    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN additive.additive_name END) AS additive_warp,
-    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN additive.additive_name END) AS additive_weft,
+    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN additive.additive END) AS additive_warp,
+    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN additive.additive END) AS additive_weft,
 
-    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN additive.additive_name END) AS warp,
-    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN additive.additive_name END) AS weft
+    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN additive.additive END) AS warp,
+    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN additive.additive END) AS weft
     
 FROM looms
 JOIN loom_machine ON looms.model_of_the_loom_id = loom_machine.id
@@ -33,7 +33,7 @@ LEFT JOIN weft_quantity ON fabric_recipe.quantity_id = weft_quantity.weft_id
 JOIN tape_speed ON fabric_recipe.tape_recipe_id = tape_speed.recipe_id
 JOIN tape_length ON tape_speed.density_id = tape_length.density_id
 JOIN tape_density ON tape_speed.density_id = tape_density.id
-JOIN color color_tape ON fabric_recipe.color_id = color_tape.color_id
+JOIN color color_tape ON fabric_recipe.color_id = color_tape.id
 JOIN additive ON fabric_recipe.additive_id = additive.additive_id
 
 GROUP BY

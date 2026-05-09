@@ -3,6 +3,69 @@ class DataTape {
         this.apiUrl = apiUrl;
         this.data = [];
     }
+    async loadData(action, params = {}) {
+        try {
+            console.log("1");
+            if (document.location.hostname === "localhost") {
+                try {
+                    return [this.loadState(action)];
+                    //return this.data;
+                } catch (e) {
+                    return [localSpace[action]];
+                    //return this.data;
+                }
+                //console.info("Loaded localStorage no localhost");
+                //return this.data;
+            }
+            try {
+                const localData = this.loadState(action);
+                if (localData) {
+                    this.data = localData;
+                    console.info("Loaded data from localStorage");
+                } else if (localSpace[action]) {
+                    // fallback на локальные данные (например, жестко закодированные)
+                    this.data = [localSpace[action]];
+                    console.info("Loaded data from localSpace");
+                }
+            } catch (error) {
+                console.warn("Local load failed:", error.message);
+                this.data = [localSpace[action]];
+            }
+
+            // Фоновая загрузка с сервера
+            (async () => {
+                try {
+                    const serverData = await this.request(action, params);
+                    this.data = serverData;
+                    this.saveState(action, this.data);
+                    console.info("Background server update complete");
+                } catch (serverError) {
+                    console.error("Background server load failed:", serverError.message);
+                }
+            })();
+
+            // Возвращаем локальные данные немедленно
+            return this.data;
+        } catch (error) {
+            console.warn("Local load failed:", error.message);
+
+            try {
+                this.data = await this.request(action, params);
+                this.saveState(action, this.data);
+                console.info("Load sql and save local space data");
+                return this.data;
+
+            } catch (serverError) {
+                console.error("Server load failed:", serverError.message);
+                this.data = [localSpace[action]];
+                console.info("Load local space data");
+                return this.data;
+
+            }
+            console.error("Ошибка при загрузке данных:", error);
+            console.dir(error);
+        }
+    }
     async request(action, params = {}) {
         const response = await fetch(this.apiUrl, {
             method: "POST",
@@ -38,44 +101,6 @@ class DataTape {
             if (error.message === "Unexpected end of JSON input") {
                 throw error;
             }
-        }
-    }
-    async loadData(action, params = {}) {
-        try {
-            console.log("2");
-            if (document.location.hostname === "localhost") {
-
-                try {
-                    this.data = [this.loadState(action)];
-                    return this.data;
-                } catch (e) {
-                    this.data = [localSpace[action]];
-                    return this.data;
-                }
-
-                console.info("Loaded localStorage no localhost");
-                return this.data;
-            }
-            console.info("Loaded localStorage");
-            return this.data = [this.loadState(action)];
-        } catch (error) {
-            console.warn("Local load failed:", error.message);
-
-            try {
-                this.data = await this.request(action, params);
-                this.saveState(action, this.data);
-                console.info("Load sql and save local space data");
-                return this.data;
-
-            } catch (serverError) {
-                console.error("Server load failed:", serverError.message);
-                this.data = [localSpace[action]];
-                console.info("Load local space data");
-                return this.data;
-
-            }
-            console.error("Ошибка при загрузке данных:", error);
-            console.dir(error);
         }
     }
     getAll() {
@@ -182,7 +207,7 @@ localSpace.getTape = [
         "density": 50,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 62,
         "time_seconds": 3720,
         "time_milliseconds": 3720000
@@ -193,7 +218,7 @@ localSpace.getTape = [
         "density": 64,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 58,
         "time_seconds": 3480,
         "time_milliseconds": 3480000
@@ -204,7 +229,7 @@ localSpace.getTape = [
         "density": 64,
         "type": "уток",
         "color": "оранжевая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 58,
         "time_seconds": 3480,
         "time_milliseconds": 3480000
@@ -215,7 +240,7 @@ localSpace.getTape = [
         "density": 78,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 36.36360168457031,
         "time_seconds": 2181.8161010742188,
         "time_milliseconds": 2181816.1010742188
@@ -226,7 +251,7 @@ localSpace.getTape = [
         "density": 78,
         "type": "уток",
         "color": "цветная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 36.36360168457031,
         "time_seconds": 2181.8161010742188,
         "time_milliseconds": 2181816.1010742188
@@ -237,7 +262,7 @@ localSpace.getTape = [
         "density": 78,
         "type": "уток",
         "color": "желтая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 36.36360168457031,
         "time_seconds": 2181.8161010742188,
         "time_milliseconds": 2181816.1010742188
@@ -248,7 +273,7 @@ localSpace.getTape = [
         "density": 78,
         "type": "уток",
         "color": "зелёная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 45.714298248291016,
         "time_seconds": 2742.857894897461,
         "time_milliseconds": 2742857.894897461
@@ -259,7 +284,7 @@ localSpace.getTape = [
         "density": 78,
         "type": "уток",
         "color": "оранжевая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 36.36360168457031,
         "time_seconds": 2181.8161010742188,
         "time_milliseconds": 2181816.1010742188
@@ -270,7 +295,7 @@ localSpace.getTape = [
         "density": 78,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 1,5%",
+        "additive": "светостаб 1,5%",
         "thread_time": 36.36360168457031,
         "time_seconds": 2181.8161010742188,
         "time_milliseconds": 2181816.1010742188
@@ -281,7 +306,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "серая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -292,7 +317,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "цветная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 40,
         "time_seconds": 2400,
         "time_milliseconds": 2400000
@@ -303,7 +328,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "чёрная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -314,7 +339,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "красная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -325,7 +350,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "оранжевая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -336,7 +361,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "прозрачная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -347,7 +372,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "синяя",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -358,7 +383,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 1,5%",
+        "additive": "светостаб 1,5%",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -369,7 +394,7 @@ localSpace.getTape = [
         "density": 90,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 31.111099243164062,
         "time_seconds": 1866.6659545898438,
         "time_milliseconds": 1866665.9545898438
@@ -380,7 +405,7 @@ localSpace.getTape = [
         "density": 102,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 1,5%",
+        "additive": "светостаб 1,5%",
         "thread_time": 34,
         "time_seconds": 2040,
         "time_milliseconds": 2040000
@@ -391,7 +416,7 @@ localSpace.getTape = [
         "density": 105,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 1,5%",
+        "additive": "светостаб 1,5%",
         "thread_time": 28.875,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
@@ -402,7 +427,7 @@ localSpace.getTape = [
         "density": 105,
         "type": "уток",
         "color": "зелёная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28.875,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
@@ -413,7 +438,7 @@ localSpace.getTape = [
         "density": 105,
         "type": "уток",
         "color": "бирюзовая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28.875,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
@@ -424,7 +449,7 @@ localSpace.getTape = [
         "density": 105,
         "type": "уток",
         "color": "цветная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28.875,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
@@ -435,7 +460,7 @@ localSpace.getTape = [
         "density": 105,
         "type": "уток",
         "color": "чёрная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28.875,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
@@ -446,7 +471,7 @@ localSpace.getTape = [
         "density": 105,
         "type": "уток",
         "color": "красная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28.875,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
@@ -457,7 +482,7 @@ localSpace.getTape = [
         "density": 110,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 27,
         "time_seconds": 1620,
         "time_milliseconds": 1620000
@@ -468,7 +493,7 @@ localSpace.getTape = [
         "density": 110,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 2%",
+        "additive": "светостаб 2%",
         "thread_time": 27,
         "time_seconds": 1620,
         "time_milliseconds": 1620000
@@ -479,7 +504,7 @@ localSpace.getTape = [
         "density": 110,
         "type": "уток",
         "color": "чёрная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 27,
         "time_seconds": 1620,
         "time_milliseconds": 1620000
@@ -490,7 +515,7 @@ localSpace.getTape = [
         "density": 110,
         "type": "уток",
         "color": "желтая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 27,
         "time_seconds": 1620,
         "time_milliseconds": 1620000
@@ -501,7 +526,7 @@ localSpace.getTape = [
         "density": 110,
         "type": "уток",
         "color": "темно-синяя",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 27,
         "time_seconds": 1620,
         "time_milliseconds": 1620000
@@ -512,7 +537,7 @@ localSpace.getTape = [
         "density": 110,
         "type": "уток",
         "color": "синяя",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 27,
         "time_seconds": 1620,
         "time_milliseconds": 1620000
@@ -523,7 +548,7 @@ localSpace.getTape = [
         "density": 112,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 30,
         "time_seconds": 1800,
         "time_milliseconds": 1800000
@@ -534,7 +559,7 @@ localSpace.getTape = [
         "density": 112,
         "type": "уток",
         "color": "цветная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 30,
         "time_seconds": 1800,
         "time_milliseconds": 1800000
@@ -545,7 +570,7 @@ localSpace.getTape = [
         "density": 130,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 26.651399612426758,
         "time_seconds": 1599.0839767456055,
         "time_milliseconds": 1599083.9767456055
@@ -556,7 +581,7 @@ localSpace.getTape = [
         "density": 130,
         "type": "уток",
         "color": "синяя",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 26.651399612426758,
         "time_seconds": 1599.0839767456055,
         "time_milliseconds": 1599083.9767456055
@@ -567,7 +592,7 @@ localSpace.getTape = [
         "density": 130,
         "type": "уток",
         "color": "чёрная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 26.651399612426758,
         "time_seconds": 1599.0839767456055,
         "time_milliseconds": 1599083.9767456055
@@ -578,7 +603,7 @@ localSpace.getTape = [
         "density": 140,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28,
         "time_seconds": 1680,
         "time_milliseconds": 1680000
@@ -589,7 +614,7 @@ localSpace.getTape = [
         "density": 140,
         "type": "уток",
         "color": "цветная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28,
         "time_seconds": 1680,
         "time_milliseconds": 1680000
@@ -600,7 +625,7 @@ localSpace.getTape = [
         "density": 170,
         "type": "уток",
         "color": "цветная",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28,
         "time_seconds": 1680,
         "time_milliseconds": 1680000
@@ -611,7 +636,7 @@ localSpace.getTape = [
         "density": 170,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 28,
         "time_seconds": 1680,
         "time_milliseconds": 1680000
@@ -622,7 +647,7 @@ localSpace.getTape = [
         "density": 170,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 2%",
+        "additive": "светостаб 2%",
         "thread_time": 28,
         "time_seconds": 1680,
         "time_milliseconds": 1680000
@@ -633,7 +658,7 @@ localSpace.getTape = [
         "density": 220,
         "type": "уток",
         "color": "белая",
-        "additive_name": "нет",
+        "additive": "нет",
         "thread_time": 26,
         "time_seconds": 1560,
         "time_milliseconds": 1560000
@@ -644,7 +669,7 @@ localSpace.getTape = [
         "density": 220,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 2%",
+        "additive": "светостаб 2%",
         "thread_time": 26,
         "time_seconds": 1560,
         "time_milliseconds": 1560000
@@ -655,7 +680,7 @@ localSpace.getTape = [
         "density": 240,
         "type": "уток",
         "color": "белая",
-        "additive_name": "светостаб 2%",
+        "additive": "светостаб 2%",
         "thread_time": 22,
         "time_seconds": 1320,
         "time_milliseconds": 1320000
@@ -1814,7 +1839,7 @@ localSpace.getThreads = [
             option.value = tape.id;
 
             //option.textContent = `${tape.color}`;
-            option.textContent = `${tape.density} ${tape.additive_name === "нет" ? tape.color : tape.additive_name}`;
+            option.textContent = `${tape.density} ${tape.additive === "нет" ? tape.color : tape.additive}`;
             select.append(option);
         });
         return select;
@@ -1997,7 +2022,7 @@ localSpace.getThreads = [
         // if (timeValue) {
         // const [hours, minutes] = timeValue.split(':').map(Number); // Разбиваем время на часы и минуты
         // const totalMinutes = hours * 60 + minutes; // Переводим в общее количество минут
-        const color = getLinearGradientColor(totalMinutes / 60000); // Получаем цвет
+        const color = getRedToBlueColor(totalMinutes / 60000); // Получаем цвет
         input.style.backgroundColor = color; // Устанавливаем цвет фона ячейки
         // input.style.paddingRight = 4*totalMinutes/60000+"px";
         input.style.width = minutesToPixels(totalMinutes / 60000) + "px";
@@ -2012,8 +2037,8 @@ localSpace.getThreads = [
         const minMinutes = 20;
         const maxMinutes = 90;
 
-        const minPixels = 120; // Минимальное значение в пикселях
-        const maxPixels = 240; // Максимальное значение в пикселях
+        const minPixels = 130; // Минимальное значение в пикселях
+        const maxPixels = 380; // Максимальное значение в пикселях
 
         // Проверяем, что минуты находятся в пределах
         if (minutes < minMinutes || minutes > maxMinutes) {
@@ -2032,7 +2057,59 @@ localSpace.getThreads = [
         // Добавляем базовое значение для смещения
         return pixelValue > 900 ? 900 : pixelValue; // Начинаем с 20 пикселей для 20 минут
     }
+    function getRedToBlueColor(minutes) {
+        const minMinutes = 20;
+        const maxMinutes = 40;
 
+        // Ограничиваем минуты
+        const clamped = Math.min(Math.max(minutes, minMinutes), maxMinutes);
+
+        // Нормализуем в диапазон [0,1]
+        const t = (clamped - minMinutes) / (maxMinutes - minMinutes);
+
+        // Красный → синий
+        const r = Math.floor(lerp(255, 0, t)); // Красный уменьшается
+        const g = 0;                           // Зеленый всегда 0
+        const b = Math.floor(lerp(0, 255, t)); // Синий увеличивается
+
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    // Линейная интерполяция
+    function lerp(a, b, t) {
+        return a + (b - a) * t;
+    }
+    function getWeatherGradientColor(minutes) {
+        const minMinutes = 20;
+        const maxMinutes = 90;
+
+        // Ограничиваем минуты
+        const clamped = Math.min(Math.max(minutes, minMinutes), maxMinutes);
+        const t = (clamped - minMinutes) / (maxMinutes - minMinutes);
+
+        let r, g, b;
+
+        if (t <= 0.5) {
+            // Красный → зеленый
+            const tt = t * 2;
+            r = 255;
+            g = Math.floor(lerp(0, 255, tt));
+            b = 0;
+        } else {
+            // Зеленый → синий
+            const tt = (t - 0.5) * 2;
+            r = 0;
+            g = Math.floor(lerp(255, 0, tt));
+            b = Math.floor(lerp(0, 255, tt));
+        }
+
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    // Линейная интерполяция
+    function lerp(a, b, t) {
+        return a + (b - a) * t;
+    }
     function getLinearGradientColor(minutes) {
         // Нормализуем минуты от 20 до 90
         const minMinutes = 20;
@@ -2059,149 +2136,6 @@ localSpace.getThreads = [
         }
 
         return `rgb(${red}, ${green}, ${blue})`;
-    }
-
-
-
-    let countDiv = 0;
-
-    function renderPass() {
-        let div = document.createElement("div");
-
-        let date = document.createElement("input");
-        let p = document.createElement("p");
-
-        let ul = document.createElement("ul");
-        let ol = document.createElement("ol");
-
-        let buttonLoad = document.createElement("button");
-        let buttonRemove = document.createElement("button");
-
-        buttonLoad.addEventListener("pointerdown", load);
-        buttonLoad.date = date;
-        buttonLoad.time = p;
-
-        buttonRemove.addEventListener("pointerdown", removeRequest);
-        buttonRemove.date = date;
-        buttonRemove.time = p;
-
-        div.append(date);
-        div.append(p);
-        div.append(ol);
-        div.append(buttonLoad);
-        div.append(buttonRemove);
-        div.classList.add("tail");
-        section.append(div);
-        let sum = 0;
-
-        const lineData = document.createElement("li");
-        const time = document.createElement("input");
-        time.type = "time";
-        lineData.append(time);
-        ol.append(lineData);
-
-        const TimeOfDay = new Object();
-        // console.log(TimeOfDay);
-
-        const option = document.createElement("option");
-
-        div.id = countDiv;
-        countDiv++;
-        return function (database) {
-            date.type = "date";
-            date.valueAsNumber = database.date;
-            date.min = date.value;
-            date.max = date.value;
-
-            sum = sum || database.run || 28800000;
-            time.valueAsNumber = time12(database.run || 28800000);
-            time.setAttribute("disabled", true);
-            buttonRemove.beginning = time;
-            buttonLoad.beginning = time;
-
-            buttonRemove.saveID = database.save_id;
-            buttonLoad.saveId = database.save_id;
-
-            p.textContent = database.time;
-
-            for (let i = 0; i < database.quantity; i++) {
-                const lineData = document.createElement("li");
-                const time = document.createElement("input");
-                lineData.append(time);
-                ol.append(lineData);
-
-                time.type = "time";
-                // time.setAttribute('readonly', true);
-                time.setAttribute("disabled", true);
-                sum += +database.millisecond;
-
-                // console.log(sum);
-                listMS.push(database.millisecond);
-                time.valueAsNumber = time12(sum);
-                updateColor(lineData, +database.millisecond);
-            }
-            buttonLoad.textContent = "Загрузить";
-            buttonRemove.textContent = "Удалить";
-            return div;
-        };
-    }
-
-    function write(database, sum, ol, selectedButtons) {
-        const time = document.createElement("input");
-        time.type = "time";
-
-        for (let i = 0; i < database.quantity; i++) {
-            const lineData = document.createElement("li");
-            const time = document.createElement("input");
-            time.type = "time";
-            lineData.append(time);
-            ol.append(lineData);
-
-            sum += +database.millisecond;
-            listMS.push(database.millisecond);
-            time.valueAsNumber = time12(sum);
-            updateColor(lineData, +database.millisecond);
-        }
-        return sum;
-    }
-
-    function viewData(ansver, select) {
-        const archiv = [];
-
-        section.innerHTML = "";
-        select.innerHTML = "";
-
-        let ul = document.createElement("ul");
-        let obj = {};
-        let sum = 0;
-        let count = 0;
-        let currentValue = null; // Переменная для хранения текущего значения
-        let currentValue2 = null; // Переменная для хранения текущего значения
-
-        let fnh = renderPass();
-
-        ansver.forEach((database) => {
-            // const minute = database.millisecond / 60000;
-            if (database.save_id === currentValue) {
-                fnh(database);
-            } else {
-                if (currentValue !== null && currentValue2 !== null) {
-                    fnh = renderPass(archiv);
-                }
-                currentValue = database.save_id;
-                currentValue2 = database.time;
-                archiv.push({ date: dtinput, time: select });
-                fnh(database);
-            }
-        });
-        if (obj && ul) {
-            for (const [key, value] of Object.entries(obj)) {
-                const listItem = document.createElement("li");
-                listItem.textContent = `Время: ${key}, Количество: ${value}`;
-                ul.appendChild(listItem);
-            }
-        }
-        console.log(archiv.length);
     }
 })("test");
 
