@@ -932,25 +932,13 @@ localSpace.getThreads = [
         }
     }
     const INIT_INPUT_DATA = create3();
-    const start = INIT_INPUT_DATA.TimeStart;
-    const end = INIT_INPUT_DATA.TimeEnd;
     const timeDx = INIT_INPUT_DATA.TimeDx;
     const dx = INIT_INPUT_DATA.dx1;
-    // dx.classList.add("fixed-menu");
     const summa = INIT_INPUT_DATA.sum;
     const summaFix = INIT_INPUT_DATA.fix;
     const quantity = INIT_INPUT_DATA.quan;
-    //main.append(start);
-    //main.append(end);
-    //const buttonLine = [];
-    //const buttonRow = [];
 
-    //for (let j = 0; j < 27; j++) {
-    //    buttonLine.push([]);
-    //}
 
-    let infoTime = [];
-    const saveSate = [];
     const getSum = new CustomEvent("getSum", {
         bubbles: true, // Позволяет событию всплывать
         cancelable: true, // Позволяет событию быть отменяемым
@@ -971,18 +959,10 @@ localSpace.getThreads = [
 
 
 
-
-
-    let listTask = [];
     const section = document.getElementById("section");
-    const select = document.createElement("select");
-
-    let dtinput = null;
-    let dateSave = 0;
 
 
 
-    //let myThread = [];
     let myThread = thread.slice();
     let uniqueDensity = [...new Set(myThread.map(item => item.density))];
     console.log(uniqueDensity);
@@ -1023,21 +1003,18 @@ localSpace.getThreads = [
     let compactSelectBtn = [];
 
     {
-
-
         const eve = new CustomEvent("calc", {
             bubbles: true, // Позволяет событию всплывать
             cancelable: true, // Позволяет событию быть отменяемым
         });
-
-        //################################################################################################
-        //################################################################################################
-        //################################################################################################
-        //################################################################################################
-        //################################################################################################
-
-
     }
+
+    //################################################################################################
+    //################################################################################################
+    //################################################################################################
+    //################################################################################################
+    //################################################################################################
+
     function dropListSelectTex(array, select = document.createElement("select")) {
         array.forEach((tape) => {
             let option = document.createElement("option");
@@ -1122,21 +1099,16 @@ localSpace.getThreads = [
         compactSelectBtn = selectedButtons.filter(item => item != null);
         console.log(compactSelectBtn);
 
-        const schedule = compactSelectBtn.map(({ column: { select, length } }) => ({ density: select.value, length: length.value }));
+        const schedule = compactSelectBtn.map(({ column: { select, length } }) => ({ density: Number(select.value), length: Number(length.value) }));
 
         const sequence = groupSequence(schedule);
+        localStorage.setItem('tapeSequence', JSON.stringify(sequence));
 
         const grouped = groupAll(schedule);
-        localStorage.setItem('tapeSequence', JSON.stringify(sequence));
         console.log(sequence);
         console.log(grouped);
 
-        stats.innerHTML = grouped.map(item => `
-        <b>${item.density}</b>
-        Количество: <span>${item.count}</span><span> Катушек ${item.count * 230}</span> 
-        <hr>
-        `).join("");
-
+        stats.innerHTML = (grouped.map(item => `<div class="stat-item"><b>${item.density}</b><span> ${item.type}: ${item.count} </span>${item.type === "основа" ? "<span>Длина:" + item.length + "</span>" : ""}<span>Катушек: ${item.count * 230}</span><hr></div>`).join(""));
 
         const needCount = compactSelectBtn.length;
         while (TaskList.reference.length > needCount) {
@@ -1612,206 +1584,14 @@ localSpace.getThreads = [
         });
     }
 
-    const button = document.createElement("button");
-    button.textContent = "Вычислить";
-    //main.append(button);
-    const get = document.createElement("button");
-    //get.textContent = "Загрузить";
-    //main.append(get);
-
-    //main.append(section);
-
-    let listMS = [];
-
-
-
-
-    async function load(e) {
-        if (!e.target.closest("button")) return;
-        let task = e.target.closest("div");
-
-        infoTime.forEach((item) => (item.valueAsNumber = NaN));
-        infoTime.forEach((item) => item.dispatchEvent(event));
-        selectedButtons.length &&
-            selectedButtons.forEach((item, i) => {
-                item.classList.remove("tg");
-                delete selectedButtons[i];
-            });
-
-        const data = [];
-        console.log(this.date.valueAsNumber, this.time.textContent, this.saveId);
-
-        const response = await fetch(document.location.href, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-            },
-            body: JSON.stringify({
-                action: "select",
-                table: {
-                    name: "diary_ref",
-                },
-                // date: this.date.valueAsNumber,
-                // time: this.time.value,
-                // time: this.time.textContent,
-                saveId: this.saveId
-            }),
-        }).then((response) => response.json());
-
-
-        response.forEach((item) => {
-            for (let i = 0; i < item.quantity; i++) {
-                data.push(item.millisecond);
-            }
-        });
-
-        let current = [];
-        data.forEach((val, i) => {
-            if (current.indexOf(val) < 0) {
-                current.push(val);
-            }
-            let c = current.indexOf(val);
-            infoTime[c].valueAsNumber = val;
-            infoTime[c].dispatchEvent(event);
-            buttonLine[i][c].classList.add("tg");
-            selectedButtons[i] = buttonLine[i][c];
-        });
-        start.valueAsNumber = this.beginning.valueAsNumber;
-
-        summa.dispatchEvent(getSum);
-        dx.dispatchEvent(getSum);
-        timeDx.dispatchEvent(getSum);
-    }
     function getListTimeSum(sum = 0) {
         selectedButtons.forEach((item) => {
             sum += +item.value;
         });
         return sum;
     }
-    async function removeRequest(e) {
-        // if (!e.target.closest("button")) return;
-        //   let g = e.target.closest("div");
-        //   console.log(g.id);
-        //   infoTime.forEach((item) => (item.valueAsNumber = NaN));
-        //   infoTime.forEach((item) => item.dispatchEvent(event));
-        //   selectedButtons.length &&
-        //     selectedButtons.forEach((item, i) => {
-        //       item.classList.remove("tg");
-        //       delete selectedButtons[i];
-        //     });
 
-        //   let sum = 0;
-        //   let current = [];
-        //   data[g.id].forEach((val, i) => {
-        //     console.log(val, i);
-        //     if (current.indexOf(val) < 0) {
-        //       current.push(val);
-        //     }
-        //     sum+=val;
-        //     let c = current.indexOf(val);
-        //     infoTime[c].valueAsNumber = val;
-        //     infoTime[c].dispatchEvent(event);
-        //     buttonLine[i][c].classList.add("tg");
-        //     selectedButtons[i] = buttonLine[i][c];
-        //   });
-        //   timeDx.valueAsNumber = end.valueAsNumber - sum - start.valueAsNumber;
-        //   dx.value = (end.valueAsNumber - sum - start.valueAsNumber) / 60000;
-        //   summa.valueAsNumber = sum + start.valueAsNumber;
 
-        // console.log(this.date.valueAsNumber);
-        // console.log(this.time.value);
-        let date = this.date.valueAsNumber ||
-            e.target.closest("div").querySelector("input").valueAsNumber;
-        let time = this.time.textContent ||
-            e.target.closest("div").querySelector("select").value;
-        console.log(date, time, this.saveID);
-
-        // console.log(this.time.textContent);
-
-        try {
-            const response = await fetch(document.location.href, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
-                },
-                body: JSON.stringify({
-                    action: "remove",
-                    table: {
-                        name: "diary_ref",
-                    },
-                    key: {
-                        date: date,
-                        time: time,
-                        save_id: this.saveID,
-                    },
-                }),
-            }).then((response) => response.json());
-            console.log(response);
-
-            if (response.success === "0") {
-                this.classList.add("success");
-                setTimeout(() => {
-                    this.classList.remove("success");
-                }, 3000);
-            } else throw response;
-        } catch (error) {
-            this.classList.add("reject");
-            setTimeout(() => {
-                this.classList.remove("reject");
-            }, 3000);
-            console.warn(error);
-        }
-    }
-
-    function begin(ol, timeRun) {
-        // console.log(sum);
-        let sum = timeRun || 28800000;
-        // let sum = start.valueAsNumber;
-        const box = document.createElement("li");
-        const time = document.createElement("input");
-        time.type = "time";
-        time.valueAsNumber = time12(sum);
-        box.append(time);
-        ol.append(box);
-        return sum;
-    }
-    async function getDB() {
-        return await fetch(document.location.href, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-            },
-            body: JSON.stringify({
-                action: "select",
-                table: {
-                    name: "diary_ref",
-                },
-                data: null,
-            }),
-        }).then((response) => response.json());
-    }
-
-    let data = [];
-
-    get.addEventListener("click", async function (e) {
-        const response = await getDB();
-        console.log(response);
-
-        let select = document.createElement("select");
-        section.id = "";
-        viewData(response, select);
-    });
-
-    function Task(millisecond, quantity, time, data, run) {
-        this.millisecond = +millisecond;
-        this.second = millisecond / 1000;
-        this.minute = millisecond / 60000;
-        this.quantity = quantity;
-        this.time = time;
-        this.data = data;
-        this.run = run;
-        this.runMinute = run / 60000;
-    }
 
 
 
@@ -1844,7 +1624,6 @@ localSpace.getThreads = [
         });
         return select;
     }
-    let selectName;
 
 
 
@@ -1853,76 +1632,7 @@ localSpace.getThreads = [
 
 
 
-    let tapeMap = tape[0];
-    function setTimeTask(event) {
-        console.log(selectedButtons, listTask);
-        const tape = {};
-        tape.name = 0;
-        tape.ms = 0;
-        tape.sumMs = start.valueAsNumber;
-        tape.mod = 0;
-        selectedButtons.forEach((item, i) => {
-            tape.name = +item.name;
-            tape.ms = +item.value;
-            tape.sumMs += +item.value;
 
-            let timeMS = time12(tape.sumMs + tape.mod);
-            tape.mod = timeMS % 60000;
-            // ## minute
-            listTask[i].valueAsNumber = Math.floor(timeMS / 60000) * 60000;
-
-
-
-            //selectName[i]
-
-
-            let tapeNamesArray = tapeMap.filter(current => +item.name === current.group_id);
-            if (tapeNamesArray.length === 0) {
-                setNameTape(tapeMap, selectName[i]);
-            } else {
-                setNameTape(tapeNamesArray, selectName[i]);
-            }
-
-            //const box = document.createElement("li");
-            //updateColor(box, +item.value);
-            //const time = document.createElement("input");
-            //time.type = "time";
-            //time.name = item.name;
-            //sum2 += +item.value;
-            ////time.valueAsNumber = time12(sum2);
-
-            //let timeMS = time12(sum2 + mod);
-            //let timeS = Math.floor(timeMS / 60000);
-            //mod = timeMS % 60000;
-            //time.valueAsNumber = timeS * 60000;
-
-
-
-            //time.setAttribute("disabled", true);
-
-            //const TapeName = document.createElement("select");
-            //TapeName.name = item.name;
-
-            //let tapeNamesArray = tape[0].filter(current => current.group_id === +time.name);
-
-            //console.log(tapeNamesArray);
-
-            //if (tapeNamesArray.length === 0) {
-            //    setNameTape(tape[0], TapeName);
-            //} else {
-            //    setNameTape(tapeNamesArray, TapeName);
-            //}
-
-            //selectName.push(TapeName);
-
-            //box.append(time);
-            //box.append(TapeName);
-            //ol.append(box);
-            //console.log(sum2);
-        });
-    }
-    selectName = [];
-    let selectTapeName = {};
     function updateTimeTask() {
         let sum = TaskList.start.valueAsNumber;
         let mod = 0;
@@ -1955,57 +1665,45 @@ localSpace.getThreads = [
 
         for (const item of arr) {
 
-            if (
-                current &&
-                current.density === item.density &&
-                current.length === item.length
-            ) {
-
+            if (current && current.density === item.density && current.length === item.length) {
                 current.count++;
-
             } else {
-
                 current = {
                     density: item.density,
                     length: item.length,
                     count: 1
                 };
-
                 result.push(current);
             }
         }
-
         return result;
     }
     function groupAll(arr) {
+
+        // density -> length
+        const lookup = new Map(thread.map(item => [item.density, item.length]));
 
         const map = new Map();
 
         for (const item of arr) {
 
-            const key =
-                `${item.density}_${item.length}`;
+            const key = `${item.density}_${item.length}`;
 
             if (!map.has(key)) {
 
+                const sourceLength = lookup.get(item.density);
+
                 map.set(key, {
-                    density: item.density,
-                    length: item.length,
+                    density: Number(item.density),
+                    length: Number(item.length),
+                    type: Math.abs(item.length - sourceLength) < 400 ? "уток" : "основа",
                     count: 0
                 });
             }
-
             map.get(key).count++;
         }
-
         return [...map.values()];
     }
-
-
-    button.addEventListener("click", handleCalculation);
-
-
-
 
     const color = [
         "#E7C697",
@@ -2013,10 +1711,9 @@ localSpace.getThreads = [
         "#FF7514",
         "darkgray",
         "pink",
-        " #FCDD76",
-        "#3EB489",
+        "#FCDD76",
+        "#3EB489"
     ];
-
     function updateColor(input, totalMinutes) {
         // const timeValue = input.value; // Получаем значение времени
         // if (timeValue) {
@@ -2031,7 +1728,6 @@ localSpace.getThreads = [
         // input.style.backgroundColor = '';
         // }
     }
-
     function minutesToPixels(minutes) {
         // Нормализуем минуты от 20 до 90
         const minMinutes = 20;
@@ -2074,82 +1770,8 @@ localSpace.getThreads = [
 
         return `rgb(${r}, ${g}, ${b})`;
     }
-
     // Линейная интерполяция
     function lerp(a, b, t) {
         return a + (b - a) * t;
-    }
-    function getWeatherGradientColor(minutes) {
-        const minMinutes = 20;
-        const maxMinutes = 90;
-
-        // Ограничиваем минуты
-        const clamped = Math.min(Math.max(minutes, minMinutes), maxMinutes);
-        const t = (clamped - minMinutes) / (maxMinutes - minMinutes);
-
-        let r, g, b;
-
-        if (t <= 0.5) {
-            // Красный → зеленый
-            const tt = t * 2;
-            r = 255;
-            g = Math.floor(lerp(0, 255, tt));
-            b = 0;
-        } else {
-            // Зеленый → синий
-            const tt = (t - 0.5) * 2;
-            r = 0;
-            g = Math.floor(lerp(255, 0, tt));
-            b = Math.floor(lerp(0, 255, tt));
-        }
-
-        return `rgb(${r}, ${g}, ${b})`;
-    }
-
-    // Линейная интерполяция
-    function lerp(a, b, t) {
-        return a + (b - a) * t;
-    }
-    function getLinearGradientColor(minutes) {
-        // Нормализуем минуты от 20 до 90
-        const minMinutes = 20;
-        const maxMinutes = 90;
-        const normalizedValue = (minutes - minMinutes) / (maxMinutes - minMinutes);
-
-        // Ограничиваем значение от 0 до 1
-        const clampedValue = Math.min(Math.max(normalizedValue, 0), 1);
-
-        let red, green, blue;
-
-        if (clampedValue <= 0.5) {
-            // Переход от синего к зеленому
-            const transitionValue = clampedValue * 2; // Увеличиваем диапазон до [0, 1]
-            red = 0;
-            green = Math.floor(transitionValue * 255); // Увеличиваем зеленый
-            blue = 255 - Math.floor(transitionValue * 255); // Уменьшаем синий
-        } else {
-            // Переход от зеленого к красному
-            const transitionValue = (clampedValue - 0.5) * 2; // Увеличиваем диапазон до [0, 1]
-            red = Math.floor(transitionValue * 255); // Увеличиваем красный
-            green = 255 - Math.floor(transitionValue * 255); // Уменьшаем зеленый
-            blue = 0; // Синий всегда 0
-        }
-
-        return `rgb(${red}, ${green}, ${blue})`;
     }
 })("test");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
