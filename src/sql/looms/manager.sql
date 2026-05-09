@@ -34,7 +34,7 @@ JOIN tape_speed ON fabric_recipe.tape_recipe_id = tape_speed.recipe_id
 JOIN tape_length ON tape_speed.density_id = tape_length.density_id
 JOIN tape_density ON tape_speed.density_id = tape_density.id
 JOIN color color_tape ON fabric_recipe.color_id = color_tape.id
-JOIN additive ON fabric_recipe.additive_id = additive.additive_id
+JOIN additive ON fabric_recipe.additive_id = additive.id
 
 GROUP BY
     loom_number,
