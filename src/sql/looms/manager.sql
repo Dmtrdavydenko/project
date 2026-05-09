@@ -1,10 +1,10 @@
 SELECT
-    loom_number,
-    sleeve_width,
-    sleeve_density,
-    CONCAT(sw.sleeve_width, '/', sd.sleeve_density) as w_d,
+    loom_number as loom,
+    sleeve_width as fabric_w,
+    sleeve_density as fabric_d,
+    CONCAT(sw.sleeve_width, '/', sd.sleeve_density) as wd,
     looms.fabric_recipe_id,
-    model_of_the_loom_id,
+    model_of_the_loom_id as model_loom,
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN warp_quantity END) AS q_warp,
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN weft_quantity END) AS q_weft,
 
