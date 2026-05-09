@@ -558,7 +558,7 @@ function myfilter(arr) {
     console.log(sum);
 }
 async function loadTable() {
-    const result = await fetch("https://worktime.up.railway.app/app", {
+    const response = await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -569,8 +569,32 @@ async function loadTable() {
                 name: selectTableName.value,
             }
         }),
-    }).then((response) => response.json());
-    console.log(result);
+    })
+    for (const [key, value] of response.headers.entries()) {
+        console.log("\x1b[34m [" + key + "][" + value + "]");
+    }
+    const contentType = response.headers.get('content-type');
+    console.log("\x1b[33m [" + contentType + "]");
+
+    if (!response.ok) {
+        throw new Error(`Ошибка HTTP: ${response.status}`);
+    }
+    const text = await response.text();
+
+    try {
+        const data = JSON.parse(text);
+        console.info("Load server sql");
+        return { ok: true, data };
+    } catch (error) {
+        console.log("\x1b[33m [" + text + "]");
+        console.dir(error);
+        if (error.message.includes("is not valid JSON")) {
+            throw new Error("is not valid JSON");
+        }
+        if (error.message === "Unexpected end of JSON input") {
+            throw error;
+        }
+    }
 
 
     //result.all[1] = result.all[1].map(meta => (decodeMetadata(meta)));
