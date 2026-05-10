@@ -8,10 +8,10 @@ class DataTape {
             console.log("1");
             if (document.location.hostname === "localhost") {
                 try {
-                    return [this.loadState(action)];
+                    return this.loadState(action);
                     //return this.data;
                 } catch (e) {
-                    return [localSpace[action]];
+                    return localSpace[action];
                     //return this.data;
                 }
                 //console.info("Loaded localStorage no localhost");
@@ -24,12 +24,12 @@ class DataTape {
                     console.info("Loaded data from localStorage");
                 } else if (localSpace[action]) {
                     // fallback на локальные данные (например, жестко закодированные)
-                    this.data = [localSpace[action]];
+                    this.data = localSpace[action];
                     console.info("Loaded data from localSpace");
                 }
             } catch (error) {
                 console.warn("Local load failed:", error.message);
-                this.data = [localSpace[action]];
+                this.data = localSpace[action];
             }
 
             // Фоновая загрузка с сервера
@@ -57,7 +57,7 @@ class DataTape {
 
             } catch (serverError) {
                 console.error("Server load failed:", serverError.message);
-                this.data = [localSpace[action]];
+                this.data = localSpace[action];
                 console.info("Load local space data");
                 return this.data;
 
@@ -90,8 +90,8 @@ class DataTape {
 
         try {
             const data = JSON.parse(text);
-            console.info("Load server sql");
-            return { ok: true, data };
+            console.info("Load server sql",data);
+            return data;
         } catch (error) {
             console.log("\x1b[33m [" + text + "]");
             console.dir(error);
@@ -819,7 +819,7 @@ localSpace.getThreads = [
     console.log(tape);
     console.log(threadi);
 
-    console.log(tape[0]);
+    console.log(tape);
     console.log(threadi);
     console.log(cmd);
     const thread = threadi.map(({ id, density, speed, length }) => ({
