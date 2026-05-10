@@ -1666,7 +1666,6 @@ async function getTapeKnowledge() {
     }
 }
 async function getUseTape() {
-    console.log(arguments.callee.name);
     let connection = null;
     try {
         sql = loadSQL("./src/sql/looms/useTape.sql");
