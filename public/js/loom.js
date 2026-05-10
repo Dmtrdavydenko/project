@@ -120,6 +120,8 @@ function createButtonsInBlockFromArray(field, containerId, numbersArray, reverse
     console.log(field);
     arr.forEach(item => {
         const btn = document.createElement('button');
+        item.button = btn;
+
         btn.addEventListener("click", handleClickBtn);
         btn.textContent = item[field];
         container.appendChild(btn);
@@ -175,13 +177,14 @@ function getLocalDateTimeForMySQL() {
  */
 async function loadAndRenderButtons(field = "loom") {
     try {
-        //const allNumbersSV = await request("getUseTape");
+        const allNumbers = await request("getUseTape");
 
-        const allNumbers = [
+        const allNumbersSV = [
             {
                 "cnt": 2,
                 "loom": 1,
                 "ppm": 970,
+                "fabric_recipe_id": 35,
                 "den_warp": "140",
                 "den_weft": "140",
                 "quan_warp": 1150,
@@ -197,6 +200,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 2,
                 "ppm": 970,
+                "fabric_recipe_id": 16,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 360,
@@ -212,6 +216,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 3,
                 "ppm": 970,
+                "fabric_recipe_id": 3,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 260,
@@ -227,6 +232,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 4,
                 "ppm": 970,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -242,6 +248,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 5,
                 "ppm": 970,
+                "fabric_recipe_id": 7,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 312,
@@ -257,6 +264,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 6,
                 "ppm": 970,
+                "fabric_recipe_id": 11,
                 "den_warp": "90",
                 "den_weft": "78",
                 "quan_warp": 360,
@@ -272,6 +280,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 7,
                 "ppm": 970,
+                "fabric_recipe_id": 6,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 288,
@@ -287,6 +296,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 8,
                 "ppm": 970,
+                "fabric_recipe_id": 36,
                 "den_warp": "220",
                 "den_weft": "220",
                 "quan_warp": 1154,
@@ -302,6 +312,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 9,
                 "ppm": 970,
+                "fabric_recipe_id": 1,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 360,
@@ -317,6 +328,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 10,
                 "ppm": 970,
+                "fabric_recipe_id": 34,
                 "den_warp": "112",
                 "den_weft": "112",
                 "quan_warp": 1150,
@@ -332,6 +344,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 11,
                 "ppm": 970,
+                "fabric_recipe_id": 17,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 378,
@@ -347,6 +360,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 3,
                 "loom": 12,
                 "ppm": 970,
+                "fabric_recipe_id": 44,
                 "den_warp": "90",
                 "den_weft": "90,78",
                 "quan_warp": 422,
@@ -362,6 +376,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 13,
                 "ppm": 970,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -377,6 +392,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 14,
                 "ppm": 970,
+                "fabric_recipe_id": 37,
                 "den_warp": "170",
                 "den_weft": "220",
                 "quan_warp": 1374,
@@ -392,6 +408,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 15,
                 "ppm": 970,
+                "fabric_recipe_id": 10,
                 "den_warp": "105",
                 "den_weft": "105",
                 "quan_warp": 338,
@@ -407,6 +424,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 16,
                 "ppm": 970,
+                "fabric_recipe_id": 43,
                 "den_warp": "90",
                 "den_weft": "78",
                 "quan_warp": 404,
@@ -422,6 +440,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 17,
                 "ppm": 970,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -437,6 +456,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 18,
                 "ppm": 970,
+                "fabric_recipe_id": 1,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 360,
@@ -452,6 +472,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 19,
                 "ppm": 1200,
+                "fabric_recipe_id": 1,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 360,
@@ -467,6 +488,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 20,
                 "ppm": 970,
+                "fabric_recipe_id": 42,
                 "den_warp": "90",
                 "den_weft": "78",
                 "quan_warp": 414,
@@ -482,6 +504,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 21,
                 "ppm": 970,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -497,6 +520,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 22,
                 "ppm": 970,
+                "fabric_recipe_id": 16,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 360,
@@ -512,6 +536,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 23,
                 "ppm": 970,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -527,6 +552,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 24,
                 "ppm": 970,
+                "fabric_recipe_id": 3,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 260,
@@ -542,6 +568,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 25,
                 "ppm": 970,
+                "fabric_recipe_id": 6,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 288,
@@ -557,6 +584,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 26,
                 "ppm": 970,
+                "fabric_recipe_id": 10,
                 "den_warp": "105",
                 "den_weft": "105",
                 "quan_warp": 338,
@@ -572,6 +600,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 27,
                 "ppm": 970,
+                "fabric_recipe_id": 35,
                 "den_warp": "140",
                 "den_weft": "140",
                 "quan_warp": 1150,
@@ -584,24 +613,42 @@ async function loadAndRenderButtons(field = "loom") {
                 "additive_weft": "нет"
             },
             {
-                "cnt": 3,
+                "cnt": 1,
                 "loom": 28,
                 "ppm": 1200,
-                "den_warp": "78,78",
-                "den_weft": "90",
+                "fabric_recipe_id": 14,
+                "den_warp": "78",
+                "den_weft": null,
                 "quan_warp": 290,
-                "quan_weft": "39.0",
+                "quan_weft": "0.0",
                 "sum_warp": 290,
+                "sum_weft": "0.0",
+                "color_warp": "зелёная",
+                "color_weft": null,
+                "additive_warp": "нет",
+                "additive_weft": null
+            },
+            {
+                "cnt": 2,
+                "loom": 28,
+                "ppm": 1200,
+                "fabric_recipe_id": 14,
+                "den_warp": "78",
+                "den_weft": "90",
+                "quan_warp": 72,
+                "quan_weft": "39.0",
+                "sum_warp": 72,
                 "sum_weft": "39.0",
-                "color_warp": "прозрачная,зелёная",
+                "color_warp": "прозрачная",
                 "color_weft": "прозрачная",
-                "additive_warp": "нет,нет",
+                "additive_warp": "нет",
                 "additive_weft": "нет"
             },
             {
                 "cnt": 2,
                 "loom": 29,
                 "ppm": 1200,
+                "fabric_recipe_id": 1,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 360,
@@ -617,6 +664,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 30,
                 "ppm": 1200,
+                "fabric_recipe_id": 16,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 360,
@@ -632,6 +680,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 31,
                 "ppm": 1200,
+                "fabric_recipe_id": 11,
                 "den_warp": "90",
                 "den_weft": "78",
                 "quan_warp": 360,
@@ -647,6 +696,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 32,
                 "ppm": 1200,
+                "fabric_recipe_id": 5,
                 "den_warp": "90",
                 "den_weft": "78",
                 "quan_warp": 288,
@@ -662,6 +712,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 33,
                 "ppm": 1200,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -677,6 +728,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 34,
                 "ppm": 1200,
+                "fabric_recipe_id": 7,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 312,
@@ -692,6 +744,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 35,
                 "ppm": 1200,
+                "fabric_recipe_id": 35,
                 "den_warp": "140",
                 "den_weft": "140",
                 "quan_warp": 1150,
@@ -707,6 +760,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 36,
                 "ppm": 1200,
+                "fabric_recipe_id": 36,
                 "den_warp": "220",
                 "den_weft": "220",
                 "quan_warp": 1154,
@@ -722,6 +776,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 37,
                 "ppm": 970,
+                "fabric_recipe_id": 3,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 260,
@@ -737,6 +792,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 38,
                 "ppm": 970,
+                "fabric_recipe_id": 11,
                 "den_warp": "90",
                 "den_weft": "78",
                 "quan_warp": 360,
@@ -752,6 +808,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 39,
                 "ppm": 970,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -767,6 +824,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 40,
                 "ppm": 970,
+                "fabric_recipe_id": 6,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 288,
@@ -782,6 +840,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 41,
                 "ppm": 970,
+                "fabric_recipe_id": 37,
                 "den_warp": "170",
                 "den_weft": "220",
                 "quan_warp": 1374,
@@ -797,6 +856,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 42,
                 "ppm": 970,
+                "fabric_recipe_id": 6,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 288,
@@ -812,6 +872,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 43,
                 "ppm": 970,
+                "fabric_recipe_id": 8,
                 "den_warp": "78",
                 "den_weft": "78",
                 "quan_warp": 346,
@@ -827,6 +888,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 44,
                 "ppm": 970,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -842,6 +904,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 45,
                 "ppm": 970,
+                "fabric_recipe_id": 11,
                 "den_warp": "90",
                 "den_weft": "78",
                 "quan_warp": 360,
@@ -857,6 +920,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 46,
                 "ppm": 970,
+                "fabric_recipe_id": 16,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 360,
@@ -872,6 +936,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 47,
                 "ppm": 970,
+                "fabric_recipe_id": 35,
                 "den_warp": "140",
                 "den_weft": "140",
                 "quan_warp": 1150,
@@ -887,6 +952,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 48,
                 "ppm": 970,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -902,6 +968,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 49,
                 "ppm": 970,
+                "fabric_recipe_id": 6,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 288,
@@ -917,6 +984,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 50,
                 "ppm": 970,
+                "fabric_recipe_id": 45,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 450,
@@ -932,6 +1000,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 51,
                 "ppm": 970,
+                "fabric_recipe_id": 38,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 254,
@@ -947,6 +1016,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 52,
                 "ppm": 970,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -962,6 +1032,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 53,
                 "ppm": 970,
+                "fabric_recipe_id": 3,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 260,
@@ -977,6 +1048,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 54,
                 "ppm": 970,
+                "fabric_recipe_id": 16,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 360,
@@ -992,6 +1064,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 55,
                 "ppm": 1200,
+                "fabric_recipe_id": 3,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 260,
@@ -1007,6 +1080,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 56,
                 "ppm": 1200,
+                "fabric_recipe_id": 7,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 312,
@@ -1022,6 +1096,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 57,
                 "ppm": 1200,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -1037,6 +1112,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 58,
                 "ppm": 1200,
+                "fabric_recipe_id": 7,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 312,
@@ -1052,6 +1128,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 59,
                 "ppm": 1200,
+                "fabric_recipe_id": 34,
                 "den_warp": "112",
                 "den_weft": "112",
                 "quan_warp": 1150,
@@ -1067,6 +1144,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 60,
                 "ppm": 1200,
+                "fabric_recipe_id": 6,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 288,
@@ -1079,24 +1157,42 @@ async function loadAndRenderButtons(field = "loom") {
                 "additive_weft": "нет"
             },
             {
-                "cnt": 3,
+                "cnt": 1,
                 "loom": 61,
                 "ppm": 1200,
-                "den_warp": "78,78",
-                "den_weft": "90",
+                "fabric_recipe_id": 14,
+                "den_warp": "78",
+                "den_weft": null,
                 "quan_warp": 290,
-                "quan_weft": "39.0",
+                "quan_weft": "0.0",
                 "sum_warp": 290,
+                "sum_weft": "0.0",
+                "color_warp": "зелёная",
+                "color_weft": null,
+                "additive_warp": "нет",
+                "additive_weft": null
+            },
+            {
+                "cnt": 2,
+                "loom": 61,
+                "ppm": 1200,
+                "fabric_recipe_id": 14,
+                "den_warp": "78",
+                "den_weft": "90",
+                "quan_warp": 72,
+                "quan_weft": "39.0",
+                "sum_warp": 72,
                 "sum_weft": "39.0",
-                "color_warp": "прозрачная,зелёная",
+                "color_warp": "прозрачная",
                 "color_weft": "прозрачная",
-                "additive_warp": "нет,нет",
+                "additive_warp": "нет",
                 "additive_weft": "нет"
             },
             {
                 "cnt": 2,
                 "loom": 62,
                 "ppm": 1200,
+                "fabric_recipe_id": 3,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 260,
@@ -1112,6 +1208,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 63,
                 "ppm": 1200,
+                "fabric_recipe_id": 7,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 312,
@@ -1127,6 +1224,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 64,
                 "ppm": 1200,
+                "fabric_recipe_id": 21,
                 "den_warp": "110",
                 "den_weft": "110",
                 "quan_warp": 392,
@@ -1142,6 +1240,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 65,
                 "ppm": 1200,
+                "fabric_recipe_id": 21,
                 "den_warp": "110",
                 "den_weft": "110",
                 "quan_warp": 392,
@@ -1157,6 +1256,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 66,
                 "ppm": 1200,
+                "fabric_recipe_id": 21,
                 "den_warp": "110",
                 "den_weft": "110",
                 "quan_warp": 392,
@@ -1172,6 +1272,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 67,
                 "ppm": 1200,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -1187,6 +1288,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 68,
                 "ppm": 1200,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -1202,6 +1304,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 69,
                 "ppm": 1200,
+                "fabric_recipe_id": 10,
                 "den_warp": "105",
                 "den_weft": "105",
                 "quan_warp": 338,
@@ -1217,6 +1320,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 70,
                 "ppm": 1200,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -1232,6 +1336,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 71,
                 "ppm": 1200,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -1247,6 +1352,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 72,
                 "ppm": 1200,
+                "fabric_recipe_id": 4,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 282,
@@ -1262,6 +1368,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 87,
                 "ppm": 700,
+                "fabric_recipe_id": 22,
                 "den_warp": "90",
                 "den_weft": "78",
                 "quan_warp": 432,
@@ -1277,6 +1384,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 88,
                 "ppm": 700,
+                "fabric_recipe_id": 40,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 348,
@@ -1292,6 +1400,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 89,
                 "ppm": 700,
+                "fabric_recipe_id": 39,
                 "den_warp": "105",
                 "den_weft": "105",
                 "quan_warp": 280,
@@ -1307,6 +1416,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 90,
                 "ppm": 700,
+                "fabric_recipe_id": 39,
                 "den_warp": "105",
                 "den_weft": "105",
                 "quan_warp": 280,
@@ -1322,6 +1432,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 91,
                 "ppm": 700,
+                "fabric_recipe_id": 26,
                 "den_warp": "90",
                 "den_weft": "78",
                 "quan_warp": 428,
@@ -1337,6 +1448,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 92,
                 "ppm": 920,
+                "fabric_recipe_id": 33,
                 "den_warp": "140",
                 "den_weft": "140",
                 "quan_warp": 1000,
@@ -1352,6 +1464,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 93,
                 "ppm": 920,
+                "fabric_recipe_id": 24,
                 "den_warp": "78",
                 "den_weft": "78",
                 "quan_warp": 408,
@@ -1367,6 +1480,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 94,
                 "ppm": 600,
+                "fabric_recipe_id": 41,
                 "den_warp": "90",
                 "den_weft": "90",
                 "quan_warp": 378,
@@ -1382,6 +1496,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 95,
                 "ppm": 850,
+                "fabric_recipe_id": 26,
                 "den_warp": "90",
                 "den_weft": "78",
                 "quan_warp": 428,
@@ -1397,6 +1512,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 96,
                 "ppm": 850,
+                "fabric_recipe_id": 30,
                 "den_warp": "64",
                 "den_weft": "64",
                 "quan_warp": 710,
@@ -1412,6 +1528,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 97,
                 "ppm": 920,
+                "fabric_recipe_id": 33,
                 "den_warp": "140",
                 "den_weft": "140",
                 "quan_warp": 1000,
@@ -1427,6 +1544,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 98,
                 "ppm": 920,
+                "fabric_recipe_id": 33,
                 "den_warp": "140",
                 "den_weft": "140",
                 "quan_warp": 1000,
@@ -1442,6 +1560,7 @@ async function loadAndRenderButtons(field = "loom") {
                 "cnt": 2,
                 "loom": 99,
                 "ppm": 920,
+                "fabric_recipe_id": 33,
                 "den_warp": "140",
                 "den_weft": "140",
                 "quan_warp": 1000,
@@ -1455,7 +1574,106 @@ async function loadAndRenderButtons(field = "loom") {
             }
         ]
 
+        for (const item of allNumbers) {
+            for (const key in item) {
+                item.button = document.createElement('button');
+                if (!isNaN(item[key]) && item[key] !== '') {
+                    item[key] = Number(item[key]);
+                }
+            }
+        }
+
         console.log(allNumbers);
+
+
+
+
+
+        const warpMap = new Map();
+
+        for (const item of allNumbers) {
+
+            const key = `warp: ${item.den_warp} color: ${item.color_warp} additive: ${item.additive_warp}`;
+
+            if (!warpMap.has(key)) {
+                warpMap.set(key, []);
+            }
+
+            warpMap.get(key).push(item);
+        }
+
+        console.log("warp", warpMap);
+        const tapeWarp = document.createElement('div');
+        tapeWarp.classList.add("container-grid-warp");
+        warpMap.forEach((value, key) => {
+
+            const btn = document.createElement('button');
+
+            btn.textContent = key;
+
+            btn.addEventListener("click", () => {
+
+                for (const item of allNumbers) {
+                    item.button.classList.remove('active-loom');
+                }
+
+                for (const item of value) {
+                    item.button.classList.add('active-loom');
+                }
+
+            });
+
+            tapeWarp.append(btn);
+
+        });
+
+        document.body.append(tapeWarp);
+
+
+
+        const weftMap = new Map();
+
+        for (const item of allNumbers) {
+
+            const key = `weft ${item.den_weft} color: ${item.color_weft} additive: ${item.additive_weft}`;
+
+            if (!weftMap.has(key)) {
+                weftMap.set(key, []);
+            }
+
+            weftMap.get(key).push(item);
+        }
+
+
+        console.log("weft", weftMap);
+        const tapeWeft = document.createElement('div');
+        tapeWeft.classList.add("container-grid-weft");
+        weftMap.forEach((value, key) => {
+
+            const btn = document.createElement('button');
+
+            btn.textContent = key;
+
+            btn.addEventListener("click", () => {
+
+                for (const item of allNumbers) {
+                    item.button.classList.remove('active-loom');
+                }
+
+                for (const item of value) {
+                    item.button.classList.add('active-loom');
+                }
+
+            });
+
+            tapeWeft.append(btn);
+
+        });
+
+        document.body.append(tapeWeft);
+
+
+
 
         const requiredCount = buttonsPerBlock * totalBlocks + 13;
         if (!Array.isArray(allNumbers) || allNumbers.length < requiredCount) {
@@ -1593,6 +1811,7 @@ async function sendUpdateTextileId(update) {
 (async () => {
     // Запускаем загрузку и рендер кнопок
     const looms_fabric_recipe = await loadAndRenderButtons();
+    console.log(looms_fabric_recipe);
     const keys = Object.keys(looms_fabric_recipe[0]);
     keys.forEach(item => nav.append(createA(item)));
 

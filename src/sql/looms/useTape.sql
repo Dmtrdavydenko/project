@@ -63,13 +63,13 @@ GROUP BY
       loom_number,
    -- sleeve_width,
    -- sleeve_density,
-      looms.fabric_recipe_id
+      looms.fabric_recipe_id,
    -- model_of_the_loom_id,
 
    -- loom_machine.ppm,
    -- yarn_type.yarn_id,
    -- tape_density.density,
-   -- color_tape.color,
+      color_tape.color
    -- additive.additive
 
    ORDER BY loom_number ASC
