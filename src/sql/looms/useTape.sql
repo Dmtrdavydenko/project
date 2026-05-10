@@ -25,6 +25,7 @@ SELECT
 
     MAX(loom_number) AS loom,
     MAX(loom_machine.ppm) AS ppm,
+    MAX(looms.fabric_recipe_id) AS fabric_recipe_id,
 
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN tape_density.density END) AS den_warp,
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN tape_density.density END) AS den_weft,
@@ -59,10 +60,10 @@ JOIN additive ON fabric_recipe.additive_id = additive.id
 
 GROUP BY
     
-      loom_number
+      loom_number,
    -- sleeve_width,
    -- sleeve_density,
-   -- looms.fabric_recipe_id
+      looms.fabric_recipe_id
    -- model_of_the_loom_id,
 
    -- loom_machine.ppm,
