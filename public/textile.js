@@ -583,7 +583,7 @@ async function request() {
 
     try {
         const data = JSON.parse(text);
-        console.info("Load server sql");
+        console.info("Load server sql",data);
         return { ok: true, data };
     } catch (error) {
         console.log("\x1b[33m [" + text + "]");
@@ -616,7 +616,7 @@ async function loadTable() {
 
         Object.entries(schema).forEach(([name, field]) => {
 
-            // ❗ пропускаем id (auto_increment)
+
             if (field.COLUMN_KEY === 'PRI') return;
 
             const wrapper = document.createElement('div');
