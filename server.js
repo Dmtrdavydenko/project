@@ -1668,10 +1668,11 @@ async function getTapeKnowledge() {
 async function getUseTape() {
     let connection = null;
     try {
-        sql = loadSQL("./src/sql/looms/useTape.sql");
+        const sql = loadSQL("./src/sql/looms/useTape.sql");
         connection = await getAwaitConnect();
         //console.log(data);
-        return await connection.execute(sql);
+        const [rows] = await connection.execute(sql);
+        return rows;
     } catch (error) {
         console.error('Ошибка:', error);
         throw error;
