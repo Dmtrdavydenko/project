@@ -1593,7 +1593,7 @@ async function loadAndRenderButtons(field = "loom") {
 
         for (const item of allNumbers) {
 
-            const key = `warp: ${item.den_warp} color: ${item.color_warp} additive: ${item.additive_warp}`;
+            const key = `${item.den_warp} ${item.color_warp} ${item.additive_warp}`;
 
             if (!warpMap.has(key)) {
                 warpMap.set(key, []);
@@ -1635,7 +1635,7 @@ async function loadAndRenderButtons(field = "loom") {
 
         for (const item of allNumbers) {
 
-            const key = `weft ${item.den_weft} color: ${item.color_weft} additive: ${item.additive_weft}`;
+            const key = `${item.den_weft} ${item.color_weft} ${item.additive_weft}`;
 
             if (!weftMap.has(key)) {
                 weftMap.set(key, []);
