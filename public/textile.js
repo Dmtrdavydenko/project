@@ -597,8 +597,9 @@ async function request() {
     }
 }
 async function loadTable() {
-    const result = await request().data;
-
+    const ans = await request();
+    const result = ans.data;
+    console.log(result);
 
 
     //result.all[1] = result.all[1].map(meta => (decodeMetadata(meta)));

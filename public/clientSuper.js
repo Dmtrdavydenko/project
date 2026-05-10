@@ -822,7 +822,7 @@ localSpace.getThreads = [
     console.log(tape[0]);
     console.log(threadi);
     console.log(cmd);
-    const thread = threadi[0].map(({ id, density, speed, length }) => ({
+    const thread = threadi.map(({ id, density, speed, length }) => ({
         id,
         density,
         speed,
