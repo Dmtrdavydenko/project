@@ -1688,7 +1688,6 @@ async function loadAndRenderButtons(field = "loom_number") {
                 "weft": "нет"
             }
         ]
-
         console.log(allNumbers);
 
         const requiredCount = buttonsPerBlock * totalBlocks + 13;

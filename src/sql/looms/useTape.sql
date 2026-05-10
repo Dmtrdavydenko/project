@@ -20,17 +20,20 @@ SELECT
     JSON_ARRAYAGG(tape_density.density) AS density
 */
     COUNT(*) AS cnt,
-    GROUP_CONCAT(loom_number) AS loom,
-    GROUP_CONCAT(loom_machine.ppm) AS ppm,
+ -- GROUP_CONCAT(DISTINCT loom_number ORDER BY loom_number ASC) AS loom,
+ -- GROUP_CONCAT(DISTINCT loom_machine.ppm ORDER BY loom_machine.ppm ASC) AS ppm,
+
+    MAX(loom_number) AS loom,
+    MAX(loom_machine.ppm) AS ppm,
 
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN tape_density.density END) AS den_warp,
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN tape_density.density END) AS den_weft,
 
-    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN warp_quantity ELSE 0 END) AS quan_warp,
-    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN weft_quantity ELSE 0 END) AS quan_weft,
+    MAX(CASE WHEN yarn_type.yarn_id = 1 THEN warp_quantity ELSE 0 END) AS quan_warp,
+    MAX(CASE WHEN yarn_type.yarn_id = 2 THEN weft_quantity ELSE 0 END) AS quan_weft,
 
-    SUM(CASE WHEN yarn_type.yarn_id = 1 THEN warp_quantity ELSE 0 END) AS sum_warp,
-    SUM(CASE WHEN yarn_type.yarn_id = 2 THEN weft_quantity ELSE 0 END) AS sum_weft,
+    MAX(CASE WHEN yarn_type.yarn_id = 1 THEN warp_quantity ELSE 0 END) AS sum_warp,
+    MAX(CASE WHEN yarn_type.yarn_id = 2 THEN weft_quantity ELSE 0 END) AS sum_weft,
 
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN color_tape.color END) AS color_warp,
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN color_tape.color END) AS color_weft,
@@ -55,9 +58,17 @@ JOIN color color_tape ON fabric_recipe.color_id = color_tape.id
 JOIN additive ON fabric_recipe.additive_id = additive.id
 
 GROUP BY
-     -- loom_machine.ppm,
-      yarn_type.yarn_id,
-      tape_density.density,
-      color_tape.color,
-      additive.additive
-    ORDER BY tape_density.density ASC
+    
+      loom_number
+   -- sleeve_width,
+   -- sleeve_density,
+   -- looms.fabric_recipe_id
+   -- model_of_the_loom_id,
+
+   -- loom_machine.ppm,
+   -- yarn_type.yarn_id,
+   -- tape_density.density,
+   -- color_tape.color,
+   -- additive.additive
+
+   ORDER BY loom_number ASC
