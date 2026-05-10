@@ -1634,7 +1634,7 @@ async function getTape() {
     try {
         connection = await getAwaitConnect();
         //console.log(data);
-        return await connection.execute(sql);
+        return (await connection.execute(sql))[0];
     } catch (error) {
         console.error('Ошибка:', error);
         throw error;

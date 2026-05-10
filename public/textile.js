@@ -557,7 +557,7 @@ function myfilter(arr) {
     console.log(filteredThreadType);
     console.log(sum);
 }
-async function loadTable() {
+async function request() {
     const response = await fetch("https://worktime.up.railway.app/app", {
         method: "POST",
         headers: {
@@ -595,6 +595,10 @@ async function loadTable() {
             throw error;
         }
     }
+}
+async function loadTable() {
+    const result = await request().data;
+
 
 
     //result.all[1] = result.all[1].map(meta => (decodeMetadata(meta)));
