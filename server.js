@@ -37,6 +37,7 @@ const functionDB = {
     "getHistory": getHistory,
     "getDay": getDay,
     "getTapeKnowledge": getTapeKnowledge,
+    "getUseTape": getUseTape,
 }
 
 const ENCRYPTION_KEY = process.env.HH_ENCRYPTION_KEY;
@@ -1643,6 +1644,7 @@ async function getTape() {
         console.log("Соединение возвращено.");
     }
 }
+
 async function getTapeKnowledge() {
     console.log("CALL=", getTape.name)
     let connection = null;
@@ -1652,6 +1654,22 @@ async function getTapeKnowledge() {
     order by length ASC
     `
     try {
+        connection = await getAwaitConnect();
+        //console.log(data);
+        return await connection.execute(sql);
+    } catch (error) {
+        console.error('Ошибка:', error);
+        throw error;
+    } finally {
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
+    }
+}
+async function getUseTape() {
+    console.log(arguments.callee.name);
+    let connection = null;
+    try {
+        sql = loadSQL("./src/sql/looms/useTape.sql");
         connection = await getAwaitConnect();
         //console.log(data);
         return await connection.execute(sql);

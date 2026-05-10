@@ -1,3 +1,42 @@
+async function request(action, params = {}) {
+    const response = await fetch("https://worktime.up.railway.app/app", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: action, // Например, "getThreads", "getTasks"
+            ...params
+        }),
+    });
+    for (const [key, value] of response.headers.entries()) {
+        console.log("\x1b[34m [" + key + "][" + value + "]");
+    }
+    const contentType = response.headers.get('content-type');
+    console.log("\x1b[33m [" + contentType + "]");
+
+    if (!response.ok) {
+        throw new Error(`Ошибка HTTP: ${response.status}`);
+    }
+    const text = await response.text();
+
+    try {
+        const data = JSON.parse(text);
+        console.info("Load server sql", data);
+        return data;
+    } catch (error) {
+        console.log("\x1b[33m [" + text + "]");
+        console.dir(error);
+        if (error.message.includes("is not valid JSON")) {
+            throw new Error("is not valid JSON");
+        }
+        if (error.message === "Unexpected end of JSON input") {
+            throw error;
+        }
+    }
+}
+
+
 document.body.addEventListener("click", edit)
 async function edit(event) {
     const button = event.target.closest("div");
@@ -136,27 +175,9 @@ function getLocalDateTimeForMySQL() {
  */
 async function loadAndRenderButtons(field = "loom_number") {
     try {
-        //const response = await fetch('https://worktime.up.railway.app/app', {
-        //    method: 'POST',
-        //    headers: { 'Content-Type': 'application/json;charset=utf-8' },
-        //    body: JSON.stringify({
-        //        action: "sql",
-        //        //query: "SELECT " + field + " " +
-        //        //    "FROM textile t " +
-        //        //    "JOIN sleeve_width_density swd ON t.wd_id = swd.sleeve_width_density_id " +
-        //        //    "JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
-        //        //    "JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id;",
-        //        query: "SELECT " + field + " FROM " +
-        //            "(SELECT looms.*, CONCAT(sw.sleeve_width, '/', sd.sleeve_density) AS sleeve_width_density " +
-        //            "FROM looms " +
-        //            "LEFT JOIN sleeve_width_density swd ON looms.type_id = swd.sleeve_width_density_id " +
-        //            "LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id " +
-        //            "LEFT JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id) AS combo;",
-        //    }),
-        //});
-        //console.log(response);
-        //const [allNumbers] = await response.json();
-        const allNumbers = [
+        const allNumbers = await request("getUseTape");
+
+        const allNumbersSV = [
             {
                 "loom_number": 1,
                 "sleeve_width": 150,
@@ -1688,6 +1709,7 @@ async function loadAndRenderButtons(field = "loom_number") {
                 "weft": "нет"
             }
         ]
+
         console.log(allNumbers);
 
         const requiredCount = buttonsPerBlock * totalBlocks + 13;
