@@ -66,6 +66,9 @@ class DataTape {
             console.dir(error);
         }
     }
+    loadParams(action) {
+        this.saveState(action, localSpace[action]);
+    }
     async request(action, params = {}) {
         const response = await fetch(this.apiUrl, {
             method: "POST",
@@ -90,7 +93,7 @@ class DataTape {
 
         try {
             const data = JSON.parse(text);
-            console.info("Load server sql",data);
+            console.info("Load server sql", data);
             return data;
         } catch (error) {
             console.log("\x1b[33m [" + text + "]");
@@ -1025,6 +1028,7 @@ localSpace.getThreads = [
         return select;
     }
     function calculate(select, length, speed, time, buttons, action) {
+
         const density = Number(select.value);
         const tape = myThread.find(item => item.density === density);
 
@@ -1071,6 +1075,7 @@ localSpace.getThreads = [
             handleCalculation();
             //tape.length = l;
         }
+
     }
     function update(density, speed) {
         const tape = myThread.find(item => item.density === density);
