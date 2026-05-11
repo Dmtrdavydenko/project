@@ -530,7 +530,7 @@ async function sqlQuery(sqlQueryString) {
             throw new Error(`Некорректный JSON от сервера: ${responseText}`);
         }
 
-        console.log("Результат запроса:", result);
+        console.log(result);
 
     } catch (error) {
         // Полный вывод ошибки

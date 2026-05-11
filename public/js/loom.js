@@ -177,9 +177,9 @@ function getLocalDateTimeForMySQL() {
  */
 async function loadAndRenderButtons(field = "loom") {
     try {
-        const allNumbers = await request("getUseTape");
+        const allNumbersSV = await request("getUseTape");
 
-        const allNumbersSV = [
+        const allNumbers = [
             {
                 "cnt": 2,
                 "loom": 1,
@@ -1576,7 +1576,6 @@ async function loadAndRenderButtons(field = "loom") {
 
         for (const item of allNumbers) {
             for (const key in item) {
-                item.button = document.createElement('button');
                 if (!isNaN(item[key]) && item[key] !== '') {
                     item[key] = Number(item[key]);
                 }
