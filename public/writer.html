@@ -8,11 +8,27 @@
 <textarea id="editor" rows="10" cols="60"></textarea>
 
     <script>
-        const ws = new WebSocket('ws://localhost:3000');
+
+        const protocol =
+            location.protocol === 'https:'
+                ? 'wss:'
+                : 'ws:';
+
+        const ws = new WebSocket(
+            `${protocol}//${location.host}`
+        );
 
         const editor = document.getElementById('editor');
 
         let debounce;
+
+        ws.onopen = () => {
+            console.log('websocket connected');
+        };
+
+        ws.onerror = (error) => {
+            console.error('websocket error', error);
+        };
 
         editor.addEventListener('input', () => {
 
@@ -20,14 +36,19 @@
 
             debounce = setTimeout(() => {
 
-                ws.send(JSON.stringify({
-                    type: 'text-change',
-                    text: editor.value
-                }));
+                if (ws.readyState === WebSocket.OPEN) {
+
+                    ws.send(JSON.stringify({
+                        type: 'text-change',
+                        text: editor.value
+                    }));
+
+                }
 
             }, 500);
 
         });
+
     </script>
 
 </body>

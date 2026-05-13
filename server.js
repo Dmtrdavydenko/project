@@ -3058,7 +3058,6 @@ console.log(__filename);
 console.log(__dirname);
 
 const server = http.createServer((req, res) => {
-    console.log(req);
 
     let file = 'viewer.html';
 
