@@ -1,44 +1,45 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width initial-scale=1.0">
-    <title>Main</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor</title>
 </head>
-
 <body>
-<textarea id="code" placeholder="Пиши код здесь"></textarea>
+
+<textarea id="code" style="width:600px;height:200px;"></textarea>
 
     <script>
         let ws;
-        function connectWS() {
-            const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-            ws = new WebSocket(`${protocol}://${location.host}/ws`);
 
-            ws.onopen = () => console.log('WebSocket открыт');
+        function connect() {
+            const protocol = location.protocol === "https:" ? "wss" : "ws";
+            ws = new WebSocket(`${protocol}://${location.host}`);
+
+            ws.onopen = () => console.log("WS открыт");
+
             ws.onclose = () => {
-                console.log('WebSocket закрыт, переподключаемся через 1 сек...');
-                setTimeout(connectWS, 1000);
+                console.log("WS закрыт → reconnect");
+                setTimeout(connect, 1000);
             };
         }
-        connectWS();
+
+        connect();
+
+        const textarea = document.getElementById("code");
+
         let timeout;
-        let textarea = document.getElementById('code');
 
-        textarea.addEventListener('input', () => {
+        textarea.addEventListener("input", () => {
             clearTimeout(timeout);
+
             timeout = setTimeout(() => {
-                // Отправка только если WebSocket открыт
-                if (ws.readyState === WebSocket.OPEN) {
+                if (ws && ws.readyState === WebSocket.OPEN) {
                     ws.send(textarea.value);
-                } else {
-                    console.warn('WebSocket закрыт, сообщение не отправлено');
                 }
-            }, 200);
+            }, 200); // debounce client
         });
-
     </script>
-</body>
 
+</body>
 </html>

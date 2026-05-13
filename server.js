@@ -3126,3 +3126,66 @@ function generateCanvasHTML(code) {
         </script>
     `;
 }
+
+
+import { WebSocketServer } from "ws";
+
+// ===== твой HTTP сервер =====
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("OK");
+});
+
+// ===== WebSocket (Railway compatible WSS) =====
+const wss = new WebSocketServer({ server });
+
+let currentCanvasHTML = "";
+let pendingMessage = null;
+let debounceTimeout = null;
+
+wss.on("connection", (ws) => {
+    console.log("WS client connected");
+
+    // отправляем текущее состояние
+    ws.send(currentCanvasHTML);
+
+    ws.on("message", (msg) => {
+        const message = msg.toString();
+
+        // debounce логика
+        pendingMessage = message;
+
+        if (debounceTimeout) clearTimeout(debounceTimeout);
+
+        debounceTimeout = setTimeout(() => {
+            currentCanvasHTML = generateCanvasHTML(pendingMessage);
+
+            // рассылаем всем
+            wss.clients.forEach((client) => {
+                if (client.readyState === 1) {
+                    client.send(currentCanvasHTML);
+                }
+            });
+
+            pendingMessage = null;
+            debounceTimeout = null;
+        }, 100); // 100ms debounce
+    });
+
+    ws.on("close", () => {
+        console.log("WS client disconnected");
+    });
+});
+
+function generateCanvasHTML(code) {
+    return `
+        <canvas id="c" width="600" height="200"></canvas>
+        <script>
+            const canvas = document.getElementById('c');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.font = '20px Arial';
+            ctx.fillText(${JSON.stringify(code)}, 10, 50);
+        </script>
+    `;
+}

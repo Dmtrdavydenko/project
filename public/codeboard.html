@@ -1,32 +1,35 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codeboard</title>
 </head>
-
 <body>
+
     <div id="board"></div>
 
     <script>
         let ws;
-        function connectWS() {
-            const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-            ws = new WebSocket(`${protocol}://${location.host}/ws`);
 
-            ws.onopen = () => console.log('WebSocket открыт');
-            ws.onclose = () => {
-                console.log('WebSocket закрыт, переподключаемся через 1 сек...');
-                setTimeout(connectWS, 1000);
-            };
+        function connect() {
+            const protocol = location.protocol === "https:" ? "wss" : "ws";
+            ws = new WebSocket(`${protocol}://${location.host}`);
+
+            ws.onopen = () => console.log("WS открыт");
+
             ws.onmessage = (event) => {
-                document.getElementById('board').innerHTML = event.data;
+                document.getElementById("board").innerHTML = event.data;
+            };
+
+            ws.onclose = () => {
+                console.log("WS закрыт → reconnect");
+                setTimeout(connect, 1000);
             };
         }
-        connectWS();
-    </script>
-</body>
 
+        connect();
+    </script>
+
+</body>
 </html>
