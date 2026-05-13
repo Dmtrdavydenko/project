@@ -3039,13 +3039,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 let currentText = '';
-
+let state = {
+    text: '',
+    width: 1000,
+    height: 400
+};
 function createCanvasCode(text) {
 
     return `
 const canvas = document.createElement('canvas');
-canvas.width = 1000;
-canvas.height = 400;
+canvas.width = ${state.width};
+canvas.height = ${state.height};
 
 const ctx = canvas.getContext('2d');
 
@@ -3055,7 +3059,7 @@ ctx.fillStyle = '#ffffff';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 ctx.fillStyle = '#000000';
-ctx.font = '40px Arial';
+ctx.font = '24px Arial';
 
 const lines = ${JSON.stringify(text)}.split('\\n');
 
@@ -3125,15 +3129,29 @@ wss.on('connection', (ws) => {
         code: createCanvasCode(currentText)
     }));
 
-    ws.on('message', (message) => {
+    //ws.on('message', (message) => {
 
-        const data = JSON.parse(message.toString());
+    //    const data = JSON.parse(message.toString());
 
-        if (data.type === "text-change") {
+    //    if (data.type === "text-change") {
+    //        currentText = data.text;
+
+    //        broadcastCanvasCode();
+    //    }
+    //});
+    ws.on('message', (msg) => {
+
+        const data = JSON.parse(msg.toString());
+
+        if (data.type === 'text-change') {
             console.log(data.text);
-            currentText = data.text;
+
+            state.text = data.text;
+            state.width = data.width;
+            state.height = data.height;
 
             broadcastCanvasCode();
+
         }
     });
 });

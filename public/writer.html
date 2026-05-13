@@ -30,20 +30,42 @@
             console.error('websocket error', error);
         };
 
+        //editor.addEventListener('input', () => {
+
+        //    clearTimeout(debounce);
+
+        //    debounce = setTimeout(() => {
+
+        //        if (ws.readyState === WebSocket.OPEN) {
+
+        //            ws.send(JSON.stringify({
+        //                type: 'text-change',
+        //                text: editor.value
+        //            }));
+
+        //        }
+
+        //    }, 500);
+
+        //});
         editor.addEventListener('input', () => {
 
             clearTimeout(debounce);
 
             debounce = setTimeout(() => {
 
+                const rect = editor.getBoundingClientRect();
                 if (ws.readyState === WebSocket.OPEN) {
+
 
                     ws.send(JSON.stringify({
                         type: 'text-change',
-                        text: editor.value
+                        text: editor.value,
+                        width: rect.width,
+                        height: rect.height
                     }));
-
                 }
+
 
             }, 500);
 
