@@ -3020,66 +3020,66 @@ console.log("Server listening on " + PORT);
 //let debounceTimeout = null;     // таймаут дебаунса
 
 //// WebSocket upgrade
-//server.on('upgrade', (req, socket, head) => {
-//    const pathname = req.url;
+server.on('upgrade', (req, socket, head) => {
+    const pathname = req.url;
 
-//    // Поддерживаем только /ws
-//    if (!pathname.startsWith('/ws')) {
-//        socket.destroy();
-//        return;
-//    }
+    // Поддерживаем только /ws
+    if (!pathname.startsWith('/ws')) {
+        socket.destroy();
+        return;
+    }
 
-//    if (req.headers['upgrade'] !== 'websocket') {
-//        socket.destroy();
-//        return;
-//    }
+    if (req.headers['upgrade'] !== 'websocket') {
+        socket.destroy();
+        return;
+    }
 
-//    // WebSocket handshake
-//    const key = req.headers['sec-websocket-key'];
-//    const acceptKey = crypto
-//        .createHash('sha1')
-//        .update(key + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11', 'binary')
-//        .digest('base64');
+    // WebSocket handshake
+    const key = req.headers['sec-websocket-key'];
+    const acceptKey = crypto
+        .createHash('sha1')
+        .update(key + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11', 'binary')
+        .digest('base64');
 
-//    socket.write(
-//        'HTTP/1.1 101 Switching Protocols\r\n' +
-//        'Upgrade: websocket\r\n' +
-//        'Connection: Upgrade\r\n' +
-//        'Sec-WebSocket-Accept: ' + acceptKey + '\r\n\r\n'
-//    );
+    socket.write(
+        'HTTP/1.1 101 Switching Protocols\r\n' +
+        'Upgrade: websocket\r\n' +
+        'Connection: Upgrade\r\n' +
+        'Sec-WebSocket-Accept: ' + acceptKey + '\r\n\r\n'
+    );
 
-//    socket.isAlive = true;
-//    clients.add(socket);
+    socket.isAlive = true;
+    clients.add(socket);
 
-//    // Отправляем текущее состояние новому клиенту
-//    sendWebSocketMessage(socket, currentCanvasHTML);
+    // Отправляем текущее состояние новому клиенту
+    sendWebSocketMessage(socket, currentCanvasHTML);
 
-//    socket.on('data', buffer => {
-//        const message = parseWebSocketMessage(buffer);
-//        if (!message) return;
+    socket.on('data', buffer => {
+        const message = parseWebSocketMessage(buffer);
+        if (!message) return;
 
-//        // Сохраняем последнее сообщение
-//        pendingMessage = message;
+        // Сохраняем последнее сообщение
+        pendingMessage = message;
 
-//        // Сбрасываем предыдущий таймаут
-//        if (debounceTimeout) clearTimeout(debounceTimeout);
+        // Сбрасываем предыдущий таймаут
+        if (debounceTimeout) clearTimeout(debounceTimeout);
 
-//        // Запускаем дебаунс: рассылаем всем через 100мс
-//        debounceTimeout = setTimeout(() => {
-//            currentCanvasHTML = generateCanvasHTML(pendingMessage);
+        // Запускаем дебаунс: рассылаем всем через 100мс
+        debounceTimeout = setTimeout(() => {
+            currentCanvasHTML = generateCanvasHTML(pendingMessage);
 
-//            clients.forEach(client => {
-//                sendWebSocketMessage(client, currentCanvasHTML);
-//            });
+            clients.forEach(client => {
+                sendWebSocketMessage(client, currentCanvasHTML);
+            });
 
-//            pendingMessage = null;
-//            debounceTimeout = null;
-//        }, 100); // 100ms debounce
-//    });
+            pendingMessage = null;
+            debounceTimeout = null;
+        }, 100); // 100ms debounce
+    });
 
-//    socket.on('close', () => clients.delete(socket));
-//    socket.on('error', () => clients.delete(socket));
-//});
+    socket.on('close', () => clients.delete(socket));
+    socket.on('error', () => clients.delete(socket));
+});
 
 //// ===== WebSocket helper functions =====
 //function parseWebSocketMessage(buffer) {
@@ -3114,18 +3114,18 @@ console.log("Server listening on " + PORT);
 //}
 
 //// ===== Canvas HTML генератор =====
-//function generateCanvasHTML(code) {
-//    return `
-//        <canvas width="600" height="200"></canvas>
-//        <script>
-//            const canvas = document.querySelector('canvas:last-of-type');
-//            const ctx = canvas.getContext('2d');
-//            ctx.clearRect(0,0,canvas.width,canvas.height);
-//            ctx.font = '20px Arial';
-//            ctx.fillText(${JSON.stringify(code)}, 10, 50);
-//        </script>
-//    `;
-//}
+function generateCanvasHTML(code) {
+    return `
+        <canvas width="600" height="200"></canvas>
+        <script>
+            const canvas = document.querySelector('canvas:last-of-type');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.font = '20px Arial';
+            ctx.fillText(${JSON.stringify(code)}, 10, 50);
+        </script>
+    `;
+}
 
 //const wss = new WebSocketServer({ server });
 
@@ -3212,7 +3212,8 @@ let lastMessage = "";
 function broadcastToViewers(msg) {
     wss.clients.forEach(client => {
         if (client !== writer && client.readyState === wss.OPEN) {
-            client.send(JSON.stringify({ text: msg }));
+            //client.send(JSON.stringify({ text: msg }));
+            client.send(generateCanvasHTML(msg));
         }
     });
 }
@@ -3233,6 +3234,7 @@ wss.on("connection", (ws, req) => {
 
         ws.on("message", (msg) => {
             lastMessage = msg.toString();
+            console.log(lastMessage);
 
             if (debounceTimeout) clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(() => {
