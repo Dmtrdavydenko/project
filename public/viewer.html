@@ -5,20 +5,26 @@
 </head>
 <body>
 
-    <img id="image" width="1000" />
+    <canvas id="canvas" width="1000" height="400"></canvas>
 
     <script>
         const ws = new WebSocket('ws://localhost:3000');
 
-        ws.binaryType = 'blob';
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
 
-        const image = document.getElementById('image');
+        ws.onmessage = (event) => {
 
-        ws.onmessage = async (event) => {
+            const data = JSON.parse(event.data);
 
-            const url = URL.createObjectURL(event.data);
+            if (data.type === 'canvas-code') {
 
-            image.src = url;
+                // выполняем canvas код от сервера
+                new Function('canvas', 'ctx', data.code)(
+                    canvas,
+                    ctx
+                );
+            }
         };
     </script>
 

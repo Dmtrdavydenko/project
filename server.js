@@ -3034,30 +3034,25 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { WebSocketServer } from 'ws';
-import { createCanvas } from 'canvas';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 let currentText = '';
 
-const WIDTH = 1000;
-const HEIGHT = 400;
+function createCanvasCode(text) {
 
-const canvas = createCanvas(WIDTH, HEIGHT);
-const ctx = canvas.getContext('2d');
+    return `
+ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-function renderCanvas(text) {
+ctx.fillStyle = '#ffffff';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+ctx.fillStyle = '#000000';
+ctx.font = '40px Arial';
 
-    ctx.fillStyle = '#000000';
-    ctx.font = '40px Arial';
-
-    ctx.fillText(text, 50, 100);
-
-    return canvas.toBuffer('image/png');
+ctx.fillText(${JSON.stringify(text)}, 50, 100);
+`;
 }
 
 const server = http.createServer((req, res) => {
@@ -3088,45 +3083,39 @@ const server = http.createServer((req, res) => {
 
 const wss = new WebSocketServer({ server });
 
-function broadcastCanvas() {
+function broadcastCanvasCode() {
 
-    const imageBuffer = renderCanvas(currentText);
+    const code = createCanvasCode(currentText);
+
+    const payload = JSON.stringify({
+        type: 'canvas-code',
+        code
+    });
 
     for (const client of wss.clients) {
 
         if (client.readyState === 1) {
-
-            client.send(imageBuffer, {
-                binary: true
-            });
+            client.send(payload);
         }
     }
 }
 
 wss.on('connection', (ws) => {
 
-    // отправляем текущее состояние
-    const imageBuffer = renderCanvas(currentText);
-
-    ws.send(imageBuffer, {
-        binary: true
-    });
+    ws.send(JSON.stringify({
+        type: 'canvas-code',
+        code: createCanvasCode(currentText)
+    }));
 
     ws.on('message', (message) => {
 
-        try {
+        const data = JSON.parse(message.toString());
 
-            const data = JSON.parse(message.toString());
+        if (data.type === 'text-change') {
 
-            if (data.type === 'text-change') {
+            currentText = data.text;
 
-                currentText = data.text;
-
-                broadcastCanvas();
-            }
-
-        } catch (e) {
-            console.error(e);
+            broadcastCanvasCode();
         }
     });
 });
@@ -3134,28 +3123,6 @@ wss.on('connection', (ws) => {
 server.listen(3000, () => {
     console.log('http://localhost:3000');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
