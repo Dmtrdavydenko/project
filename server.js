@@ -3154,9 +3154,6 @@ wss.on('connection', (ws) => {
     });
 });
 
-server.listen(PORT, () => {
-    console.log('http://localhost:3000');
-});
 
 
 
