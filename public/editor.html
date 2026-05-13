@@ -11,17 +11,35 @@
 <textarea id="code" placeholder="Пиши код здесь"></textarea>
 
     <script>
-        const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-        const ws = new WebSocket(`${protocol}://${location.host}/ws`);
-        const textarea = document.getElementById('code');
+        let ws;
+        function connectWS() {
+            const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+            ws = new WebSocket(`${protocol}://${location.host}/ws`);
 
+            ws.onopen = () => console.log('WebSocket открыт');
+            ws.onclose = () => {
+                console.log('WebSocket закрыт, переподключаемся через 1 сек...');
+                setTimeout(connectWS, 1000);
+            };
+            ws.onmessage = (event) => {
+                document.getElementById('board').innerHTML = event.data;
+            };
+        }
+        connectWS();
         let timeout;
         textarea.addEventListener('input', () => {
             clearTimeout(timeout);
             timeout = setTimeout(() => {
-                ws.send(textarea.value);
+                // Отправка только если WebSocket открыт
+                if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(textarea.value);
+                } else {
+                    console.warn('WebSocket закрыт, сообщение не отправлено');
+                }
             }, 200);
-        });</script>
+        });
+
+    </script>
 </body>
 
 </html>
