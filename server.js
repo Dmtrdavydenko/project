@@ -3063,16 +3063,17 @@ ctx.font = '24px Arial';
 
 const lines = ${JSON.stringify(text)}.split('\\n');
 
-let y = 80;
+let y = 40;
 
 for (const line of lines) {
     ctx.fillText(line, 50, y);
-    y += 50;
+    y += 30;
 }
 
 // вставляем canvas в страницу (или контейнер)
-document.body.innerHTML = '';
-document.body.appendChild(canvas);
+const app = document.getElementById("app");
+app.innerHTML = "";
+app.appendChild(canvas);
 `;
 }
 console.log(__filename);
