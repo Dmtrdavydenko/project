@@ -8,24 +8,52 @@
     <canvas id="canvas" width="1000" height="400"></canvas>
 
     <script>
-        const ws = new WebSocket('ws://localhost:3000');
+
+        const protocol =
+            location.protocol === 'https:'
+                ? 'wss:'
+                : 'ws:';
+
+        const ws = new WebSocket(
+            `${protocol}//${location.host}`
+        );
 
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
+        ws.onopen = () => {
+            console.log('websocket connected');
+        };
+
+        ws.onerror = (error) => {
+            console.error('websocket error', error);
+        };
+
         ws.onmessage = (event) => {
 
-            const data = JSON.parse(event.data);
+            try {
 
-            if (data.type === 'canvas-code') {
+                const data = JSON.parse(event.data);
 
-                // выполняем canvas код от сервера
-                new Function('canvas', 'ctx', data.code)(
-                    canvas,
-                    ctx
-                );
+                if (data.type === 'canvas-code') {
+
+                    new Function(
+                        'canvas',
+                        'ctx',
+                        data.code
+                    )(
+                        canvas,
+                        ctx
+                    );
+                }
+
+            } catch (error) {
+
+                console.error('render error', error);
+
             }
         };
+
     </script>
 
 </body>
