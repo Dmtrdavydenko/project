@@ -3011,7 +3011,7 @@
 //console.log("Server listening on " + PORT);
 
 
-// server.js
+
 import http from "http";
 import fs from "fs";
 import path from "path";
@@ -3019,49 +3019,68 @@ import { WebSocketServer } from "ws";
 
 const PORT = process.env.PORT || 3000;
 
-// HTTP сервер для статики
+// ===== HTTP сервер для статики =====
 const server = http.createServer((req, res) => {
     let filePath = "./public" + (req.url === "/" ? "/editor.html" : req.url);
+    const extname = String(path.extname(filePath)).toLowerCase();
+    const mimeTypes = {
+        ".html": "text/html",
+        ".js": "application/javascript",
+        ".css": "text/css",
+        ".json": "application/json",
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".gif": "image/gif",
+        ".svg": "image/svg+xml",
+        ".ico": "image/x-icon",
+        ".txt": "text/plain"
+    };
 
-    // безопасный путь
-    filePath = path.normalize(filePath);
+    const contentType = mimeTypes[extname] || "application/octet-stream";
 
-    fs.readFile(filePath, (err, data) => {
+    fs.readFile(filePath, (err, content) => {
         if (err) {
-            res.writeHead(404, { "Content-Type": "text/plain" });
-            res.end("404 Not Found");
-            return;
+            if (err.code === "ENOENT") {
+                res.writeHead(404);
+                res.end("404 Not Found");
+            } else {
+                res.writeHead(500);
+                res.end("Server Error");
+            }
+        } else {
+            res.writeHead(200, { "Content-Type": contentType });
+            res.end(content, "utf-8");
         }
-
-        // content-type по расширению
-        const ext = path.extname(filePath).toLowerCase();
-        const mime = {
-            ".html": "text/html",
-            ".js": "application/javascript",
-            ".css": "text/css",
-            ".png": "image/png",
-            ".jpg": "image/jpeg",
-            ".svg": "image/svg+xml"
-        }[ext] || "application/octet-stream";
-
-        res.writeHead(200, { "Content-Type": mime });
-        res.end(data);
     });
 });
 
-// WebSocket сервер поверх того же HTTP
+// ===== WebSocket сервер =====
 const wss = new WebSocketServer({ server });
 
 let writer = null;
 let currentText = "";
 let debounceTimeout = null;
+let lastMessage = "";
 
 function broadcastToViewers(msg) {
     wss.clients.forEach(client => {
-        if (client !== writer && client.readyState === 1) {
-            client.send(msg);
+        if (client !== writer && client.readyState === wss.OPEN) {
+            client.send(generateCanvasHTML(msg));
         }
     });
+}
+
+function generateCanvasHTML(code) {
+    return `
+        <canvas width="600" height="200"></canvas>
+        <script>
+            const canvas = document.querySelector('canvas:last-of-type');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.font = '20px Arial';
+            ctx.fillText(${JSON.stringify(code)}, 10, 50);
+        </script>
+    `;
 }
 
 wss.on("connection", (ws, req) => {
@@ -3078,10 +3097,11 @@ wss.on("connection", (ws, req) => {
         console.log("Writer connected");
 
         ws.on("message", msg => {
-            const text = msg.toString();
+            lastMessage = msg.toString();
+
             if (debounceTimeout) clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(() => {
-                currentText = text;
+                currentText = lastMessage;
                 broadcastToViewers(currentText);
                 debounceTimeout = null;
             }, 100);
@@ -3093,12 +3113,15 @@ wss.on("connection", (ws, req) => {
         });
 
     } else {
-        // viewer
+        // Viewer
         console.log("Viewer connected");
-        ws.send(currentText);
+        ws.send(generateCanvasHTML(currentText));
+
         ws.on("close", () => console.log("Viewer disconnected"));
     }
 });
 
-// запускаем сервер
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// ===== Запуск сервера =====
+server.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
