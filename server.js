@@ -3127,60 +3127,60 @@ console.log("Server listening on " + PORT);
 //    `;
 //}
 
-
-import { WebSocketServer } from "ws";
-
-
-// ===== WebSocket (Railway compatible WSS) =====
 const wss = new WebSocketServer({ server });
 
-let currentCanvasHTML = "";
-let pendingMessage = null;
+let writer = null;           // хранит текущего писателя
+let currentCanvasText = "";  // текущий текст
 let debounceTimeout = null;
+let lastMessage = "";
 
-wss.on("connection", (ws) => {
-    console.log("WS client connected");
-
-    // отправляем текущее состояние
-    ws.send(currentCanvasHTML);
-
-    ws.on("message", (msg) => {
-        const message = msg.toString();
-
-        // debounce логика
-        pendingMessage = message;
-
-        if (debounceTimeout) clearTimeout(debounceTimeout);
-
-        debounceTimeout = setTimeout(() => {
-            currentCanvasHTML = generateCanvasHTML(pendingMessage);
-
-            // рассылаем всем
-            wss.clients.forEach((client) => {
-                if (client.readyState === 1) {
-                    client.send(currentCanvasHTML);
-                }
-            });
-
-            pendingMessage = null;
-            debounceTimeout = null;
-        }, 100); // 100ms debounce
+// helper: отправка всем viewers
+function broadcastToViewers(msg) {
+    wss.clients.forEach(client => {
+        if (client !== writer && client.readyState === wss.OPEN) {
+            client.send(JSON.stringify({ text: msg }));
+        }
     });
-
-    ws.on("close", () => {
-        console.log("WS client disconnected");
-    });
-});
-
-function generateCanvasHTML(code) {
-    return `
-        <canvas id="c" width="600" height="200"></canvas>
-        <script>
-            const canvas = document.getElementById('c');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.font = '20px Arial';
-            ctx.fillText(${JSON.stringify(code)}, 10, 50);
-        </script>
-    `;
 }
+
+wss.on("connection", (ws, req) => {
+    // проверяем роль через query ?role=writer или ?role=viewer
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const role = url.searchParams.get("role");
+
+    if (role === "writer") {
+        if (writer) {
+            // уже есть писатель → отказ
+            ws.send(JSON.stringify({ error: "Writer already connected" }));
+            ws.close();
+            return;
+        }
+        writer = ws;
+        console.log("Writer connected");
+
+        ws.on("message", (msg) => {
+            lastMessage = msg.toString();
+
+            if (debounceTimeout) clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                currentCanvasText = lastMessage;
+                broadcastToViewers(currentCanvasText);
+                debounceTimeout = null;
+            }, 100); // debounce 100ms
+        });
+
+        ws.on("close", () => {
+            console.log("Writer disconnected");
+            writer = null;
+        });
+
+    } else {
+        // viewer
+        console.log("Viewer connected");
+
+        // отправляем текущий текст
+        ws.send(JSON.stringify({ text: currentCanvasText }));
+
+        ws.on("close", () => console.log("Viewer disconnected"));
+    }
+});
