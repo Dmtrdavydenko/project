@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" initial-scale="" 1.0">
+    <title>Main</title>
+</head>
+
+<body>
+    <div id="board"></div>
+
+    <script>
+        const ws = new WebSocket(`ws://${location.host}`);
+        const board = document.getElementById('board');
+
+        ws.onmessage = (event) => {
+            board.innerHTML = event.data; // вставляем canvas
+        };
+    </script>
+</body>
+
+</html>

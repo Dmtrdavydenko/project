@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" initial-scale="" 1.0">
+    <title>Main</title>
+</head>
+
+<body>
+<textarea id="code" placeholder="Пиши код здесь"></textarea>
+
+    <script>
+    const ws = new WebSocket(`ws://${location.host}`);
+        const textarea = document.getElementById('code');
+
+        let timeout;
+        textarea.addEventListener('input', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                ws.send(textarea.value);
+            }, 200);
+        });</script>
+</body>
+
+</html>
