@@ -3012,39 +3012,41 @@
 
 
 
-
-import express from "express";
 import http from "http";
 import { WebSocketServer } from "ws";
-import path from "path";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Статика
-app.use(express.static(path.join(__dirname, "public")));
+// ===== HTTP сервер нужен для Railway и WebSocket upgrade =====
+const server = http.createServer((req, res) => {
+    // Простая заглушка для HTTP
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("OK");
+});
 
-// HTTP сервер для Railway + WSS
-const server = http.createServer(app);
-
-// WebSocket сервер
+// ===== WebSocket сервер =====
 const wss = new WebSocketServer({ server });
 
-let writer = null;          // текущий писатель
-let currentText = "";       // текущий текст
-let debounceTimeout = null;
+let writer = null;           // текущий писатель
+let currentText = "";        // текст на canvas
+let debounceTimeout = null;  // для debounce
 let lastMessage = "";
 
-// Функция генерации Canvas HTML
+// рассылка всем viewers
+function broadcastToViewers(msg) {
+    wss.clients.forEach((client) => {
+        if (client !== writer && client.readyState === wss.OPEN) {
+            client.send(generateCanvasHTML(msg));
+        }
+    });
+}
+
+// HTML для canvas
 function generateCanvasHTML(code) {
     return `
-    <canvas id="c" width="600" height="200"></canvas>
+    <canvas width="600" height="200"></canvas>
     <script>
-      const canvas = document.getElementById('c');
+      const canvas = document.querySelector('canvas:last-of-type');
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0,0,canvas.width,canvas.height);
       ctx.font = '20px Arial';
@@ -3053,16 +3055,7 @@ function generateCanvasHTML(code) {
   `;
 }
 
-// Рассылка всем viewers
-function broadcastToViewers(msg) {
-    wss.clients.forEach(client => {
-        if (client !== writer && client.readyState === wss.OPEN) {
-            client.send(generateCanvasHTML(msg));
-        }
-    });
-}
-
-// Новое соединение
+// новое соединение
 wss.on("connection", (ws, req) => {
     const url = new URL(req.url, `http://${req.headers.host}`);
     const role = url.searchParams.get("role");
@@ -3084,7 +3077,7 @@ wss.on("connection", (ws, req) => {
                 currentText = lastMessage;
                 broadcastToViewers(currentText);
                 debounceTimeout = null;
-            }, 100);
+            }, 100); // debounce 100ms
         });
 
         ws.on("close", () => {
@@ -3093,7 +3086,7 @@ wss.on("connection", (ws, req) => {
         });
 
     } else {
-        // Viewer
+        // viewer
         console.log("Viewer connected");
         ws.send(generateCanvasHTML(currentText));
 
@@ -3101,7 +3094,7 @@ wss.on("connection", (ws, req) => {
     }
 });
 
-// Запуск
+// ===== Запуск сервера =====
 server.listen(PORT, () => {
-    console.log("Server running on port", PORT);
+    console.log(`Server listening on port ${PORT}`);
 });
