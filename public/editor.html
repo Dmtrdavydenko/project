@@ -21,12 +21,11 @@
                 console.log('WebSocket закрыт, переподключаемся через 1 сек...');
                 setTimeout(connectWS, 1000);
             };
-            ws.onmessage = (event) => {
-                document.getElementById('board').innerHTML = event.data;
-            };
         }
         connectWS();
         let timeout;
+        let textarea = textareadocument.getElementById('code');
+
         textarea.addEventListener('input', () => {
             clearTimeout(timeout);
             timeout = setTimeout(() => {

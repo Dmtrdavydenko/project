@@ -3014,16 +3014,16 @@ console.log("Server listening on " + PORT);
 
 
 // подключаем уже созданный сервер
-// если ваш server = http.createServer() 
-// то просто добавим обработчик upgrade
 const clients = new Set();
 let currentCanvasHTML = "";
+let pendingMessage = null;      // хранит последнее сообщение
+let debounceTimeout = null;     // таймаут дебаунса
 
 // WebSocket upgrade
 server.on('upgrade', (req, socket, head) => {
     const pathname = req.url;
 
-    // Поддерживаем только ws://.../ws
+    // Поддерживаем только /ws
     if (!pathname.startsWith('/ws')) {
         socket.destroy();
         return;
@@ -3058,13 +3058,23 @@ server.on('upgrade', (req, socket, head) => {
         const message = parseWebSocketMessage(buffer);
         if (!message) return;
 
-        // Пишущий клиент присылает текст, мы генерируем Canvas HTML
-        currentCanvasHTML = generateCanvasHTML(message);
+        // Сохраняем последнее сообщение
+        pendingMessage = message;
 
-        // Рассылаем всем наблюдателям
-        clients.forEach(client => {
-            sendWebSocketMessage(client, currentCanvasHTML);
-        });
+        // Сбрасываем предыдущий таймаут
+        if (debounceTimeout) clearTimeout(debounceTimeout);
+
+        // Запускаем дебаунс: рассылаем всем через 100мс
+        debounceTimeout = setTimeout(() => {
+            currentCanvasHTML = generateCanvasHTML(pendingMessage);
+
+            clients.forEach(client => {
+                sendWebSocketMessage(client, currentCanvasHTML);
+            });
+
+            pendingMessage = null;
+            debounceTimeout = null;
+        }, 100); // 100ms debounce
     });
 
     socket.on('close', () => clients.delete(socket));
