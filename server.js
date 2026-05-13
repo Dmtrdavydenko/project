@@ -3108,7 +3108,7 @@ const wss = new WebSocketServer({ server });
 
 function broadcastCanvasCode() {
 
-    const code = createCanvasCode(currentText);
+    const code = createCanvasCode(state.text);
 
     const payload = JSON.stringify({
         type: 'canvas-code',
@@ -3126,7 +3126,7 @@ function broadcastCanvasCode() {
 wss.on('connection', (ws) => {
     ws.send(JSON.stringify({
         type: 'canvas-code',
-        code: createCanvasCode(currentText)
+        code: createCanvasCode(state.text)
     }));
 
     //ws.on('message', (message) => {
