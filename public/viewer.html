@@ -5,7 +5,7 @@
 </head>
 <body>
 
-    <canvas id="canvas" width="1000" height="400"></canvas>
+    <div id="app"></div>
 
     <script>
 
@@ -17,9 +17,6 @@
         const ws = new WebSocket(
             `${protocol}//${location.host}`
         );
-
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
 
         ws.onopen = () => {
             console.log('websocket connected');
@@ -37,14 +34,10 @@
 
                 if (data.type === 'canvas-code') {
 
-                    new Function(
-                        'canvas',
-                        'ctx',
-                        data.code
-                    )(
-                        canvas,
-                        ctx
-                    );
+                    // ВАЖНО:
+                    // код сам создаёт canvas и вставляет в DOM
+                    new Function(data.code)();
+
                 }
 
             } catch (error) {

@@ -3043,6 +3043,12 @@ let currentText = '';
 function createCanvasCode(text) {
 
     return `
+const canvas = document.createElement('canvas');
+canvas.width = 1000;
+canvas.height = 400;
+
+const ctx = canvas.getContext('2d');
+
 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 ctx.fillStyle = '#ffffff';
@@ -3051,7 +3057,18 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 ctx.fillStyle = '#000000';
 ctx.font = '40px Arial';
 
-ctx.fillText(${JSON.stringify(text)}, 50, 100);
+const lines = ${JSON.stringify(text)}.split('\\n');
+
+let y = 80;
+
+for (const line of lines) {
+    ctx.fillText(line, 50, y);
+    y += 50;
+}
+
+// вставляем canvas в страницу (или контейнер)
+document.body.innerHTML = '';
+document.body.appendChild(canvas);
 `;
 }
 console.log(__filename);
