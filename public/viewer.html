@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Viewer</title>
+</head>
+<body>
+
+    <img id="image" width="1000" />
+
+    <script>
+        const ws = new WebSocket('ws://localhost:3000');
+
+        ws.binaryType = 'blob';
+
+        const image = document.getElementById('image');
+
+        ws.onmessage = async (event) => {
+
+            const url = URL.createObjectURL(event.data);
+
+            image.src = url;
+        };
+    </script>
+
+</body>
+</html>

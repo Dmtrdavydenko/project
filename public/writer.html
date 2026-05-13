@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Writer</title>
+</head>
+<body>
+
+<textarea id="editor" rows="10" cols="60"></textarea>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:3000');
+
+        const editor = document.getElementById('editor');
+
+        let debounce;
+
+        editor.addEventListener('input', () => {
+
+            clearTimeout(debounce);
+
+            debounce = setTimeout(() => {
+
+                ws.send(JSON.stringify({
+                    type: 'text-change',
+                    text: editor.value
+                }));
+
+            }, 500);
+
+        });
+    </script>
+
+</body>
+</html>
