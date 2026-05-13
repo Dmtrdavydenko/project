@@ -3057,7 +3057,7 @@ function createCanvasCode(text) {
     return `
 const canvas = document.createElement('canvas');
 canvas.width = ${state.width};
-canvas.height = ${state.height};
+canvas.height = ${state.height*2};
 
 const ctx = canvas.getContext('2d');
 
