@@ -9,7 +9,7 @@
 
 ////const mysql = require('mysql2/promise');
 
-//const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 //// const db = require("./src/sqlite.js");
 //const functionDB = {
@@ -3054,9 +3054,11 @@ ctx.font = '40px Arial';
 ctx.fillText(${JSON.stringify(text)}, 50, 100);
 `;
 }
+console.log(__filename);
+console.log(__dirname);
 
 const server = http.createServer((req, res) => {
-    console.log(req.url);
+    console.log(req);
 
     let file = 'viewer.html';
 
@@ -3102,7 +3104,6 @@ function broadcastCanvasCode() {
 }
 
 wss.on('connection', (ws) => {
-
     ws.send(JSON.stringify({
         type: 'canvas-code',
         code: createCanvasCode(currentText)
@@ -3121,7 +3122,7 @@ wss.on('connection', (ws) => {
     });
 });
 
-server.listen(3000, () => {
+server.listen(PORT, () => {
     console.log('http://localhost:3000');
 });
 
