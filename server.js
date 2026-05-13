@@ -3112,7 +3112,7 @@ wss.on('connection', (ws) => {
 
         const data = JSON.parse(message.toString());
 
-        if (data.type === 'text-change') {
+        if (data.type === "text-change") {
             console.log(data.text);
             currentText = data.text;
 
