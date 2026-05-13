@@ -3130,11 +3130,6 @@ function generateCanvasHTML(code) {
 
 import { WebSocketServer } from "ws";
 
-// ===== твой HTTP сервер =====
-const server = http.createServer((req, res) => {
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    res.end("OK");
-});
 
 // ===== WebSocket (Railway compatible WSS) =====
 const wss = new WebSocketServer({ server });
