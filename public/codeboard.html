@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Codeboard Viewer</title>
+    <title>Viewer</title>
 </head>
 <body>
     <h2>Viewer</h2>
     <canvas id="c" width="600" height="200"></canvas>
-
     <script>
         const canvas = document.getElementById("c");
         const ctx = canvas.getContext("2d");
@@ -21,9 +20,14 @@
 
             ws.onmessage = (event) => {
                 const html = event.data;
-
-                // Вставляем canvas + скрипт
-                document.body.insertAdjacentHTML("beforeend", html);
+                // Создаём временный элемент и вставляем canvas
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = html;
+                const newCanvas = tempDiv.querySelector("canvas");
+                if (newCanvas) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(newCanvas, 0, 0);
+                }
             };
 
             ws.onclose = () => {

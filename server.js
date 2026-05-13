@@ -3013,49 +3013,76 @@
 
 
 import http from "http";
+import fs from "fs";
+import path from "path";
 import { WebSocketServer } from "ws";
 
 const PORT = process.env.PORT || 3000;
 
-// ===== HTTP сервер нужен для Railway и WebSocket upgrade =====
+// ===== HTTP сервер для статики =====
 const server = http.createServer((req, res) => {
-    // Простая заглушка для HTTP
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    res.end("OK");
+    let filePath = "./public" + (req.url === "/" ? "/editor.html" : req.url);
+    const extname = String(path.extname(filePath)).toLowerCase();
+    const mimeTypes = {
+        ".html": "text/html",
+        ".js": "application/javascript",
+        ".css": "text/css",
+        ".json": "application/json",
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".gif": "image/gif",
+        ".svg": "image/svg+xml",
+        ".ico": "image/x-icon",
+        ".txt": "text/plain"
+    };
+
+    const contentType = mimeTypes[extname] || "application/octet-stream";
+
+    fs.readFile(filePath, (err, content) => {
+        if (err) {
+            if (err.code === "ENOENT") {
+                res.writeHead(404);
+                res.end("404 Not Found");
+            } else {
+                res.writeHead(500);
+                res.end("Server Error");
+            }
+        } else {
+            res.writeHead(200, { "Content-Type": contentType });
+            res.end(content, "utf-8");
+        }
+    });
 });
 
 // ===== WebSocket сервер =====
 const wss = new WebSocketServer({ server });
 
-let writer = null;           // текущий писатель
-let currentText = "";        // текст на canvas
-let debounceTimeout = null;  // для debounce
+let writer = null;
+let currentText = "";
+let debounceTimeout = null;
 let lastMessage = "";
 
-// рассылка всем viewers
 function broadcastToViewers(msg) {
-    wss.clients.forEach((client) => {
+    wss.clients.forEach(client => {
         if (client !== writer && client.readyState === wss.OPEN) {
             client.send(generateCanvasHTML(msg));
         }
     });
 }
 
-// HTML для canvas
 function generateCanvasHTML(code) {
     return `
-    <canvas width="600" height="200"></canvas>
-    <script>
-      const canvas = document.querySelector('canvas:last-of-type');
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.font = '20px Arial';
-      ctx.fillText(${JSON.stringify(code)}, 10, 50);
-    </script>
-  `;
+        <canvas width="600" height="200"></canvas>
+        <script>
+            const canvas = document.querySelector('canvas:last-of-type');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.font = '20px Arial';
+            ctx.fillText(${JSON.stringify(code)}, 10, 50);
+        </script>
+    `;
 }
 
-// новое соединение
 wss.on("connection", (ws, req) => {
     const url = new URL(req.url, `http://${req.headers.host}`);
     const role = url.searchParams.get("role");
@@ -3069,7 +3096,7 @@ wss.on("connection", (ws, req) => {
         writer = ws;
         console.log("Writer connected");
 
-        ws.on("message", (msg) => {
+        ws.on("message", msg => {
             lastMessage = msg.toString();
 
             if (debounceTimeout) clearTimeout(debounceTimeout);
@@ -3077,7 +3104,7 @@ wss.on("connection", (ws, req) => {
                 currentText = lastMessage;
                 broadcastToViewers(currentText);
                 debounceTimeout = null;
-            }, 100); // debounce 100ms
+            }, 100);
         });
 
         ws.on("close", () => {
@@ -3086,7 +3113,7 @@ wss.on("connection", (ws, req) => {
         });
 
     } else {
-        // viewer
+        // Viewer
         console.log("Viewer connected");
         ws.send(generateCanvasHTML(currentText));
 
@@ -3096,5 +3123,5 @@ wss.on("connection", (ws, req) => {
 
 // ===== Запуск сервера =====
 server.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
