@@ -3064,7 +3064,7 @@ const server = http.createServer((req, res) => {
     }
 
     const filePath = path.join(__dirname, 'public', file);
-
+    console.log(filePath);
     fs.readFile(filePath, (err, data) => {
 
         if (err) {
