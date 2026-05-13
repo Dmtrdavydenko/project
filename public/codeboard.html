@@ -3,29 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Codeboard</title>
+    <title>Codeboard (Viewer)</title>
 </head>
 <body>
-    <canvas id="c" width="600" height="200"></canvas>
+    <h2>Codeboard (Viewer)</h2>
+    <div id="canvas-container"></div>
+
     <script>
-        const canvas = document.getElementById("c");
-        const ctx = canvas.getContext("2d");
+        const container = document.getElementById("canvas-container");
+        const protocol = location.protocol === "https:" ? "wss" : "ws";
 
         function connect() {
-            const protocol = location.protocol === "https:" ? "wss" : "ws";
             const ws = new WebSocket(`${protocol}://${location.host}/?role=viewer`);
 
             ws.onopen = () => console.log("Viewer WS открыт");
 
             ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.font = "20px Arial";
-                ctx.fillText(data.text || "", 10, 50);
+                container.innerHTML = event.data;
             };
 
             ws.onclose = () => {
-                console.log("Viewer WS закрыт → reconnect");
+                console.log("Viewer WS закрыт → reconnect через 1 сек");
                 setTimeout(connect, 1000);
             };
         }
