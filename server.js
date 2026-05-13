@@ -3012,116 +3012,169 @@
 
 
 
-import http from "http";
-import fs from "fs";
-import path from "path";
-import { WebSocketServer } from "ws";
 
-const PORT = process.env.PORT || 3000;
 
-// ===== HTTP сервер для статики =====
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+import { WebSocketServer } from 'ws';
+import { createCanvas } from 'canvas';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+let currentText = '';
+
+const WIDTH = 1000;
+const HEIGHT = 400;
+
+const canvas = createCanvas(WIDTH, HEIGHT);
+const ctx = canvas.getContext('2d');
+
+function renderCanvas(text) {
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    ctx.fillStyle = '#000000';
+    ctx.font = '40px Arial';
+
+    ctx.fillText(text, 50, 100);
+
+    return canvas.toBuffer('image/png');
+}
+
 const server = http.createServer((req, res) => {
-    let filePath = "./public" + (req.url === "/" ? "/editor.html" : req.url);
-    const extname = String(path.extname(filePath)).toLowerCase();
-    const mimeTypes = {
-        ".html": "text/html",
-        ".js": "application/javascript",
-        ".css": "text/css",
-        ".json": "application/json",
-        ".png": "image/png",
-        ".jpg": "image/jpeg",
-        ".gif": "image/gif",
-        ".svg": "image/svg+xml",
-        ".ico": "image/x-icon",
-        ".txt": "text/plain"
-    };
 
-    const contentType = mimeTypes[extname] || "application/octet-stream";
+    let file = 'viewer.html';
 
-    fs.readFile(filePath, (err, content) => {
+    if (req.url === '/writer') {
+        file = 'writer.html';
+    }
+
+    const filePath = path.join(__dirname, 'public', file);
+
+    fs.readFile(filePath, (err, data) => {
+
         if (err) {
-            if (err.code === "ENOENT") {
-                res.writeHead(404);
-                res.end("404 Not Found");
-            } else {
-                res.writeHead(500);
-                res.end("Server Error");
-            }
-        } else {
-            res.writeHead(200, { "Content-Type": contentType });
-            res.end(content, "utf-8");
-        }
-    });
-});
-
-// ===== WebSocket сервер =====
-const wss = new WebSocketServer({ server });
-
-let writer = null;
-let currentText = "";
-let debounceTimeout = null;
-let lastMessage = "";
-
-function broadcastToViewers(msg) {
-    wss.clients.forEach(client => {
-        if (client !== writer && client.readyState === wss.OPEN) {
-            client.send(generateCanvasHTML(msg));
-        }
-    });
-}
-
-function generateCanvasHTML(code) {
-    return `
-        <canvas width="600" height="200"></canvas>
-        <script>
-            const canvas = document.querySelector('canvas:last-of-type');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.font = '20px Arial';
-            ctx.fillText(${JSON.stringify(code)}, 10, 50);
-        </script>
-    `;
-}
-
-wss.on("connection", (ws, req) => {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const role = url.searchParams.get("role");
-
-    if (role === "writer") {
-        if (writer) {
-            ws.send(JSON.stringify({ error: "Writer already connected" }));
-            ws.close();
+            res.writeHead(500);
+            res.end('error');
             return;
         }
-        writer = ws;
-        console.log("Writer connected");
 
-        ws.on("message", msg => {
-            lastMessage = msg.toString();
-
-            if (debounceTimeout) clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(() => {
-                currentText = lastMessage;
-                broadcastToViewers(currentText);
-                debounceTimeout = null;
-            }, 100);
+        res.writeHead(200, {
+            'Content-Type': 'text/html'
         });
 
-        ws.on("close", () => {
-            console.log("Writer disconnected");
-            writer = null;
-        });
+        res.end(data);
+    });
+});
 
-    } else {
-        // Viewer
-        console.log("Viewer connected");
-        ws.send(generateCanvasHTML(currentText));
+const wss = new WebSocketServer({ server });
 
-        ws.on("close", () => console.log("Viewer disconnected"));
+function broadcastCanvas() {
+
+    const imageBuffer = renderCanvas(currentText);
+
+    for (const client of wss.clients) {
+
+        if (client.readyState === 1) {
+
+            client.send(imageBuffer, {
+                binary: true
+            });
+        }
     }
+}
+
+wss.on('connection', (ws) => {
+
+    // отправляем текущее состояние
+    const imageBuffer = renderCanvas(currentText);
+
+    ws.send(imageBuffer, {
+        binary: true
+    });
+
+    ws.on('message', (message) => {
+
+        try {
+
+            const data = JSON.parse(message.toString());
+
+            if (data.type === 'text-change') {
+
+                currentText = data.text;
+
+                broadcastCanvas();
+            }
+
+        } catch (e) {
+            console.error(e);
+        }
+    });
 });
 
-// ===== Запуск сервера =====
-server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+server.listen(3000, () => {
+    console.log('http://localhost:3000');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
