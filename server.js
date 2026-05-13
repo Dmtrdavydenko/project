@@ -3042,7 +3042,7 @@ console.log("Server listening on " + PORT);
 //import path from 'path';
 //import url from 'url';
 
-import ws from 'ws';
+import { WebSocketServer } from 'ws';
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -3112,7 +3112,6 @@ app.appendChild(canvas);
 //        res.end(data);
 //    });
 //});
-const WebSocketServer = ws.WebSocketServer
 const wss = new WebSocketServer({ server });
 
 function broadcastCanvasCode() {
