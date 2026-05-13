@@ -11,13 +11,21 @@
     <div id="board"></div>
 
     <script>
-        const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-        const ws = new WebSocket(`${protocol}://${location.host}/ws`);
-        const board = document.getElementById('board');
+        let ws;
+        function connectWS() {
+            const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+            ws = new WebSocket(`${protocol}://${location.host}/ws`);
 
-        ws.onmessage = (event) => {
-            board.innerHTML = event.data; // вставляем canvas
-        };
+            ws.onopen = () => console.log('WebSocket открыт');
+            ws.onclose = () => {
+                console.log('WebSocket закрыт, переподключаемся через 1 сек...');
+                setTimeout(connectWS, 1000);
+            };
+            ws.onmessage = (event) => {
+                document.getElementById('board').innerHTML = event.data;
+            };
+        }
+        connectWS();
     </script>
 </body>
 
