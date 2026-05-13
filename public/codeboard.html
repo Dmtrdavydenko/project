@@ -6,30 +6,31 @@
     <title>Codeboard</title>
 </head>
 <body>
-
-    <div id="board"></div>
-
+    <canvas id="c" width="600" height="200"></canvas>
     <script>
-        let ws;
+        const canvas = document.getElementById("c");
+        const ctx = canvas.getContext("2d");
 
         function connect() {
             const protocol = location.protocol === "https:" ? "wss" : "ws";
-            ws = new WebSocket(`${protocol}://${location.host}`);
+            const ws = new WebSocket(`${protocol}://${location.host}/?role=viewer`);
 
-            ws.onopen = () => console.log("WS открыт");
+            ws.onopen = () => console.log("Viewer WS открыт");
 
             ws.onmessage = (event) => {
-                document.getElementById("board").innerHTML = event.data;
+                const data = JSON.parse(event.data);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.font = "20px Arial";
+                ctx.fillText(data.text || "", 10, 50);
             };
 
             ws.onclose = () => {
-                console.log("WS закрыт → reconnect");
+                console.log("Viewer WS закрыт → reconnect");
                 setTimeout(connect, 1000);
             };
         }
 
         connect();
     </script>
-
 </body>
 </html>
