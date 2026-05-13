@@ -3014,118 +3014,118 @@ console.log("Server listening on " + PORT);
 
 
 // подключаем уже созданный сервер
-const clients = new Set();
-let currentCanvasHTML = "";
-let pendingMessage = null;      // хранит последнее сообщение
-let debounceTimeout = null;     // таймаут дебаунса
+//const clients = new Set();
+//let currentCanvasHTML = "";
+//let pendingMessage = null;      // хранит последнее сообщение
+//let debounceTimeout = null;     // таймаут дебаунса
 
-// WebSocket upgrade
-server.on('upgrade', (req, socket, head) => {
-    const pathname = req.url;
+//// WebSocket upgrade
+//server.on('upgrade', (req, socket, head) => {
+//    const pathname = req.url;
 
-    // Поддерживаем только /ws
-    if (!pathname.startsWith('/ws')) {
-        socket.destroy();
-        return;
-    }
+//    // Поддерживаем только /ws
+//    if (!pathname.startsWith('/ws')) {
+//        socket.destroy();
+//        return;
+//    }
 
-    if (req.headers['upgrade'] !== 'websocket') {
-        socket.destroy();
-        return;
-    }
+//    if (req.headers['upgrade'] !== 'websocket') {
+//        socket.destroy();
+//        return;
+//    }
 
-    // WebSocket handshake
-    const key = req.headers['sec-websocket-key'];
-    const acceptKey = crypto
-        .createHash('sha1')
-        .update(key + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11', 'binary')
-        .digest('base64');
+//    // WebSocket handshake
+//    const key = req.headers['sec-websocket-key'];
+//    const acceptKey = crypto
+//        .createHash('sha1')
+//        .update(key + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11', 'binary')
+//        .digest('base64');
 
-    socket.write(
-        'HTTP/1.1 101 Switching Protocols\r\n' +
-        'Upgrade: websocket\r\n' +
-        'Connection: Upgrade\r\n' +
-        'Sec-WebSocket-Accept: ' + acceptKey + '\r\n\r\n'
-    );
+//    socket.write(
+//        'HTTP/1.1 101 Switching Protocols\r\n' +
+//        'Upgrade: websocket\r\n' +
+//        'Connection: Upgrade\r\n' +
+//        'Sec-WebSocket-Accept: ' + acceptKey + '\r\n\r\n'
+//    );
 
-    socket.isAlive = true;
-    clients.add(socket);
+//    socket.isAlive = true;
+//    clients.add(socket);
 
-    // Отправляем текущее состояние новому клиенту
-    sendWebSocketMessage(socket, currentCanvasHTML);
+//    // Отправляем текущее состояние новому клиенту
+//    sendWebSocketMessage(socket, currentCanvasHTML);
 
-    socket.on('data', buffer => {
-        const message = parseWebSocketMessage(buffer);
-        if (!message) return;
+//    socket.on('data', buffer => {
+//        const message = parseWebSocketMessage(buffer);
+//        if (!message) return;
 
-        // Сохраняем последнее сообщение
-        pendingMessage = message;
+//        // Сохраняем последнее сообщение
+//        pendingMessage = message;
 
-        // Сбрасываем предыдущий таймаут
-        if (debounceTimeout) clearTimeout(debounceTimeout);
+//        // Сбрасываем предыдущий таймаут
+//        if (debounceTimeout) clearTimeout(debounceTimeout);
 
-        // Запускаем дебаунс: рассылаем всем через 100мс
-        debounceTimeout = setTimeout(() => {
-            currentCanvasHTML = generateCanvasHTML(pendingMessage);
+//        // Запускаем дебаунс: рассылаем всем через 100мс
+//        debounceTimeout = setTimeout(() => {
+//            currentCanvasHTML = generateCanvasHTML(pendingMessage);
 
-            clients.forEach(client => {
-                sendWebSocketMessage(client, currentCanvasHTML);
-            });
+//            clients.forEach(client => {
+//                sendWebSocketMessage(client, currentCanvasHTML);
+//            });
 
-            pendingMessage = null;
-            debounceTimeout = null;
-        }, 100); // 100ms debounce
-    });
+//            pendingMessage = null;
+//            debounceTimeout = null;
+//        }, 100); // 100ms debounce
+//    });
 
-    socket.on('close', () => clients.delete(socket));
-    socket.on('error', () => clients.delete(socket));
-});
+//    socket.on('close', () => clients.delete(socket));
+//    socket.on('error', () => clients.delete(socket));
+//});
 
-// ===== WebSocket helper functions =====
-function parseWebSocketMessage(buffer) {
-    const secondByte = buffer[1];
-    const length = secondByte & 127;
-    let maskStart = 2;
-    if (length === 126) maskStart = 4;
-    else if (length === 127) maskStart = 10;
-    const masks = buffer.slice(maskStart, maskStart + 4);
-    const dataStart = maskStart + 4;
-    const data = buffer.slice(dataStart, dataStart + length);
-    const decoded = Buffer.alloc(length);
-    for (let i = 0; i < length; i++) decoded[i] = data[i] ^ masks[i % 4];
-    return decoded.toString();
-}
+//// ===== WebSocket helper functions =====
+//function parseWebSocketMessage(buffer) {
+//    const secondByte = buffer[1];
+//    const length = secondByte & 127;
+//    let maskStart = 2;
+//    if (length === 126) maskStart = 4;
+//    else if (length === 127) maskStart = 10;
+//    const masks = buffer.slice(maskStart, maskStart + 4);
+//    const dataStart = maskStart + 4;
+//    const data = buffer.slice(dataStart, dataStart + length);
+//    const decoded = Buffer.alloc(length);
+//    for (let i = 0; i < length; i++) decoded[i] = data[i] ^ masks[i % 4];
+//    return decoded.toString();
+//}
 
-function sendWebSocketMessage(socket, message) {
-    const msgBuffer = Buffer.from(message);
-    const length = msgBuffer.length;
-    let payload;
+//function sendWebSocketMessage(socket, message) {
+//    const msgBuffer = Buffer.from(message);
+//    const length = msgBuffer.length;
+//    let payload;
 
-    if (length < 126) {
-        payload = Buffer.alloc(2 + length);
-        payload[0] = 0x81; // text frame
-        payload[1] = length;
-        msgBuffer.copy(payload, 2);
-    } else {
-        throw new Error('Message too long');
-    }
+//    if (length < 126) {
+//        payload = Buffer.alloc(2 + length);
+//        payload[0] = 0x81; // text frame
+//        payload[1] = length;
+//        msgBuffer.copy(payload, 2);
+//    } else {
+//        throw new Error('Message too long');
+//    }
 
-    socket.write(payload);
-}
+//    socket.write(payload);
+//}
 
-// ===== Canvas HTML генератор =====
-function generateCanvasHTML(code) {
-    return `
-        <canvas width="600" height="200"></canvas>
-        <script>
-            const canvas = document.querySelector('canvas:last-of-type');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.font = '20px Arial';
-            ctx.fillText(${JSON.stringify(code)}, 10, 50);
-        </script>
-    `;
-}
+//// ===== Canvas HTML генератор =====
+//function generateCanvasHTML(code) {
+//    return `
+//        <canvas width="600" height="200"></canvas>
+//        <script>
+//            const canvas = document.querySelector('canvas:last-of-type');
+//            const ctx = canvas.getContext('2d');
+//            ctx.clearRect(0,0,canvas.width,canvas.height);
+//            ctx.font = '20px Arial';
+//            ctx.fillText(${JSON.stringify(code)}, 10, 50);
+//        </script>
+//    `;
+//}
 
 
 import { WebSocketServer } from "ws";
