@@ -3056,6 +3056,7 @@ ctx.fillText(${JSON.stringify(text)}, 50, 100);
 }
 
 const server = http.createServer((req, res) => {
+    console.log(req.url);
 
     let file = 'viewer.html';
 
