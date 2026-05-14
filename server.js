@@ -3056,7 +3056,7 @@ function createCanvasCode(text) {
 
     return `
 const canvas = document.createElement('canvas');
-canvas.width = ${state.width};
+canvas.width = ${state.width+20};
 canvas.height = ${state.height*2};
 
 const ctx = canvas.getContext('2d');
@@ -3074,8 +3074,8 @@ const lines = ${JSON.stringify(text)}.split('\\n');
 let y = 16;
 
 for (const line of lines) {
-    ctx.fillText(line, 16, y);
-    y += 10;
+    ctx.fillText(line, 20, y);
+    y += 1.2*13.3333;
 }
 
 // вставляем canvas в страницу (или контейнер)
