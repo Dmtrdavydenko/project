@@ -125,7 +125,8 @@ ul {
 }
 
 .menu-toggle {
-    display: none;
+    /*    display: none;*/
+    visibility: hidden;
     background: none;
     border: none;
     font-size: 1.5rem;
