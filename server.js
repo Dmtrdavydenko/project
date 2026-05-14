@@ -3053,12 +3053,12 @@ let state = {
     height: 400
 };
 function createCanvasCode(text) {
-    const scale = 1.2;
+    const scale = 1.3;
     state.width *= scale;
     state.height *= scale;
     let font = 13.3333;
     font *= scale;
-    let lineHeight = 1.2 * font;
+    let lineHeight = 1.3 * font;
     return `
 const canvas = document.createElement('canvas');
 canvas.width = ${state.width+20};
