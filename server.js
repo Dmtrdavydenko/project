@@ -3053,11 +3053,16 @@ let state = {
     height: 400
 };
 function createCanvasCode(text) {
-
+    const scale = 1.2;
+    state.width *= scale;
+    state.height *= scale;
+    let font = 13.3333;
+    font *= scale;
+    let lineHeight = 1.2 * font;
     return `
 const canvas = document.createElement('canvas');
 canvas.width = ${state.width+20};
-canvas.height = ${state.height*2};
+canvas.height = ${state.height+16};
 
 const ctx = canvas.getContext('2d');
 
@@ -3067,7 +3072,7 @@ ctx.fillStyle = '#ffffff';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 ctx.fillStyle = '#000000';
-ctx.font = '13.3333px Arial';
+ctx.font = '${font}px Arial';
 
 const lines = ${JSON.stringify(text)}.split('\\n');
 
@@ -3075,7 +3080,7 @@ let y = 16;
 
 for (const line of lines) {
     ctx.fillText(line, 20, y);
-    y += 1.2*13.3333;
+    y += ${lineHeight};
 }
 
 // вставляем canvas в страницу (или контейнер)
