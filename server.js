@@ -3067,15 +3067,15 @@ ctx.fillStyle = '#ffffff';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 ctx.fillStyle = '#000000';
-ctx.font = '18px Arial';
+ctx.font = '13.3333px Arial';
 
 const lines = ${JSON.stringify(text)}.split('\\n');
 
-let y = 20;
+let y = 16;
 
 for (const line of lines) {
-    ctx.fillText(line, 20, y);
-    y += 24;
+    ctx.fillText(line, 16, y);
+    y += 10;
 }
 
 // вставляем canvas в страницу (или контейнер)
