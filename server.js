@@ -3054,15 +3054,16 @@ let state = {
 };
 function createCanvasCode(text) {
     const scale = 1.3;
-    state.width *= scale;
-    state.height *= scale;
+    const can = {}
+    can.width = state.width * scale;
+    can.height = state.height * scale;
     let font = 13.3333;
     font *= scale;
-    let lineHeight = 1.3 * font;
+    let lineHeight = 1.2 * font;
     return `
 const canvas = document.createElement('canvas');
-canvas.width = ${state.width+20};
-canvas.height = ${state.height+16};
+canvas.width = ${can.width+20};
+canvas.height = ${can.height+16};
 
 const ctx = canvas.getContext('2d');
 
