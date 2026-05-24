@@ -463,7 +463,7 @@ async function createSourceTable(name = selectTableName.value) {
         const spanTableName = document.createElement("span");
         spanTableName.textContent = name;
         container.appendChild(spanTableName);
-        container.appendChild(document.createElement("hr"););
+        container.appendChild(document.createElement("hr"));
         container.appendChild(table);
         await getTypeTableHeder();
     }
