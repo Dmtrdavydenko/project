@@ -1180,16 +1180,16 @@ ORDER BY l.loom_number ASC;
                     tape_extrusion.additive_id,
 
 
-                    tape_speed.*, Tape.*, color.*, additive.*, yarn_type.*
+                    tape_speed.*, tape_length.*, color.*, additive.*, yarn_type.*
                     FROM tape_extrusion
                     JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.recipe_id
 
-                    JOIN Tape ON tape_speed.density_id = Tape.id
-                    JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
+                    JOIN tape_length ON tape_speed.density_id = tape_length.id
+                    JOIN yarn_type ON tape_length.class_yarn_id = yarn_type.yarn_id
 
                     JOIN color ON tape_extrusion.color_id = color.id
                     JOIN additive ON tape_extrusion.additive_id = additive.id
-                    ORDER BY Tape.density_id ASC
+                    ORDER BY tape_length.density_id ASC
                     `;
                 break;
             case "Tape":
@@ -1304,7 +1304,7 @@ async function getTable(body) {
                 sql = `
                 SELECT recipe_id, density, thread_speed_id FROM tape_speed
                 JOIN tape_density ON tape_speed.density_id = tape_density.id
-                JOIN Tape ON tape_speed.density_id = Tape.id
+                JOIN tape_length ON tape_speed.density_id = tape_length.id
                 ORDER BY tape_density.density ASC
                 `
                 break;
@@ -1695,10 +1695,10 @@ async function getTapeDensity() {
     FROM tape_extrusion
         JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.recipe_id
 
-        JOIN Tape ON tape_speed.density_id = Tape.id
+        JOIN tape_length ON tape_speed.density_id = tape_length.id
         JOIN tape_density ON tape_speed.density_id = tape_density.id
 
-        JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
+        JOIN yarn_type ON tape_length.class_yarn_id = yarn_type.yarn_id
 
         JOIN color ON tape_extrusion.color_id = color.id
         JOIN additive ON tape_extrusion.additive_id = additive.id
@@ -1827,12 +1827,12 @@ async function getDay(body) {
             UNIX_TIMESTAMP(client_local_time) * 1000 AS task_milliseconds,
             yarn_name as type,
 
-            Tape.density,
+            tape_density.density,
             color.color,
             additive.additive,
-            Tape.length,
+            tape_length.length,
             tape_speed.thread_speed_id as speed,
-            (Tape.length / tape_speed.thread_speed_id) * 60000 as tape_milliseconds
+            (tape_length.length / tape_speed.thread_speed_id) * 60000 as tape_milliseconds
 
             FROM (
                   SELECT
@@ -1849,9 +1849,9 @@ async function getDay(body) {
 
             JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.recipe_id
 
-            JOIN Tape   ON tape_speed.tape_id = Tape.id
+            JOIN tape_length ON tape_speed.tape_id = tape_length.id
 
-            JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
+            JOIN yarn_type ON tape_length.class_yarn_id = yarn_type.yarn_id
 
             JOIN color ON tape_extrusion.color_id = color.id
 
@@ -1889,12 +1889,12 @@ async function getTime() {
             UNIX_TIMESTAMP(client_local_time) * 1000 AS task_milliseconds,
             yarn_name as type,
 
-            Tape.density,
+            tape_density.density,
             color.color,
             additive.additive,
-            Tape.length,
+            tape_length.length,
             tape_speed.thread_speed_id as speed,
-            (Tape.length / tape_speed.thread_speed_id) * 60000 as tape_milliseconds
+            (tape_length.length / tape_speed.thread_speed_id) * 60000 as tape_milliseconds
 
             FROM (
                   SELECT
@@ -1911,9 +1911,9 @@ async function getTime() {
 
             JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.recipe_id
 
-            JOIN Tape   ON tape_speed.tape_id = Tape.id
+            JOIN tape_length ON tape_speed.tape_id = tape_length.id
 
-            JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
+            JOIN yarn_type ON tape_length.class_yarn_id = yarn_type.yarn_id
 
             JOIN color ON tape_extrusion.color_id = color.id
 
