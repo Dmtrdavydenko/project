@@ -1174,15 +1174,15 @@ ORDER BY l.loom_number ASC;
                 //select.pri = descRows.find(row => row.Key === 'PRI')?.Field || null;
                 break;
             case "tape_extrusion":
-                sql = `SELECT tape_extrusion.id as Tape_id,
-                    tape_extrusion.thread_id,
+                sql = `SELECT tape_extrusion.recipe_id as Tape_id,
+                    tape_extrusion.tape_id,
                     tape_extrusion.color_id,
                     tape_extrusion.additive_id,
 
 
                     tape_speed.*, Tape.*, color.*, additive.*, yarn_type.*
                     FROM tape_extrusion
-                    JOIN tape_speed ON tape_extrusion.thread_id = tape_speed.thread_id
+                    JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id
 
                     JOIN Tape ON tape_speed.density_id = Tape.id
                     JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
@@ -1360,7 +1360,7 @@ async function getTable(body) {
             case "tape_extrusion":
                 sql = "SELECT * " +
                     "FROM tape_extrusion " +
-                    "JOIN tape_speed ON tape_extrusion.thread_id = tape_speed.thread_id " +
+                    "JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id " +
                     "JOIN color ON tape_extrusion.color_id = color.id " +
                     "JOIN additive ON tape_extrusion.additive_id = additive.id " +
                     "ORDER BY thread_density ASC";
@@ -1572,10 +1572,10 @@ async function insertTime(body) {
 //            const connection = await pool.getConnection();
 //            try {
 //                console.log('Успешно подключено к базе данных MySQL!');
-//                const sql = "SELECT tape_extrusion.id as id, tape_speed.thread_id as group_id, density, yarn_name as type, " +
+//                const sql = "SELECT tape_extrusion.recipe_id as id, tape_speed.thread_id as group_id, density, yarn_name as type, " +
 //                    "color, additive, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
 //                    "FROM tape_extrusion " +
-//                    "JOIN tape_speed ON tape_extrusion.thread_id = tape_speed.thread_id " +
+//                    "JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id " +
 //                    "JOIN Tape   ON tape_speed.tape_id = Tape.id " +
 //                    "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
 //                    "JOIN color ON tape_extrusion.color_id = color.id " +
@@ -1622,10 +1622,10 @@ async function insertTime(body) {
 async function getTape() {
     console.log("CALL=", getTape.name)
     let connection = null;
-    const sql = "SELECT tape_extrusion.id as id, tape_speed.recipe_id as group_id, density, yarn_name as type, " +
+    const sql = "SELECT tape_extrusion.recipe_id as id, tape_speed.recipe_id as group_id, density, yarn_name as type, " +
         "color, additive, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
         "FROM tape_extrusion " +
-        "JOIN tape_speed ON tape_extrusion.thread_id = tape_speed.recipe_id " +
+        "JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.recipe_id " +
         "JOIN tape_length ON tape_speed.density_id = tape_length.id " +
         "JOIN tape_density ON tape_speed.density_id = tape_density.id " +
         "JOIN yarn_type ON tape_length.class_yarn_id = yarn_type.yarn_id " +
@@ -1693,7 +1693,7 @@ async function getTapeDensity() {
         thread_time * 60 as tape_seconds,
         thread_time * 60000 as tape_milliseconds
     FROM tape_extrusion
-        JOIN tape_speed ON tape_extrusion.thread_id = tape_speed.thread_id
+        JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id
 
         JOIN Tape ON tape_speed.density_id = Tape.id
         JOIN tape_density ON tape_speed.density_id = tape_density.id
@@ -1845,9 +1845,9 @@ async function getDay(body) {
                   WHERE task_time IS NOT NULL
                 ) AS localized
 
-            JOIN tape_extrusion ON localized.TapeExtrusion_id = tape_extrusion.id
+            JOIN tape_extrusion ON localized.TapeExtrusion_id = tape_extrusion.recipe_id
 
-            JOIN tape_speed ON tape_extrusion.thread_id = tape_speed.thread_id
+            JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id
 
             JOIN Tape   ON tape_speed.tape_id = Tape.id
 
@@ -1907,9 +1907,9 @@ async function getTime() {
                   WHERE task_time IS NOT NULL
                 ) AS timestamps
 
-            JOIN tape_extrusion ON timestamps.TapeExtrusion_id = tape_extrusion.id
+            JOIN tape_extrusion ON timestamps.TapeExtrusion_id = tape_extrusion.recipe_id
 
-            JOIN tape_speed ON tape_extrusion.thread_id = tape_speed.thread_id
+            JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id
 
             JOIN Tape   ON tape_speed.tape_id = Tape.id
 
@@ -1960,9 +1960,9 @@ async function devGetTime() {
 
             FROM timestamps
 
-            JOIN tape_extrusion ON timestamps.TapeExtrusion_id = tape_extrusion.id
+            JOIN tape_extrusion ON timestamps.TapeExtrusion_id = tape_extrusion.recipe_id
 
-            JOIN tape_speed ON tape_extrusion.thread_id = tape_speed.thread_id
+            JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id
 
             JOIN Tape   ON tape_speed.tape_id = Tape.id
 
