@@ -2928,7 +2928,7 @@ server.on("request", (req, res) => {
             req.on("data", (chunk) => {
                 chunks.push(chunk);
             });
-            req.on("end", () => {
+            req.on("end", async () => {
 
                 try {
                     const buffer = Buffer.concat(chunks);
@@ -2965,7 +2965,7 @@ server.on("request", (req, res) => {
 
                     const connect = await getAwaitConnect();
                     const sql = loadSQL("./src/sql/endpoint/insert.sql");
-                    connect.execute(sql, [
+                    await connect.execute(sql, [
                         endpoint,
                         profile.ip,
                         profile.userAgent,
