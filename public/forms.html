@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Производственные формы</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 20px;
+            background: #f4f4f4;
+            color: #222;
+        }
+
+        .form-block {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .form-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 12px 16px;
+            align-items: center;
+        }
+
+        .label {
+            font-weight: 600;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        @media (max-width: 700px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .label {
+                margin-bottom: -6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Сменное задание машинисту -->
+    <div class="form-block">
+        <div class="form-title">
+            Сменное задание машинисту
+        </div>
+
+        <div class="form-grid">
+            <div class="label">ФИО машиниста</div>
+            <input type="text">
+
+            <div class="label">Дата</div>
+            <input type="date">
+
+            <div class="label">Смена</div>
+            <input type="text">
+
+            <div class="label">Агрегат</div>
+            <input type="text">
+
+            <div class="label">Тип ленты (текс)</div>
+            <input type="text">
+
+            <div class="label">Плановый вес, кг</div>
+            <input type="number">
+        </div>
+    </div>
+
+    <!-- Журнал учёта выработки машиниста -->
+    <div class="form-block">
+        <div class="form-title">
+            Журнал учёта выработки машиниста
+        </div>
+
+        <div class="form-grid">
+            <div class="label">ФИО машиниста</div>
+            <input type="text">
+
+            <div class="label">Дата</div>
+            <input type="date">
+
+            <div class="label">Смена</div>
+            <input type="text">
+
+            <div class="label">Агрегат</div>
+            <input type="text">
+
+            <div class="label">Тип ленты (текс)</div>
+            <input type="text">
+
+            <div class="label">Плановый вес, кг</div>
+            <input type="number">
+
+            <div class="label">Фактический вес, кг</div>
+            <input type="number">
+
+            <div class="label">Отходы, кг</div>
+            <input type="number">
+
+            <div class="label">Время простоев, мин</div>
+            <input type="number">
+
+            <div class="label">Причина простоя</div>
+            <textarea></textarea>
+        </div>
+    </div>
+
+    <!-- Журнал учёта выработки ткача -->
+    <div class="form-block">
+        <div class="form-title">
+            Журнал учёта выработки ткача
+        </div>
+
+        <div class="form-grid">
+            <div class="label">ФИО ткача</div>
+            <input type="text">
+
+            <div class="label">Дата</div>
+            <input type="date">
+
+            <div class="label">Смена</div>
+            <input type="text">
+
+            <div class="label">Номер станка</div>
+            <input type="text">
+
+            <div class="label">Технологическая карта (артикул)</div>
+            <input type="text">
+
+            <div class="label">Выработка, погонные метры</div>
+            <input type="number">
+        </div>
+    </div>
+
+</body>
+</html>
