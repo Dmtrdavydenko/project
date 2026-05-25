@@ -2971,6 +2971,8 @@ server.on("request", (req, res) => {
                         profile.userAgent,
                         profile.language
                     ]);
+                    if (connection) connection.release();
+                    console.log("Соединение возвращено.");
                 }
                 catch (error) {
 
