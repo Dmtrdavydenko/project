@@ -1060,7 +1060,7 @@ ORDER BY l.loom_number ASC;
                 FROM tape_speed
 
                 JOIN tape_density ON tape_speed.density_id = tape_density.id
-                JOIN Tape ON tape_speed.density_id = Tape.id
+                JOIN tape_length ON tape_speed.density_id = tape_length.id
                 ORDER BY tape_density.density ASC
 
                 `;
