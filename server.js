@@ -1626,9 +1626,9 @@ async function getTape() {
         "color, additive, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
         "FROM tape_extrusion " +
         "JOIN tape_speed ON tape_extrusion.thread_id = tape_speed.recipe_id " +
-        "JOIN Tape ON tape_speed.density_id = Tape.id " +
+        "JOIN tape_length ON tape_speed.density_id = tape_length.id " +
         "JOIN tape_density ON tape_speed.density_id = tape_density.id " +
-        "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
+        "JOIN yarn_type ON tape_length.class_yarn_id = yarn_type.yarn_id " +
         "JOIN color ON tape_extrusion.color_id = color.id " +
         "JOIN additive ON tape_extrusion.additive_id = additive.id " +
         "ORDER BY density ASC";
@@ -2006,7 +2006,7 @@ async function getThreads() {
                 thread_time * 60 * 1000 as time_milliseconds
             FROM tape_speed
                 JOIN tape_density ON tape_speed.density_id = tape_density.id
-                JOIN Tape ON tape_speed.density_id = Tape.id
+                JOIN tape_length ON tape_speed.density_id = tape_length.id
                 ORDER BY density, speed ASC
             `;
             return await connection.execute(sql);
