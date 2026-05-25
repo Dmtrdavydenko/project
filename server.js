@@ -2851,7 +2851,25 @@ server.on("request", (req, res) => {
             // Здесь отдаём статический файл из файловой системы
         }
     }
-
+    if (req.url === "/app") {
+        const profile = {
+            login,
+            ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
+            userAgent: req.headers["user-agent"],
+            language: req.headers["accept-language"],
+            timestamp: new Date().toISOString()
+        };
+        const connection = await getAwaitConnect();
+        const sql = loadSQL("./src/sql/endpoint/insert.sql");
+        await connection.execute(sql, [
+            endpoint,
+            profile.ip,
+            profile.userAgent,
+            profile.language
+        ]);
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
+    }
     if (req.url === "/app") {
         if (req.method === "POST") {
             let chunks = [];
@@ -2942,6 +2960,10 @@ server.on("request", (req, res) => {
 
                     // тут твоя проверка
 
+                    res.writeHead(200, {
+                        "Content-Type": "application/json"
+                    });
+
                     const profile = {
                         login,
                         ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
@@ -2951,11 +2973,6 @@ server.on("request", (req, res) => {
                     };
 
                     console.log("LOGIN ATTEMPT:", profile);
-
-                    res.writeHead(200, {
-                        "Content-Type": "application/json"
-                    });
-
                     res.end(JSON.stringify({
                         success: true,
                         message: "Авторизация выполнена",
@@ -2973,8 +2990,7 @@ server.on("request", (req, res) => {
                     ]);
                     if (connection) connection.release();
                     console.log("Соединение возвращено.");
-                }
-                catch (error) {
+                }catch (error) {
 
                     res.writeHead(400, {
                         "Content-Type": "application/json"
