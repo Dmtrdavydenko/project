@@ -2852,30 +2852,11 @@ server.on("request", (req, res) => {
         }
     }
     if (req.url === "/app") {
-        const profile = {
-            login,
-            ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
-            userAgent: req.headers["user-agent"],
-            language: req.headers["accept-language"],
-            timestamp: new Date().toISOString()
-        };
-        const connection = await getAwaitConnect();
-        const sql = loadSQL("./src/sql/endpoint/insert.sql");
-        await connection.execute(sql, [
-            endpoint,
-            profile.ip,
-            profile.userAgent,
-            profile.language
-        ]);
-        if (connection) connection.release();
-        console.log("Соединение возвращено.");
-    }
-    if (req.url === "/app") {
         if (req.method === "POST") {
             let chunks = [];
             req.on("data", (chunk) => {
                 chunks.push(chunk);
-            }).on("end", () => {
+            }).on("end", async () => {
                 try {
                     if (chunks.length === 0)
                         throw new Error("Empty request body");
@@ -2913,14 +2894,38 @@ server.on("request", (req, res) => {
                         throw new Error(`Function '${action}' not found`);
                     }
                     console.log("Pre function data:", data);
+
+                    let connection;
+                    try {
+                        const profile = {
+                            login,
+                            ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
+                            userAgent: req.headers["user-agent"],
+                            language: req.headers["accept-language"],
+                            timestamp: new Date().toISOString()
+                        };
+                        connection = await getAwaitConnect();
+                        const sql = loadSQL("./src/sql/endpoint/insert.sql");
+                        await connection.execute(sql, [
+                            endpoint,
+                            profile.ip,
+                            profile.userAgent,
+                            profile.language
+                        ]);
+                    } catch (e) {
+                    } finally {
+                        if (connection) {
+                            connection.release();
+                            console.log("Соединение возвращено.");
+                        }
+                    }
                     functionDB[action](data)
                         .then((resolve) => JSON.stringify(resolve))
                         .then((resolve) => res.end(resolve))
                         .catch(error => {
                             res.end(error.message);
                             console.log("Er", error);
-                        })
-
+                        });
                 } catch (error) {
                     res.writeHead(400, { 'Content-Type': 'application/json' });
                     res.end(JSON.stringify({
@@ -2990,7 +2995,7 @@ server.on("request", (req, res) => {
                     ]);
                     if (connection) connection.release();
                     console.log("Соединение возвращено.");
-                }catch (error) {
+                } catch (error) {
 
                     res.writeHead(400, {
                         "Content-Type": "application/json"
