@@ -2898,11 +2898,9 @@ server.on("request", (req, res) => {
                     let connection;
                     try {
                         const profile = {
-                            login,
                             ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
                             userAgent: req.headers["user-agent"],
-                            language: req.headers["accept-language"],
-                            timestamp: new Date().toISOString()
+                            language: req.headers["accept-language"]
                         };
                         connection = await getAwaitConnect();
                         const sql = loadSQL("./src/sql/endpoint/insert.sql");
