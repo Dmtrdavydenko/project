@@ -2963,9 +2963,9 @@ server.on("request", (req, res) => {
                     }));
 
 
-                    const connect = await getAwaitConnect();
+                    const connection = await getAwaitConnect();
                     const sql = loadSQL("./src/sql/endpoint/insert.sql");
-                    await connect.execute(sql, [
+                    await connection.execute(sql, [
                         endpoint,
                         profile.ip,
                         profile.userAgent,
