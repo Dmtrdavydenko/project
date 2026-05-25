@@ -1193,8 +1193,8 @@ ORDER BY l.loom_number ASC;
                     `;
                 break;
             case "Tape":
-                sql = "SELECT * from Tape "+
-                    "JOIN tape_density ON Tape.density_id = tape_density.id "+
+                sql = "SELECT * from Tape " +
+                    "JOIN tape_density ON Tape.density_id = tape_density.id " +
 
                     "ORDER BY density ASC";
                 break;
@@ -1252,7 +1252,7 @@ ORDER BY l.loom_number ASC;
             return {
                 all,
                 rows,
-                k:await buildSelectFields(body.table)
+                k: await buildSelectFields(body.table)
                 //Field: select.fields,
                 //F: select.sqlFields,
                 //key: select.pri,
@@ -2725,7 +2725,7 @@ server.on("request", (req, res) => {
     console.log("pathname", parsedUrl.pathname);
     const pathname = parsedUrl.pathname;
 
-    // 📍 Главная страница — ссылка для авторизации
+    // Главная страница — ссылка для авторизации
     if (pathname === "/conecthh") {
         const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
         console.log("1840", parsedUrl);
@@ -2737,7 +2737,7 @@ server.on("request", (req, res) => {
         <head><title>HH.ru OAuth на Node.js</title></head>
         <body>
           <h1>HH.ru OAuth (чистый Node.js)</h1>
-          <p><a href="${authUrl}">👉 Нажмите здесь, чтобы авторизоваться в HH.ru</a></p>
+          <p><a href="${authUrl}"> Нажмите здесь, чтобы авторизоваться в HH.ru</a></p>
           <p><a href="/nn">token</a></p>
         </body>
       </html>
@@ -2751,7 +2751,7 @@ server.on("request", (req, res) => {
             return;
         }
 
-        console.log('✅ Получен code от HH.ru:', code, state);
+        console.log('Получен code от HH.ru:', code, state);
         getAccessToken(code, async (err, tokenData) => {
             console.log("token=", tokenData);
 
@@ -2920,6 +2920,57 @@ server.on("request", (req, res) => {
                 console.error("Flow error:", error);
             });
         }
+    } else if (req.method === "POST") {
+        if (pathname.startsWith('/api/login')) {
+            let chunks = [];
+
+            req.on("data", (chunk) => {
+                chunks.push(chunk);
+            });
+            req.on("end", () => {
+
+                try {
+                    const buffer = Buffer.concat(chunks);
+                    const data = JSON.parse(buffer.toString());
+
+                    const login = data.login;
+                    const password = data.password;
+
+                    console.log("Логин:", login);
+                    console.log("Пароль:", password);
+
+                    // тут твоя проверка
+
+                    res.writeHead(200, {
+                        "Content-Type": "application/json"
+                    });
+
+                    res.end(JSON.stringify({
+                        success: true,
+                        message: "Авторизация выполнена"
+                    }));
+
+                }
+                catch (error) {
+
+                    res.writeHead(400, {
+                        "Content-Type": "application/json"
+                    });
+
+                    res.end(JSON.stringify({
+                        success: false,
+                        message: "Ошибка JSON"
+                    }));
+
+                }
+
+            });
+
+            return;
+        } else {
+            res.writeHead(404);
+            res.end("Not Found");
+        }
     } else if (req.url === "/api/tape/insert") {
         if (req.method === "POST") {
             let chunks = [];
@@ -3062,8 +3113,8 @@ function createCanvasCode(text) {
     let lineHeight = 1.2 * font;
     return `
 const canvas = document.createElement('canvas');
-canvas.width = ${can.width+20};
-canvas.height = ${can.height+16};
+canvas.width = ${can.width + 20};
+canvas.height = ${can.height + 16};
 
 const ctx = canvas.getContext('2d');
 
