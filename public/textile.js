@@ -719,6 +719,15 @@ async function loadTable() {
     formContainer.innerHTML = '';
 
     if (result.rows && Array.isArray(result.rows) && result.rows.length > 0) {
+        if (selectTableName.value === "user_endpoints") {
+            result.rows.forEach(row => {
+                if (row.last_visit) {
+                    row.last_visit =
+                        new Date(row.last_visit)
+                            .toLocaleString();
+                }
+            });
+        }
         const table = createTable(result.rows);
         if (selectTableName.value === "tape_length") {
             formContainer.appendChild(renderForm(result.k));
