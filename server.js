@@ -1052,7 +1052,7 @@ ORDER BY l.loom_number ASC;
                 //ORDER BY width ASC, density ASC
                 break;
             case "tape_speed":
-                const field = ["thread_id", "thread_density", "thread_length"];
+                const field = ["recipe_id", "thread_density", "thread_length"];
                 //sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.id";
                 sql = `
                 SELECT density, length, thread_speed_id, thread_time
@@ -1182,7 +1182,7 @@ ORDER BY l.loom_number ASC;
 
                     tape_speed.*, Tape.*, color.*, additive.*, yarn_type.*
                     FROM tape_extrusion
-                    JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id
+                    JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.recipe_id
 
                     JOIN Tape ON tape_speed.density_id = Tape.id
                     JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id
@@ -1302,7 +1302,7 @@ async function getTable(body) {
                 //sql = "SELECT t." + field.join(", t.") + ", c.color FROM threadPP t JOIN color c ON t.color_id = c.id";
                 //sql = "SELECT * FROM tape_speed";
                 sql = `
-                SELECT thread_id, density, thread_speed_id FROM tape_speed
+                SELECT recipe_id, density, thread_speed_id FROM tape_speed
                 JOIN tape_density ON tape_speed.density_id = tape_density.id
                 JOIN Tape ON tape_speed.density_id = Tape.id
                 ORDER BY tape_density.density ASC
@@ -1360,7 +1360,7 @@ async function getTable(body) {
             case "tape_extrusion":
                 sql = "SELECT * " +
                     "FROM tape_extrusion " +
-                    "JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id " +
+                    "JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.recipe_id " +
                     "JOIN color ON tape_extrusion.color_id = color.id " +
                     "JOIN additive ON tape_extrusion.additive_id = additive.id " +
                     "ORDER BY thread_density ASC";
@@ -1452,7 +1452,7 @@ async function insert(body) {
 
         // Вставка новой записи
         return await connection.execute(
-            'INSERT INTO ' + body.table.name + ' (thread_id, color_id, additive_id) VALUES (?, ?, ?)',
+            'INSERT INTO ' + body.table.name + ' (recipe_id, color_id, additive_id) VALUES (?, ?, ?)',
             [body.tape_speed, body.color, body.additive]
         );
         //const [insertResult] =
@@ -1688,12 +1688,12 @@ async function getTapeDensity() {
     SELECT
         tape_density.density as tape_density,
         thread_speed_id as tape_speed,
-        tape_speed.thread_id as group_id,
+        tape_speed.recipe_id as group_id,
         length as tape_length,
         thread_time * 60 as tape_seconds,
         thread_time * 60000 as tape_milliseconds
     FROM tape_extrusion
-        JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id
+        JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.recipe_id
 
         JOIN Tape ON tape_speed.density_id = Tape.id
         JOIN tape_density ON tape_speed.density_id = tape_density.id
@@ -1847,7 +1847,7 @@ async function getDay(body) {
 
             JOIN tape_extrusion ON localized.TapeExtrusion_id = tape_extrusion.recipe_id
 
-            JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id
+            JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.recipe_id
 
             JOIN Tape   ON tape_speed.tape_id = Tape.id
 
@@ -1909,7 +1909,7 @@ async function getTime() {
 
             JOIN tape_extrusion ON timestamps.TapeExtrusion_id = tape_extrusion.recipe_id
 
-            JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id
+            JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.recipe_id
 
             JOIN Tape   ON tape_speed.tape_id = Tape.id
 
@@ -1962,7 +1962,7 @@ async function devGetTime() {
 
             JOIN tape_extrusion ON timestamps.TapeExtrusion_id = tape_extrusion.recipe_id
 
-            JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id
+            JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.recipe_id
 
             JOIN Tape   ON tape_speed.tape_id = Tape.id
 
@@ -1998,7 +1998,7 @@ async function getThreads() {
             console.log('Успешно подключено к базе данных MySQL!');
             const sql = `
             SELECT
-                thread_id as id,
+                recipe_id as id,
                 density,
                 length,
                 thread_speed_id as speed,
