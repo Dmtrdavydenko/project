@@ -2941,13 +2941,24 @@ server.on("request", (req, res) => {
 
                     // тут твоя проверка
 
+                    const profile = {
+                        login,
+                        ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
+                        userAgent: req.headers["user-agent"],
+                        language: req.headers["accept-language"],
+                        timestamp: new Date().toISOString()
+                    };
+
+                    console.log("LOGIN ATTEMPT:", profile);
+
                     res.writeHead(200, {
                         "Content-Type": "application/json"
                     });
 
                     res.end(JSON.stringify({
                         success: true,
-                        message: "Авторизация выполнена"
+                        message: "Авторизация выполнена",
+                        profile: profile
                     }));
 
                 }

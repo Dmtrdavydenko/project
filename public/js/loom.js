@@ -119,28 +119,28 @@ class LoomsRow {
     }
 }
 function handleClickBtn(e) {
-    const btn = e.currentTarget;
-    btn.classList.toggle('active');
+    //const btn = e.currentTarget;
+    //btn.classList.toggle('active');
 
-    const number = btn.textContent;
-    const existingIndex = state.findIndex(row => row.reference === btn);
+    //const number = btn.textContent;
+    //const existingIndex = state.findIndex(row => row.reference === btn);
 
-    if (btn.classList.contains('active')) {
-        // добавляем
-        state.push(new LoomsRow(btn, number));
-    } else {
-        // удаляем
-        if (existingIndex !== -1) state.splice(existingIndex, 1);
-    }
+    //if (btn.classList.contains('active')) {
+    //    // добавляем
+    //    state.push(new LoomsRow(btn, number));
+    //} else {
+    //    // удаляем
+    //    if (existingIndex !== -1) state.splice(existingIndex, 1);
+    //}
 
-    // обновляем input и объект update
-    inputSS.value = number;
-    update.loom_number = number;
+    //// обновляем input и объект update
+    //inputSS.value = number;
+    //update.loom_number = number;
 
-    // логика для даты и счетчика
-    const localDateTime = getLocalDateTimeForMySQL();
-    console.log(localDateTime);
-    console.log(state.length); // теперь это фактический счетчик активных кнопок
+    //// логика для даты и счетчика
+    //const localDateTime = getLocalDateTimeForMySQL();
+    //console.log(localDateTime);
+    //console.log(state.length); // теперь это фактический счетчик активных кнопок
 }
 function getLocalDateTimeForMySQL() {
     const now = new Date();
@@ -161,2435 +161,1570 @@ function getLocalDateTimeForMySQL() {
  */
 function getDataT() {
     return [
-        {
-            "cnt": 1,
-            "loom": 1,
-            "ppm": 970,
-            "fabric_w": 150,
-            "quan_weft": null,
-            "fabric_d": 110,
-            "wd": "150/110",
-            "fabric_recipe_id": 35,
-            "yarn_type": "warp",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 1,
-            "ppm": 970,
-            "fabric_w": 150,
-            "quan_weft": "39.5",
-            "fabric_d": 110,
-            "wd": "150/110",
-            "fabric_recipe_id": 35,
-            "yarn_type": "weft",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 2,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 16,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 2,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 16,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 3,
-            "ppm": 970,
-            "fabric_w": 36,
-            "quan_weft": "39.0",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 3,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 3,
-            "ppm": 970,
-            "fabric_w": 36,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 3,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 4,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 4,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 5,
-            "ppm": 970,
-            "fabric_w": 42,
-            "quan_weft": "38.5",
-            "fabric_d": 68,
-            "wd": "42/68",
-            "fabric_recipe_id": 7,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 5,
-            "ppm": 970,
-            "fabric_w": 42,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "42/68",
-            "fabric_recipe_id": 7,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 6,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 60,
-            "wd": "50/60",
-            "fabric_recipe_id": 11,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 6,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "35.5",
-            "fabric_d": 60,
-            "wd": "50/60",
-            "fabric_recipe_id": 11,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 7,
-            "ppm": 970,
-            "fabric_w": 40,
-            "quan_weft": "37.5",
-            "fabric_d": 65,
-            "wd": "40/65",
-            "fabric_recipe_id": 6,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 7,
-            "ppm": 970,
-            "fabric_w": 40,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "40/65",
-            "fabric_recipe_id": 6,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 8,
-            "ppm": 970,
-            "fabric_w": 160,
-            "quan_weft": null,
-            "fabric_d": 180,
-            "wd": "160/180",
-            "fabric_recipe_id": 36,
-            "yarn_type": "warp",
-            "tape_density": "220",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 8,
-            "ppm": 970,
-            "fabric_w": 160,
-            "quan_weft": "47.5",
-            "fabric_d": 180,
-            "wd": "160/180",
-            "fabric_recipe_id": 36,
-            "yarn_type": "weft",
-            "tape_density": "220",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 9,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 1,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 9,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "35.5",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 1,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 10,
-            "ppm": 970,
-            "fabric_w": 150,
-            "quan_weft": null,
-            "fabric_d": 85,
-            "wd": "150/85",
-            "fabric_recipe_id": 34,
-            "yarn_type": "warp",
-            "tape_density": "112",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 10,
-            "ppm": 970,
-            "fabric_w": 150,
-            "quan_weft": "36.0",
-            "fabric_d": 85,
-            "wd": "150/85",
-            "fabric_recipe_id": 34,
-            "yarn_type": "weft",
-            "tape_density": "112",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 11,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "39.3",
-            "fabric_d": 72,
-            "wd": "50/72",
-            "fabric_recipe_id": 17,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 11,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "38.5",
-            "fabric_d": 72,
-            "wd": "50/72",
-            "fabric_recipe_id": 17,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 12,
-            "ppm": 970,
-            "fabric_w": 56,
-            "quan_weft": null,
-            "fabric_d": 67,
-            "wd": "56/67",
-            "fabric_recipe_id": 44,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 12,
-            "ppm": 970,
-            "fabric_w": 56,
-            "quan_weft": "19.0",
-            "fabric_d": 67,
-            "wd": "56/67",
-            "fabric_recipe_id": 44,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 12,
-            "ppm": 970,
-            "fabric_w": 56,
-            "quan_weft": "19.0",
-            "fabric_d": 67,
-            "wd": "56/67",
-            "fabric_recipe_id": 44,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 13,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 13,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 14,
-            "ppm": 970,
-            "fabric_w": 190,
-            "quan_weft": null,
-            "fabric_d": 160,
-            "wd": "190/160",
-            "fabric_recipe_id": 37,
-            "yarn_type": "warp",
-            "tape_density": "170",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 14,
-            "ppm": 970,
-            "fabric_w": 190,
-            "quan_weft": "38.5",
-            "fabric_d": 160,
-            "wd": "190/160",
-            "fabric_recipe_id": 37,
-            "yarn_type": "weft",
-            "tape_density": "220",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 15,
-            "ppm": 970,
-            "fabric_w": 47,
-            "quan_weft": "35.5",
-            "fabric_d": 75,
-            "wd": "47/75",
-            "fabric_recipe_id": 10,
-            "yarn_type": "warp",
-            "tape_density": "105",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 15,
-            "ppm": 970,
-            "fabric_w": 47,
-            "quan_weft": "35.0",
-            "fabric_d": 75,
-            "wd": "47/75",
-            "fabric_recipe_id": 10,
-            "yarn_type": "weft",
-            "tape_density": "105",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 16,
-            "ppm": 970,
-            "fabric_w": 56,
-            "quan_weft": null,
-            "fabric_d": 60,
-            "wd": "56/60",
-            "fabric_recipe_id": 43,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 16,
-            "ppm": 970,
-            "fabric_w": 56,
-            "quan_weft": "35.5",
-            "fabric_d": 60,
-            "wd": "56/60",
-            "fabric_recipe_id": 43,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 17,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 17,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 18,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 1,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 18,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "35.5",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 1,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 19,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 1,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 19,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": "35.5",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 1,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 20,
-            "ppm": 970,
-            "fabric_w": 55,
-            "quan_weft": "0.0",
-            "fabric_d": 64,
-            "wd": "55/64",
-            "fabric_recipe_id": 42,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 20,
-            "ppm": 970,
-            "fabric_w": 55,
-            "quan_weft": "37.0",
-            "fabric_d": 64,
-            "wd": "55/64",
-            "fabric_recipe_id": 42,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 21,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 21,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 22,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 16,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 22,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 16,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 23,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 23,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 24,
-            "ppm": 970,
-            "fabric_w": 36,
-            "quan_weft": "39.0",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 3,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 24,
-            "ppm": 970,
-            "fabric_w": 36,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 3,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 25,
-            "ppm": 970,
-            "fabric_w": 40,
-            "quan_weft": "37.5",
-            "fabric_d": 65,
-            "wd": "40/65",
-            "fabric_recipe_id": 6,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 25,
-            "ppm": 970,
-            "fabric_w": 40,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "40/65",
-            "fabric_recipe_id": 6,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 26,
-            "ppm": 970,
-            "fabric_w": 47,
-            "quan_weft": "35.5",
-            "fabric_d": 75,
-            "wd": "47/75",
-            "fabric_recipe_id": 10,
-            "yarn_type": "warp",
-            "tape_density": "105",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 26,
-            "ppm": 970,
-            "fabric_w": 47,
-            "quan_weft": "35.0",
-            "fabric_d": 75,
-            "wd": "47/75",
-            "fabric_recipe_id": 10,
-            "yarn_type": "weft",
-            "tape_density": "105",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 27,
-            "ppm": 970,
-            "fabric_w": 150,
-            "quan_weft": null,
-            "fabric_d": 110,
-            "wd": "150/110",
-            "fabric_recipe_id": 35,
-            "yarn_type": "warp",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 27,
-            "ppm": 970,
-            "fabric_w": 150,
-            "quan_weft": "39.5",
-            "fabric_d": 110,
-            "wd": "150/110",
-            "fabric_recipe_id": 35,
-            "yarn_type": "weft",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 28,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": null,
-            "fabric_d": 63,
-            "wd": "50/63",
-            "fabric_recipe_id": 14,
-            "yarn_type": "warp",
-            "tape_density": "78",
-            "tape_color": "зелёная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 28,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": null,
-            "fabric_d": 63,
-            "wd": "50/63",
-            "fabric_recipe_id": 14,
-            "yarn_type": "warp",
-            "tape_density": "78",
-            "tape_color": "прозрачная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 28,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": "39.0",
-            "fabric_d": 63,
-            "wd": "50/63",
-            "fabric_recipe_id": 14,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "прозрачная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 29,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 1,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 29,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": "35.5",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 1,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 30,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 16,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 30,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 16,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 31,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 60,
-            "wd": "50/60",
-            "fabric_recipe_id": 11,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 31,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": "35.5",
-            "fabric_d": 60,
-            "wd": "50/60",
-            "fabric_recipe_id": 11,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 32,
-            "ppm": 1200,
-            "fabric_w": 40,
-            "quan_weft": "37.5",
-            "fabric_d": 60,
-            "wd": "40/60",
-            "fabric_recipe_id": 5,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 32,
-            "ppm": 1200,
-            "fabric_w": 40,
-            "quan_weft": "35.3",
-            "fabric_d": 60,
-            "wd": "40/60",
-            "fabric_recipe_id": 5,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 33,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 33,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 34,
-            "ppm": 1200,
-            "fabric_w": 42,
-            "quan_weft": "38.5",
-            "fabric_d": 68,
-            "wd": "42/68",
-            "fabric_recipe_id": 7,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 34,
-            "ppm": 1200,
-            "fabric_w": 42,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "42/68",
-            "fabric_recipe_id": 7,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 35,
-            "ppm": 1200,
-            "fabric_w": 150,
-            "quan_weft": null,
-            "fabric_d": 110,
-            "wd": "150/110",
-            "fabric_recipe_id": 35,
-            "yarn_type": "warp",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 35,
-            "ppm": 1200,
-            "fabric_w": 150,
-            "quan_weft": "39.5",
-            "fabric_d": 110,
-            "wd": "150/110",
-            "fabric_recipe_id": 35,
-            "yarn_type": "weft",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 36,
-            "ppm": 1200,
-            "fabric_w": 160,
-            "quan_weft": null,
-            "fabric_d": 180,
-            "wd": "160/180",
-            "fabric_recipe_id": 36,
-            "yarn_type": "warp",
-            "tape_density": "220",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 36,
-            "ppm": 1200,
-            "fabric_w": 160,
-            "quan_weft": "47.5",
-            "fabric_d": 180,
-            "wd": "160/180",
-            "fabric_recipe_id": 36,
-            "yarn_type": "weft",
-            "tape_density": "220",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 37,
-            "ppm": 970,
-            "fabric_w": 36,
-            "quan_weft": "39.0",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 3,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 37,
-            "ppm": 970,
-            "fabric_w": 36,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 3,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 38,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 60,
-            "wd": "50/60",
-            "fabric_recipe_id": 11,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 38,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "35.5",
-            "fabric_d": 60,
-            "wd": "50/60",
-            "fabric_recipe_id": 11,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 39,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 39,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 40,
-            "ppm": 970,
-            "fabric_w": 40,
-            "quan_weft": "37.5",
-            "fabric_d": 65,
-            "wd": "40/65",
-            "fabric_recipe_id": 6,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 40,
-            "ppm": 970,
-            "fabric_w": 40,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "40/65",
-            "fabric_recipe_id": 6,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 41,
-            "ppm": 970,
-            "fabric_w": 190,
-            "quan_weft": null,
-            "fabric_d": 160,
-            "wd": "190/160",
-            "fabric_recipe_id": 37,
-            "yarn_type": "warp",
-            "tape_density": "170",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 41,
-            "ppm": 970,
-            "fabric_w": 190,
-            "quan_weft": "38.5",
-            "fabric_d": 160,
-            "wd": "190/160",
-            "fabric_recipe_id": 37,
-            "yarn_type": "weft",
-            "tape_density": "220",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 42,
-            "ppm": 970,
-            "fabric_w": 40,
-            "quan_weft": "37.5",
-            "fabric_d": 65,
-            "wd": "40/65",
-            "fabric_recipe_id": 6,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 42,
-            "ppm": 970,
-            "fabric_w": 40,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "40/65",
-            "fabric_recipe_id": 6,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 43,
-            "ppm": 970,
-            "fabric_w": 45,
-            "quan_weft": "35.2",
-            "fabric_d": 60,
-            "wd": "45/60",
-            "fabric_recipe_id": 8,
-            "yarn_type": "warp",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 43,
-            "ppm": 970,
-            "fabric_w": 45,
-            "quan_weft": "36.0",
-            "fabric_d": 60,
-            "wd": "45/60",
-            "fabric_recipe_id": 8,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 44,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 44,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 45,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 60,
-            "wd": "50/60",
-            "fabric_recipe_id": 11,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 45,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "35.5",
-            "fabric_d": 60,
-            "wd": "50/60",
-            "fabric_recipe_id": 11,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 46,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 16,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 46,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 16,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 47,
-            "ppm": 970,
-            "fabric_w": 150,
-            "quan_weft": null,
-            "fabric_d": 110,
-            "wd": "150/110",
-            "fabric_recipe_id": 35,
-            "yarn_type": "warp",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 47,
-            "ppm": 970,
-            "fabric_w": 150,
-            "quan_weft": "39.5",
-            "fabric_d": 110,
-            "wd": "150/110",
-            "fabric_recipe_id": 35,
-            "yarn_type": "weft",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 48,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 48,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 49,
-            "ppm": 970,
-            "fabric_w": 40,
-            "quan_weft": "37.5",
-            "fabric_d": 65,
-            "wd": "40/65",
-            "fabric_recipe_id": 6,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 49,
-            "ppm": 970,
-            "fabric_w": 40,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "40/65",
-            "fabric_recipe_id": 6,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 50,
-            "ppm": 970,
-            "fabric_w": 60,
-            "quan_weft": null,
-            "fabric_d": 70,
-            "wd": "60/70",
-            "fabric_recipe_id": 45,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 50,
-            "ppm": 970,
-            "fabric_w": 60,
-            "quan_weft": "38.0",
-            "fabric_d": 70,
-            "wd": "60/70",
-            "fabric_recipe_id": 45,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 51,
-            "ppm": 970,
-            "fabric_w": 36,
-            "quan_weft": null,
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 38,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 51,
-            "ppm": 970,
-            "fabric_w": 36,
-            "quan_weft": "35.2",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 38,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 52,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 52,
-            "ppm": 970,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 53,
-            "ppm": 970,
-            "fabric_w": 36,
-            "quan_weft": "39.0",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 3,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 53,
-            "ppm": 970,
-            "fabric_w": 36,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 3,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 54,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 16,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 54,
-            "ppm": 970,
-            "fabric_w": 50,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "50/65",
-            "fabric_recipe_id": 16,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 55,
-            "ppm": 1200,
-            "fabric_w": 36,
-            "quan_weft": "39.0",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 3,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 55,
-            "ppm": 1200,
-            "fabric_w": 36,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 3,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 56,
-            "ppm": 1200,
-            "fabric_w": 42,
-            "quan_weft": "38.5",
-            "fabric_d": 68,
-            "wd": "42/68",
-            "fabric_recipe_id": 7,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 56,
-            "ppm": 1200,
-            "fabric_w": 42,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "42/68",
-            "fabric_recipe_id": 7,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 57,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 57,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 58,
-            "ppm": 1200,
-            "fabric_w": 42,
-            "quan_weft": "38.5",
-            "fabric_d": 68,
-            "wd": "42/68",
-            "fabric_recipe_id": 7,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 58,
-            "ppm": 1200,
-            "fabric_w": 42,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "42/68",
-            "fabric_recipe_id": 7,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 59,
-            "ppm": 1200,
-            "fabric_w": 150,
-            "quan_weft": null,
-            "fabric_d": 85,
-            "wd": "150/85",
-            "fabric_recipe_id": 34,
-            "yarn_type": "warp",
-            "tape_density": "112",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 59,
-            "ppm": 1200,
-            "fabric_w": 150,
-            "quan_weft": "36.0",
-            "fabric_d": 85,
-            "wd": "150/85",
-            "fabric_recipe_id": 34,
-            "yarn_type": "weft",
-            "tape_density": "112",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 60,
-            "ppm": 1200,
-            "fabric_w": 40,
-            "quan_weft": "37.5",
-            "fabric_d": 65,
-            "wd": "40/65",
-            "fabric_recipe_id": 6,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 60,
-            "ppm": 1200,
-            "fabric_w": 40,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "40/65",
-            "fabric_recipe_id": 6,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 61,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": null,
-            "fabric_d": 63,
-            "wd": "50/63",
-            "fabric_recipe_id": 14,
-            "yarn_type": "warp",
-            "tape_density": "78",
-            "tape_color": "зелёная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 61,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": null,
-            "fabric_d": 63,
-            "wd": "50/63",
-            "fabric_recipe_id": 14,
-            "yarn_type": "warp",
-            "tape_density": "78",
-            "tape_color": "прозрачная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 61,
-            "ppm": 1200,
-            "fabric_w": 50,
-            "quan_weft": "39.0",
-            "fabric_d": 63,
-            "wd": "50/63",
-            "fabric_recipe_id": 14,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "прозрачная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 62,
-            "ppm": 1200,
-            "fabric_w": 36,
-            "quan_weft": "39.0",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 3,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 62,
-            "ppm": 1200,
-            "fabric_w": 36,
-            "quan_weft": "35.0",
-            "fabric_d": 65,
-            "wd": "36/65",
-            "fabric_recipe_id": 3,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 63,
-            "ppm": 1200,
-            "fabric_w": 42,
-            "quan_weft": "38.5",
-            "fabric_d": 68,
-            "wd": "42/68",
-            "fabric_recipe_id": 7,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 63,
-            "ppm": 1200,
-            "fabric_w": 42,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "42/68",
-            "fabric_recipe_id": 7,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 64,
-            "ppm": 1200,
-            "fabric_w": 54,
-            "quan_weft": "34.8",
-            "fabric_d": 80,
-            "wd": "54/80",
-            "fabric_recipe_id": 21,
-            "yarn_type": "warp",
-            "tape_density": "110",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 64,
-            "ppm": 1200,
-            "fabric_w": 54,
-            "quan_weft": "35.0",
-            "fabric_d": 80,
-            "wd": "54/80",
-            "fabric_recipe_id": 21,
-            "yarn_type": "weft",
-            "tape_density": "110",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 65,
-            "ppm": 1200,
-            "fabric_w": 54,
-            "quan_weft": "34.8",
-            "fabric_d": 80,
-            "wd": "54/80",
-            "fabric_recipe_id": 21,
-            "yarn_type": "warp",
-            "tape_density": "110",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 65,
-            "ppm": 1200,
-            "fabric_w": 54,
-            "quan_weft": "35.0",
-            "fabric_d": 80,
-            "wd": "54/80",
-            "fabric_recipe_id": 21,
-            "yarn_type": "weft",
-            "tape_density": "110",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 66,
-            "ppm": 1200,
-            "fabric_w": 54,
-            "quan_weft": "34.8",
-            "fabric_d": 80,
-            "wd": "54/80",
-            "fabric_recipe_id": 21,
-            "yarn_type": "warp",
-            "tape_density": "110",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 66,
-            "ppm": 1200,
-            "fabric_w": 54,
-            "quan_weft": "35.0",
-            "fabric_d": 80,
-            "wd": "54/80",
-            "fabric_recipe_id": 21,
-            "yarn_type": "weft",
-            "tape_density": "110",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 67,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 67,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 68,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 68,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 69,
-            "ppm": 1200,
-            "fabric_w": 47,
-            "quan_weft": "35.5",
-            "fabric_d": 75,
-            "wd": "47/75",
-            "fabric_recipe_id": 10,
-            "yarn_type": "warp",
-            "tape_density": "105",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 69,
-            "ppm": 1200,
-            "fabric_w": 47,
-            "quan_weft": "35.0",
-            "fabric_d": 75,
-            "wd": "47/75",
-            "fabric_recipe_id": 10,
-            "yarn_type": "weft",
-            "tape_density": "105",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 70,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 70,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 71,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 71,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 72,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "36.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 72,
-            "ppm": 1200,
-            "fabric_w": 39,
-            "quan_weft": "35.5",
-            "fabric_d": 68,
-            "wd": "39/68",
-            "fabric_recipe_id": 4,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 87,
-            "ppm": 700,
-            "fabric_w": 55,
-            "quan_weft": "44.5",
-            "fabric_d": 66,
-            "wd": "55/66",
-            "fabric_recipe_id": 22,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 87,
-            "ppm": 700,
-            "fabric_w": 55,
-            "quan_weft": "36.5",
-            "fabric_d": 66,
-            "wd": "55/66",
-            "fabric_recipe_id": 22,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 88,
-            "ppm": 700,
-            "fabric_w": 48,
-            "quan_weft": null,
-            "fabric_d": 67,
-            "wd": "48/67",
-            "fabric_recipe_id": 40,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 88,
-            "ppm": 700,
-            "fabric_w": 48,
-            "quan_weft": "38.0",
-            "fabric_d": 67,
-            "wd": "48/67",
-            "fabric_recipe_id": 40,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 89,
-            "ppm": 700,
-            "fabric_w": 38,
-            "quan_weft": null,
-            "fabric_d": 75,
-            "wd": "38/75",
-            "fabric_recipe_id": 39,
-            "yarn_type": "warp",
-            "tape_density": "105",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 89,
-            "ppm": 700,
-            "fabric_w": 38,
-            "quan_weft": "34.5",
-            "fabric_d": 75,
-            "wd": "38/75",
-            "fabric_recipe_id": 39,
-            "yarn_type": "weft",
-            "tape_density": "105",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 90,
-            "ppm": 700,
-            "fabric_w": 38,
-            "quan_weft": null,
-            "fabric_d": 75,
-            "wd": "38/75",
-            "fabric_recipe_id": 39,
-            "yarn_type": "warp",
-            "tape_density": "105",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 90,
-            "ppm": 700,
-            "fabric_w": 38,
-            "quan_weft": "34.5",
-            "fabric_d": 75,
-            "wd": "38/75",
-            "fabric_recipe_id": 39,
-            "yarn_type": "weft",
-            "tape_density": "105",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 91,
-            "ppm": 700,
-            "fabric_w": 60,
-            "quan_weft": "45.0",
-            "fabric_d": 60,
-            "wd": "60/60",
-            "fabric_recipe_id": 26,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 91,
-            "ppm": 700,
-            "fabric_w": 60,
-            "quan_weft": "35.0",
-            "fabric_d": 60,
-            "wd": "60/60",
-            "fabric_recipe_id": 26,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 92,
-            "ppm": 920,
-            "fabric_w": 128,
-            "quan_weft": null,
-            "fabric_d": 110,
-            "wd": "128/110",
-            "fabric_recipe_id": 33,
-            "yarn_type": "warp",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 92,
-            "ppm": 920,
-            "fabric_w": 128,
-            "quan_weft": "36.0",
-            "fabric_d": 110,
-            "wd": "128/110",
-            "fabric_recipe_id": 33,
-            "yarn_type": "weft",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 93,
-            "ppm": 920,
-            "fabric_w": 56,
-            "quan_weft": "9.1",
-            "fabric_d": 62,
-            "wd": "56/62",
-            "fabric_recipe_id": 24,
-            "yarn_type": "warp",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 93,
-            "ppm": 920,
-            "fabric_w": 56,
-            "quan_weft": "39.0",
-            "fabric_d": 62,
-            "wd": "56/62",
-            "fabric_recipe_id": 24,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 94,
-            "ppm": 600,
-            "fabric_w": 50,
-            "quan_weft": "39.3",
-            "fabric_d": 70,
-            "wd": "50/70",
-            "fabric_recipe_id": 41,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 94,
-            "ppm": 600,
-            "fabric_w": 50,
-            "quan_weft": "38.0",
-            "fabric_d": 70,
-            "wd": "50/70",
-            "fabric_recipe_id": 41,
-            "yarn_type": "weft",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 95,
-            "ppm": 850,
-            "fabric_w": 60,
-            "quan_weft": "45.0",
-            "fabric_d": 60,
-            "wd": "60/60",
-            "fabric_recipe_id": 26,
-            "yarn_type": "warp",
-            "tape_density": "90",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 95,
-            "ppm": 850,
-            "fabric_w": 60,
-            "quan_weft": "35.0",
-            "fabric_d": 60,
-            "wd": "60/60",
-            "fabric_recipe_id": 26,
-            "yarn_type": "weft",
-            "tape_density": "78",
-            "tape_color": "белая",
-            "tape_additive": "светостаб"
-        },
-        {
-            "cnt": 1,
-            "loom": 96,
-            "ppm": 850,
-            "fabric_w": 100,
-            "quan_weft": null,
-            "fabric_d": 75,
-            "wd": "100/75",
-            "fabric_recipe_id": 30,
-            "yarn_type": "warp",
-            "tape_density": "64",
-            "tape_color": "оранжевая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 96,
-            "ppm": 850,
-            "fabric_w": 100,
-            "quan_weft": "37.0",
-            "fabric_d": 75,
-            "wd": "100/75",
-            "fabric_recipe_id": 30,
-            "yarn_type": "weft",
-            "tape_density": "64",
-            "tape_color": "оранжевая",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 97,
-            "ppm": 920,
-            "fabric_w": 128,
-            "quan_weft": null,
-            "fabric_d": 110,
-            "wd": "128/110",
-            "fabric_recipe_id": 33,
-            "yarn_type": "warp",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 97,
-            "ppm": 920,
-            "fabric_w": 128,
-            "quan_weft": "36.0",
-            "fabric_d": 110,
-            "wd": "128/110",
-            "fabric_recipe_id": 33,
-            "yarn_type": "weft",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 98,
-            "ppm": 920,
-            "fabric_w": 128,
-            "quan_weft": null,
-            "fabric_d": 110,
-            "wd": "128/110",
-            "fabric_recipe_id": 33,
-            "yarn_type": "warp",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 98,
-            "ppm": 920,
-            "fabric_w": 128,
-            "quan_weft": "36.0",
-            "fabric_d": 110,
-            "wd": "128/110",
-            "fabric_recipe_id": 33,
-            "yarn_type": "weft",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 99,
-            "ppm": 920,
-            "fabric_w": 128,
-            "quan_weft": null,
-            "fabric_d": 110,
-            "wd": "128/110",
-            "fabric_recipe_id": 33,
-            "yarn_type": "warp",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        },
-        {
-            "cnt": 1,
-            "loom": 99,
-            "ppm": 920,
-            "fabric_w": 128,
-            "quan_weft": "36.0",
-            "fabric_d": 110,
-            "wd": "128/110",
-            "fabric_recipe_id": 33,
-            "yarn_type": "weft",
-            "tape_density": "140",
-            "tape_color": "цветная",
-            "tape_additive": "нет"
-        }
-    ]
+    {
+        "cnt": 1,
+        "loom": 1,
+        "yarn_type": "warp",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "1150.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 1,
+        "yarn_type": "weft",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "39.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 2,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 2,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 3,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "260.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 3,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 4,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 4,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 5,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "312.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 5,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "36.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 6,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 6,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 7,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "288.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 7,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 8,
+        "yarn_type": "warp",
+        "tape_density": "220",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "1154.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 8,
+        "yarn_type": "weft",
+        "tape_density": "220",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "47.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 9,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 9,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 10,
+        "yarn_type": "warp",
+        "tape_density": "112",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "1150.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 10,
+        "yarn_type": "weft",
+        "tape_density": "112",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "36.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 11,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "378.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 11,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "38.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 12,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "422.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 12,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "19.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 12,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "19.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 13,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 13,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 14,
+        "yarn_type": "warp",
+        "tape_density": "170",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "1374.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 14,
+        "yarn_type": "weft",
+        "tape_density": "220",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "38.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 15,
+        "yarn_type": "warp",
+        "tape_density": "105",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "338.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 15,
+        "yarn_type": "weft",
+        "tape_density": "105",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 16,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "404.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 16,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 17,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 17,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 18,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 18,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 19,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 19,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 20,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "414.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 20,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "37.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 21,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 21,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 22,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 22,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 23,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 23,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 24,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "260.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 24,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 25,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "288.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 25,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 26,
+        "yarn_type": "warp",
+        "tape_density": "105",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "338.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 26,
+        "yarn_type": "weft",
+        "tape_density": "105",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 27,
+        "yarn_type": "warp",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "1150.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 27,
+        "yarn_type": "weft",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "39.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 28,
+        "yarn_type": "warp",
+        "tape_density": "78",
+        "tape_color": "зелёная",
+        "tape_additive": "нет",
+        "quantity": "290.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 28,
+        "yarn_type": "warp",
+        "tape_density": "78",
+        "tape_color": "прозрачная",
+        "tape_additive": "нет",
+        "quantity": "72.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 28,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "прозрачная",
+        "tape_additive": "нет",
+        "quantity": "39.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 29,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 29,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 30,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 30,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 31,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 31,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 32,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "288.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 32,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "35.3"
+    },
+    {
+        "cnt": 1,
+        "loom": 33,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 33,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 34,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "312.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 34,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "36.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 35,
+        "yarn_type": "warp",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "1150.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 35,
+        "yarn_type": "weft",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "39.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 36,
+        "yarn_type": "warp",
+        "tape_density": "220",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "1154.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 36,
+        "yarn_type": "weft",
+        "tape_density": "220",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "47.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 37,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "260.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 37,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 38,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 38,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 39,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 39,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 40,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "288.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 40,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 41,
+        "yarn_type": "warp",
+        "tape_density": "170",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "1374.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 41,
+        "yarn_type": "weft",
+        "tape_density": "220",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "38.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 42,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "288.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 42,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 43,
+        "yarn_type": "warp",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "346.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 43,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "36.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 44,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 44,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 45,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 45,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 46,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 46,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 47,
+        "yarn_type": "warp",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "1150.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 47,
+        "yarn_type": "weft",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "39.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 48,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 48,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 49,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "288.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 49,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 50,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "450.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 50,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "38.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 51,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "254.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 51,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "35.2"
+    },
+    {
+        "cnt": 1,
+        "loom": 52,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 52,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 53,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "260.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 53,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 54,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "360.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 54,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 55,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "260.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 55,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 56,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "312.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 56,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "36.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 57,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 57,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 58,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "312.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 58,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "36.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 59,
+        "yarn_type": "warp",
+        "tape_density": "112",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "1150.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 59,
+        "yarn_type": "weft",
+        "tape_density": "112",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "36.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 60,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "288.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 60,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 61,
+        "yarn_type": "warp",
+        "tape_density": "78",
+        "tape_color": "зелёная",
+        "tape_additive": "нет",
+        "quantity": "290.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 61,
+        "yarn_type": "warp",
+        "tape_density": "78",
+        "tape_color": "прозрачная",
+        "tape_additive": "нет",
+        "quantity": "72.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 61,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "прозрачная",
+        "tape_additive": "нет",
+        "quantity": "39.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 62,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "260.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 62,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 63,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "312.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 63,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "36.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 64,
+        "yarn_type": "warp",
+        "tape_density": "110",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "392.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 64,
+        "yarn_type": "weft",
+        "tape_density": "110",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 65,
+        "yarn_type": "warp",
+        "tape_density": "110",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "392.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 65,
+        "yarn_type": "weft",
+        "tape_density": "110",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 66,
+        "yarn_type": "warp",
+        "tape_density": "110",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "392.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 66,
+        "yarn_type": "weft",
+        "tape_density": "110",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 67,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 67,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 68,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 68,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 69,
+        "yarn_type": "warp",
+        "tape_density": "105",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "338.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 69,
+        "yarn_type": "weft",
+        "tape_density": "105",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 70,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 70,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 71,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 71,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 72,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "282.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 72,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "35.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 87,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "432.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 87,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "36.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 88,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "348.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 88,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "38.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 89,
+        "yarn_type": "warp",
+        "tape_density": "105",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "280.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 89,
+        "yarn_type": "weft",
+        "tape_density": "105",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "34.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 90,
+        "yarn_type": "warp",
+        "tape_density": "105",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "280.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 90,
+        "yarn_type": "weft",
+        "tape_density": "105",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "34.5"
+    },
+    {
+        "cnt": 1,
+        "loom": 91,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "428.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 91,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 92,
+        "yarn_type": "warp",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "1000.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 92,
+        "yarn_type": "weft",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "36.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 93,
+        "yarn_type": "warp",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "408.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 93,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "39.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 94,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "378.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 94,
+        "yarn_type": "weft",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "нет",
+        "quantity": "38.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 95,
+        "yarn_type": "warp",
+        "tape_density": "90",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "428.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 95,
+        "yarn_type": "weft",
+        "tape_density": "78",
+        "tape_color": "белая",
+        "tape_additive": "светостаб",
+        "quantity": "35.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 96,
+        "yarn_type": "warp",
+        "tape_density": "64",
+        "tape_color": "оранжевая",
+        "tape_additive": "нет",
+        "quantity": "710.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 96,
+        "yarn_type": "weft",
+        "tape_density": "64",
+        "tape_color": "оранжевая",
+        "tape_additive": "нет",
+        "quantity": "37.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 97,
+        "yarn_type": "warp",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "1000.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 97,
+        "yarn_type": "weft",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "36.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 98,
+        "yarn_type": "warp",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "1000.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 98,
+        "yarn_type": "weft",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "36.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 99,
+        "yarn_type": "warp",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "1000.0"
+    },
+    {
+        "cnt": 1,
+        "loom": 99,
+        "yarn_type": "weft",
+        "tape_density": "140",
+        "tape_color": "цветная",
+        "tape_additive": "нет",
+        "quantity": "36.0"
+    }
+];
 }
 
 
 function createButtonsInBlockFromArray(field, containerId, numbersArray, reverse = false) {
     const container = document.getElementById(containerId);
-    container.innerHTML = '';
+    //container.innerHTML = '';
     // Копируем массив и, если нужно, переворачиваем порядок
     const arr = reverse ? [...numbersArray].reverse() : numbersArray;
     arr.forEach(item => {
@@ -2598,9 +1733,10 @@ function createButtonsInBlockFromArray(field, containerId, numbersArray, reverse
         container.appendChild(item.button);
     });
 }
+let allNumbers
 async function loadAndRenderButtons(field = "loom") {
     try {
-        const allNumbers = getDataT();
+        allNumbers = getDataT();
 
         for (const item of allNumbers) {
             for (const key in item) {
@@ -2627,7 +1763,7 @@ async function loadAndRenderButtons(field = "loom") {
 
         const createSection = (map, containerClass) => {
             const container = document.querySelector("."+containerClass) || document.createElement('div');
-            container.innerHTML = '';
+            //container.innerHTML = '';
 
             container.classList.add(containerClass);
 
@@ -2648,15 +1784,14 @@ async function loadAndRenderButtons(field = "loom") {
             document.body.appendChild(container);
         };
 
-        createSection(warpMap, 'container-grid-warp');
-        createSection(weftMap, 'container-grid-weft');
+        document.querySelector(".container-grid-warp") || createSection(warpMap, 'container-grid-warp');
+        document.querySelector(".container-grid-weft") || createSection(weftMap, 'container-grid-weft');
 
         // Группировка по loom
         const loomGroups = groupBy(allNumbers, i => i.loom);
 
         // Создаём уникальные кнопки для loom и присваиваем их элементам
         const allNumbersLoom = [];
-
 
         loomGroups.forEach((items, loom) => {
             const btn = document.createElement('button');
@@ -2722,8 +1857,39 @@ async function loadAndRenderButtons(field = "loom") {
         console.error('Ошибка загрузки номеров:', error);
     }
 }
+let allNumbersLoom;
+function update(field = "loom") {
+
+    const requiredCount = buttonsPerBlock * totalBlocks + 13;
+    if (allNumbersLoom.length < requiredCount) {
+        console.error(`Недостаточно номеров в базе. Требуется минимум ${requiredCount}.`);
+        return;
+    }
+
+    const blocksNumbersArray = allNumbersLoom.slice(0, buttonsPerBlock * totalBlocks);
+    const footerNumbers = allNumbersLoom.slice(buttonsPerBlock * totalBlocks, requiredCount);
+
+    const blocksNumbers = {};
+    [...rightBlocks, ...leftBlocks].forEach((blockId, i) => {
+        const start = i * buttonsPerBlock;
+        blocksNumbers[blockId] = blocksNumbersArray.slice(start, start + buttonsPerBlock);
+    });
+    blocksNumbers['footerBlock'] = footerNumbers;
+
+    // Создаём кнопки с реверсом
+    let blockIndex = 1;
+    rightBlocks.forEach(blockId => {
+        createButtonsInBlockFromArray(field, blockId, blocksNumbers[blockId], blockIndex % 2 === 1 || blockIndex === totalBlocks);
+        blockIndex++;
+    });
+    leftBlocks.forEach(blockId => {
+        createButtonsInBlockFromArray(field, blockId, blocksNumbers[blockId], blockIndex % 2 === 1 || blockIndex === totalBlocks);
+        blockIndex++;
+    });
+    createButtonsInBlockFromArray(field, 'footerBlock', blocksNumbers['footerBlock'], true);
 
 
+}
 
 
 
@@ -2778,7 +1944,7 @@ async function nv(event) {
     const nav = event.target.closest("nav");
     if (!nav) return;
     console.log(event.target.textContent);
-    loadAndRenderButtons(event.target.textContent);
+    update(event.target.textContent);
 }
 
 
@@ -2787,7 +1953,7 @@ inputSS.type = "number";
 //inputSS.classList.add("custom-select");
 
 
-const update = {};
+//const update = {};
 
 
 
@@ -2804,10 +1970,12 @@ async function sendUpdateTextileId(update) {
     } catch (error) {
 
     }
-}
+};
+
 (async () => {
     // Запускаем загрузку и рендер кнопок
     const looms_fabric_recipe = await loadAndRenderButtons();
+    allNumbersLoom = looms_fabric_recipe;
     console.log(looms_fabric_recipe);
     const keys = Object.keys(looms_fabric_recipe[0]);
     keys.forEach(item => nav.append(createA(item)));
