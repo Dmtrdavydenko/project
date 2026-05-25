@@ -2961,6 +2961,24 @@ server.on("request", (req, res) => {
                         profile: profile
                     }));
 
+
+                    const sql = `
+INSERT INTO user_profiles (login, ip, user_agent, language)
+VALUES (?, ?, ?, ?)
+ON DUPLICATE KEY UPDATE
+    ip = VALUES(ip),
+    user_agent = VALUES(user_agent),
+    language = VALUES(language),
+    last_login = CURRENT_TIMESTAMP
+`;
+
+                    await db.execute(sql, [
+                        login,
+                        profile.ip,
+                        profile.userAgent,
+                        profile.language
+                    ]);
+
                 }
                 catch (error) {
 
