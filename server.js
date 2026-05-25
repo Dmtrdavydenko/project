@@ -2725,6 +2725,7 @@ server.on("request", (req, res) => {
     console.log("pathname", parsedUrl.pathname);
     const pathname = parsedUrl.pathname;
 
+    const endpoint = `${req.method} ${parsedUrl.pathname}`;
     // Главная страница — ссылка для авторизации
     if (pathname === "/conecthh") {
         const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
@@ -2962,23 +2963,14 @@ server.on("request", (req, res) => {
                     }));
 
 
-                    const sql = `
-INSERT INTO user_profiles (login, ip, user_agent, language)
-VALUES (?, ?, ?, ?)
-ON DUPLICATE KEY UPDATE
-    ip = VALUES(ip),
-    user_agent = VALUES(user_agent),
-    language = VALUES(language),
-    last_login = CURRENT_TIMESTAMP
-`;
-
-                    await db.execute(sql, [
-                        login,
+                    const connect = await getAwaitConnect();
+                    sql = loadSQL("./src/sql/endpoint/insert.sql");
+                    connect.execute(sql, [
+                        endpoint,
                         profile.ip,
                         profile.userAgent,
                         profile.language
                     ]);
-
                 }
                 catch (error) {
 
