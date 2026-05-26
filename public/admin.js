@@ -172,6 +172,11 @@ getColumnsTypes.textContent = "Получить колонки";
 getColumnsTypes.addEventListener("click", getSelectedValue);
 
 const textArea = document.createElement("textarea");
+const table = document.createElement("table");
+const tbody = document.createElement("tbody");
+const thead = document.createElement("thead");
+table.append(thead);
+table.append(tbody);
 const textAsk = document.createElement("textarea");
 
 const queryButton = document.createElement("button");
@@ -206,6 +211,7 @@ main.append(getAllTablesName);
 main.append(selectElement);
 main.append(getColumnsTypes);
 main.append(textArea);
+main.append(table);
 main.append(queryButton);
 main.append(textAsk);
 main.append(form);
@@ -529,8 +535,9 @@ async function sqlQuery(sqlQueryString) {
             console.log(responseText);
             throw new Error(`Некорректный JSON от сервера: ${responseText}`);
         }
-
-        console.log(result);
+        if (result.length > 1)
+            const data = result.rows || result[0];
+        await render(data);
 
     } catch (error) {
         // Полный вывод ошибки
@@ -538,7 +545,31 @@ async function sqlQuery(sqlQueryString) {
     }
 }
 
+async function render(data) {
 
+    if (!data || data.length === 0) return;
+
+    const keys = Object.keys(data[0]);
+
+    const headHtml = `
+        <tr>
+            ${keys.map(key => `<th>${key}</th>`).join("")}
+        </tr>
+    `;
+
+    const bodyHtml = data.map(row => {
+
+        return `
+            <tr>
+                ${keys.map(key => `<td>${row[key]}</td>`).join("")}
+            </tr>
+        `;
+
+    }).join("");
+
+    thead.innerHTML = headHtml;
+    tbody.innerHTML = bodyHtml;
+}
 
 
 
