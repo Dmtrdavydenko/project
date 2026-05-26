@@ -535,9 +535,7 @@ async function sqlQuery(sqlQueryString) {
             console.log(responseText);
             throw new Error(`Некорректный JSON от сервера: ${responseText}`);
         }
-        if (result.length > 1)
-            const data = result.rows || result[0];
-        await render(data);
+        await render(result[0]);
 
     } catch (error) {
         // Полный вывод ошибки
