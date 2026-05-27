@@ -212,7 +212,9 @@ main.append(selectElement);
 main.append(getColumnsTypes);
 main.append(textArea);
 main.append(queryButton);
+main.append(document.createElement("hr"));
 main.append(table);
+main.append(document.createElement("hr"));
 main.append(textAsk);
 main.append(form);
 main.append(sendButton);
@@ -535,6 +537,7 @@ async function sqlQuery(sqlQueryString) {
             console.log(responseText);
             throw new Error(`Некорректный JSON от сервера: ${responseText}`);
         }
+        console.log(result[0]);
         await render(result[0]);
 
     } catch (error) {

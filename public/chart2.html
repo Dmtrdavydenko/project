@@ -80,310 +80,311 @@
 
     </div>
 
-    <script>class CircularChart {
+    <script>
+    class CircularChart {
 
-    constructor({
-        container,
-        data,
-        size = 260,
-        radius = 90,
-        strokeWidth = 34,
-        centerText = ''
-    }) {
+            constructor({
+                container,
+                data,
+                size = 260,
+                radius = 90,
+                strokeWidth = 34,
+                centerText = ''
+            }) {
 
-        this.container = container;
-        this.data = data;
+                this.container = container;
+                this.data = data;
 
-        this.size = size;
-        this.radius = radius;
-        this.strokeWidth = strokeWidth;
-        this.centerText = centerText;
+                this.size = size;
+                this.radius = radius;
+                this.strokeWidth = strokeWidth;
+                this.centerText = centerText;
 
-        this.circumference =
-            2 * Math.PI * radius;
+                this.circumference =
+                    2 * Math.PI * radius;
 
-        this.colors = [
-            '#3b82f6',
-            '#10b981',
-            '#f59e0b',
-            '#ef4444',
-            '#8b5cf6',
-            '#06b6d4',
-            '#84cc16',
-            '#ec4899',
-            '#f97316',
-            '#14b8a6',
-            '#eab308',
-            '#0ea5e9'
+                this.colors = [
+                    '#3b82f6',
+                    '#10b981',
+                    '#f59e0b',
+                    '#ef4444',
+                    '#8b5cf6',
+                    '#06b6d4',
+                    '#84cc16',
+                    '#ec4899',
+                    '#f97316',
+                    '#14b8a6',
+                    '#eab308',
+                    '#0ea5e9'
+                ];
+            }
+
+            total() {
+
+                return this.data.reduce(
+                    (sum, item) => sum + item.value,
+                    0
+                );
+            }
+
+            percent(value) {
+
+                return (
+                    value / this.total()
+                ) * 100;
+            }
+
+            createSVG() {
+
+                const svgNS =
+                    'http://www.w3.org/2000/svg';
+
+                const svg =
+                    document.createElementNS(svgNS, 'svg');
+
+                svg.setAttribute('width', this.size);
+                svg.setAttribute('height', this.size);
+
+                const center = this.size / 2;
+
+                const group =
+                    document.createElementNS(svgNS, 'g');
+
+                group.setAttribute(
+                    'transform',
+                    `rotate(-90 ${center} ${center})`
+                );
+
+                let offset = 0;
+
+                this.data.forEach((item, index) => {
+
+                    const percent =
+                        this.percent(item.value);
+
+                    const dash =
+                        (percent / 100) *
+                        this.circumference;
+
+                    const circle =
+                        document.createElementNS(svgNS, 'circle');
+
+                    circle.setAttribute('cx', center);
+                    circle.setAttribute('cy', center);
+                    circle.setAttribute('r', this.radius);
+
+                    circle.setAttribute('fill', 'none');
+
+                    circle.setAttribute(
+                        'stroke',
+                        this.colors[index % this.colors.length]
+                    );
+
+                    circle.setAttribute(
+                        'stroke-width',
+                        this.strokeWidth
+                    );
+
+                    circle.setAttribute(
+                        'stroke-dasharray',
+                        `${dash} ${this.circumference - dash}`
+                    );
+
+                    circle.setAttribute(
+                        'stroke-dashoffset',
+                        -offset
+                    );
+
+                    offset += dash;
+
+                    group.appendChild(circle);
+                });
+
+                svg.appendChild(group);
+
+                const text =
+                    document.createElementNS(svgNS, 'text');
+
+                text.setAttribute('x', center);
+                text.setAttribute('y', center);
+
+                text.setAttribute('text-anchor', 'middle');
+
+                text.setAttribute(
+                    'dominant-baseline',
+                    'middle'
+                );
+
+                text.setAttribute(
+                    'font-size',
+                    '18'
+                );
+
+                text.setAttribute(
+                    'font-weight',
+                    'bold'
+                );
+
+                text.textContent = this.centerText;
+
+                svg.appendChild(text);
+
+                return svg;
+            }
+
+            createLegend() {
+
+                const legend =
+                    document.createElement('div');
+
+                this.data.forEach((item, index) => {
+
+                    const row =
+                        document.createElement('div');
+
+                    row.className = 'legend-row';
+
+                    const color =
+                        document.createElement('div');
+
+                    color.className = 'legend-color';
+
+                    color.style.background =
+                        this.colors[index % this.colors.length];
+
+                    const percent =
+                        this.percent(item.value)
+                            .toFixed(1);
+
+                    const text =
+                        document.createElement('div');
+
+                    text.innerHTML =
+                        `<b>${item.label}</b><br>
+                     ${item.value.toLocaleString()}
+                     (${percent}%)`;
+
+                    row.appendChild(color);
+                    row.appendChild(text);
+
+                    legend.appendChild(row);
+                });
+
+                return legend;
+            }
+
+            render() {
+
+                const wrap =
+                    document.createElement('div');
+
+                wrap.className = 'chart-wrap';
+
+                wrap.appendChild(
+                    this.createSVG()
+                );
+
+                wrap.appendChild(
+                    this.createLegend()
+                );
+
+                this.container.appendChild(wrap);
+            }
+        }
+
+        /* =========================================
+           ДАННЫЕ ИЗ SQL
+        ========================================= */
+
+        /* WARP количество */
+
+        const warpCountData = [
+
+            { label: '90 белая нет', value: 15118 },
+            { label: '90 белая светостаб', value: 3546 },
+            { label: '105 белая светостаб', value: 1574 },
+            { label: '140 цветная', value: 8600 },
+            { label: '220 белая', value: 2308 }
+
         ];
-    }
 
-    total() {
+        /* WEFT количество */
 
-        return this.data.reduce(
-            (sum, item) => sum + item.value,
-            0
-        );
-    }
+        const weftCountData = [
 
-    percent(value){
+            { label: '90 белая нет', value: 1436.5 },
+            { label: '90 белая светостаб', value: 248.2 },
+            { label: '105 белая светостаб', value: 174 },
+            { label: '140 цветная', value: 302 },
+            { label: '220 белая', value: 95 }
 
-        return (
-            value / this.total()
-        ) * 100;
-    }
+        ];
 
-    createSVG(){
+        /* WARP длина */
 
-        const svgNS =
-            'http://www.w3.org/2000/svg';
+        const warpLengthData = [
 
-        const svg =
-            document.createElementNS(svgNS, 'svg');
+            { label: '90 белая нет', value: 31352358.10 },
+            { label: '90 белая светостаб', value: 6797216.59 },
+            { label: '105 белая светостаб', value: 3001372.70 },
+            { label: '140 цветная', value: 15975550.80 },
+            { label: '220 белая', value: 3795792.19 }
 
-        svg.setAttribute('width', this.size);
-        svg.setAttribute('height', this.size);
+        ];
 
-        const center = this.size / 2;
+        /* WEFT длина */
 
-        const group =
-            document.createElementNS(svgNS, 'g');
+        const weftLengthData = [
 
-        group.setAttribute(
-            'transform',
-            `rotate(-90 ${center} ${center})`
-        );
+            { label: '90 белая нет', value: 25139099.99 },
+            { label: '90 белая светостаб', value: 4644268.34 },
+            { label: '105 белая светостаб', value: 2891230.70 },
+            { label: '140 цветная', value: 15660725.28 },
+            { label: '220 белая', value: 4999656.96 }
 
-        let offset = 0;
+        ];
 
-        this.data.forEach((item, index) => {
+        /* =========================================
+           RENDER
+        ========================================= */
 
-            const percent =
-                this.percent(item.value);
+        new CircularChart({
+            container:
+                document.getElementById('warp-count'),
 
-            const dash =
-                (percent / 100) *
-                this.circumference;
+            centerText: 'Warp Qty',
 
-            const circle =
-                document.createElementNS(svgNS, 'circle');
+            data: warpCountData
+        }).render();
 
-            circle.setAttribute('cx', center);
-            circle.setAttribute('cy', center);
-            circle.setAttribute('r', this.radius);
 
-            circle.setAttribute('fill', 'none');
+        new CircularChart({
+            container:
+                document.getElementById('weft-count'),
 
-            circle.setAttribute(
-                'stroke',
-                this.colors[index % this.colors.length]
-            );
+            centerText: 'Weft Qty',
 
-            circle.setAttribute(
-                'stroke-width',
-                this.strokeWidth
-            );
+            data: weftCountData
+        }).render();
 
-            circle.setAttribute(
-                'stroke-dasharray',
-                `${dash} ${this.circumference - dash}`
-            );
 
-            circle.setAttribute(
-                'stroke-dashoffset',
-                -offset
-            );
+        new CircularChart({
+            container:
+                document.getElementById('warp-length'),
 
-            offset += dash;
+            centerText: 'Warp M',
 
-            group.appendChild(circle);
-        });
+            data: warpLengthData
+        }).render();
 
-        svg.appendChild(group);
 
-        const text =
-            document.createElementNS(svgNS, 'text');
+        new CircularChart({
+            container:
+                document.getElementById('weft-length'),
 
-        text.setAttribute('x', center);
-        text.setAttribute('y', center);
+            centerText: 'Weft M',
 
-        text.setAttribute('text-anchor', 'middle');
-
-        text.setAttribute(
-            'dominant-baseline',
-            'middle'
-        );
-
-        text.setAttribute(
-            'font-size',
-            '18'
-        );
-
-        text.setAttribute(
-            'font-weight',
-            'bold'
-        );
-
-        text.textContent = this.centerText;
-
-        svg.appendChild(text);
-
-        return svg;
-    }
-
-    createLegend(){
-
-        const legend =
-            document.createElement('div');
-
-        this.data.forEach((item, index) => {
-
-            const row =
-                document.createElement('div');
-
-            row.className = 'legend-row';
-
-            const color =
-                document.createElement('div');
-
-            color.className = 'legend-color';
-
-            color.style.background =
-                this.colors[index % this.colors.length];
-
-            const percent =
-                this.percent(item.value)
-                .toFixed(1);
-
-            const text =
-                document.createElement('div');
-
-            text.innerHTML =
-                `<b>${item.label}</b><br>
-                 ${item.value.toLocaleString()}
-                 (${percent}%)`;
-
-            row.appendChild(color);
-            row.appendChild(text);
-
-            legend.appendChild(row);
-        });
-
-        return legend;
-    }
-
-    render(){
-
-        const wrap =
-            document.createElement('div');
-
-        wrap.className = 'chart-wrap';
-
-        wrap.appendChild(
-            this.createSVG()
-        );
-
-        wrap.appendChild(
-            this.createLegend()
-        );
-
-        this.container.appendChild(wrap);
-    }
-}
-
-/* =========================================
-   ДАННЫЕ ИЗ SQL
-========================================= */
-
-/* WARP количество */
-
-const warpCountData = [
-
-    { label:'90 белая нет', value:15118 },
-    { label:'90 белая светостаб', value:3546 },
-    { label:'105 белая светостаб', value:1574 },
-    { label:'140 цветная', value:8600 },
-    { label:'220 белая', value:2308 }
-
-];
-
-/* WEFT количество */
-
-const weftCountData = [
-
-    { label:'90 белая нет', value:1436.5 },
-    { label:'90 белая светостаб', value:248.2 },
-    { label:'105 белая светостаб', value:174 },
-    { label:'140 цветная', value:302 },
-    { label:'220 белая', value:95 }
-
-];
-
-/* WARP длина */
-
-const warpLengthData = [
-
-    { label:'90 белая нет', value:31352358.10 },
-    { label:'90 белая светостаб', value:6797216.59 },
-    { label:'105 белая светостаб', value:3001372.70 },
-    { label:'140 цветная', value:15975550.80 },
-    { label:'220 белая', value:3795792.19 }
-
-];
-
-/* WEFT длина */
-
-const weftLengthData = [
-
-    { label:'90 белая нет', value:25139099.99 },
-    { label:'90 белая светостаб', value:4644268.34 },
-    { label:'105 белая светостаб', value:2891230.70 },
-    { label:'140 цветная', value:15660725.28 },
-    { label:'220 белая', value:4999656.96 }
-
-];
-
-/* =========================================
-   RENDER
-========================================= */
-
-new CircularChart({
-    container:
-        document.getElementById('warp-count'),
-
-    centerText:'Warp Qty',
-
-    data: warpCountData
-}).render();
-
-
-new CircularChart({
-    container:
-        document.getElementById('weft-count'),
-
-    centerText:'Weft Qty',
-
-    data: weftCountData
-}).render();
-
-
-new CircularChart({
-    container:
-        document.getElementById('warp-length'),
-
-    centerText:'Warp M',
-
-    data: warpLengthData
-}).render();
-
-
-new CircularChart({
-    container:
-        document.getElementById('weft-length'),
-
-    centerText:'Weft M',
-
-    data: weftLengthData
-}).render();</script>
+            data: weftLengthData
+        }).render();</script>
 </body>
 </html>
