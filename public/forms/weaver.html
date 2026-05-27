@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Производственные формы</title>
+    <link rel="stylesheet" href="../css/forms.css" />
+    <script src="../js/getDateTimeNow.js" defer></script>
+    <script src="../js/weaverForm.js" defer></script>
+</head>
+
+<body>
+    <!-- Журнал учёта выработки ткача -->
+    <div class="form-block">
+        <div class="form-title">
+            Журнал учёта выработки ткача
+        </div>
+
+        <form id="form" class="form-grid">
+            <div class="label">ФИО</div>
+            <input id="fio" type="text" disabled>
+
+            <div class="label">Дата</div>
+            <input id="DateTime" type="datetime-local" disabled>
+
+            <div class="label">Смена</div>
+            <input id="smena" type="number" disabled>
+
+            <div class="label">Номер станка</div>
+            <input id="loom" type="number">
+
+            <div class="label">Технологическая карта (артикул)</div>
+            <input id="recipe" type="number">
+
+            <div class="label">Выработка, погонные метры</div>
+            <input id="product" type="number">
+            <div class="label">Отправить</div>
+
+            <button id="btn" class="btn" type="submit" style="padding: 9px; white-space: pre-wrap; cursor: pointer;"></button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Производственные формы</title>
+    <link rel="stylesheet" href="../css/forms.css" />
+    <script src="../js/getDateTimeNow.js" defer></script>
+    <script src="../js/operatorExtrusionForm.js" defer></script>
+</head>
+
+<body>
+    <!-- Журнал учёта выработки машиниста -->
+    <div class="form-block">
+        <div class="form-title">
+            Журнал учёта выработки машиниста
+        </div>
+
+        <form id="form" class="form-grid">
+            <div class="label">ФИО</div>
+            <input id="fio" type="text" disabled>
+
+            <div class="label">Дата</div>
+            <input id="DateTime" type="date" disabled>
+
+            <div class="label">Смена</div>
+            <input id="smena" type="text" disabled>
+
+            <div class="label">Агрегат</div>
+            <input id="extrusion" type="text">
+
+            <div class="label">Текс</div>
+            <input id="density" type="text">
+
+            <div class="label">Тип ленты</div>
+            <div>
+                <label>
+                    <input id="type1" type="radio" name="options" value="1">
+                    Основа
+                </label>
+                <label>
+                    <input id="type2" type="radio" name="options" value="2">
+                    Уток
+                </label>
+            </div>
+            <div class="label">Плановый вес, кг</div>
+            <input id="planWeight" type="number" disabled>
+
+            <div class="label">Фактический вес, кг</div>
+            <input id="actWeight" type="number">
+
+            <div class="label">Отходы, кг</div>
+            <input id="slop" type="number">
+
+            <div class="label">Время простоев, мин</div>
+            <input id="time" type="number">
+
+            <div class="label">Причина простоя</div>
+            <textarea id="text"></textarea>
+
+            <div class="label">Отправить</div>
+            <button id="btn" class="btn" type="submit" style="padding: 9px; white-space: pre-wrap; cursor: pointer;"></button>
+        </form>
+    </div>
+</body>
+</html>
