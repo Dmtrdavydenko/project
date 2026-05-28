@@ -13,7 +13,7 @@ button {
     cursor:pointer;
 }
 
-button {
+/*button {
     position: relative;
     overflow: visible;
     padding: 14px 28px;
@@ -23,7 +23,7 @@ button {
     color: white;
     font-size: 16px;
     cursor: pointer;
-}
+}*/
 
     /* волна */
     button::after {
