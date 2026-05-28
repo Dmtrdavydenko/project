@@ -9,7 +9,9 @@
     border: 0.7px dashed black;
     padding: 7px;
 }
-
+button {
+    cursor:pointer;
+}
 /*.select-button {
     padding: 10px;
     font-size: 14px;
