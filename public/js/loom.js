@@ -1776,6 +1776,7 @@ async function loadAndRenderButtons(field = "loom") {
                     btn.textContent = key;
                     btn.addEventListener('click', () => {
                         allNumbers.forEach(i => i.button?.classList.remove('active-loom'));
+                        allNumbers.forEach(i => i.buttonWarpWeft?.classList.remove('active-loom'));
                         items.forEach(i => i.button.classList.add('active-loom'));
                     });
                     container.appendChild(btn);
@@ -1806,6 +1807,7 @@ async function loadAndRenderButtons(field = "loom") {
             btn.addEventListener('click', () => {
                 // Сначала снимаем выделение со всех warp/weft кнопок через объекты
                 allNumbers.forEach(i => i.buttonWarpWeft?.classList.remove('active-loom'));
+                allNumbers.forEach(i => i.button?.classList.remove('active-loom'));
 
                 // Находим все warp/weft кнопки, используемые в этих loom
                 const relatedWarpWeftButtons = new Set();
