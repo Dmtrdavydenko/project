@@ -38,6 +38,7 @@ const functionDB = {
     "getDay": getDay,
     "getTapeKnowledge": getTapeKnowledge,
     "getUseTape": getUseTape,
+    "getLoomsRecipe": getLoomsRecipe,
 }
 
 const ENCRYPTION_KEY = process.env.HH_ENCRYPTION_KEY;
@@ -1669,6 +1670,22 @@ async function getUseTape() {
     let connection = null;
     try {
         const sql = loadSQL("./src/sql/looms/useTape.sql");
+        connection = await getAwaitConnect();
+        //console.log(data);
+        const [rows] = await connection.execute(sql);
+        return rows;
+    } catch (error) {
+        console.error('Ошибка:', error);
+        throw error;
+    } finally {
+        if (connection) connection.release();
+        console.log("Соединение возвращено.");
+    }
+}
+async function getLoomsRecipe() {
+    let connection = null;
+    try {
+        const sql = loadSQL("./src/sql/looms/getLoomsRecipe.sql");
         connection = await getAwaitConnect();
         //console.log(data);
         const [rows] = await connection.execute(sql);

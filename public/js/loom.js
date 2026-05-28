@@ -1736,7 +1736,8 @@ function createButtonsInBlockFromArray(field, containerId, numbersArray, reverse
 let allNumbers
 async function loadAndRenderButtons(field = "loom") {
     try {
-        allNumbers = getDataT();
+        //allNumbers = getDataT();
+        allNumbers = await request("getLoomsRecipe");
 
         for (const item of allNumbers) {
             for (const key in item) {
