@@ -1985,7 +1985,7 @@ async function sendUpdateTextileId(update) {
 
         centerText: 'Warp Qty',
 
-        data: warpCountData
+        data: statWarpCountData
     }).render();
 
 
@@ -1995,7 +1995,7 @@ async function sendUpdateTextileId(update) {
 
         centerText: 'Weft Qty',
 
-        data: weftCountData
+        data: statWeftCountData
     }).render();
 
 
@@ -2005,7 +2005,7 @@ async function sendUpdateTextileId(update) {
 
         centerText: 'Warp M',
 
-        data: warpLengthData
+        data: statWarpLengthData
     }).render();
 
 
@@ -2015,7 +2015,7 @@ async function sendUpdateTextileId(update) {
 
         centerText: 'Weft M',
 
-        data: weftLengthData
+        data: statWeftLengthData
     }).render();
 
     // Запускаем загрузку и рендер кнопок
