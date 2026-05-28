@@ -1784,8 +1784,8 @@ async function loadAndRenderButtons(field = "loom") {
             document.body.appendChild(container);
         };
 
-        document.querySelector(".container-grid-warp") || createSection(warpMap, 'container-grid-warp');
-        document.querySelector(".container-grid-weft") || createSection(weftMap, 'container-grid-weft');
+        document.querySelector("grid-warp") || createSection(warpMap, 'grid-warp');
+        document.querySelector("grid-weft") || createSection(weftMap, 'grid-weft');
 
         // Группировка по loom
         const loomGroups = groupBy(allNumbers, i => i.loom);
