@@ -538,8 +538,8 @@ async function sqlQuery(sqlQueryString) {
             throw new Error(`Некорректный JSON от сервера: ${responseText}`);
         }
         console.log(result[0]);
-        console.log(result[0].filter(i => i.yarn_type === "warp"));
-        console.log(result[0].filter(i => i.yarn_type === "weft"));
+        console.log(result[0].filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_threads_width })));
+        console.log(result[0].filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_threads_width })));
         await render(result[0]);
 
     } catch (error) {

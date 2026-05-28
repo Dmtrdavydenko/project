@@ -1973,6 +1973,10 @@ async function sendUpdateTextileId(update) {
 };
 
 (async () => {
+    const dataTape = request("getUseTape");
+    const statWarp = dataTape.filter(i => i.yarn_type === "warp");
+    const statWeft = dataTape.filter(i => i.yarn_type === "weft");
+
     // Запускаем загрузку и рендер кнопок
     const looms_fabric_recipe = await loadAndRenderButtons();
     allNumbersLoom = looms_fabric_recipe;
