@@ -161,1564 +161,1564 @@ function getLocalDateTimeForMySQL() {
  */
 function getDataT() {
     return [
-    {
-        "cnt": 1,
-        "loom": 1,
-        "yarn_type": "warp",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "1150.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 1,
-        "yarn_type": "weft",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "39.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 2,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 2,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 3,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "260.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 3,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 4,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 4,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 5,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "312.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 5,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "36.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 6,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 6,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 7,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "288.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 7,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 8,
-        "yarn_type": "warp",
-        "tape_density": "220",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "1154.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 8,
-        "yarn_type": "weft",
-        "tape_density": "220",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "47.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 9,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 9,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 10,
-        "yarn_type": "warp",
-        "tape_density": "112",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "1150.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 10,
-        "yarn_type": "weft",
-        "tape_density": "112",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "36.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 11,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "378.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 11,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "38.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 12,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "422.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 12,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "19.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 12,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "19.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 13,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 13,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 14,
-        "yarn_type": "warp",
-        "tape_density": "170",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "1374.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 14,
-        "yarn_type": "weft",
-        "tape_density": "220",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "38.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 15,
-        "yarn_type": "warp",
-        "tape_density": "105",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "338.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 15,
-        "yarn_type": "weft",
-        "tape_density": "105",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 16,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "404.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 16,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 17,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 17,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 18,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 18,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 19,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 19,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 20,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "414.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 20,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "37.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 21,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 21,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 22,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 22,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 23,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 23,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 24,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "260.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 24,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 25,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "288.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 25,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 26,
-        "yarn_type": "warp",
-        "tape_density": "105",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "338.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 26,
-        "yarn_type": "weft",
-        "tape_density": "105",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 27,
-        "yarn_type": "warp",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "1150.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 27,
-        "yarn_type": "weft",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "39.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 28,
-        "yarn_type": "warp",
-        "tape_density": "78",
-        "tape_color": "зелёная",
-        "tape_additive": "нет",
-        "quantity": "290.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 28,
-        "yarn_type": "warp",
-        "tape_density": "78",
-        "tape_color": "прозрачная",
-        "tape_additive": "нет",
-        "quantity": "72.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 28,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "прозрачная",
-        "tape_additive": "нет",
-        "quantity": "39.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 29,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 29,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 30,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 30,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 31,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 31,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 32,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "288.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 32,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "35.3"
-    },
-    {
-        "cnt": 1,
-        "loom": 33,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 33,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 34,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "312.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 34,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "36.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 35,
-        "yarn_type": "warp",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "1150.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 35,
-        "yarn_type": "weft",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "39.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 36,
-        "yarn_type": "warp",
-        "tape_density": "220",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "1154.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 36,
-        "yarn_type": "weft",
-        "tape_density": "220",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "47.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 37,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "260.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 37,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 38,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 38,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 39,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 39,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 40,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "288.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 40,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 41,
-        "yarn_type": "warp",
-        "tape_density": "170",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "1374.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 41,
-        "yarn_type": "weft",
-        "tape_density": "220",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "38.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 42,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "288.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 42,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 43,
-        "yarn_type": "warp",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "346.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 43,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "36.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 44,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 44,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 45,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 45,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 46,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 46,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 47,
-        "yarn_type": "warp",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "1150.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 47,
-        "yarn_type": "weft",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "39.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 48,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 48,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 49,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "288.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 49,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 50,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "450.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 50,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "38.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 51,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "254.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 51,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "35.2"
-    },
-    {
-        "cnt": 1,
-        "loom": 52,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 52,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 53,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "260.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 53,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 54,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "360.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 54,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 55,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "260.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 55,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 56,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "312.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 56,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "36.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 57,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 57,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 58,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "312.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 58,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "36.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 59,
-        "yarn_type": "warp",
-        "tape_density": "112",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "1150.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 59,
-        "yarn_type": "weft",
-        "tape_density": "112",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "36.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 60,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "288.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 60,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 61,
-        "yarn_type": "warp",
-        "tape_density": "78",
-        "tape_color": "зелёная",
-        "tape_additive": "нет",
-        "quantity": "290.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 61,
-        "yarn_type": "warp",
-        "tape_density": "78",
-        "tape_color": "прозрачная",
-        "tape_additive": "нет",
-        "quantity": "72.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 61,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "прозрачная",
-        "tape_additive": "нет",
-        "quantity": "39.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 62,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "260.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 62,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 63,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "312.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 63,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "36.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 64,
-        "yarn_type": "warp",
-        "tape_density": "110",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "392.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 64,
-        "yarn_type": "weft",
-        "tape_density": "110",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 65,
-        "yarn_type": "warp",
-        "tape_density": "110",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "392.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 65,
-        "yarn_type": "weft",
-        "tape_density": "110",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 66,
-        "yarn_type": "warp",
-        "tape_density": "110",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "392.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 66,
-        "yarn_type": "weft",
-        "tape_density": "110",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 67,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 67,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 68,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 68,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 69,
-        "yarn_type": "warp",
-        "tape_density": "105",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "338.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 69,
-        "yarn_type": "weft",
-        "tape_density": "105",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 70,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 70,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 71,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 71,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 72,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "282.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 72,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "35.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 87,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "432.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 87,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "36.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 88,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "348.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 88,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "38.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 89,
-        "yarn_type": "warp",
-        "tape_density": "105",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "280.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 89,
-        "yarn_type": "weft",
-        "tape_density": "105",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "34.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 90,
-        "yarn_type": "warp",
-        "tape_density": "105",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "280.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 90,
-        "yarn_type": "weft",
-        "tape_density": "105",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "34.5"
-    },
-    {
-        "cnt": 1,
-        "loom": 91,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "428.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 91,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 92,
-        "yarn_type": "warp",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "1000.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 92,
-        "yarn_type": "weft",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "36.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 93,
-        "yarn_type": "warp",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "408.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 93,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "39.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 94,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "378.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 94,
-        "yarn_type": "weft",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "нет",
-        "quantity": "38.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 95,
-        "yarn_type": "warp",
-        "tape_density": "90",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "428.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 95,
-        "yarn_type": "weft",
-        "tape_density": "78",
-        "tape_color": "белая",
-        "tape_additive": "светостаб",
-        "quantity": "35.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 96,
-        "yarn_type": "warp",
-        "tape_density": "64",
-        "tape_color": "оранжевая",
-        "tape_additive": "нет",
-        "quantity": "710.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 96,
-        "yarn_type": "weft",
-        "tape_density": "64",
-        "tape_color": "оранжевая",
-        "tape_additive": "нет",
-        "quantity": "37.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 97,
-        "yarn_type": "warp",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "1000.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 97,
-        "yarn_type": "weft",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "36.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 98,
-        "yarn_type": "warp",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "1000.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 98,
-        "yarn_type": "weft",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "36.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 99,
-        "yarn_type": "warp",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "1000.0"
-    },
-    {
-        "cnt": 1,
-        "loom": 99,
-        "yarn_type": "weft",
-        "tape_density": "140",
-        "tape_color": "цветная",
-        "tape_additive": "нет",
-        "quantity": "36.0"
-    }
-];
+        {
+            "cnt": 1,
+            "loom": 1,
+            "yarn_type": "warp",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "1150.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 1,
+            "yarn_type": "weft",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "39.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 2,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 2,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 3,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "260.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 3,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 4,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 4,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 5,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "312.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 5,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "36.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 6,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 6,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 7,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "288.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 7,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 8,
+            "yarn_type": "warp",
+            "tape_density": "220",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "1154.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 8,
+            "yarn_type": "weft",
+            "tape_density": "220",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "47.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 9,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 9,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 10,
+            "yarn_type": "warp",
+            "tape_density": "112",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "1150.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 10,
+            "yarn_type": "weft",
+            "tape_density": "112",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "36.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 11,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "378.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 11,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "38.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 12,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "422.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 12,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "19.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 12,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "19.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 13,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 13,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 14,
+            "yarn_type": "warp",
+            "tape_density": "170",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "1374.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 14,
+            "yarn_type": "weft",
+            "tape_density": "220",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "38.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 15,
+            "yarn_type": "warp",
+            "tape_density": "105",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "338.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 15,
+            "yarn_type": "weft",
+            "tape_density": "105",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 16,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "404.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 16,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 17,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 17,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 18,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 18,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 19,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 19,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 20,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "414.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 20,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "37.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 21,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 21,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 22,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 22,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 23,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 23,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 24,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "260.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 24,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 25,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "288.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 25,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 26,
+            "yarn_type": "warp",
+            "tape_density": "105",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "338.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 26,
+            "yarn_type": "weft",
+            "tape_density": "105",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 27,
+            "yarn_type": "warp",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "1150.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 27,
+            "yarn_type": "weft",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "39.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 28,
+            "yarn_type": "warp",
+            "tape_density": "78",
+            "tape_color": "зелёная",
+            "tape_additive": "нет",
+            "quantity": "290.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 28,
+            "yarn_type": "warp",
+            "tape_density": "78",
+            "tape_color": "прозрачная",
+            "tape_additive": "нет",
+            "quantity": "72.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 28,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "прозрачная",
+            "tape_additive": "нет",
+            "quantity": "39.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 29,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 29,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 30,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 30,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 31,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 31,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 32,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "288.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 32,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "35.3"
+        },
+        {
+            "cnt": 1,
+            "loom": 33,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 33,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 34,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "312.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 34,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "36.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 35,
+            "yarn_type": "warp",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "1150.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 35,
+            "yarn_type": "weft",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "39.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 36,
+            "yarn_type": "warp",
+            "tape_density": "220",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "1154.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 36,
+            "yarn_type": "weft",
+            "tape_density": "220",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "47.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 37,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "260.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 37,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 38,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 38,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 39,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 39,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 40,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "288.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 40,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 41,
+            "yarn_type": "warp",
+            "tape_density": "170",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "1374.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 41,
+            "yarn_type": "weft",
+            "tape_density": "220",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "38.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 42,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "288.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 42,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 43,
+            "yarn_type": "warp",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "346.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 43,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "36.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 44,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 44,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 45,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 45,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 46,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 46,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 47,
+            "yarn_type": "warp",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "1150.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 47,
+            "yarn_type": "weft",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "39.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 48,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 48,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 49,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "288.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 49,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 50,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "450.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 50,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "38.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 51,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "254.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 51,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "35.2"
+        },
+        {
+            "cnt": 1,
+            "loom": 52,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 52,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 53,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "260.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 53,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 54,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "360.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 54,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 55,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "260.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 55,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 56,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "312.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 56,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "36.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 57,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 57,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 58,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "312.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 58,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "36.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 59,
+            "yarn_type": "warp",
+            "tape_density": "112",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "1150.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 59,
+            "yarn_type": "weft",
+            "tape_density": "112",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "36.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 60,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "288.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 60,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 61,
+            "yarn_type": "warp",
+            "tape_density": "78",
+            "tape_color": "зелёная",
+            "tape_additive": "нет",
+            "quantity": "290.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 61,
+            "yarn_type": "warp",
+            "tape_density": "78",
+            "tape_color": "прозрачная",
+            "tape_additive": "нет",
+            "quantity": "72.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 61,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "прозрачная",
+            "tape_additive": "нет",
+            "quantity": "39.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 62,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "260.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 62,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 63,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "312.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 63,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "36.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 64,
+            "yarn_type": "warp",
+            "tape_density": "110",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "392.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 64,
+            "yarn_type": "weft",
+            "tape_density": "110",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 65,
+            "yarn_type": "warp",
+            "tape_density": "110",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "392.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 65,
+            "yarn_type": "weft",
+            "tape_density": "110",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 66,
+            "yarn_type": "warp",
+            "tape_density": "110",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "392.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 66,
+            "yarn_type": "weft",
+            "tape_density": "110",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 67,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 67,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 68,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 68,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 69,
+            "yarn_type": "warp",
+            "tape_density": "105",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "338.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 69,
+            "yarn_type": "weft",
+            "tape_density": "105",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 70,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 70,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 71,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 71,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 72,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "282.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 72,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "35.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 87,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "432.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 87,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "36.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 88,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "348.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 88,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "38.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 89,
+            "yarn_type": "warp",
+            "tape_density": "105",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "280.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 89,
+            "yarn_type": "weft",
+            "tape_density": "105",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "34.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 90,
+            "yarn_type": "warp",
+            "tape_density": "105",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "280.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 90,
+            "yarn_type": "weft",
+            "tape_density": "105",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "34.5"
+        },
+        {
+            "cnt": 1,
+            "loom": 91,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "428.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 91,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 92,
+            "yarn_type": "warp",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "1000.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 92,
+            "yarn_type": "weft",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "36.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 93,
+            "yarn_type": "warp",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "408.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 93,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "39.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 94,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "378.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 94,
+            "yarn_type": "weft",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "нет",
+            "quantity": "38.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 95,
+            "yarn_type": "warp",
+            "tape_density": "90",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "428.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 95,
+            "yarn_type": "weft",
+            "tape_density": "78",
+            "tape_color": "белая",
+            "tape_additive": "светостаб",
+            "quantity": "35.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 96,
+            "yarn_type": "warp",
+            "tape_density": "64",
+            "tape_color": "оранжевая",
+            "tape_additive": "нет",
+            "quantity": "710.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 96,
+            "yarn_type": "weft",
+            "tape_density": "64",
+            "tape_color": "оранжевая",
+            "tape_additive": "нет",
+            "quantity": "37.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 97,
+            "yarn_type": "warp",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "1000.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 97,
+            "yarn_type": "weft",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "36.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 98,
+            "yarn_type": "warp",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "1000.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 98,
+            "yarn_type": "weft",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "36.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 99,
+            "yarn_type": "warp",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "1000.0"
+        },
+        {
+            "cnt": 1,
+            "loom": 99,
+            "yarn_type": "weft",
+            "tape_density": "140",
+            "tape_color": "цветная",
+            "tape_additive": "нет",
+            "quantity": "36.0"
+        }
+    ];
 }
 
 
@@ -1762,7 +1762,7 @@ async function loadAndRenderButtons(field = "loom") {
         const weftMap = groupBy(allNumbers.filter(i => i.yarn_type === 'weft'), i => `${i.tape_density} ${i.tape_color} ${i.tape_additive}`);
 
         const createSection = (map, containerClass) => {
-            const container = document.querySelector("."+containerClass) || document.createElement('div');
+            const container = document.querySelector("." + containerClass) || document.createElement('div');
             //container.innerHTML = '';
 
             container.classList.add(containerClass);
@@ -1974,8 +1974,49 @@ async function sendUpdateTextileId(update) {
 
 (async () => {
     const dataTape = request("getUseTape");
-    const statWarp = dataTape.filter(i => i.yarn_type === "warp");
-    const statWeft = dataTape.filter(i => i.yarn_type === "weft");
+    const statWarpCountData = dataTape.filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_threads_width }));
+    const statWeftCountData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_threads_width }));
+    const statWarpLengthData = dataTape.filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_consumption_shift }));
+    const statWeftLengthData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_consumption_shift }));
+
+    new CircularChart({
+        container:
+            document.getElementById('warp-count'),
+
+        centerText: 'Warp Qty',
+
+        data: warpCountData
+    }).render();
+
+
+    new CircularChart({
+        container:
+            document.getElementById('weft-count'),
+
+        centerText: 'Weft Qty',
+
+        data: weftCountData
+    }).render();
+
+
+    new CircularChart({
+        container:
+            document.getElementById('warp-length'),
+
+        centerText: 'Warp M',
+
+        data: warpLengthData
+    }).render();
+
+
+    new CircularChart({
+        container:
+            document.getElementById('weft-length'),
+
+        centerText: 'Weft M',
+
+        data: weftLengthData
+    }).render();
 
     // Запускаем загрузку и рендер кнопок
     const looms_fabric_recipe = await loadAndRenderButtons();
@@ -2393,6 +2434,19 @@ async function sendUpdateTextileId(update) {
     document.body.append(inputSS);
     document.body.append(div);
     document.body.append(buttonSend);
+
+    const warpCount = document.createElement("div");
+    warpCount.id = "warp-count"
+    const weftCount = document.createElement("div");
+    weftCount.id = "weft-count"
+    const warpLength = document.createElement("div");
+    warpLength.id = "warp-length"
+    const weftLength = document.createElement("div");
+    weftLength.id = "warp-length"
+    document.body.append(warpCount);
+    document.body.append(weftCount);
+    document.body.append(warpLength);
+    document.body.append(weftLength);
 
 
 
