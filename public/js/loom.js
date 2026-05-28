@@ -1735,10 +1735,11 @@ function createButtonsInBlockFromArray(field, containerId, numbersArray, reverse
 }
 let allNumbers
 async function loadAndRenderButtons(field = "loom") {
+    console.log("init");
     try {
         //allNumbers = getDataT();
         allNumbers = await request("getLoomsRecipe");
-
+        console.log({ allNumbers: allNumbers});
         for (const item of allNumbers) {
             for (const key in item) {
                 if (!isNaN(item[key]) && item[key] !== '') {
@@ -1888,8 +1889,6 @@ function update(field = "loom") {
         blockIndex++;
     });
     createButtonsInBlockFromArray(field, 'footerBlock', blocksNumbers['footerBlock'], true);
-
-
 }
 
 
