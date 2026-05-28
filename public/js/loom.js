@@ -1979,9 +1979,12 @@ async function sendUpdateTextileId(update) {
     const statWarpLengthData = dataTape.filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_consumption_shift }));
     const statWeftLengthData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_consumption_shift }));
 
+    const warpCount = document.createElement("div");
+    const weftCount = document.createElement("div");
+    const warpLength = document.createElement("div");
+    const weftLength = document.createElement("div");
     new CircularChart({
-        container:
-            document.getElementById('warp-count'),
+        container: warpCount,
 
         centerText: 'Warp Qty',
 
@@ -1990,8 +1993,7 @@ async function sendUpdateTextileId(update) {
 
 
     new CircularChart({
-        container:
-            document.getElementById('weft-count'),
+        container: weftCount,
 
         centerText: 'Weft Qty',
 
@@ -2000,8 +2002,7 @@ async function sendUpdateTextileId(update) {
 
 
     new CircularChart({
-        container:
-            document.getElementById('warp-length'),
+        container: warpLength,
 
         centerText: 'Warp M',
 
@@ -2010,8 +2011,7 @@ async function sendUpdateTextileId(update) {
 
 
     new CircularChart({
-        container:
-            document.getElementById('weft-length'),
+        container: weftLength,
 
         centerText: 'Weft M',
 
@@ -2435,14 +2435,7 @@ async function sendUpdateTextileId(update) {
     document.body.append(div);
     document.body.append(buttonSend);
 
-    const warpCount = document.createElement("div");
-    warpCount.id = "warp-count"
-    const weftCount = document.createElement("div");
-    weftCount.id = "weft-count"
-    const warpLength = document.createElement("div");
-    warpLength.id = "warp-length"
-    const weftLength = document.createElement("div");
-    weftLength.id = "warp-length"
+
     document.body.append(warpCount);
     document.body.append(weftCount);
     document.body.append(warpLength);
