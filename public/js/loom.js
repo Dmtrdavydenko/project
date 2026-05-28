@@ -1781,7 +1781,7 @@ async function loadAndRenderButtons(field = "loom") {
                     items.forEach(i => i.button = btn);
                     items.forEach(i => i.buttonWarpWeft = btn);
                 });
-            document.body.appendChild(container);
+            //document.body.appendChild(container);
         };
 
         document.querySelector("grid-warp") || createSection(warpMap, 'grid-warp');
