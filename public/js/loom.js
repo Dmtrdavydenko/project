@@ -1974,10 +1974,10 @@ async function sendUpdateTextileId(update) {
 
 (async () => {
     const dataTape = await request("getUseTape");
-    const statWarpCountData = dataTape.filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_threads_width }));
-    const statWeftCountData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_threads_width }));
-    const statWarpLengthData = dataTape.filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_consumption_shift }));
-    const statWeftLengthData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_consumption_shift }));
+    const statWarpCountData = dataTape.filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_threads_width) }));
+    const statWeftCountData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_threads_10cm) }));
+    const statWarpLengthData = dataTape.filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_consumption_shift) }));
+    const statWeftLengthData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_consumption_shift) }));
 
     const warpCount = document.createElement("div");
     const weftCount = document.createElement("div");
