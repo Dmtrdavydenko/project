@@ -1978,13 +1978,19 @@ async function sendUpdateTextileId(update) {
     const statWeftCountData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_threads_10cm) }));
     const statWarpLengthData = dataTape.filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_consumption_shift) }));
     const statWeftLengthData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_consumption_shift) }));
-
+    console.log({
+        countWarp: statWarpCountData,
+        countWeft: statWeftCountData,
+        lengthWarp: statWarpLengthData,
+        lengthWeft: statWeftLengthData
+    })
+    
     const warpCount = document.createElement("div");
     const weftCount = document.createElement("div");
     const warpLength = document.createElement("div");
     const weftLength = document.createElement("div");
     new CircularChart({
-        container: warpCount,
+        container: document.getElementById('warp-count'),
 
         centerText: 'Warp Qty',
 
@@ -1993,7 +1999,7 @@ async function sendUpdateTextileId(update) {
 
 
     new CircularChart({
-        container: weftCount,
+        container: document.getElementById('weft-count'),
 
         centerText: 'Weft Qty',
 
@@ -2002,7 +2008,7 @@ async function sendUpdateTextileId(update) {
 
 
     new CircularChart({
-        container: warpLength,
+        container: document.getElementById('warp-length'),
 
         centerText: 'Warp M',
 
@@ -2011,7 +2017,7 @@ async function sendUpdateTextileId(update) {
 
 
     new CircularChart({
-        container: weftLength,
+        container: document.getElementById('weft-length'),
 
         centerText: 'Weft M',
 

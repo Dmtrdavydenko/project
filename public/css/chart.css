@@ -1,9 +1,46 @@
 body {
     font-family: Arial;
-    background: #f4f4f4;
-    padding: 40px;
+    background: #f3f4f6;
+    margin: 0;
+    padding: 30px;
 }
 
-.chart-legend {
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.08);
+}
+
+    .card h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+
+.chart-wrap {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
     font-size: 14px;
+}
+
+.legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
 }
