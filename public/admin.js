@@ -538,6 +538,8 @@ async function sqlQuery(sqlQueryString) {
             throw new Error(`Некорректный JSON от сервера: ${responseText}`);
         }
         console.log(result[0]);
+        console.log(result[0].filter(i => i.yarn_type === "warp"));
+        console.log(result[0].filter(i => i.yarn_type === "weft"));
         await render(result[0]);
 
     } catch (error) {
