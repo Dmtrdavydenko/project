@@ -2751,7 +2751,7 @@ server.on("request", (req, res) => {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
         const authUrl = `https://hh.ru/oauth/authorize?response_type=code&client_id=${process.env.HH_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.HH_REDIRECT_URI)}&state=123`;
         res.end(`
-      <html>
+        <html>
         <head><title>HH.ru OAuth на Node.js</title></head>
         <body>
           <h1>HH.ru OAuth (чистый Node.js)</h1>
@@ -2835,7 +2835,12 @@ server.on("request", (req, res) => {
             if (pathname === "/hh.json") {
                 filePath = path.join(process.cwd(), "/public/models", pathname);
             }
-
+            if (pathname === "/authentication") {
+                filePath = path.join(process.cwd(), "/public/forms", pathname);
+            }
+            if (pathname === "/home") {
+                filePath = path.join(process.cwd(), "/public/forms", "weaver");
+            }
             //if (pathname === "/n-n.html" || pathname === "/nnstyle.css" || pathname === "nn2-1.js" || pathname === "app.js") {
             //    filePath = path.join(process.cwd(), "/public/models", pathname);
             //}
@@ -2999,6 +3004,15 @@ server.on("request", (req, res) => {
                         profile: profile
                     }));
 
+                    let success = true;
+                    if (success) {
+                        // редирект на home
+                        res.writeHead(302, {
+                            Location: '/home'
+                        });
+
+                        return res.end();
+                    }
 
                     const connection = await getAwaitConnect();
                     const sql = loadSQL("./src/sql/endpoint/insert.sql");

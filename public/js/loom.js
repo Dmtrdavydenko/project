@@ -104,12 +104,7 @@ const rightBlocks = ['rightBottom', 'rightThird', 'rightSecond', 'rightTop'];
 const leftBlocks = ['leftTop', 'leftSecond', 'leftThird', 'leftBottom'];
 const totalBlocks = rightBlocks.length + leftBlocks.length; // 8
 
-/**
- * Создаёт кнопки в контейнере из массива объектов с учётом реверса
- * @param {string} containerId - ID контейнера для кнопок
- * @param {Array} numbersArray - Массив объектов с полем textile_number
- * @param {boolean} reverse - Нужно ли реверсировать порядок кнопок
- */
+
 
 const state = [];
 class LoomsRow {
@@ -1726,11 +1721,31 @@ function createButtonsInBlockFromArray(field, containerId, numbersArray, reverse
     const container = document.getElementById(containerId);
     //container.innerHTML = '';
     // Копируем массив и, если нужно, переворачиваем порядок
+    console.log(numbersArray);
     const arr = reverse ? [...numbersArray].reverse() : numbersArray;
     arr.forEach(item => {
         item.button.textContent = item[field];
         item.button.addEventListener("click", handleClickBtn);
         container.appendChild(item.button);
+    });
+}
+function updateButtonsInBlockFromArray(field, containerId, numbersArray, reverse = false) {
+    const container = document.getElementById(containerId);
+    //container.innerHTML = '';
+    // Копируем массив и, если нужно, переворачиваем порядок
+    console.log({ numbersArray, field });
+    const arr = reverse ? [...numbersArray].reverse() : numbersArray;
+    arr.forEach(item => {
+        let str = item.select[field] && typeof item.select[field] === "object"
+            ? Object.entries(item.select[field])
+                .map(([key, value]) => `${value}`)
+                //.map(([key, value]) => `${key}:${value}`)
+                //.join("<span>/<span>")
+                .join("<hr>")
+            : item.select[field];
+
+        item.button.innerHTML = str;
+        item.button.title = field === "loom" ? "loom" : "warp\nweft";
     });
 }
 let allNumbers
@@ -1739,7 +1754,7 @@ async function loadAndRenderButtons(field = "loom") {
     try {
         //allNumbers = getDataT();
         allNumbers = await request("getLoomsRecipe");
-        console.log({ allNumbers: allNumbers});
+        console.log({ allNumbers: allNumbers });
         for (const item of allNumbers) {
             for (const key in item) {
                 if (!isNaN(item[key]) && item[key] !== '') {
@@ -1862,16 +1877,65 @@ async function loadAndRenderButtons(field = "loom") {
     }
 }
 let allNumbersLoom;
+let group = [];
+let keyFn = i => i.loom;
+async function ini() {
+    allNumbers.forEach(i => {
+        const key = keyFn(i);
+
+        // ищем объект по key
+        let obj = group.find(x => x.select.loom === key);
+
+        // если нет — создаём
+        if (!obj) {
+            obj = {
+                button: i.button,
+                select: {
+                    loom: key,
+                    tape_density: {},
+                    tape_quantity: {},
+                    tape_color: {},
+                    tape_additive: {}
+                }
+            };
+
+            group.push(obj);
+        }
+
+        const select = obj.select;
+
+        // tape_density
+        select.tape_density[i.yarn_type] = select.tape_density[i.yarn_type]
+            ? select.tape_density[i.yarn_type] + " " + i.tape_density
+            : i.tape_density;
+
+        // quantity
+        select.tape_quantity[i.yarn_type] = select.tape_quantity[i.yarn_type]
+            ? select.tape_quantity[i.yarn_type] + " " + i.quantity
+            : i.quantity;
+
+        // color
+        select.tape_color[i.yarn_type] = select.tape_color[i.yarn_type]
+            ? select.tape_color[i.yarn_type] + " " + i.tape_color
+            : i.tape_color;
+
+        // additive
+        select.tape_additive[i.yarn_type] = select.tape_additive[i.yarn_type]
+            ? select.tape_additive[i.yarn_type] + " " + i.tape_additive
+            : i.tape_additive;
+    });
+}
+
 function update(field = "loom") {
 
     const requiredCount = buttonsPerBlock * totalBlocks + 13;
-    if (allNumbersLoom.length < requiredCount) {
+    if (group.length < requiredCount) {
         console.error(`Недостаточно номеров в базе. Требуется минимум ${requiredCount}.`);
         return;
     }
-
-    const blocksNumbersArray = allNumbersLoom.slice(0, buttonsPerBlock * totalBlocks);
-    const footerNumbers = allNumbersLoom.slice(buttonsPerBlock * totalBlocks, requiredCount);
+    console.log(group);
+    const blocksNumbersArray = group.slice(0, buttonsPerBlock * totalBlocks);
+    const footerNumbers = group.slice(buttonsPerBlock * totalBlocks, requiredCount);
 
     const blocksNumbers = {};
     [...rightBlocks, ...leftBlocks].forEach((blockId, i) => {
@@ -1883,14 +1947,14 @@ function update(field = "loom") {
     // Создаём кнопки с реверсом
     let blockIndex = 1;
     rightBlocks.forEach(blockId => {
-        createButtonsInBlockFromArray(field, blockId, blocksNumbers[blockId], blockIndex % 2 === 1 || blockIndex === totalBlocks);
+        updateButtonsInBlockFromArray(field, blockId, blocksNumbers[blockId], blockIndex % 2 === 1 || blockIndex === totalBlocks);
         blockIndex++;
     });
     leftBlocks.forEach(blockId => {
-        createButtonsInBlockFromArray(field, blockId, blocksNumbers[blockId], blockIndex % 2 === 1 || blockIndex === totalBlocks);
+        updateButtonsInBlockFromArray(field, blockId, blocksNumbers[blockId], blockIndex % 2 === 1 || blockIndex === totalBlocks);
         blockIndex++;
     });
-    createButtonsInBlockFromArray(field, 'footerBlock', blocksNumbers['footerBlock'], true);
+    updateButtonsInBlockFromArray(field, 'footerBlock', blocksNumbers['footerBlock'], true);
 }
 
 
@@ -1986,7 +2050,7 @@ async function sendUpdateTextileId(update) {
         lengthWarp: statWarpLengthData,
         lengthWeft: statWeftLengthData
     })
-    
+
     const warpCount = document.createElement("div");
     const weftCount = document.createElement("div");
     const warpLength = document.createElement("div");
@@ -2030,7 +2094,9 @@ async function sendUpdateTextileId(update) {
     const looms_fabric_recipe = await loadAndRenderButtons();
     allNumbersLoom = looms_fabric_recipe;
     console.log(looms_fabric_recipe);
-    const keys = Object.keys(looms_fabric_recipe[0]);
+    //const keys = Object.keys(looms_fabric_recipe[0]);
+    await ini();
+    const keys = Object.keys(group[1].select);
     keys.forEach(item => nav.append(createA(item)));
 
 
@@ -2444,10 +2510,7 @@ async function sendUpdateTextileId(update) {
     document.body.append(buttonSend);
 
 
-    document.body.append(warpCount);
-    document.body.append(weftCount);
-    document.body.append(warpLength);
-    document.body.append(weftLength);
+
 
 
 
