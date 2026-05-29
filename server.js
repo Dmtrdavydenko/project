@@ -2838,8 +2838,6 @@ server.on("request", (req, res) => {
             }
             if (route === "/authentication") {
                 filePath = path.join(process.cwd(), "/public/forms", pathname);
-            } else {
-                console.log({ fail: pathname, use: filePath });
             }
             if (route === "/home") {
                 filePath = path.join(process.cwd(), "/public/forms", "weaver.html");
@@ -2873,6 +2871,7 @@ server.on("request", (req, res) => {
             <body>
               <pre>read file<br>${filePath}</pre>
               <pre>${pathname}</pre>
+              <pre>route</pre>
               <pre>${route}</pre>
             </body>
           </html>`);
