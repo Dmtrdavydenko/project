@@ -2837,6 +2837,8 @@ server.on("request", (req, res) => {
             }
             if (pathname === "/authentication") {
                 filePath = path.join(process.cwd(), "/public/forms", pathname);
+            } else {
+                console.log({ fail: pathname, use: filePath });
             }
             if (pathname === "/home") {
                 filePath = path.join(process.cwd(), "/public/forms", "weaver");
