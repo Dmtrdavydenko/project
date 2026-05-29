@@ -2996,10 +2996,6 @@ server.on("request", (req, res) => {
 
                     // тут твоя проверка
 
-                    res.writeHead(200, {
-                        "Content-Type": "application/json"
-                    });
-
                     const profile = {
                         login,
                         ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
@@ -3022,7 +3018,7 @@ server.on("request", (req, res) => {
                             "Content-Type": "application/json"
                         });
 
-                        return res.end(JSON.stringify({
+                        res.end(JSON.stringify({
                             success: true,
                             redirect: "/home",
                             message: "Авторизация выполнена"
