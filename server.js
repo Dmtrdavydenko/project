@@ -2641,7 +2641,7 @@ async function getAccessTokenBD(userId = 1) {
 }
 (async () => {
 
-    console.log(getAccessTokenBD.name, await getAccessTokenBD());
+    //console.log(getAccessTokenBD.name, await getAccessTokenBD());
 
 })();
 async function getRefreshTokenBD(userId = 1) {
@@ -2859,9 +2859,10 @@ server.on("request", (req, res) => {
             }
 
             console.log(pathname);
-            console.log(filePath);
+            console.log({ read: filePath });
             fs.exists(filePath, function (exists, err) {
                 if (!exists || !MIMETYPES[ext]) {
+                    console.log({ path: filePath });
                     console.log("File does not exist: " + pathname);
                     return;
                 }
@@ -2998,11 +2999,11 @@ server.on("request", (req, res) => {
                     };
 
                     console.log("LOGIN ATTEMPT:", profile);
-                    res.end(JSON.stringify({
-                        success: true,
-                        message: "Авторизация выполнена",
-                        profile: profile
-                    }));
+                    //res.end(JSON.stringify({
+                    //    success: true,
+                    //    message: "Авторизация выполнена",
+                    //    profile: profile
+                    //}));
 
                     let success = true;
                     if (success) {
