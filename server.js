@@ -2841,8 +2841,8 @@ server.on("request", (req, res) => {
             } else {
                 console.log({ fail: pathname, use: filePath });
             }
-            if (pathname === "/home") {
-                filePath = path.join(process.cwd(), "/public/forms", "weaver");
+            if (route === "/home") {
+                filePath = path.join(process.cwd(), "/public/forms", "weaver.html");
             }
             //if (pathname === "/n-n.html" || pathname === "/nnstyle.css" || pathname === "nn2-1.js" || pathname === "app.js") {
             //    filePath = path.join(process.cwd(), "/public/models", pathname);
