@@ -2866,6 +2866,14 @@ server.on("request", (req, res) => {
                 if (!exists || !MIMETYPES[ext]) {
                     console.log({ path: filePath });
                     console.log("File does not exist: " + pathname);
+                    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                    res.end(`<html>
+            <head><title>Успешно!</title></head>
+            <body>
+              <p>read file${filePath}</p>
+              <pre>${pathname}</pre>
+            </body>
+          </html>`);
                     return;
                 }
                 res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
