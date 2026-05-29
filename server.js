@@ -3019,23 +3019,27 @@ server.on("request", (req, res) => {
                     let success = true;
                     if (success) {
                         // редирект на home
-                        res.writeHead(302, {
-                            Location: '/home'
+                        res.writeHead(200, {
+                            "Content-Type": "application/json"
                         });
 
-                        return res.end();
+                        return res.end(JSON.stringify({
+                            success: true,
+                            redirect: "/home",
+                            message: "Авторизация выполнена"
+                        }));
                     }
 
-                    const connection = await getAwaitConnect();
-                    const sql = loadSQL("./src/sql/endpoint/insert.sql");
-                    await connection.execute(sql, [
-                        endpoint,
-                        profile.ip,
-                        profile.userAgent,
-                        profile.language
-                    ]);
-                    if (connection) connection.release();
-                    console.log("Соединение возвращено.");
+                    //const connection = await getAwaitConnect();
+                    //const sql = loadSQL("./src/sql/endpoint/insert.sql");
+                    //await connection.execute(sql, [
+                    //    endpoint,
+                    //    profile.ip,
+                    //    profile.userAgent,
+                    //    profile.language
+                    //]);
+                    //if (connection) connection.release();
+                    //console.log("Соединение возвращено.");
                 } catch (error) {
 
                     res.writeHead(400, {

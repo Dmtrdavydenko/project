@@ -76,8 +76,13 @@
 
                 const result = await response.json();
                 console.log(result);
+                if (result.success) {
+                    window.location.href = result.redirect;
+                    return;
+                }
+
                 document.getElementById("message").innerText =
-                    result.message || "Успешно";
+                    result.message || "Ошибка";
 
             }
             catch (error) {
