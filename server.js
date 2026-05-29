@@ -2816,6 +2816,7 @@ server.on("request", (req, res) => {
             const parsedUrl = url.parse(req.url, true);
             console.log(parsedUrl.pathname);
             let pathname = parsedUrl.pathname;
+            const route = pathname;
             let ext = path.extname(pathname);
             if (pathname !== "/" && pathname[pathname.length - 1] === "/") {
                 res.writeHead(302, { Location: pathname.slice(0, -1) });
@@ -2835,7 +2836,7 @@ server.on("request", (req, res) => {
             if (pathname === "/hh.json") {
                 filePath = path.join(process.cwd(), "/public/models", pathname);
             }
-            if (pathname === "/authentication") {
+            if (route === "/authentication") {
                 filePath = path.join(process.cwd(), "/public/forms", pathname);
             } else {
                 console.log({ fail: pathname, use: filePath });
@@ -2872,6 +2873,7 @@ server.on("request", (req, res) => {
             <body>
               <pre>read file<br>${filePath}</pre>
               <pre>${pathname}</pre>
+              <pre>${route}</pre>
             </body>
           </html>`);
                 }
