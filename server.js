@@ -2870,7 +2870,7 @@ server.on("request", (req, res) => {
                     res.end(`<html>
             <head><title>Успешно!</title></head>
             <body>
-              <p>read file${filePath}</p>
+              <pre>read file<br>${filePath}</pre>
               <pre>${pathname}</pre>
             </body>
           </html>`);
