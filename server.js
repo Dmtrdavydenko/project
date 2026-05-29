@@ -2874,7 +2874,6 @@ server.on("request", (req, res) => {
               <pre>${pathname}</pre>
             </body>
           </html>`);
-                    return;
                 }
                 res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
                 console.log(filePath);
