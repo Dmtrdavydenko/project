@@ -34,7 +34,7 @@ body {
     font-weight: 600;
 }
 
-div>input,
+input,
 textarea,
 select {
     width: 100%;

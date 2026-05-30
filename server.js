@@ -6,6 +6,7 @@ import path from "path";
 import url from "url";
 import crypto from "crypto";
 import mysql from "mysql2/promise";
+import bcrypt from "bcrypt";
 
 //const mysql = require('mysql2/promise');
 
@@ -2733,7 +2734,7 @@ function getAccessToken(code, callback) {
 
 const server = http.createServer();
 
-
+let userpages = "";
 server.on("request", (req, res) => {
     console.log("req.url=", req.url)
 
