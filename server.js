@@ -3053,7 +3053,10 @@ server.on("request", async (req, res) => {
                 try {
 
                     const buffer = Buffer.concat(chunks);
-                    const data = JSON.parse(buffer.toString());
+                    const raw = buffer.toString().trim();
+                    if (!raw) throw new Error("Empty body");
+                    const data = JSON.parse(raw);
+
                     let user = new Object();
                     user.login = data.login;
 
@@ -3096,7 +3099,7 @@ server.on("request", async (req, res) => {
                     const sessionId = crypto.randomBytes(32).toString("hex");
                     msg[2] = sessionId;
                     const sqlUserSession = loadSQL("./src/sql/user_session/insert.sql");
-                    msg[3] = { sessionId, user_id: user.user_id, ip: profile.ip, userAgent:profile.userAgent };
+                    msg[3] = { sessionId, user_id: user.user_id, ip: profile.ip, userAgent: profile.userAgent };
                     msg[4] = await connect.execute(sqlUserSession, [sessionId, user.user_id, profile.ip, profile.userAgent]);
                     console.log("Соединение возвращено.");
                     // редирект на home
@@ -3123,7 +3126,7 @@ server.on("request", async (req, res) => {
                         success: false,
                         message: "Ошибка JSON",
                         error: error.message,
-                        msg:msg
+                        msg: msg
                     }));
                     return;
                 } finally {
@@ -3132,6 +3135,73 @@ server.on("request", async (req, res) => {
 
             });
 
+            return;
+        } else {
+            res.writeHead(404);
+            res.end("Not Found");
+        }
+        if (pathname.startsWith("/api/profile/insert")) {
+
+            const user_id = await getUserBySession(req);
+
+            if (!user_id) {
+                res.writeHead(302, {
+                    Location: "/authentication"
+                });
+
+                res.end();
+                return
+            }
+            let chunks = [];
+
+            req.on("data", (chunk) => {
+                chunks.push(chunk);
+            });
+            req.on("end", async () => {
+
+                const connect = await getAwaitConnect();
+                try {
+
+                    const buffer = Buffer.concat(chunks);
+                    const raw = buffer.toString().trim();
+                    if (!raw) throw new Error("Empty body");
+                    const data = JSON.parse(raw);
+
+                    let user = {};
+                    user.user_id = user_id;
+                    user.fio = data.fio;
+                    user.birthDate = data.birthDate;
+                    const sqlReg = loadSQL("./src/sql/user_profile/insert.sql");
+                    const [result] = await connect.execute(sqlReg, [user.user_id, user.fio, user.birthDate]);
+
+
+                    res.writeHead(200, {
+                        "Content-Type": "application/json"
+                    });
+
+                    res.end(JSON.stringify({
+                        success: true,
+                        result: result,
+                        user: user,
+                        message: "Данные изменены"
+                    }));
+                    return
+                } catch (error) {
+
+                    res.writeHead(400, {
+                        "Content-Type": "application/json"
+                    });
+
+                    res.end(JSON.stringify({
+                        success: false,
+                        message: "Ошибка JSON",
+                        error: error.message
+                    }));
+                    return;
+                } finally {
+                    if (connect) connect.release();
+                }
+            })
             return;
         } else {
             res.writeHead(404);
@@ -3154,8 +3224,9 @@ server.on("request", async (req, res) => {
                     }
 
                     const buffer = Buffer.concat(chunks);
-                    const data = JSON.parse(buffer.toString());
-
+                    const raw = buffer.toString().trim();
+                    if (!raw) throw new Error("Empty body");
+                    const data = JSON.parse(raw);
                     console.log("Received:", data);
 
                     const { density_id, length, diameter } = data;

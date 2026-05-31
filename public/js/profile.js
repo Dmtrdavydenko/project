@@ -8,18 +8,20 @@
 //    birthDate.value = "2001-07-06";
 //})();
 form.addEventListener("submit", async function (event) {
-
     event.preventDefault();
-    const data = user;
+
+    const user = new Object(null);
+    user.fio = fio.value;
+    user.birthDate = birthDate.value;
 
     try {
 
-        const response = await fetch(api, {
+        const response = await fetch("/api/profile/insert", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(user),
         });
 
         const result = await response.json();
@@ -65,7 +67,7 @@ form.addEventListener("submit", async function (event) {
     const dataProfile = {};
     dataProfile.login = "Davydenko";
     profile.textContent = userProfileLogin.replace(/X/g, dataProfile.login);
-    id.value = "1";
+    id.value = user.user_id;
 
 
     const user = new Object(null);
