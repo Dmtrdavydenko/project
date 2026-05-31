@@ -33,11 +33,11 @@ user.addEventListener("submit", async function (event) {
         console.log(result);
 
         //result.message || "Успешно";
-        btn.innerText = 0 || "Успешно";
+        btnSend.innerText = 0 || "Успешно";
 
     }
     catch (error) {
-        btn.innerText = "Ошибка соединения с сервером";
+        btnSend.innerText = "Ошибка соединения с сервером";
         console.error(error);
     }
 
@@ -63,11 +63,11 @@ quit.addEventListener("submit", async function (event) {
         console.log(result);
 
         //result.message || "Успешно";
-        btn.innerText = 0 || "Успешно";
-
+        btnQuit.innerText = 0 || "Успешно";
+        window.location.href = result.redirect;
     }
     catch (error) {
-        btn.innerText = "Ошибка соединения с сервером";
+        btnQuit.innerText = "Ошибка соединения с сервером";
         console.error(error);
     }
 

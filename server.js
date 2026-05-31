@@ -3165,10 +3165,22 @@ server.on("request", async (req, res) => {
                 const sessionId = cookies.session_id;
 
                 if (!sessionId) {
-                    res.writeHead(401, { "Content-Type": "application/json" });
+                    //res.writeHead(302, {
+                    //    "Location": "/authentication",
+                    //    "Set-Cookie": "session_id=; HttpOnly; Path=/; Max-Age=0"
+                    //});
+                    //res.end(JSON.stringify({
+                    //    success: false,
+                    //    message: "No session"
+                    //}));
+                    res.writeHead(200, {
+                        "Set-Cookie": "session_id=; HttpOnly; Path=/; Max-Age=0",
+                        "Content-Type": "application/json"
+                    });
+
                     res.end(JSON.stringify({
-                        success: false,
-                        message: "No session"
+                        success: true,
+                        redirect: "/authentication"
                     }));
                     return;
                 }
@@ -3176,13 +3188,20 @@ server.on("request", async (req, res) => {
                 await connection.execute(sqlDelete, [sessionId]);
 
 
+                //res.writeHead(302, {
+                //    "Location": "/authentication",
+                //    "Set-Cookie": "session_id=; HttpOnly; Path=/; Max-Age=0"
+                //});
+                //res.end();
+
                 res.writeHead(200, {
                     "Set-Cookie": "session_id=; HttpOnly; Path=/; Max-Age=0",
                     "Content-Type": "application/json"
                 });
 
                 res.end(JSON.stringify({
-                    success: true
+                    success: true,
+                    redirect: "/authentication"
                 }));
                 return
             } catch (error) {
