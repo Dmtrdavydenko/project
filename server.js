@@ -3090,11 +3090,13 @@ server.on("request", async (req, res) => {
                         user.password_hash = rows[0].password_hash;
                         //};
                     }
-                    msg[0] = user
+                    msg[0] = user;
+                    msg[1] = profile;
                     const sessionId = crypto.randomBytes(32).toString("hex");
-                    msg[1] = sessionId;
+                    msg[2] = sessionId;
                     const sqlUserSession = loadSQL("./src/sql/user_session/insert.sql");
-                    msg[2] = await connect.execute(sqlUserSession, [sessionId, user.user_id, profile.ip, profile.userAgent]);
+                    msg[3] = { sessionId, user_id: user.user_id, ip: profile.ip, userAgent:profile.userAgent };
+                    msg[4] = await connect.execute(sqlUserSession, [sessionId, user.user_id, profile.ip, profile.userAgent]);
                     console.log("Соединение возвращено.");
                     // редирект на home
                     res.writeHead(200, {
