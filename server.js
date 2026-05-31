@@ -2828,6 +2828,28 @@ server.on("request", async (req, res) => {
                 res.end();
                 return
             }
+            const connection = await getAwaitConnect();
+            try {
+                const sqlReg = loadSQL("./src/sql/user_profile/select.sql");
+                const [rows] = await connection.execute(sqlReg, [user.user_id]);
+                if (rows.length > 0) {
+                    user.profile = rows[0];
+                } else {
+                    user.profile = null;
+                }
+            } catch (error) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({
+                    error: error.message
+                }));
+                return;
+
+            } finally {
+                if (connection) {
+                    connection.release();
+                    console.log("Соединение возвращено.");
+                }
+            }
             res.writeHead(200, {
                 "Content-Type": "application/json"
             });
@@ -3194,7 +3216,6 @@ server.on("request", async (req, res) => {
 
                     res.end(JSON.stringify({
                         success: false,
-                        message: "Ошибка JSON",
                         error: error.message
                     }));
                     return;
