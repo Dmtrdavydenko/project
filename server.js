@@ -2831,7 +2831,7 @@ server.on("request", async (req, res) => {
             res.writeHead(200, {
                 "Content-Type": "application/json"
             });
-            res.end(JSON.stringify(rows[0]));
+            res.end(JSON.stringify(user));
             return
         }
         if (pathname.startsWith('/api')) {
