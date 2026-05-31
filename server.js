@@ -3149,10 +3149,57 @@ server.on("request", async (req, res) => {
                 } finally {
                     if (connect) connect.release();
                 }
-
             });
-
             return;
+        } else if (pathname.startsWith("/api/session/quit")) {
+
+            const connection = await getAwaitConnect();
+            try {
+                const cookies = Object.fromEntries(
+                    (req.headers.cookie || "")
+                        .split(";")
+                        .filter(Boolean)
+                        .map(x => x.trim().split("="))
+                );
+
+                const sessionId = cookies.session_id;
+
+                if (!sessionId) {
+                    res.writeHead(401, { "Content-Type": "application/json" });
+                    res.end(JSON.stringify({
+                        success: false,
+                        message: "No session"
+                    }));
+                    return;
+                }
+                const sqlDelete = loadSQL("./src/sql/user_session/delete.sql");
+                await connection.execute(sqlDelete, [sessionId]);
+
+
+                res.writeHead(200, {
+                    "Set-Cookie": "session_id=; HttpOnly; Path=/; Max-Age=0",
+                    "Content-Type": "application/json"
+                });
+
+                res.end(JSON.stringify({
+                    success: true
+                }));
+                return
+            } catch (error) {
+
+                res.writeHead(500, {
+                    "Content-Type": "application/json"
+                });
+
+                res.end(JSON.stringify({
+                    success: false,
+                    error: error.message
+                }));
+                return;
+            } finally {
+                if (connection) connection.release();
+            }
+            return
         } else if (pathname.startsWith("/api/profile/insert")) {
 
             const user = await getUserBySession(req);
@@ -3172,7 +3219,7 @@ server.on("request", async (req, res) => {
             });
             req.on("end", async () => {
 
-                const connect = await getAwaitConnect();
+                const connection = await getAwaitConnect();
                 try {
 
                     const buffer = Buffer.concat(chunks);
@@ -3183,7 +3230,7 @@ server.on("request", async (req, res) => {
                     user.fio = data.fio;
                     user.birthDate = data.birthDate;
                     const sqlReg = loadSQL("./src/sql/user_profile/insert.sql");
-                    const [result] = await connect.execute(sqlReg, [user.user_id, user.fio, user.birthDate]);
+                    const [result] = await connection.execute(sqlReg, [user.user_id, user.fio, user.birthDate]);
 
 
                     res.writeHead(200, {
@@ -3209,7 +3256,7 @@ server.on("request", async (req, res) => {
                     }));
                     return;
                 } finally {
-                    if (connect) connect.release();
+                    if (connection) connection.release();
                 }
             })
             return;

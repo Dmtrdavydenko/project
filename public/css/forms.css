@@ -59,9 +59,6 @@ textarea {
         margin-bottom: -6px;
     }
 }
-#btn::before {
-    content: ""
-}
-#btn::after {
+.btn::after {
     content:" "
 }
