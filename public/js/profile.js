@@ -11,8 +11,13 @@ form.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     const user = new Object(null);
+    if (!fio.value.trim()) return fio.focus();
+
+    if (!birthDate.value.trim()) return birthDate.focus();
+
     user.fio = fio.value;
     user.birthDate = birthDate.value;
+
 
     try {
 
