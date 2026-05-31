@@ -64,11 +64,10 @@ form.addEventListener("submit", async function (event) {
     const data = await response.json();
     profile.textContent = profile.textContent.trim().replace(/X/g, data.profile.login);
 
-    const user = new Object(null);
     id.value = data.user_id;
-    user.fio = fio.value;
-    user.birthDate = birthDate.value;
-    return { data, user }
+    fio.value = data.profile.fio;
+    birthDate.value = data.profile.birth_date;
+    return data;
 })("/api/profile")
     .then(user => {
         console.log(user);
