@@ -3071,7 +3071,6 @@ server.on("request", async (req, res) => {
             req.on("end", async () => {
 
                 const connect = await getAwaitConnect();
-                let msg = [];
                 try {
 
                     const buffer = Buffer.concat(chunks);
@@ -3116,13 +3115,9 @@ server.on("request", async (req, res) => {
                         user.password_hash = rows[0].password_hash;
                         //};
                     }
-                    msg[0] = user;
-                    msg[1] = profile;
                     const sessionId = crypto.randomBytes(32).toString("hex");
-                    msg[2] = sessionId;
                     const sqlUserSession = loadSQL("./src/sql/user_session/insert.sql");
-                    msg[3] = { sessionId, user_id: user.user_id, ip: profile.ip, userAgent: profile.userAgent };
-                    msg[4] = await connect.execute(sqlUserSession, [sessionId, user.user_id, profile.ip, profile.userAgent]);
+                    await connect.execute(sqlUserSession, [sessionId, user.user_id, profile.ip, profile.userAgent]);
                     console.log("Соединение возвращено.");
                     // редирект на home
                     res.writeHead(200, {
@@ -3158,11 +3153,7 @@ server.on("request", async (req, res) => {
             });
 
             return;
-        } else {
-            res.writeHead(404);
-            res.end("Not Found");
-        }
-        if (pathname.startsWith("/api/profile/insert")) {
+        } else if (pathname.startsWith("/api/profile/insert")) {
 
             const user_id = await getUserBySession(req);
 
@@ -3190,7 +3181,7 @@ server.on("request", async (req, res) => {
                     const data = JSON.parse(raw);
 
                     let user = {};
-                    user.user_id = user_id;
+                    user.user_id = user_id.user_id;
                     user.fio = data.fio;
                     user.birthDate = data.birthDate;
                     const sqlReg = loadSQL("./src/sql/user_profile/insert.sql");
