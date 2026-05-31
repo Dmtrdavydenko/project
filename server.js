@@ -1,7 +1,7 @@
 import https from "https";
 import querystring from "querystring";
 import http from "http";
-import fs from "fs";
+import fs, { access } from "fs";
 import path from "path";
 import url from "url";
 import crypto from "crypto";
@@ -2735,6 +2735,30 @@ function getAccessToken(code, callback) {
 const server = http.createServer();
 
 let userpages = "";
+async function getUserBySession(req) {
+
+    const cookies = Object.fromEntries(
+        (req.headers.cookie || "")
+            .split(";")
+            .filter(Boolean)
+            .map(x => x.trim().split("="))
+    );
+
+    const sessionId = cookies.session_id;
+
+    if (!sessionId) {
+        return null;
+    }
+
+
+    // найти сессию пользователя
+    const connectSession = await getAwaitConnect();
+    const sqlUserSession = loadSQL("./src/sql/user_session/select.sql");
+    const [rows] = await connectSession.execute(sqlUserSession, [sessionId]);
+    if (connectSession) connectSession.release();
+
+    return rows.length ? rows[0] : null;
+}
 server.on("request", (req, res) => {
     console.log("req.url=", req.url)
 
@@ -2796,6 +2820,24 @@ server.on("request", (req, res) => {
             }
         });
     } else if (req.method === "GET") {
+        if (pathname === "/api/profile") {
+
+            const user = await getUserBySession(req);
+            if (!user) {
+                res.writeHead(401);
+                res.end();
+                return 
+            }
+            const connection = await getAwaitConnect();
+            const sqlUserProfile = loadSQL("./src/sql/user_profile/select.sql");
+            const [rows] = await connectSession.execute(sqlUserProfile, [user.user_id]);
+            if (connectSession) connectSession.release();
+            res.writeHead(200, {
+                "Content-Type": "application/json"
+            });
+            res.end(JSON.stringify(rows[0]));
+            return
+        }
         if (pathname.startsWith('/api')) {
             // Здесь обработка запроса к базе данных и возврат JSON
             // pathname оставляем как есть, не меняем
@@ -2841,8 +2883,32 @@ server.on("request", (req, res) => {
                 filePath = path.join(process.cwd(), "/public/forms", pathname);
             }
             if (route === "/home") {
+
+
+                const user = await getUserBySession(req);
+
+                if (!user) {
+                    res.writeHead(302, {
+                        Location: "/authentication"
+                    });
+
+                    res.end();
+                    return
+                }
                 filePath = path.join(process.cwd(), "/public/forms", "weaver.html");
             }
+
+            //res.writeHead(303, {
+            //    "Content-Type": "application/json",
+            //});
+
+            //res.end(JSON.stringify({
+            //    success: false,
+            //    redirect: "/authentication",
+            //    message: "Ошибка авторизации"
+            //}));
+            //filePath = path.join(process.cwd(), "/public/forms", "weaver.html");
+
             //if (pathname === "/n-n.html" || pathname === "/nnstyle.css" || pathname === "nn2-1.js" || pathname === "app.js") {
             //    filePath = path.join(process.cwd(), "/public/models", pathname);
             //}
@@ -2875,7 +2941,7 @@ server.on("request", (req, res) => {
               <pre>route</pre>
               <pre>${route}</pre>
             </body>
-          </html>`);
+            </html>`);
                 }
                 res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
                 console.log(filePath);
@@ -2986,24 +3052,52 @@ server.on("request", (req, res) => {
             req.on("end", async () => {
 
                 try {
+
                     const buffer = Buffer.concat(chunks);
                     const data = JSON.parse(buffer.toString());
-
-                    const login = data.login;
-                    const password = data.password;
-
-                    console.log("Логин:", login);
-                    console.log("Пароль:", password);
-
-                    // тут твоя проверка
+                    const user = new Object();
+                    user.login = data.login;
+                    user.password_hash = await bcrypt.hash(data.password, 12);
 
                     const profile = {
-                        login,
+                        login: user.login,
                         ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
                         userAgent: req.headers["user-agent"],
                         language: req.headers["accept-language"],
                         timestamp: new Date().toISOString()
                     };
+
+                    // registration
+                    const connectReg = await getAwaitConnect();
+                    const sqlReg = loadSQL("./src/sql/login/insert.sql");
+                    await connectReg.execute(sqlReg, [user.login, user.password_hash]);
+                    if (connectReg) connectReg.release();
+                    console.log("Соединение возвращено.");
+
+                    // login
+                    const connectLogin = await getAwaitConnect();
+                    const sqlLogin = loadSQL("./src/sql/login/select.sql");
+                    const [row] = await connectLogin.execute(sqlLogin, [user.login]);
+                    if (connectLogin) connectLogin.release();
+                    console.log("Соединение возвращено.");
+
+                    const success = await bcrypt.compare(data.password, row[0].password_hash);
+
+                    // выдаем клиенту сессию куки
+                    const sessionId = crypto.randomBytes(32).toString("hex");
+                    const connectSession = await getAwaitConnect();
+                    const sqlUserSession = loadSQL("./src/sql/user_session/insert.sql");
+                    await connectSession.execute(sqlUserSession, [sessionId, row[0].user_id, profile.ip, profile.userAgent]);
+                    if (connectSession) connectSession.release();
+                    console.log("Соединение возвращено.");
+
+
+                    //console.log("Логин:", login);
+                    //console.log("Пароль:", password);
+
+                    // тут твоя проверка
+
+
 
                     console.log("LOGIN ATTEMPT:", profile);
                     //res.end(JSON.stringify({
@@ -3012,11 +3106,14 @@ server.on("request", (req, res) => {
                     //    profile: profile
                     //}));
 
-                    let success = true;
+                    //let success = true;
                     if (success) {
                         // редирект на home
                         res.writeHead(200, {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            "Set-Cookie": [
+                                `session_id=${sessionId}; HttpOnly; Secure; Path=/; Max-Age=86400; SameSite=Lax`
+                            ]
                         });
 
                         res.end(JSON.stringify({

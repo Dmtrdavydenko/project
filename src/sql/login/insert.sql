@@ -1,0 +1,4 @@
+INSERT INTO users
+(login,password_hash)
+VALUES
+(?,?);

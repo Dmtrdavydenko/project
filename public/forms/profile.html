@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Производственные формы</title>
+    <link rel="stylesheet" href="../css/forms.css" />
+    <script src="../js/profile.js" defer></script>
+</head>
+
+<body>
+    <!-- Журнал учёта выработки ткача -->
+    <div class="form-block">
+        <div id="profile" class="form-title">
+            Профиль X
+        </div>
+
+        <form id="form" class="form-grid">
+            <div class="label">Идентификатор</div>
+            <input id="id" type="number" disabled>
+
+            <div class="label">ФИО</div>
+            <input id="fio" type="text">
+
+            <div class="label">Дата рождения</div>
+            <input id="birthDate" type="date">
+
+            <div class="label">Отправить</div>
+            <button id="btn" class="btn" type="submit" style="padding: 9px; white-space: pre-wrap; cursor: pointer;"></button>
+        </form>
+    </div>
+</body>
+</html>
