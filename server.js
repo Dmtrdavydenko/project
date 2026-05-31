@@ -3048,6 +3048,7 @@ server.on("request", async (req, res) => {
             req.on("end", async () => {
 
                 const connect = await getAwaitConnect();
+                let msg = [];
                 try {
 
                     const buffer = Buffer.concat(chunks);
@@ -3083,16 +3084,17 @@ server.on("request", async (req, res) => {
                             }));
                             return
                         }
-                        user = {
-                            user_id: rows[0].user_id,
-                            login: rows[0].login,
-                            password_hash: rows[0].password_hash
-                        };
+                        //user = {
+                        user.user_id = rows[0].user_id;
+                        user.login = rows[0].login;
+                        user.password_hash = rows[0].password_hash;
+                        //};
                     }
+                    msg[0] = user
                     const sessionId = crypto.randomBytes(32).toString("hex");
-
+                    msg[1] = sessionId;
                     const sqlUserSession = loadSQL("./src/sql/user_session/insert.sql");
-                    await connect.execute(sqlUserSession, [sessionId, user.user_id, profile.ip, profile.userAgent]);
+                    msg[2] = await connect.execute(sqlUserSession, [sessionId, user.user_id, profile.ip, profile.userAgent]);
                     console.log("Соединение возвращено.");
                     // редирект на home
                     res.writeHead(200, {
@@ -3116,7 +3118,8 @@ server.on("request", async (req, res) => {
 
                     res.end(JSON.stringify({
                         success: false,
-                        message: "Ошибка JSON"
+                        message: "Ошибка JSON",
+                        msg:msg
                     }));
                     return;
                 } finally {
