@@ -62,10 +62,7 @@ form.addEventListener("submit", async function (event) {
 
     const response = await fetch(api);
     const data = await response.json();
-    let userProfileLogin = profile.textContent.trim();
-    const dataProfile = {};
-    dataProfile.login = "Davydenko";
-    profile.textContent = userProfileLogin.replace(/X/g, dataProfile.login);
+    profile.textContent = profile.textContent.trim().replace(/X/g, data.profile.login);
 
     const user = new Object(null);
     id.value = data.user_id;

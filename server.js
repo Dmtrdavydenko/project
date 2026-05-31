@@ -3155,9 +3155,9 @@ server.on("request", async (req, res) => {
             return;
         } else if (pathname.startsWith("/api/profile/insert")) {
 
-            const user_id = await getUserBySession(req);
+            const user = await getUserBySession(req);
 
-            if (!user_id) {
+            if (!user) {
                 res.writeHead(302, {
                     Location: "/authentication"
                 });
@@ -3180,8 +3180,6 @@ server.on("request", async (req, res) => {
                     if (!raw) throw new Error("Empty body");
                     const data = JSON.parse(raw);
 
-                    let user = {};
-                    user.user_id = user_id.user_id;
                     user.fio = data.fio;
                     user.birthDate = data.birthDate;
                     const sqlReg = loadSQL("./src/sql/user_profile/insert.sql");
