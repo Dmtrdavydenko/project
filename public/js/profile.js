@@ -66,7 +66,7 @@ form.addEventListener("submit", async function (event) {
 
     id.value = data.user_id;
     fio.value = data.profile.fio;
-    birthDate.value = data.profile.birth_date;
+    birthDate.value = data.profile.birth_date?.split("T")[0] ?? "";
     return data;
 })("/api/profile")
     .then(user => {
