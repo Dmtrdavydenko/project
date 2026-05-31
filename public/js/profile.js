@@ -93,17 +93,17 @@ quit.addEventListener("submit", async function (event) {
 //})("/api/profile/insert");
 
 
-//(async (api) => {
+(async (api) => {
 
-//    const response = await fetch(api);
-//    const data = await response.json();
-//    profile.textContent = profile.textContent.trim().replace(/X/g, data.profile.login);
+    const response = await fetch(api);
+    const data = await response.json();
+    profile.textContent = profile.textContent.trim().replace(/X/g, data.profile.login);
 
-//    id.value = data.user_id;
-//    fio.value = data.profile.fio;
-//    birthDate.value = data.profile.birth_date?.split("T")[0] ?? "";
-//    return data;
-//})("/api/profile")
-//    .then(user => {
-//        console.log(user);
-//    })
+    id.value = data.user_id;
+    fio.value = data.profile.fio;
+    birthDate.value = data.profile.birth_date?.split("T")[0] ?? "";
+    return data;
+})("/api/profile")
+    .then(user => {
+        console.log(user);
+    })
