@@ -3047,6 +3047,7 @@ server.on("request", async (req, res) => {
             });
             req.on("end", async () => {
 
+                const connect = await getAwaitConnect();
                 try {
 
                     const buffer = Buffer.concat(chunks);
@@ -3063,7 +3064,6 @@ server.on("request", async (req, res) => {
                     };
 
                     // login
-                    const connect = await getAwaitConnect();
                     const sqlLogin = loadSQL("./src/sql/login/select.sql");
                     const [rows] = await connect.execute(sqlLogin, [user.login]);
                     if (!rows.length) {
@@ -3077,20 +3077,22 @@ server.on("request", async (req, res) => {
                         const success = await bcrypt.compare(data.password, rows[0].password_hash);
 
                         if (!success) {
-                            connect.release();
                             res.end(JSON.stringify({
                                 success: false,
                                 message: "Wrong password"
                             }));
                             return
                         }
-                        user = rows[0];
+                        user = {
+                            user_id: rows[0].user_id,
+                            login: rows[0].login,
+                            password_hash: rows[0].password_hash
+                        };
                     }
                     const sessionId = crypto.randomBytes(32).toString("hex");
 
                     const sqlUserSession = loadSQL("./src/sql/user_session/insert.sql");
                     await connect.execute(sqlUserSession, [sessionId, user.user_id, profile.ip, profile.userAgent]);
-                    if (connect) connect.release();
                     console.log("Соединение возвращено.");
                     // редирект на home
                     res.writeHead(200, {
@@ -3116,7 +3118,9 @@ server.on("request", async (req, res) => {
                         success: false,
                         message: "Ошибка JSON"
                     }));
-
+                    return;
+                } finally {
+                    if (connect) connect.release();
                 }
 
             });
