@@ -3051,9 +3051,8 @@ server.on("request", async (req, res) => {
 
                     const buffer = Buffer.concat(chunks);
                     const data = JSON.parse(buffer.toString());
-                    const user = new Object();
+                    let user = new Object();
                     user.login = data.login;
-                    user.password_hash = await bcrypt.hash(data.password, 12);
 
                     const profile = {
                         login: user.login,
@@ -3066,46 +3065,47 @@ server.on("request", async (req, res) => {
                     // login
                     const connect = await getAwaitConnect();
                     const sqlLogin = loadSQL("./src/sql/login/select.sql");
-                    const [row] = await connect.execute(sqlLogin, [user.login]);
-                    if (rows.length) {
-                        const sqlReg = loadSQL("./src/sql/login/insert.sql");
-                        await connect.execute(sqlReg, [user.login, user.password_hash]);
-                    }
+                    const [rows] = await connect.execute(sqlLogin, [user.login]);
+                    if (!rows.length) {
+                        user.password_hash = await bcrypt.hash(data.password, 12);
 
-                    const success = await bcrypt.compare(data.password, row[0].password_hash);
+                        const sqlReg = loadSQL("./src/sql/login/insert.sql");
+                        const [result] = await connect.execute(sqlReg, [user.login, user.password_hash]);
+
+                        user.user_id = result.insertId;
+                    } else {
+                        const success = await bcrypt.compare(data.password, rows[0].password_hash);
+
+                        if (!success) {
+                            connect.release();
+                            res.end(JSON.stringify({
+                                success: false,
+                                message: "Wrong password"
+                            }));
+                            return
+                        }
+                        user = rows[0];
+                    }
                     const sessionId = crypto.randomBytes(32).toString("hex");
 
                     const sqlUserSession = loadSQL("./src/sql/user_session/insert.sql");
-                    await connect.execute(sqlUserSession, [sessionId, row[0].user_id, profile.ip, profile.userAgent]);
+                    await connect.execute(sqlUserSession, [sessionId, user.user_id, profile.ip, profile.userAgent]);
                     if (connect) connect.release();
                     console.log("Соединение возвращено.");
+                    // редирект на home
+                    res.writeHead(200, {
+                        "Content-Type": "application/json",
+                        "Set-Cookie": [
+                            `session_id=${sessionId}; HttpOnly; Secure; Path=/; Max-Age=86400; SameSite=Lax`
+                        ]
+                    });
 
-                    if (success) {
-                        // редирект на home
-                        res.writeHead(200, {
-                            "Content-Type": "application/json",
-                            "Set-Cookie": [
-                                `session_id=${sessionId}; HttpOnly; Secure; Path=/; Max-Age=86400; SameSite=Lax`
-                            ]
-                        });
-
-                        res.end(JSON.stringify({
-                            success: true,
-                            redirect: "/home",
-                            message: "Авторизация выполнена"
-                        }));
-                    }
-
-                    //const connection = await getAwaitConnect();
-                    //const sql = loadSQL("./src/sql/endpoint/insert.sql");
-                    //await connection.execute(sql, [
-                    //    endpoint,
-                    //    profile.ip,
-                    //    profile.userAgent,
-                    //    profile.language
-                    //]);
-                    //if (connection) connection.release();
-                    //console.log("Соединение возвращено.");
+                    res.end(JSON.stringify({
+                        success: true,
+                        redirect: "/home",
+                        message: "Авторизация выполнена"
+                    }));
+                    return
                 } catch (error) {
 
                     res.writeHead(400, {
