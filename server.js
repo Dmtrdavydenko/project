@@ -3063,7 +3063,7 @@ server.on("request", async (req, res) => {
                         timestamp: new Date().toISOString()
                     };
 
-                    // registration
+                    // login
                     const connect = await getAwaitConnect();
                     const sqlLogin = loadSQL("./src/sql/login/select.sql");
                     const [row] = await connect.execute(sqlLogin, [user.login]);
