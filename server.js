@@ -2826,7 +2826,7 @@ server.on("request", (req, res) => {
             if (!user) {
                 res.writeHead(401);
                 res.end();
-                return 
+                return
             }
             const connection = await getAwaitConnect();
             const sqlUserProfile = loadSQL("./src/sql/user_profile/select.sql");
@@ -3068,45 +3068,22 @@ server.on("request", (req, res) => {
                     };
 
                     // registration
-                    const connectReg = await getAwaitConnect();
-                    const sqlReg = loadSQL("./src/sql/login/insert.sql");
-                    await connectReg.execute(sqlReg, [user.login, user.password_hash]);
-                    if (connectReg) connectReg.release();
-                    console.log("Соединение возвращено.");
-
-                    // login
-                    const connectLogin = await getAwaitConnect();
+                    const connect = await getAwaitConnect();
                     const sqlLogin = loadSQL("./src/sql/login/select.sql");
-                    const [row] = await connectLogin.execute(sqlLogin, [user.login]);
-                    if (connectLogin) connectLogin.release();
-                    console.log("Соединение возвращено.");
+                    const [row] = await connect.execute(sqlLogin, [user.login]);
+                    if (rows.length) {
+                        const sqlReg = loadSQL("./src/sql/login/insert.sql");
+                        await connect.execute(sqlReg, [user.login, user.password_hash]);
+                    }
 
                     const success = await bcrypt.compare(data.password, row[0].password_hash);
-
-                    // выдаем клиенту сессию куки
                     const sessionId = crypto.randomBytes(32).toString("hex");
-                    const connectSession = await getAwaitConnect();
+
                     const sqlUserSession = loadSQL("./src/sql/user_session/insert.sql");
-                    await connectSession.execute(sqlUserSession, [sessionId, row[0].user_id, profile.ip, profile.userAgent]);
-                    if (connectSession) connectSession.release();
+                    await connect.execute(sqlUserSession, [sessionId, row[0].user_id, profile.ip, profile.userAgent]);
+                    if (connect) connect.release();
                     console.log("Соединение возвращено.");
 
-
-                    //console.log("Логин:", login);
-                    //console.log("Пароль:", password);
-
-                    // тут твоя проверка
-
-
-
-                    console.log("LOGIN ATTEMPT:", profile);
-                    //res.end(JSON.stringify({
-                    //    success: true,
-                    //    message: "Авторизация выполнена",
-                    //    profile: profile
-                    //}));
-
-                    //let success = true;
                     if (success) {
                         // редирект на home
                         res.writeHead(200, {
