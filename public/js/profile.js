@@ -61,16 +61,14 @@ form.addEventListener("submit", async function (event) {
 (async (api) => {
 
     const response = await fetch(api);
-    const data = await response.json();
-    const user = data;
+    const user_id = await response.json();
     let userProfileLogin = profile.textContent.trim();
     const dataProfile = {};
     dataProfile.login = "Davydenko";
     profile.textContent = userProfileLogin.replace(/X/g, dataProfile.login);
-    id.value = user.user_id;
-
 
     const user = new Object(null);
+    id.value = user.user_id;
     user.fio = fio.value;
     user.birthDate = birthDate.value;
     return { data, user }
