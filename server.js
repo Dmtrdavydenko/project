@@ -2759,7 +2759,7 @@ async function getUserBySession(req) {
 
     return rows.length ? rows[0] : null;
 }
-server.on("request", (req, res) => {
+server.on("request", async (req, res) => {
     console.log("req.url=", req.url)
 
     const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
@@ -2828,10 +2828,6 @@ server.on("request", (req, res) => {
                 res.end();
                 return
             }
-            const connection = await getAwaitConnect();
-            const sqlUserProfile = loadSQL("./src/sql/user_profile/select.sql");
-            const [rows] = await connectSession.execute(sqlUserProfile, [user.user_id]);
-            if (connectSession) connectSession.release();
             res.writeHead(200, {
                 "Content-Type": "application/json"
             });
