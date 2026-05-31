@@ -3119,6 +3119,7 @@ server.on("request", async (req, res) => {
                     res.end(JSON.stringify({
                         success: false,
                         message: "Ошибка JSON",
+                        error: error.message,
                         msg:msg
                     }));
                     return;
