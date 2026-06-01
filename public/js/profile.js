@@ -97,7 +97,7 @@ quit.addEventListener("submit", async function (event) {
 
     const response = await fetch(api);
     const data = await response.json();
-    console.log(data);
+    //console.log(data);
     profile.textContent = profile.textContent.trim().replace(/X/g, data.profile.login);
 
     id.value = data.user_id;
@@ -105,15 +105,15 @@ quit.addEventListener("submit", async function (event) {
     birthDate.value = data.profile.birth_date?.split("T")[0] ?? "";
 
     const test = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("");
-    console.log(test);
+    //console.log(test);
     permission.innerHTML = test;
-    console.log(data);
+    //console.log(data);
 
     return data;
 })("/api/profile")
     .then(data => {
-        const test = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("");
-        console.log(test);
-        permission.innerHTML = test;
-        console.log(data);
+        //const test = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("");
+        //console.log(test);
+        //permission.innerHTML = test;
+        //console.log(data);
     })
