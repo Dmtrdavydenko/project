@@ -114,9 +114,8 @@ quit.addEventListener("submit", async function (event) {
         .join("");
 
     //select.innerHTML = html;
-
-    permission.innerHTML = data.permissions.map(i => `<div class="label">${i.permission_name}</div><select>${html}</select>`).join
-    users.innerHTML = data.users.map(i => `<div class="label">${i.login}</div><div>${i.description}</div>`).join("");
+    permission.innerHTML = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("")
+    users.innerHTML = data.users.map(i => `<div class="label">${i.login}</div><select>${html}</select>`).join("");
     //console.log(data);
 
     return data;
