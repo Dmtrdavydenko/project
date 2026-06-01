@@ -97,14 +97,15 @@ quit.addEventListener("submit", async function (event) {
 
     const response = await fetch(api);
     const data = await response.json();
+    console.log(data);
     profile.textContent = profile.textContent.trim().replace(/X/g, data.profile.login);
 
     id.value = data.user_id;
     fio.value = data.profile.fio;
     birthDate.value = data.profile.birth_date?.split("T")[0] ?? "";
 
-    const test = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).json("");
-    console.log(test)
+    const test = data.permissions?.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).json("");
+    console.log(test);
     permission.innerHTML = test;
 
     return data;
