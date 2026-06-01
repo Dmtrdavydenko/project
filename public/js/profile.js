@@ -104,12 +104,13 @@ quit.addEventListener("submit", async function (event) {
     fio.value = data.profile.fio;
     birthDate.value = data.profile.birth_date?.split("T")[0] ?? "";
 
-    const test = data.permissions?.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).json("");
-    console.log(test);
-    permission.innerHTML = test;
+
 
     return data;
 })("/api/profile")
-    .then(user => {
-        console.log(user);
+    .then(data => {
+        const test = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("");
+        console.log(test);
+        permission.innerHTML = test;
+        console.log(data);
     })
