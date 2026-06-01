@@ -2844,6 +2844,21 @@ server.on("request", async (req, res) => {
                 } else {
                     user.permissions = [];
                 }
+
+                const sqlUsers = loadSQL("./src/sql/users/select.sql");
+                const [usersRows] = await connection.execute(sqlUsers, [user.user_id]);
+                if (usersRows.length > 0) {
+                    user.users = usersRows;
+                } else {
+                    user.users = [];
+                }
+                const sqlRoles = loadSQL("./src/sql/roles/select.sql");
+                const [rolesRows] = await connection.execute(sqlRoles, [user.user_id]);
+                if (rolesRows.length > 0) {
+                    user.roles = rolesRows;
+                } else {
+                    user.roles = [];
+                }
             } catch (error) {
                 res.writeHead(500, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({

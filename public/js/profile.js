@@ -93,16 +93,30 @@ quit.addEventListener("submit", async function (event) {
 
     const response = await fetch(api);
     const data = await response.json();
-    //console.log(data);
+    console.log(data);
     profile.textContent = profile.textContent.trim().replace(/X/g, data.profile.login);
 
     id.value = data.user_id;
     fio.value = data.profile.fio;
     birthDate.value = data.profile.birth_date?.split("T")[0] ?? "";
 
-    const test = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("");
+    //const test = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("");
+    //const test = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("");
     //console.log(test);
-    permission.innerHTML = test;
+    // select options
+    //data.roles.map(i=>`<opt>`)
+    const html = data.roles
+        .map(role => `
+        <option value="${role.role_id}">
+            ${role.role_name}
+        </option>
+    `)
+        .join("");
+
+    //select.innerHTML = html;
+
+    permission.innerHTML = data.permissions.map(i => `<div class="label">${i.permission_name}</div><select>${html}</select>`).join
+    users.innerHTML = data.users.map(i => `<div class="label">${i.login}</div><div>${i.description}</div>`).join("");
     //console.log(data);
 
     return data;
