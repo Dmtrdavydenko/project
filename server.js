@@ -2837,8 +2837,8 @@ server.on("request", async (req, res) => {
                 } else {
                     user.profile = null;
                 }
-                const sqlReg = loadSQL("./src/sql/user_permission/select_by_user_id.sql");
-                const [permRows] = await connection.execute(sqlReg, [user.user_id]);
+                const sqlPerm = loadSQL("./src/sql/user_permission/select_by_user_id.sql");
+                const [permRows] = await connection.execute(sqlPerm, [user.user_id]);
                 if (permRows.length > 0) {
                     user.permissions = permRows[0];
                 } else {
