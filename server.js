@@ -2831,9 +2831,16 @@ server.on("request", async (req, res) => {
             const connection = await getAwaitConnect();
             try {
                 const sqlReg = loadSQL("./src/sql/user_profile/select.sql");
-                const [rows] = await connection.execute(sqlReg, [user.user_id]);
-                if (rows.length > 0) {
-                    user.profile = rows[0];
+                const [userRows] = await connection.execute(sqlReg, [user.user_id]);
+                if (userRows.length > 0) {
+                    user.profile = userRows[0];
+                } else {
+                    user.profile = null;
+                }
+                const sqlReg = loadSQL("./src/sql/user_permission/select_by_user_id.sql");
+                const [permRows] = await connection.execute(sqlReg, [user.user_id]);
+                if (permRows.length > 0) {
+                    user.permissions = permRows[0];
                 } else {
                     user.profile = null;
                 }
@@ -2845,10 +2852,7 @@ server.on("request", async (req, res) => {
                 return;
 
             } finally {
-                if (connection) {
-                    connection.release();
-                    console.log("Соединение возвращено.");
-                }
+                if (connection) connection.release();
             }
             res.writeHead(200, {
                 "Content-Type": "application/json"
