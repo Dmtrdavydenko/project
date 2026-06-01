@@ -1,0 +1,1 @@
+SELECT user_id, login FROM users
