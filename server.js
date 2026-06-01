@@ -2840,9 +2840,9 @@ server.on("request", async (req, res) => {
                 const sqlPerm = loadSQL("./src/sql/user_permission/select_by_user_id.sql");
                 const [permRows] = await connection.execute(sqlPerm, [user.user_id]);
                 if (permRows.length > 0) {
-                    user.permissions = permRows[0];
+                    user.permissions = permRows;
                 } else {
-                    user.profile = null;
+                    user.permissions = [];
                 }
             } catch (error) {
                 res.writeHead(500, { 'Content-Type': 'application/json' });
