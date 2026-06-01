@@ -2759,6 +2759,14 @@ async function getUserBySession(req) {
 
     return rows.length ? rows[0] : null;
 }
+async function checkPermission(user_id, permission) {
+    const connectSession = await getAwaitConnect();
+    const sqlUserSession = loadSQL("./src/sql/user_remission/has_permission.sql");
+    const [rows] = await connectSession.execute(sqlUserSession, [user_id, permission]);
+    if (connectSession) connectSession.release();
+
+    return rows.length ? rows[0] : null;
+}
 server.on("request", async (req, res) => {
     console.log("req.url=", req.url)
 
@@ -3184,14 +3192,6 @@ server.on("request", async (req, res) => {
                 const sessionId = cookies.session_id;
 
                 if (!sessionId) {
-                    //res.writeHead(302, {
-                    //    "Location": "/authentication",
-                    //    "Set-Cookie": "session_id=; HttpOnly; Path=/; Max-Age=0"
-                    //});
-                    //res.end(JSON.stringify({
-                    //    success: false,
-                    //    message: "No session"
-                    //}));
                     res.writeHead(200, {
                         "Set-Cookie": "session_id=; HttpOnly; Path=/; Max-Age=0",
                         "Content-Type": "application/json"
@@ -3206,12 +3206,6 @@ server.on("request", async (req, res) => {
                 const sqlDelete = loadSQL("./src/sql/user_session/delete.sql");
                 await connection.execute(sqlDelete, [sessionId]);
 
-
-                //res.writeHead(302, {
-                //    "Location": "/authentication",
-                //    "Set-Cookie": "session_id=; HttpOnly; Path=/; Max-Age=0"
-                //});
-                //res.end();
 
                 res.writeHead(200, {
                     "Set-Cookie": "session_id=; HttpOnly; Path=/; Max-Age=0",
@@ -3238,6 +3232,81 @@ server.on("request", async (req, res) => {
                 if (connection) connection.release();
             }
             return
+        } else if (pathname.startsWith("/api/users/role")) {
+
+            const actor = await getUserBySession(req);
+            if (!actor) {
+                res.writeHead(302, {
+                    Location: "/authentication"
+                });
+
+                res.end();
+                return
+            }
+            const hasPermission = await checkPermission(actor.user_id, "users.update");
+            if (!hasPermission) {
+                res.writeHead(403);
+                res.end(JSON.stringify({
+                    success: false,
+                    user: actor,
+                    message: "Permission denied"
+                }));
+                return
+            }
+
+            let chunks = [];
+
+            req.on("data", (chunk) => {
+                chunks.push(chunk);
+            });
+            req.on("end", async () => {
+
+                const connection = await getAwaitConnect();
+                try {
+
+                    const buffer = Buffer.concat(chunks);
+                    const raw = buffer.toString().trim();
+                    if (!raw) throw new Error("Empty body");
+                    const data = JSON.parse(raw);
+                    const user = {};
+                    user.user_id = data.user_id;
+                    user.role_id = data.role_id;
+
+
+                    const sqlReg = loadSQL("./src/sql/user_role/insert.sql");
+                    const [result] = await connection.execute(sqlReg, [user.user_id, user.role_id]);
+
+
+                    res.writeHead(200, {
+                        "Content-Type": "application/json"
+                    });
+
+                    res.end(JSON.stringify({
+                        success: true,
+                        result: result,
+                        user: user,
+                        data: data,
+                        message: "Данные изменены"
+                    }));
+                    return
+                } catch (error) {
+
+                    res.writeHead(400, {
+                        "Content-Type": "application/json"
+                    });
+
+                    res.end(JSON.stringify({
+                        success: false,
+                        error: error.message
+                    }));
+                    return;
+                } finally {
+                    if (connection) connection.release();
+                }
+            })
+            return;
+
+
         } else if (pathname.startsWith("/api/profile/insert")) {
 
             const user = await getUserBySession(req);

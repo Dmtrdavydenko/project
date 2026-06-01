@@ -87,7 +87,26 @@ quit.addEventListener("submit", async function (event) {
 //    }
 //    console.log(await updateUserProfile(api));
 //})("/api/profile/insert");
+function actorPermission(select) {
+    console.log({ user_id: select.dataset.user, role_id: select.value });
 
+    const response = await fetch("/api/users/role", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            user_id: select.dataset.user,
+            role_id: select.value
+        }),
+    });
+
+    const result = await response.json();
+    console.log(result);
+    if (!result.success)
+        alert(result.message);
+
+}
 
 (async (api) => {
 
@@ -115,7 +134,7 @@ quit.addEventListener("submit", async function (event) {
 
     //select.innerHTML = html;
     permission.innerHTML = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("")
-    users.innerHTML = data.users.map(i => `<div class="label">${i.login}</div><select>${html}</select>`).join("");
+    users.innerHTML = data.users.map(i => `<div class="label">${i.login}</div><select data-user=${i.user_id} onchange="actorPermission(this);">${html}</select>`).join("");
     //console.log(data);
 
     return data;
