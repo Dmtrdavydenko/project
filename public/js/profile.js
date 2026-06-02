@@ -87,7 +87,7 @@ quit.addEventListener("submit", async function (event) {
 //    }
 //    console.log(await updateUserProfile(api));
 //})("/api/profile/insert");
-function actorPermission(select) {
+async function actorPermission(select) {
     console.log({ user_id: select.dataset.user, role_id: select.value });
 
     const response = await fetch("/api/users/role", {
