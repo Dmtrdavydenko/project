@@ -3245,6 +3245,7 @@ server.on("request", async (req, res) => {
             }
             const hasPermission = await checkPermission(actor.user_id, "users.update");
             if (!hasPermission) {
+                console.log();
                 //res.writeHead(403);
                 res.writeHead(200, {
                     "Content-Type": "application/json"
@@ -3254,9 +3255,6 @@ server.on("request", async (req, res) => {
                     user: actor,
                     message: "Permission denied"
                 }));
-
-
-
                 return
             }
 
