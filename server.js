@@ -2761,7 +2761,7 @@ async function getUserBySession(req) {
 }
 async function checkPermission(user_id, permission) {
     const connectSession = await getAwaitConnect();
-    const sqlUserSession = loadSQL("./src/sql/user_remission/has_permission.sql");
+    const sqlUserSession = loadSQL("./src/sql/user_pemission/has_permission.sql");
     const [rows] = await connectSession.execute(sqlUserSession, [user_id, permission]);
     if (connectSession) connectSession.release();
 
@@ -3245,10 +3245,10 @@ server.on("request", async (req, res) => {
             }
             const hasPermission = await checkPermission(actor.user_id, "users.update");
             if (!hasPermission) {
-                //res.writeHead(403);
-                res.writeHead(200, {
-                    "Content-Type": "application/json"
-                });
+                res.writeHead(403);
+                //res.writeHead(200, {
+                //    "Content-Type": "application/json"
+                //});
                 res.end(JSON.stringify({
                     success: false,
                     user: actor,
