@@ -3245,10 +3245,10 @@ server.on("request", async (req, res) => {
             }
             const hasPermission = await checkPermission(actor.user_id, "users.update");
             if (!hasPermission) {
-                res.writeHead(403);
-                //res.writeHead(200, {
-                //    "Content-Type": "application/json"
-                //});
+                //res.writeHead(403);
+                res.writeHead(200, {
+                    "Content-Type": "application/json"
+                });
                 res.end(JSON.stringify({
                     success: false,
                     user: actor,
