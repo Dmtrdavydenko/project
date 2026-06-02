@@ -124,17 +124,18 @@ async function actorPermission(select) {
     //console.log(test);
     // select options
     //data.roles.map(i=>`<opt>`)
-    const html = data.roles
+    const roles = data.roles
         .map(role => `
         <option value="${role.role_id}">
             ${role.role_name}
         </option>
-    `)
-        .join("");
+    `).join("");
 
-    //select.innerHTML = html;
+    
+    //select.innerHTML = roles;
+    userRole.innerHTML = data.user_pore.map(i => `<div class="label">${i.login}</div><div>${i.role_name}</div>`).join("");
     permission.innerHTML = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("")
-    users.innerHTML = data.users.map(i => `<div class="label">${i.login}</div><select data-user=${i.user_id} onchange="actorPermission(this);">${html}</select>`).join("");
+    users.innerHTML = data.users.map(i => `<div class="label">${i.login}</div><select data-user=${i.user_id} onchange="actorPermission(this);">${roles}</select>`).join("");
     //console.log(data);
 
     return data;

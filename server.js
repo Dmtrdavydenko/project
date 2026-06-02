@@ -2867,6 +2867,13 @@ server.on("request", async (req, res) => {
                 } else {
                     user.roles = [];
                 }
+                const sqlUserRole = loadSQL("./src/sql/user_role/select.sql");
+                const [user_pore] = await connection.execute(sqlUserRole);
+                if (user_pore.length > 0) {
+                    user.user_pore = user_pore;
+                } else {
+                    user.user_pore = [];
+                }
             } catch (error) {
                 res.writeHead(500, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({
@@ -3245,11 +3252,13 @@ server.on("request", async (req, res) => {
             }
             const hasPermission = await checkPermission(actor.user_id, "users.update");
             if (!hasPermission) {
-                console.log();
-                //res.writeHead(403);
                 res.writeHead(200, {
-                    "Content-Type": "application/json"
-                });
+                    "Content-Type":"application/json"
+                })
+                //res.writeHead(403);
+                //res.writeHead(200, {
+                //    "Content-Type": "application/json"
+                //});
                 res.end(JSON.stringify({
                     success: false,
                     user: actor,
