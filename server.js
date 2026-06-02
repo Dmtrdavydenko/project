@@ -2761,7 +2761,7 @@ async function getUserBySession(req) {
 }
 async function checkPermission(user_id, permission) {
     const connectSession = await getAwaitConnect();
-    const sqlUserSession = loadSQL("./src/sql/user_pemission/has_permission.sql");
+    const sqlUserSession = loadSQL("./src/sql/user_permission/has_permission.sql");
     const [rows] = await connectSession.execute(sqlUserSession, [user_id, permission]);
     if (connectSession) connectSession.release();
 
