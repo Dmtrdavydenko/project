@@ -107,6 +107,26 @@ async function actorPermission(select) {
         alert(result.message);
 
 }
+async function actorDelete(select) {
+    console.log({ user_id: select.dataset.user, role_id: select.dataset.role });
+
+    const response = await fetch("/api/users/role", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            user_id: select.dataset.user,
+            role_id: select.dataset.role
+        }),
+    });
+
+    const result = await response.json();
+    console.log(result);
+    if (!result.success)
+        alert(result.message);
+
+}
 
 (async (api) => {
 
@@ -133,7 +153,10 @@ async function actorPermission(select) {
 
     
     //select.innerHTML = roles;
-    userRole.innerHTML = data.user_pore.map(i => `<div class="label">${i.login}</div><div>${i.role_name}</div>`).join("");
+    userRole.innerHTML = data.user_pore.map(i => `
+    <div class="label">${i.login}</div>
+    <div>${i.role_name}</div>
+    <button data-user=${i.user_id} data-role=${i.role_id}onclick="actorDelete(this);"></button>`).join("");
     permission.innerHTML = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("")
     users.innerHTML = data.users.map(i => `<div class="label">${i.login}</div><select data-user=${i.user_id} onchange="actorPermission(this);">${roles}</select>`).join("");
     //console.log(data);
