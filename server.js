@@ -3371,17 +3371,29 @@ server.on("request", async (req, res) => {
                     const [result] = await connection.execute(sqlReg, [user.user_id, user.role_id]);
 
 
+                    const sqlUserRole = loadSQL("./src/sql/user_role/select.sql");
+                    const [user_pore] = await connection.execute(sqlUserRole);
+                    if (user_pore.length > 0) {
+                        user.user_pore = user_pore;
+                    } else {
+                        user.user_pore = [];
+                    }
+
+
                     res.writeHead(200, {
                         "Content-Type": "application/json"
                     });
 
-                    res.end(JSON.stringify({
-                        success: true,
-                        result: result,
-                        user: user,
-                        data: data,
-                        message: "Данные изменены"
-                    }));
+                    //res.end(JSON.stringify({
+                    //    success: true,
+                    //    result: result,
+                    //    user: user,
+                    //    data: data,
+                    //    message: "Данные изменены"
+                    //}));
+                    user.message = "Данные изменены";
+                    user.success = true; 
+                    res.end(JSON.stringify(user));
                     return
                 } catch (error) {
 
