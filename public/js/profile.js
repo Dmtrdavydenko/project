@@ -90,7 +90,7 @@ quit.addEventListener("submit", async function (event) {
 async function actorPermission(select) {
     console.log({ user_id: select.dataset.user, role_id: select.value });
 
-    const response = await fetch("/api/users/role", {
+    const response = await fetch("/api/users/role/insert", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -110,7 +110,7 @@ async function actorPermission(select) {
 async function actorDelete(select) {
     console.log({ user_id: select.dataset.user, role_id: select.dataset.role });
 
-    const response = await fetch("/api/users/role", {
+    const response = await fetch("/api/users/role/delete", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -156,7 +156,7 @@ async function actorDelete(select) {
     userRole.innerHTML = data.user_pore.map(i => `
     <div class="label">${i.login}</div>
     <div>${i.role_name}</div>
-    <button data-user=${i.user_id} data-role=${i.role_id}onclick="actorDelete(this);"></button>`).join("");
+    <button data-user=${i.user_id} data-role=${i.role_id}onclick="actorDelete(this);">Удалить</button>`).join("");
     permission.innerHTML = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("")
     users.innerHTML = data.users.map(i => `<div class="label">${i.login}</div><select data-user=${i.user_id} onchange="actorPermission(this);">${roles}</select>`).join("");
     //console.log(data);

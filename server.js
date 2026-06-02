@@ -3239,7 +3239,7 @@ server.on("request", async (req, res) => {
                 if (connection) connection.release();
             }
             return
-        } else if (pathname.startsWith("/api/users/role")) {
+        } else if (pathname.startsWith("/api/users/role/insert")) {
 
             const actor = await getUserBySession(req);
             if (!actor) {
@@ -3253,7 +3253,7 @@ server.on("request", async (req, res) => {
             const hasPermission = await checkPermission(actor.user_id, "users.update");
             if (!hasPermission) {
                 res.writeHead(200, {
-                    "Content-Type":"application/json"
+                    "Content-Type": "application/json"
                 })
                 //res.writeHead(403);
                 //res.writeHead(200, {
@@ -3287,6 +3287,87 @@ server.on("request", async (req, res) => {
 
 
                     const sqlReg = loadSQL("./src/sql/user_role/insert.sql");
+                    const [result] = await connection.execute(sqlReg, [user.user_id, user.role_id]);
+
+
+                    res.writeHead(200, {
+                        "Content-Type": "application/json"
+                    });
+
+                    res.end(JSON.stringify({
+                        success: true,
+                        result: result,
+                        user: user,
+                        data: data,
+                        message: "Данные изменены"
+                    }));
+                    return
+                } catch (error) {
+
+                    res.writeHead(400, {
+                        "Content-Type": "application/json"
+                    });
+
+                    res.end(JSON.stringify({
+                        success: false,
+                        error: error.message
+                    }));
+                    return;
+                } finally {
+                    if (connection) connection.release();
+                }
+            })
+            return;
+
+
+        } else if (pathname.startsWith("/api/users/role/delete")) {
+
+            const actor = await getUserBySession(req);
+            if (!actor) {
+                res.writeHead(302, {
+                    Location: "/authentication"
+                });
+
+                res.end();
+                return
+            }
+            const hasPermission = await checkPermission(actor.user_id, "users.delete");
+            if (!hasPermission) {
+                res.writeHead(200, {
+                    "Content-Type": "application/json"
+                })
+                //res.writeHead(403);
+                //res.writeHead(200, {
+                //    "Content-Type": "application/json"
+                //});
+                res.end(JSON.stringify({
+                    success: false,
+                    user: actor,
+                    message: "Permission denied"
+                }));
+                return
+            }
+
+            let chunks = [];
+
+            req.on("data", (chunk) => {
+                chunks.push(chunk);
+            });
+            req.on("end", async () => {
+
+                const connection = await getAwaitConnect();
+                try {
+
+                    const buffer = Buffer.concat(chunks);
+                    const raw = buffer.toString().trim();
+                    if (!raw) throw new Error("Empty body");
+                    const data = JSON.parse(raw);
+                    const user = {};
+                    user.user_id = data.user_id;
+                    user.role_id = data.role_id;
+
+
+                    const sqlReg = loadSQL("./src/sql/user_role/delete.sql");
                     const [result] = await connection.execute(sqlReg, [user.user_id, user.role_id]);
 
 
