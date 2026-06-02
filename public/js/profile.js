@@ -106,6 +106,11 @@ async function actorPermission(select) {
     if (!data.success)
         alert(data.message);
 
+    userRole.innerHTML = data.user_pore.map(i => `
+    <div class="label">${i.login}</div>
+    <div>${i.role_name}</div>
+    <button data-user=${i.user_id} data-role=${i.role_id} onclick="actorDelete(this);">Удалить</button>`).join("");
+
 }
 async function actorDelete(select) {
     console.log({ user_id: select.dataset.user, role_id: select.dataset.role });
