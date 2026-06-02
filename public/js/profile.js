@@ -156,7 +156,7 @@ async function actorDelete(select) {
     userRole.innerHTML = data.user_pore.map(i => `
     <div class="label">${i.login}</div>
     <div>${i.role_name}</div>
-    <button data-user=${i.user_id} data-role=${i.role_id}onclick="actorDelete(this);">Удалить</button>`).join("");
+    <button data-user=${i.user_id} data-role=${i.role_id} onclick="actorDelete(this);">Удалить</button>`).join("");
     permission.innerHTML = data.permissions.map(i => `<div class="label">${i.permission_name}</div><div>${i.description}</div>`).join("")
     users.innerHTML = data.users.map(i => `<div class="label">${i.login}</div><select data-user=${i.user_id} onchange="actorPermission(this);">${roles}</select>`).join("");
     //console.log(data);
