@@ -144,7 +144,7 @@ async function actorDelete(select, msg = message) {
 
     const response = await fetch(api);
     const data = await response.json();
-    console.log(data);
+    console.log({ response, data });
     profile.textContent = profile.textContent.trim().replace(/X/g, data.profile.login);
 
     id.value = data.user_id;

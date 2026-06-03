@@ -2701,17 +2701,15 @@ server.on("request", async (req, res) => {
 
             const user = await getUserBySession(req);
             if (!user) {
-                res.writeHead(401);
-                res.end();
-                //res.writeHead(401, {
-                //    "Content-Type": "application/json"
-                //});
+                res.writeHead(401, {
+                    "Content-Type": "application/json"
+                });
 
-                //res.end(JSON.stringify({
-                //    success: true,
-                //    redirect: "/authentication"
-                //}));
-                return
+                res.end(JSON.stringify({
+                    success: false,
+                    redirect: "/authentication"
+                }));
+                return;
             }
             const connection = await getAwaitConnect();
             try {
