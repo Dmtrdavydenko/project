@@ -2944,7 +2944,7 @@ server.on("request", async (req, res) => {
                         Location: "/authentication"
                     });
 
-                    res.end();
+                    res.end(JSON.stringify(user));
                     return
                 }
                 //filePath = path.join(process.cwd(), "/public/forms", "weaver.html");
