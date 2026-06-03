@@ -2461,11 +2461,11 @@ async function saveToken(tokenData, userId = 1) {
             userId, encryptedAccess, encryptedRefresh, ivAccess, ivRefresh, expires_at
         ]);
 
-        console.log('✅ Токен успешно сохранен в БД');
+        console.log('Токен успешно сохранен в БД');
         return result;
 
     } catch (error) {
-        console.error('❌ Ошибка сохранения токена:', error.message);
+        console.error('Ошибка сохранения токена:', error.message);
         throw error;
     } finally {
         connection.release(); // Важно: всегда освобождаем соединение
@@ -2481,18 +2481,14 @@ async function getAccessTokenBD(userId = 1) {
         const [rows] = await connection.execute(query, [userId]);
 
         if (rows.length === 0) {
-            console.log('🔍 Токен не найден для пользователя:', userId);
+            console.log('Токен не найден для пользователя:', userId);
             return null;
         }
 
         const row = rows[0];
         const now = Date.now();
 
-        // Проверяем срок действия токена
-        //if (now > row.expires_at) {
-        //    console.log('⚠️ Токен устарел');
-        //    return null;
-        //}
+
 
         try {
             const decryptedToken = decrypt(row.encrypted_access_token, row.iv_access_token);
@@ -2829,8 +2825,28 @@ server.on("request", async (req, res) => {
                     res.end();
                     return;
                 }
-                //filePath = path.join(process.cwd(), "/public/forms", "weaver.html");
+                const connection = await getAwaitConnect();
                 filePath = path.join(process.cwd(), "/public/forms", "profile.html");
+
+                try {
+                    const sqlUserRole = loadSQL("./src/sql/user_role/select_by_user_id.sql");
+                    const [user_pore] = await connection.execute(sqlUserRole, [user.user_id]);
+
+
+
+                    if (user_pore.length > 0) {
+                        user.user_pore = user_pore;
+                        if (user_pore.map(i => i.role_name).includes("weaver"))
+                            filePath = path.join(process.cwd(), "/public/forms", "weaver.html");
+                    } else {
+                        user.user_pore = [];
+                    }
+
+                } catch (error) {
+
+                } finally {
+                    connection.release();
+                }
             }
 
             //res.writeHead(303, {
@@ -2986,7 +3002,7 @@ server.on("request", async (req, res) => {
             });
             req.on("end", async () => {
 
-                const connect = await getAwaitConnect();
+                const connection = await getAwaitConnect();
                 try {
 
                     const buffer = Buffer.concat(chunks);
@@ -3007,12 +3023,12 @@ server.on("request", async (req, res) => {
 
                     // login
                     const sqlLogin = loadSQL("./src/sql/login/select.sql");
-                    const [rows] = await connect.execute(sqlLogin, [user.login]);
+                    const [rows] = await connection.execute(sqlLogin, [user.login]);
                     if (!rows.length) {
                         user.password_hash = await bcrypt.hash(data.password, 12);
 
                         const sqlReg = loadSQL("./src/sql/login/insert.sql");
-                        const [result] = await connect.execute(sqlReg, [user.login, user.password_hash]);
+                        const [result] = await connection.execute(sqlReg, [user.login, user.password_hash]);
 
                         user.user_id = result.insertId;
                     } else {
@@ -3033,7 +3049,7 @@ server.on("request", async (req, res) => {
                     }
                     const sessionId = crypto.randomBytes(32).toString("hex");
                     const sqlUserSession = loadSQL("./src/sql/user_session/insert.sql");
-                    await connect.execute(sqlUserSession, [sessionId, user.user_id, profile.ip, profile.userAgent]);
+                    await connection.execute(sqlUserSession, [sessionId, user.user_id, profile.ip, profile.userAgent]);
                     console.log("Соединение возвращено.");
                     // редирект на home
                     res.writeHead(200, {
@@ -3063,7 +3079,7 @@ server.on("request", async (req, res) => {
                     }));
                     return;
                 } finally {
-                    if (connect) connect.release();
+                    if (connection) connection.release();
                 }
             });
             return;
@@ -3264,7 +3280,6 @@ server.on("request", async (req, res) => {
                     const sqlReg = loadSQL("./src/sql/user_role/delete.sql");
                     const [result] = await connection.execute(sqlReg, [user.user_id, user.role_id]);
 
-
                     const sqlUserRole = loadSQL("./src/sql/user_role/select.sql");
                     const [user_pore] = await connection.execute(sqlUserRole);
                     if (user_pore.length > 0) {
@@ -3272,7 +3287,6 @@ server.on("request", async (req, res) => {
                     } else {
                         user.user_pore = [];
                     }
-
 
                     res.writeHead(200, {
                         "Content-Type": "application/json"
@@ -3286,7 +3300,7 @@ server.on("request", async (req, res) => {
                     //    message: "Данные изменены"
                     //}));
                     user.message = "Данные изменены";
-                    user.success = true; 
+                    user.success = true;
                     res.end(JSON.stringify(user));
                     return
                 } catch (error) {
