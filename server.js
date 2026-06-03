@@ -3378,6 +3378,7 @@ server.on("request", async (req, res) => {
                     const data = JSON.parse(raw);
                     const user = {};
                     user.user_id = data.user_id;
+                    if (actor.user_id == user.user_id) throw new Error("Удалить у себя роль нельзя");
                     user.role_id = data.role_id;
 
 

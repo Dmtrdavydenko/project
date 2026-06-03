@@ -104,7 +104,7 @@ async function actorPermission(select) {
     const data = await response.json();
     console.log(data);
     if (!data.success)
-        alert(data.message);
+        alert(data.error||data.message);
 
     userRole.innerHTML = data.user_pore.map(i => `
     <div class="label">${i.login}</div>
