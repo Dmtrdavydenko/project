@@ -2940,9 +2940,12 @@ server.on("request", async (req, res) => {
                 const user = await getUserBySession(req);
 
                 if (!user) {
-                    res.writeHead(302, {
-                        Location: "/authentication"
-                    });
+                    //res.writeHead(302, {
+                    //    Location: "/authentication"
+                    //});
+                    res.writeHead(200, {
+                        "Content-Type": "application/json"
+                    })
 
                     res.end(JSON.stringify(user));
                     return
