@@ -2831,8 +2831,7 @@ server.on("request", async (req, res) => {
         if (pathname === "/api/profile") {
 
             const user = await getUserBySession(req);
-            const actor = user;
-            user.test = actor;
+            user.test = user;
             if (!user) {
                 res.writeHead(401);
                 res.end();
