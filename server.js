@@ -2806,47 +2806,39 @@ server.on("request", async (req, res) => {
                 filePath = path.join(process.cwd(), "/public/forms", pathname);
             }
             if (route === "/home") {
-
-
                 const user = await getUserBySession(req);
 
                 if (!user) {
-                    //res.writeHead(302, {
-                    //    Location: "/authentication"
-                    //});
-                    //res.writeHead(200, {
-                    //    "Content-Type": "application/json"
-                    //})
-
-                    //res.end(JSON.stringify(user));
                     res.writeHead(302, {
                         Location: "/authentication"
                     });
                     res.end();
                     return;
                 }
-                const connection = await getAwaitConnect();
+
                 filePath = path.join(process.cwd(), "/public/forms", "profile.html");
 
-                try {
-                    const sqlUserRole = loadSQL("./src/sql/user_role/select_by_user_id.sql");
-                    const [user_pore] = await connection.execute(sqlUserRole, [user.user_id]);
 
+                //const connection = await getAwaitConnect();
+                //try {
+                //    const sqlUserRole = loadSQL("./src/sql/user_role/select_by_user_id.sql");
+                //    const [user_pore] = await connection.execute(sqlUserRole, [user.user_id]);
 
+                //    if (user_pore.length > 0) {
+                //        user.user_pore = user_pore;
 
-                    if (user_pore.length > 0) {
-                        user.user_pore = user_pore;
-                        if (user_pore.map(i => i.role_name).includes("weaver"))
-                            filePath = path.join(process.cwd(), "/public/forms", "weaver.html");
-                    } else {
-                        user.user_pore = [];
-                    }
+                //        if (user_pore.map(i => i.role_name).includes("weaver"))
+                //            filePath = path.join(process.cwd(), "/public/forms", "weaver.html");
 
-                } catch (error) {
+                //    } else {
+                //        user.user_pore = [];
+                //    }
 
-                } finally {
-                    connection.release();
-                }
+                //} catch (error) {
+
+                //} finally {
+                //    connection.release();
+                //}
             }
 
             //res.writeHead(303, {
