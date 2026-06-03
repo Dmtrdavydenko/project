@@ -87,7 +87,13 @@ quit.addEventListener("submit", async function (event) {
 //    }
 //    console.log(await updateUserProfile(api));
 //})("/api/profile/insert");
-async function actorPermission(select) {
+function message(data) {
+    console.log(data);
+    if (!data.success)
+        alert(data.error || data.message);
+}
+
+async function actorPermission(select, msg = message) {
     console.log({ user_id: select.dataset.user, role_id: select.value });
 
     const response = await fetch("/api/users/role/insert", {
@@ -102,9 +108,8 @@ async function actorPermission(select) {
     });
 
     const data = await response.json();
-    console.log(data);
-    if (!data.success)
-        alert(data.error||data.message);
+    msg(data);
+
 
     userRole.innerHTML = data.user_pore.map(i => `
     <div class="label">${i.login}</div>
@@ -112,7 +117,7 @@ async function actorPermission(select) {
     <button data-user=${i.user_id} data-role=${i.role_id} onclick="actorDelete(this);">Удалить</button>`).join("");
 
 }
-async function actorDelete(select) {
+async function actorDelete(select, msg = message) {
     console.log({ user_id: select.dataset.user, role_id: select.dataset.role });
 
     const response = await fetch("/api/users/role/delete", {
@@ -127,9 +132,7 @@ async function actorDelete(select) {
     });
 
     const data = await response.json();
-    console.log(data);
-    if (!data.success)
-        alert(data.message);
+    msg(data);
 
     userRole.innerHTML = data.user_pore.map(i => `
     <div class="label">${i.login}</div>
