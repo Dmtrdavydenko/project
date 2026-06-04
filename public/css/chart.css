@@ -3,7 +3,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
 }
-@media (max-width: 960px) {
+@media (max-width: 645px) {
     .dashboard {
         grid-template-columns: 1fr;
     }
