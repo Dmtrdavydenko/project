@@ -1752,8 +1752,8 @@ let allNumbers
 async function loadAndRenderButtons(field = "loom") {
     console.log("init");
     try {
-        allNumbers = getDataT();
-        //allNumbers = await request("getLoomsRecipe");
+        //allNumbers = getDataT();
+        allNumbers = await request("getLoomsRecipe");
         console.log({ allNumbers: allNumbers });
         for (const item of allNumbers) {
             for (const key in item) {
@@ -2039,56 +2039,56 @@ async function sendUpdateTextileId(update) {
 };
 
 (async () => {
-    //const dataTape = await request("getUseTape");
-    //const statWarpCountData = dataTape.filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_threads_width) }));
-    //const statWeftCountData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_threads_10cm) }));
-    //const statWarpLengthData = dataTape.filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_consumption_shift) }));
-    //const statWeftLengthData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_consumption_shift) }));
-    //console.log({
-    //    countWarp: statWarpCountData,
-    //    countWeft: statWeftCountData,
-    //    lengthWarp: statWarpLengthData,
-    //    lengthWeft: statWeftLengthData
-    //})
+    const dataTape = await request("getUseTape");
+    const statWarpCountData = dataTape.filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_threads_width) }));
+    const statWeftCountData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_threads_10cm) }));
+    const statWarpLengthData = dataTape.filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_consumption_shift) }));
+    const statWeftLengthData = dataTape.filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: Number(i.total_consumption_shift) }));
+    console.log({
+        countWarp: statWarpCountData,
+        countWeft: statWeftCountData,
+        lengthWarp: statWarpLengthData,
+        lengthWeft: statWeftLengthData
+    })
 
-    //const warpCount = document.createElement("div");
-    //const weftCount = document.createElement("div");
-    //const warpLength = document.createElement("div");
-    //const weftLength = document.createElement("div");
-    //new CircularChart({
-    //    container: document.getElementById('warp-count'),
+    const warpCount = document.createElement("div");
+    const weftCount = document.createElement("div");
+    const warpLength = document.createElement("div");
+    const weftLength = document.createElement("div");
+    new CircularChart({
+        container: document.getElementById('warp-count'),
 
-    //    centerText: 'Warp Qty',
+        centerText: 'Warp Qty',
 
-    //    data: statWarpCountData
-    //}).render();
-
-
-    //new CircularChart({
-    //    container: document.getElementById('weft-count'),
-
-    //    centerText: 'Weft Qty',
-
-    //    data: statWeftCountData
-    //}).render();
+        data: statWarpCountData
+    }).render();
 
 
-    //new CircularChart({
-    //    container: document.getElementById('warp-length'),
+    new CircularChart({
+        container: document.getElementById('weft-count'),
 
-    //    centerText: 'Warp M',
+        centerText: 'Weft Qty',
 
-    //    data: statWarpLengthData
-    //}).render();
+        data: statWeftCountData
+    }).render();
 
 
-    //new CircularChart({
-    //    container: document.getElementById('weft-length'),
+    new CircularChart({
+        container: document.getElementById('warp-length'),
 
-    //    centerText: 'Weft M',
+        centerText: 'Warp M',
 
-    //    data: statWeftLengthData
-    //}).render();
+        data: statWarpLengthData
+    }).render();
+
+
+    new CircularChart({
+        container: document.getElementById('weft-length'),
+
+        centerText: 'Weft M',
+
+        data: statWeftLengthData
+    }).render();
 
     // Запускаем загрузку и рендер кнопок
     const looms_fabric_recipe = await loadAndRenderButtons();
