@@ -25,7 +25,9 @@
 .chart-wrap {
     display: flex;
     align-items: center;
-    gap: 24px;
+    /*    gap: 24px;*/
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .legend-row {
