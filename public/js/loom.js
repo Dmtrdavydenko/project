@@ -2460,6 +2460,7 @@ async function sendUpdateTextileId(update) {
         console.log({ uniqueSleeveWidths });
         let numbers = [];
         let lastVal = 0;
+        let currentRow = null;
         uniqueSleeveWidths.forEach(obj => {
             const btn = document.createElement("button");
             btn.classList.add("select-button");
@@ -2499,21 +2500,24 @@ async function sendUpdateTextileId(update) {
             })
             const group = sleeve.width < 100 ? (sleeve.width / 10) | 0 : (sleeve.width / 100) | 0;
 
+
             if (group !== lastVal) {
-                if (lastVal !== 0) {
-                    grid.append(document.createElement("br"));
-                }
+                currentRow = document.createElement("div");
+                currentRow.classList.add("row");
+                grid.appendChild(currentRow);
                 lastVal = group;
             }
 
-            grid.append(btn);
+            //grid.append(btn);
+            currentRow.appendChild(btn);
+
         });
 
         console.log({ numbers });
 
 
 
-        document.body.append(grid);
+        //document.body.append(grid);
     }
     const buttonSend = document.createElement('button');
     buttonSend.textContent = "send";

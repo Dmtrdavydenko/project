@@ -35,6 +35,26 @@ body {
     gap: 12px 16px;
     align-items: center;
 }
+.container-grid {
+    display: grid;
+    gap: 8px; /* расстояние между группами */
+}
+
+.row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 43px;
+    justify-content: start;
+    gap: 8px;
+}
+
+.tach-button {
+    padding: 6px 0px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    margin: 0px;
+}
 
 .label {
     font-weight: 600;

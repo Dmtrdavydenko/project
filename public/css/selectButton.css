@@ -2,12 +2,12 @@
     font-family: Arial, sans-serif;
 }*/
 .container-grid {
-    /*    display: grid;*/
+/*    display: grid;
     grid-template-columns: repeat(auto-fill, minmax(47px, 1fr));
     grid-auto-rows: 32px;
     gap: 15px;
     border: 0.7px dashed black;
-    padding: 7px;
+    padding: 7px;*/
 }
 
 .select-button {
@@ -25,8 +25,8 @@ button,
 .sonar-btn {
     position: relative;
     overflow: visible;
-    волна выходит за пределы кнопки
-    /*padding: 14px 28px;
+    /*  волна выходит за пределы кнопки
+    padding: 14px 28px;
     border: none;
     border-radius: 12px;
     background: #4f46e5;
@@ -34,6 +34,10 @@ button,
     font-size: 16px;
     cursor: pointer;*/
 }
+
+
+
+
 
     /* волна */
     button::after,
@@ -71,4 +75,25 @@ hr {
         transform: translate(-50%, -50%) scale(8); /* примерно 100px от кнопки */
         opacity: 0;
     }
+}
+
+.container-grid {
+    display: grid;
+    gap: 8px; /* расстояние между группами */
+}
+
+.row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 43px;
+    justify-content: start;
+    gap: 8px;
+}
+
+.tach-button {
+    padding: 6px 0px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    margin: 0px;
 }
