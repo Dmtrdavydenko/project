@@ -2058,7 +2058,7 @@ async function sendUpdateTextileId(update) {
     new CircularChart({
         container: document.getElementById('warp-count'),
 
-        centerText: 'Warp Qty',
+        centerText: 'Основа Кол',
 
         data: statWarpCountData
     }).render();
@@ -2067,7 +2067,7 @@ async function sendUpdateTextileId(update) {
     new CircularChart({
         container: document.getElementById('weft-count'),
 
-        centerText: 'Weft Qty',
+        centerText: 'Уток Кол',
 
         data: statWeftCountData
     }).render();
@@ -2076,7 +2076,7 @@ async function sendUpdateTextileId(update) {
     new CircularChart({
         container: document.getElementById('warp-length'),
 
-        centerText: 'Warp M',
+        centerText: 'Основа M',
 
         data: statWarpLengthData
     }).render();
@@ -2085,7 +2085,7 @@ async function sendUpdateTextileId(update) {
     new CircularChart({
         container: document.getElementById('weft-length'),
 
-        centerText: 'Weft M',
+        centerText: 'Уток M',
 
         data: statWeftLengthData
     }).render();
