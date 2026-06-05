@@ -1,24 +1,26 @@
 SELECT
     loom_number as loom,
+    looms.fabric_recipe_id,
     sleeve_width as fabric_w,
     sleeve_density as fabric_d,
-    CONCAT(sw.sleeve_width, '/', sd.sleeve_density) as wd,
-    looms.fabric_recipe_id,
-    model_of_the_loom_id as model_loom,
-    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN warp_quantity END) AS q_warp,
+   -- CONCAT(sw.sleeve_width, '/', sd.sleeve_density) as 'w/d',
+    model_of_the_loom_id as model_id,
+    loom_machine.name as name,
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN weft_quantity END) AS q_weft,
+    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN tape_density.density END) AS d_weft,
+    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN color_tape.color END) AS color_weft,
+    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN additive.additive END) AS additive_weft,
+    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN additive.additive END) AS weft,
+
+    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN warp_quantity END) AS q_warp,
 
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN tape_density.density END) AS d_warp,
-    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN tape_density.density END) AS d_weft,
 
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN color_tape.color END) AS color_warp,
-    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN color_tape.color END) AS color_weft,
 
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN additive.additive END) AS additive_warp,
-    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN additive.additive END) AS additive_weft,
 
-    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN additive.additive END) AS warp,
-    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN additive.additive END) AS weft
+    GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 1 THEN additive.additive END) AS warp
     
 FROM looms
 JOIN loom_machine ON looms.model_of_the_loom_id = loom_machine.id
