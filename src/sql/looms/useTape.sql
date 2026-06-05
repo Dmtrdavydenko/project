@@ -411,7 +411,14 @@ GROUP BY
     t.color,
     t.additive
 
+/*
 ORDER BY
     t.yarn_type,
     t.density,
     t.color;
+*/
+ORDER BY
+    t.yarn_type,
+   -- t.density,
+   -- t.color,
+    total_consumption_shift;
