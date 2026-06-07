@@ -25,7 +25,7 @@ SELECT
 FROM looms
 JOIN loom_machine ON looms.model_of_the_loom_id = loom_machine.id
 JOIN fabric_recipe ON looms.fabric_recipe_id = fabric_recipe.fabric_recipe_id
-JOIN sleeve_width_density swd ON fabric_recipe.sleeve_w_d_id = swd.sleeve_width_density_id
+JOIN sleeve_width_density swd ON fabric_recipe.fabric_wd_id = swd.sleeve_width_density_id
 JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
 JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id
 JOIN yarn_type ON fabric_recipe.yarn_id = yarn_type.yarn_id

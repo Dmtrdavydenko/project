@@ -576,7 +576,7 @@ async function select(body) {
                 //    loom_number,
                 //    type_id
                 //    FROM looms;`;
-                let msn = `LEFT JOIN sleeve_width_density swd                    ON m.sleeve_w_d_id = swd.sleeve_width_density_id
+                let msn = `LEFT JOIN sleeve_width_density swd                    ON m.fabric_wd_id = swd.sleeve_width_density_id
                 LEFT JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
                 LEFT JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
                 LEFT JOIN tape_speed thread                    ON m.thread_densiti_id = thread.thread_id
@@ -609,7 +609,7 @@ async function select(body) {
                 //     FROM looms l
                 //     JOIN speed s ON l.loom_speed = s.speed_id
                 //     LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id
-                //     LEFT JOIN sleeve_width_density swd                    ON m.sleeve_w_d_id = swd.sleeve_width_density_id
+                //     LEFT JOIN sleeve_width_density swd                    ON m.fabric_wd_id = swd.sleeve_width_density_id
                 //     LEFT JOIN sleeve_width sw                    ON swd.sleeve_width_id = sw.sleeve_width_id
                 //     LEFT JOIN sleeve_density d                    ON swd.sleeve_density_id = d.sleeve_density_id
                 //     LEFT JOIN tape_speed thread ON m.thread_densiti_id = thread.thread_id
@@ -652,7 +652,7 @@ JOIN speed s ON l.loom_speed = s.speed_id
 LEFT JOIN sleeve_width_density swd ON l.type_id = swd.sleeve_width_density_id
 LEFT JOIN sleeve_width sw ON swd.sleeve_width_id = sw.sleeve_width_id
 LEFT JOIN sleeve_density d ON swd.sleeve_density_id = d.sleeve_density_id
-LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
+LEFT JOIN \`manual\` m ON l.type_id = m.fabric_wd_id AND l.modifier_id = m.additive_id
 LEFT JOIN tape_speed thread ON m.thread_densiti_id = thread.thread_id
 LEFT JOIN color c ON m.color_id = c.id
 LEFT JOIN additive ad ON m.additive_id = ad.id
@@ -731,7 +731,7 @@ WHERE type.yarn_name = 'warp' AND thread.thread_density = 105 AND ad.additive = 
                      LEFT JOIN sleeve_density sd ON swd.sleeve_density_id = sd.sleeve_density_id
 
 
-                     LEFT JOIN \`manual\` m ON l.type_id = m.sleeve_w_d_id AND l.modifier_id = m.additive_id
+                     LEFT JOIN \`manual\` m ON l.type_id = m.fabric_wd_id AND l.modifier_id = m.additive_id
                      LEFT JOIN tape_speed thread ON m.thread_densiti_id = thread.thread_id
                      LEFT JOIN Tape ON thread.density_id = Tape.id
                      LEFT JOIN tape_density ON thread.density_id = tape_density.id
@@ -878,7 +878,7 @@ LEFT JOIN sleeve_density sd
     ON swd.sleeve_density_id = sd.sleeve_density_id
 
 LEFT JOIN \`manual\` m
-    ON m.sleeve_w_d_id = swd.sleeve_width_density_id
+    ON m.fabric_wd_id = swd.sleeve_width_density_id
    AND m.additive_id = l.modifier_id
 
 LEFT JOIN tape_speed thread

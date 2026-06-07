@@ -386,7 +386,7 @@ FROM (
         ON fr.quantity_id = wq.weft_id
 
     JOIN sleeve_width_density swd
-        ON fr.sleeve_w_d_id = swd.sleeve_width_density_id
+        ON fr.fabric_wd_id = swd.sleeve_width_density_id
 
     JOIN sleeve_width sw
         ON swd.sleeve_width_id = sw.sleeve_width_id

@@ -1714,7 +1714,7 @@ function generateUpdateSQL(data, update) {
 
     const sql = `
             UPDATE \`${table}\` m 
-            JOIN sleeve_width_density swd       ON m.sleeve_w_d_id =         swd.sleeve_width_density_id
+            JOIN sleeve_width_density swd       ON m.fabric_wd_id =         swd.sleeve_width_density_id
             JOIN sleeve_width         sw        ON swd.sleeve_width_id =     sw.sleeve_width_id
             JOIN sleeve_density       d         ON swd.sleeve_density_id =   d.sleeve_density_id
 
