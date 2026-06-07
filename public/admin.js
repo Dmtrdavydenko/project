@@ -410,7 +410,7 @@ selectTable.addEventListener("change", async () => {
     const thead = document.createElement("thead");
     table.append(thead);
     table.append(tbody);
-    const render = async (data) => {
+    const render = (data) => {
         if (!data || data.length === 0) return;
 
         const keys = Object.keys(data[0]);
@@ -435,7 +435,7 @@ selectTable.addEventListener("change", async () => {
         tbody.innerHTML = bodyHtml;
         
     };
-    await render(result[0]);
+    render(result[0]);
     list.append(table);
 })
 
@@ -668,7 +668,7 @@ async function sqlQuery(sqlQueryString) {
             throw new Error(`Некорректный JSON от сервера: ${responseText}`);
         }
         console.log(result[0]);
-        return await result[0];
+        return result[0];
     } catch (error) {
         // Полный вывод ошибки
         console.error('Ошибка при выполнении запроса:', error);
