@@ -164,7 +164,7 @@ const getAllTablesName = document.createElement("button");
 getAllTablesName.textContent = "Получить имена всех таблиц";
 
 
-const selectElement = document.createElement("select");
+const selectTable = document.createElement("select");
 
 
 const getColumnsTypes = document.createElement("button");
@@ -262,6 +262,7 @@ resizeObserver.observe(textArea);
 syncSize();
 renderHighlight();
 
+const list = document.createElement("div");
 
 const table = document.createElement("table");
 const tbody = document.createElement("tbody");
@@ -272,8 +273,9 @@ const textAsk = document.createElement("textarea");
 
 const queryButton = document.createElement("button");
 queryButton.textContent = "Сделать запрос sql";
-queryButton.addEventListener("click", () => {
-    sqlQuery(textArea.value); // Передаем текст из textarea в функцию sqlQuery
+queryButton.addEventListener("click", async () => {
+    const result = await sqlQuery(textArea.value);
+    await render(result[0]);
 });
 
 const form = document.createElement("button");
@@ -299,7 +301,8 @@ showTable.addEventListener("click", showTableFn);
 main.append(dropInput);
 main.append(drop);
 main.append(getAllTablesName);
-main.append(selectElement);
+main.append(selectTable);
+main.append(list);
 main.append(getColumnsTypes);
 app.append(light);
 app.append(textArea);
@@ -359,7 +362,7 @@ drop.addEventListener("click", async function (e) {
 //        const option = document.createElement('option');
 //        option.value = value;
 //        option.textContent = value;
-//        selectElement.appendChild(option);
+//        selectTable.appendChild(option);
 //    });
 //}
 
@@ -390,17 +393,51 @@ getAllTablesName.addEventListener("click", async function (e) {
 });
 
 function createSelectOptions(array_Of_Object, field = "value") {
-    selectElement.innerHTML = '';
+    selectTable.innerHTML = '';
     array_Of_Object.forEach(object => {
         const option = document.createElement('option');
         option.value = object[field];
         option.textContent = object[field];
-        selectElement.appendChild(option);
+        selectTable.appendChild(option);
     });
 }
 
+selectTable.addEventListener("change", async () => {
+    const result = await sqlQuery("select * from " + selectTable.value);
 
+    const table = document.createElement("table");
+    const tbody = document.createElement("tbody");
+    const thead = document.createElement("thead");
+    table.append(thead);
+    table.append(tbody);
+    const render = async (data) => {
+        if (!data || data.length === 0) return;
 
+        const keys = Object.keys(data[0]);
+
+        const headHtml = `
+        <tr>
+            ${keys.map(key => `<th>${key}</th>`).join("")}
+        </tr>
+    `;
+
+        const bodyHtml = data.map(row => {
+
+            return `
+            <tr>
+                ${keys.map(key => `<td>${row[key]}</td>`).join("")}
+            </tr>
+        `;
+
+        }).join("");
+
+        thead.innerHTML = headHtml;
+        tbody.innerHTML = bodyHtml;
+        
+    };
+    await render(result[0]);
+    list.append(table);
+})
 
 async function getSelectedValue() {
     const result = await fetch("https://worktime.up.railway.app/app", {
@@ -411,7 +448,7 @@ async function getSelectedValue() {
         body: JSON.stringify({
             action: "getColumnsAndTypesForTable",
             table: {
-                name: selectElement.value,
+                name: selectTable.value,
             }
         }),
     }).then((response) => response.json());
@@ -429,7 +466,7 @@ async function showTableFn() {
         body: JSON.stringify({
             action: "select",
             table: {
-                name: selectElement.value,
+                name: selectTable.value,
             }
         }),
     }).then((response) => response.json());
@@ -518,11 +555,11 @@ async function queryTarget(event) {
         if (td.textContent.length > 0) {
             console.log(td.textContent);
             console.log(tr.sectionRowIndex);
-            console.log(selectElement.value);
+            console.log(selectTable.value);
             console.log(headers[td.cellIndex].textContent);
             try {
                 const result = await sqlWhere({
-                    tableName: selectElement.value,
+                    tableName: selectTable.value,
                     rowId: tr.sectionRowIndex,
                     columnName: headers[td.cellIndex].textContent,
                     whereColum: "textile_id",
@@ -631,10 +668,7 @@ async function sqlQuery(sqlQueryString) {
             throw new Error(`Некорректный JSON от сервера: ${responseText}`);
         }
         console.log(result[0]);
-        console.log(result[0].filter(i => i.yarn_type === "warp").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_threads_width })));
-        console.log(result[0].filter(i => i.yarn_type === "weft").map(i => ({ label: i.density + " " + i.color + " " + i.additive, value: i.total_threads_width })));
-        await render(result[0]);
-
+        return result[0];
     } catch (error) {
         // Полный вывод ошибки
         console.error('Ошибка при выполнении запроса:', error);
@@ -680,7 +714,7 @@ async function fetchTableStructure() {
         body: JSON.stringify({
             action: "getColumnsAndTypesForTable",
             table: {
-                name: selectElement.value,
+                name: selectTable.value,
             }
         }),
     })
@@ -782,7 +816,7 @@ async function sendForm() {
         body: JSON.stringify({
             action: "insertGenerate",
             table: {
-                name: selectElement.value,
+                name: selectTable.value,
                 fields: fields,
                 values: values
             }
