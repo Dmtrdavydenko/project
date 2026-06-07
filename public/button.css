@@ -57,7 +57,7 @@ body {
     background: white;
 }
 
-textarea {
+editor-textarea {
     position: relative;
     box-sizing: border-box;
     width: 600px;

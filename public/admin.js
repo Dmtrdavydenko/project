@@ -179,7 +179,7 @@ const light = document.createElement("div");
 light.classList.add("highlight");
 
 const textArea = document.createElement("textarea");
-
+textArea.classList.add("editor-textarea");
 
 
 
