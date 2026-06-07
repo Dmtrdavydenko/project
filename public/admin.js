@@ -403,7 +403,7 @@ function createSelectOptions(array_Of_Object, field = "value") {
 }
 
 selectTable.addEventListener("change", async () => {
-    const result = await sqlQuery("select * from " + selectTable.value);
+    const data = await sqlQuery("select * from " + selectTable.value);
 
     const table = document.createElement("table");
     const tbody = document.createElement("tbody");
@@ -435,7 +435,7 @@ selectTable.addEventListener("change", async () => {
         tbody.innerHTML = bodyHtml;
         
     };
-    render(result[0]);
+    render(data);
     list.append(table);
 })
 
