@@ -32,7 +32,7 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: system-ui, sans-serif;
 }
 
 .editor {
@@ -40,16 +40,19 @@ body {
     display: inline-block;
 }
 
-.highlight {
-    position: absolute;
-    top: 0;
-    left: 0;
+.highlight,
+textarea {
     box-sizing: border-box;
     padding: 10px;
     border: 1px solid #999;
-    font-family: monospace;
-    font-size: 16px;
-    line-height: 1.4;
+    font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.highlight {
+    position: absolute;
+    inset: 0;
     white-space: pre-wrap;
     overflow: auto;
     pointer-events: none;
@@ -58,14 +61,8 @@ body {
 
 textarea {
     position: relative;
-    box-sizing: border-box;
     width: 600px;
     height: 250px;
-    padding: 10px;
-    border: 1px solid #999;
-    font-family: monospace;
-    font-size: 16px;
-    line-height: 1.4;
     background: transparent;
     color: transparent;
     caret-color: black;
@@ -74,6 +71,6 @@ textarea {
 }
 
 .sql {
-    color: blue;
-    font-weight: bold;
+    color: #0066cc;
+    font-weight: 600;
 }
