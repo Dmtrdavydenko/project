@@ -171,7 +171,98 @@ const getColumnsTypes = document.createElement("button");
 getColumnsTypes.textContent = "Получить колонки";
 getColumnsTypes.addEventListener("click", getSelectedValue);
 
+
+const app = document.createElement("div");
+app.classList.add("editor");
+
+const light = document.createElement("div");
+light.classList.add("highlight");
+
 const textArea = document.createElement("textarea");
+
+
+
+
+function escapeHtml(text) {
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+function renderHighlight() {
+
+    let html = escapeHtml(textArea.value);
+
+    const keywords = [
+        "select",
+        "from",
+        "join",
+        "on",
+        "where",
+        "group",
+        "by",
+        "order",
+        "having",
+        "insert",
+        "update",
+        "delete",
+        "show",
+        "create",
+        "table",
+        "count",
+        "as",
+        "round",
+        "sum",
+        "left",
+        "and",
+        "max"
+    ];
+
+    const regex = new RegExp(
+        `\\b(${keywords.join('|')})\\b`,
+        'gi'
+    );
+
+    html = html.replace(
+        regex,
+        match => `<span class="sql">${match.toUpperCase()}</span>`
+    );
+
+    html += '\n';
+
+    light.innerHTML = html;
+}
+
+function syncSize() {
+
+    light.style.width = textArea.offsetWidth + 'px';
+
+    light.style.height = textArea.offsetHeight + 'px';
+}
+
+function syncScroll() {
+
+    light.scrollTop = textArea.scrollTop;
+
+    light.scrollLeft = textArea.scrollLeft;
+}
+
+textArea.addEventListener('input', renderHighlight);
+
+textArea.addEventListener('scroll', syncScroll);
+
+const resizeObserver = new ResizeObserver(() => {
+    syncSize();
+    syncScroll();
+});
+
+resizeObserver.observe(textArea);
+
+syncSize();
+renderHighlight();
+
+
 const table = document.createElement("table");
 const tbody = document.createElement("tbody");
 const thead = document.createElement("thead");
@@ -210,7 +301,9 @@ main.append(drop);
 main.append(getAllTablesName);
 main.append(selectElement);
 main.append(getColumnsTypes);
-main.append(textArea);
+app.append(light);
+app.append(textArea);
+main.append(app);
 main.append(queryButton);
 main.append(document.createElement("hr"));
 main.append(table);

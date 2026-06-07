@@ -30,3 +30,51 @@
     background-color: red;
   }
 }
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.editor {
+    position: relative;
+    display: inline-block;
+}
+
+.highlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #999;
+    font-family: monospace;
+    font-size: 16px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    overflow: auto;
+    pointer-events: none;
+    background: white;
+}
+
+textarea {
+    position: relative;
+    box-sizing: border-box;
+    width: 600px;
+    height: 250px;
+    padding: 10px;
+    border: 1px solid #999;
+    font-family: monospace;
+    font-size: 16px;
+    line-height: 1.4;
+    background: transparent;
+    color: transparent;
+    caret-color: black;
+    resize: both;
+    overflow: auto;
+}
+
+.sql {
+    color: blue;
+    font-weight: bold;
+}
