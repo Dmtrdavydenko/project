@@ -407,7 +407,7 @@ function createSelectOptions(array_Of_Object, field = "value") {
 selectTable.addEventListener("change", async () => {
     const data = await sqlQuery("select * from " + selectTable.value);
     const wrap = document.createElement("div");
-
+    wrap.classList.add("form");
     const table = document.createElement("table");
     const tbody = document.createElement("tbody");
     const thead = document.createElement("thead");
