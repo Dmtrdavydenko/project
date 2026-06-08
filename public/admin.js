@@ -813,7 +813,7 @@ function createInsertForm(fields, table) {
         //    },
         //    body: JSON.stringify(data)
         //});
-
+        console.log({ data });
         const cols = Object.keys(data);
         const vals = Object.values(data);
         const sql = `
@@ -829,7 +829,6 @@ function createInsertForm(fields, table) {
         console.log(result);
     });
 
-    //list.append(form);
 
 
 
