@@ -274,8 +274,8 @@ const textAsk = document.createElement("textarea");
 const queryButton = document.createElement("button");
 queryButton.textContent = "Сделать запрос sql";
 queryButton.addEventListener("click", async () => {
-    const result = await sqlQuery(textArea.value);
-    await render(result[0]);
+    const data = await sqlQuery(textArea.value);
+    await render(data);
 });
 
 const form = document.createElement("button");
