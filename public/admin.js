@@ -277,7 +277,7 @@ const queryButton = document.createElement("button");
 queryButton.textContent = "Сделать запрос sql";
 queryButton.addEventListener("click", async () => {
     const data = await sqlQuery(textArea.value);
-    await render(data);
+    await render(data[0]);
 });
 
 const form = document.createElement("button");
@@ -410,6 +410,7 @@ selectTable.addEventListener("change", async () => {
     const table = document.createElement("table");
     const tbody = document.createElement("tbody");
     const thead = document.createElement("thead");
+    table.id = selectTable.value;
     table.append(thead);
     table.append(tbody);
     const render = (data) => {
@@ -435,9 +436,10 @@ selectTable.addEventListener("change", async () => {
 
         thead.innerHTML = headHtml;
         tbody.innerHTML = bodyHtml;
-        
+
     };
-    render(data);
+    render(data[0]);
+    createInsertForm(data[1], table);
     list.append(table);
 })
 
@@ -639,7 +641,7 @@ function decodeMetadata(metadata) {
     };
 }
 
-async function sqlQuery(sqlQueryString) {
+async function sqlQuery(sqlQueryString, values = []) {
     try {
         const response = await fetch("https://worktime.up.railway.app/app", {
             method: "POST",
@@ -649,6 +651,7 @@ async function sqlQuery(sqlQueryString) {
             body: JSON.stringify({
                 action: "sql",
                 query: sqlQueryString,
+                values: values
             }),
         });
 
@@ -671,7 +674,7 @@ async function sqlQuery(sqlQueryString) {
         }
         console.log({ response });
         console.log({ result });
-        return result[0];
+        return result;
     } catch (error) {
         // Полный вывод ошибки
         console.error('Ошибка при выполнении запроса:', error);
@@ -705,7 +708,7 @@ async function render(data) {
 }
 
 
-function createInsertForm(fields, url) {
+function createInsertForm(fields, table) {
 
     const form = document.createElement("form");
 
@@ -789,20 +792,32 @@ function createInsertForm(fields, url) {
             data[field.name] = value;
         }
 
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
+        //const response = await fetch(url, {
+        //    method: "POST",
+        //    headers: {
+        //        "Content-Type": "application/json"
+        //    },
+        //    body: JSON.stringify(data)
+        //});
 
-        const result = await response.json();
+        const cols = Object.keys(data);
+        const vals = Object.values(data);
+        const sql = `
+        INSERT INTO ${table.id}
+        (${cols.join(",")})
+        VALUES
+        (${cols.map(() => "?").join(",")})
+    `;
+
+
+        const result = await sqlQuery(sql, vals);
 
         console.log(result);
     });
 
-    document.body.append(form);
+    table.append(form);
+
+
 
     return form;
 }

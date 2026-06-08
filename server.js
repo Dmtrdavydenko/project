@@ -2302,9 +2302,10 @@ async function sql(body) {
     try {
         // Выполняем переданный SQL-запрос
         if (Array.isArray(body.values))
-            all = await connection.execute(body.query, body.values);
-        else
-            all = await connection.query(body.query);
+            if (body.values.length > 0)
+                all = await connection.execute(body.query, body.values);
+            else
+                all = await connection.query(body.query);
 
         //console.log('Результаты запроса:', all);
         return all; // Возвращаем результаты запроса
