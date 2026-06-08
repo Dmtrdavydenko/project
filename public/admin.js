@@ -815,7 +815,7 @@ function createInsertForm(fields, table) {
         console.log(result);
     });
 
-    table.append(form);
+    list.append(form);
 
 
 
