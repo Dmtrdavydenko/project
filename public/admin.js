@@ -406,6 +406,7 @@ function createSelectOptions(array_Of_Object, field = "value") {
 
 selectTable.addEventListener("change", async () => {
     const data = await sqlQuery("select * from " + selectTable.value);
+    const wrap = document.createElement("div");
 
     const table = document.createElement("table");
     const tbody = document.createElement("tbody");
@@ -439,12 +440,15 @@ selectTable.addEventListener("change", async () => {
 
     };
     render(data[0]);
-    createInsertForm(data[1], table);
+    
+
     for (const metaData of data[1]) {
 
         console.log(decodeMetadata(metaData));
     }
-    list.append(table);
+    wrap.append(createInsertForm(data[1], table));
+    wrap.append(table);
+    list.append(wrap);
 })
 
 async function getSelectedValue() {
@@ -825,7 +829,7 @@ function createInsertForm(fields, table) {
         console.log(result);
     });
 
-    list.append(form);
+    //list.append(form);
 
 
 
