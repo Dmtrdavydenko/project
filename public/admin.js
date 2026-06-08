@@ -205,6 +205,7 @@ function renderHighlight() {
         "order",
         "having",
         "insert",
+        "into"
         "update",
         "delete",
         "show",
