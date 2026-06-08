@@ -669,7 +669,8 @@ async function sqlQuery(sqlQueryString) {
             console.log(responseText);
             throw new Error(`Некорректный JSON от сервера: ${responseText}`);
         }
-        console.log(result[0]);
+        console.log({ response });
+        console.log({ result });
         return result[0];
     } catch (error) {
         // Полный вывод ошибки
@@ -704,7 +705,107 @@ async function render(data) {
 }
 
 
+function createInsertForm(fields, url) {
 
+    const form = document.createElement("form");
+
+    const MYSQL_TYPES = {
+        1: "number", // tinyint
+        2: "number", // smallint
+        3: "number", // int
+        8: "number", // bigint
+        4: "number", // float
+        5: "number", // double
+        10: "date", // date
+        12: "datetime-local", // datetime
+        7: "datetime-local", // timestamp
+        253: "text", // varchar
+        254: "text", // char
+        252: "textarea" // text/blob
+    };
+
+    for (const field of fields) {
+
+        const wrapper = document.createElement("div");
+
+        const label = document.createElement("label");
+        label.textContent = field.name;
+
+        let inputType = MYSQL_TYPES[field.columnType] || "text";
+        let input;
+
+        if (inputType === "textarea") {
+
+            input = document.createElement("textarea");
+
+        } else {
+
+            input = document.createElement("input");
+            input.type = inputType;
+        }
+
+        input.name = field.name;
+        input.id = field.name;
+
+        wrapper.append(label);
+        wrapper.append(document.createElement("br"));
+        wrapper.append(input);
+
+        form.append(wrapper);
+    }
+
+    const submit = document.createElement("button");
+    submit.type = "submit";
+    submit.textContent = "Сохранить";
+
+    form.append(document.createElement("br"));
+    form.append(submit);
+
+    form.addEventListener("submit", async e => {
+
+        e.preventDefault();
+
+        const data = {};
+
+        for (const field of fields) {
+
+            const el = form.elements[field.name];
+
+            if (!el) continue;
+
+            let value = el.value;
+
+            if (
+                field.columnType === 1 ||
+                field.columnType === 2 ||
+                field.columnType === 3 ||
+                field.columnType === 4 ||
+                field.columnType === 5 ||
+                field.columnType === 8
+            ) {
+                value = value === "" ? null : Number(value);
+            }
+
+            data[field.name] = value;
+        }
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        console.log(result);
+    });
+
+    document.body.append(form);
+
+    return form;
+}
 
 
 async function fetchTableStructure() {
