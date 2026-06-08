@@ -440,7 +440,10 @@ selectTable.addEventListener("change", async () => {
     };
     render(data[0]);
     createInsertForm(data[1], table);
-    console.log(decodeMetadata(data[1]));
+    for (const metaData of data[1]) {
+
+        console.log(decodeMetadata(metaData));
+    }
     list.append(table);
 })
 
