@@ -732,6 +732,12 @@ function createInsertForm(fields, table) {
     };
 
     for (const field of fields) {
+        // skip primary / auto fields
+        const isAuto =
+            (field.flags & 512) !== 0 || // AUTO_INCREMENT
+            field.name === "id";
+
+        if (isAuto) continue;
 
         const wrapper = document.createElement("div");
 
