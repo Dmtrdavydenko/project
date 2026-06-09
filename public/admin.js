@@ -786,7 +786,7 @@ function createInsertForm(fields, table) {
 
         for (const field of fields) {
 
-            const el = form.elements[field.name];
+            const el = form.elements.namedItem(field.name);
             console.log(el);
 
             if (!el) continue;
