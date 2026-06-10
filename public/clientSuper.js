@@ -105,7 +105,12 @@ class DataTape {
             const data = JSON.parse(text);
             console.info("Load server sql");
             console.info(data);
-            return data;
+            if (!Array.isArray(data)) throw new Error("is not Array");
+
+            if (Array.isArray(data[0]))
+                return data[0];
+            else
+                return data;
         } catch (error) {
             console.log("\x1b[33m [" + text + "]");
             console.dir(error);
