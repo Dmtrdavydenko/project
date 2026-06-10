@@ -43,6 +43,8 @@ class DataTape {
                         this.data = serverData;
                     else
                         this.data = serverData[0];
+
+                    console.log(action, this.data)
                     this.saveState(action, this.data);
                     console.info("Background server update complete");
                 } catch (serverError) {
