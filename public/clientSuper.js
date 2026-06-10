@@ -933,12 +933,12 @@ localSpace.getThreads = [
 
         if (document.hidden) {
             //Thread.data = myThread;
-            //localStorage.setItem('tapeSettings', JSON.stringify(myThread));
+            localStorage.setItem('tapeSettings', JSON.stringify(myThread));
             console.log(myThread);
         }
     });
     window.addEventListener("beforeunload", () => {
-        //localStorage.setItem('tapeSettings', JSON.stringify(myThread));
+        localStorage.setItem('tapeSettings', JSON.stringify(myThread));
     });
     function create3() {
         const TimeStart = document.createElement("input");
