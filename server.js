@@ -1880,7 +1880,7 @@ async function devGetTime() {
 
 async function getThreads() {
     try {
-        const connection = await pool.getConnection();
+        const connection = await getAwaitConnect();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
             const sql = `

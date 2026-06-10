@@ -5,29 +5,32 @@ class DataTape {
     }
     async loadData(action, params = {}) {
         try {
-            console.log("1");
+            console.log("\x1b[34mЗагрузка ...");
             if (document.location.hostname === "localhost") {
+                console.log("\x1b[34mlocalhost");
                 try {
                     return this.loadState(action);
                     //return this.data;
-                } catch (e) {
+                } catch (error) {
+                    console.log("\x1b[34mload hardcode");
                     return localSpace[action];
                     //return this.data;
                 }
                 //console.info("Loaded localStorage no localhost");
                 //return this.data;
             }
+            console.log("\x1b[34mnetwork");
             try {
                 const localData = this.loadState(action);
                 if (localData) {
-                    this.data = localData;
-                    console.info("Loaded data from localStorage");
+                    console.log("\x1b[34mnetwork localStorage");
+                    return localData;
                 } else if (localSpace[action]) {
-                    // fallback на локальные данные (например, жестко закодированные)
-                    this.data = localSpace[action];
-                    console.info("Loaded data from localSpace");
+                    console.log("\x1b[34mnetwork hardcode");
+                    return localSpace[action];
                 }
             } catch (error) {
+                console.log("\x1b[34mnetwork");
                 console.warn("Local load failed:", error.message);
                 this.data = localSpace[action];
             }
@@ -36,7 +39,10 @@ class DataTape {
             (async () => {
                 try {
                     const serverData = await this.request(action, params);
-                    this.data = serverData;
+                    if (serverData.length === 1)
+                        this.data = serverData;
+                    else
+                        this.data = serverData[0];
                     this.saveState(action, this.data);
                     console.info("Background server update complete");
                 } catch (serverError) {
@@ -93,7 +99,8 @@ class DataTape {
 
         try {
             const data = JSON.parse(text);
-            console.info("Load server sql", data);
+            console.info("Load server sql");
+            console.info(data);
             return data;
         } catch (error) {
             console.log("\x1b[33m [" + text + "]");
@@ -194,6 +201,7 @@ class DataTape {
             if (action !== "getThreads") throw new Error("No load localStorage");
             const saved = localStorage.getItem('tapeSettings');
             if (!saved) throw new Error("No load localStorage");
+            console.log("\x1b[34mload localStorage");
             return JSON.parse(saved);
         } catch (e) {
             throw new Error("No load localStorage");
@@ -716,10 +724,26 @@ localSpace.getThreads = [
         "time_milliseconds": 2742857.894897461
     },
     {
+        "id": 17,
+        "density": 78,
+        "length": 16000,
+        "speed": 400,
+        "time_seconds": 2400,
+        "time_milliseconds": 2400000
+    },
+    {
+        "id": 22,
+        "density": 78,
+        "length": 16000,
+        "speed": 425,
+        "time_seconds": 2220,
+        "time_milliseconds": 2220000
+    },
+    {
         "id": 2,
         "density": 78,
         "length": 16000,
-        "speed": 440,
+        "speed": 450,
         "time_seconds": 2181.8161010742188,
         "time_milliseconds": 2181816.1010742188
     },
@@ -732,12 +756,28 @@ localSpace.getThreads = [
         "time_milliseconds": 2400000
     },
     {
+        "id": 16,
+        "density": 90,
+        "length": 14000,
+        "speed": 400,
+        "time_seconds": 2100,
+        "time_milliseconds": 2100000
+    },
+    {
+        "id": 21,
+        "density": 90,
+        "length": 14000,
+        "speed": 425,
+        "time_seconds": 1980,
+        "time_milliseconds": 1980000
+    },
+    {
         "id": 3,
         "density": 90,
         "length": 14000,
         "speed": 450,
-        "time_seconds": 1866.6659545898438,
-        "time_milliseconds": 1866665.9545898438
+        "time_seconds": 1866.665954589844,
+        "time_milliseconds": 1866665.954589844
     },
     {
         "id": 10,
@@ -748,12 +788,28 @@ localSpace.getThreads = [
         "time_milliseconds": 2040000
     },
     {
+        "id": 18,
+        "density": 105,
+        "length": 11550,
+        "speed": 350,
+        "time_seconds": 1980,
+        "time_milliseconds": 1980000
+    },
+    {
         "id": 4,
         "density": 105,
         "length": 11550,
         "speed": 400,
         "time_seconds": 1732.5,
         "time_milliseconds": 1732500
+    },
+    {
+        "id": 19,
+        "density": 110,
+        "length": 10850,
+        "speed": 350,
+        "time_seconds": 1860,
+        "time_milliseconds": 1860000
     },
     {
         "id": 5,
@@ -772,12 +828,20 @@ localSpace.getThreads = [
         "time_milliseconds": 1800000
     },
     {
+        "id": 20,
+        "density": 130,
+        "length": 9328,
+        "speed": 300,
+        "time_seconds": 1865.4000091552732,
+        "time_milliseconds": 1865400.0091552732
+    },
+    {
         "id": 11,
         "density": 130,
         "length": 9328,
         "speed": 350,
-        "time_seconds": 1599.0839767456055,
-        "time_milliseconds": 1599083.9767456055
+        "time_seconds": 1599.0839767456057,
+        "time_milliseconds": 1599083.9767456057
     },
     {
         "id": 7,
@@ -812,7 +876,6 @@ localSpace.getThreads = [
         "time_milliseconds": 1320000
     }
 ];
-
 
 
 (async (cmd) => {
