@@ -236,6 +236,37 @@ function renderHighlight() {
     html += '\n';
     light.innerHTML = html;
 }
+function formatSql(text) {
+    let result = text;
+
+    Object.entries(keywordGroups).forEach(([_, words]) => {
+        const regex = new RegExp(
+            `\\b(${words.join('|')})\\b`,
+            'gi'
+        );
+
+        result = result.replace(
+            regex,
+            match => match.toUpperCase()
+        );
+    });
+
+    return result;
+}
+textArea.addEventListener('copy', e => {
+    e.preventDefault();
+
+    const selectedText =
+        textArea.value.substring(
+            textArea.selectionStart,
+            textArea.selectionEnd
+        );
+
+    e.clipboardData.setData(
+        'text/plain',
+        formatSql(selectedText)
+    );
+});
 
 function syncSize() {
 
