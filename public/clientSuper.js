@@ -42,7 +42,7 @@ class DataTape {
                     if (serverData.length === 1)
                         this.data = serverData;
                     else
-                        this.data = serverData[0];
+                        this.data = serverData;
 
                     console.log(action, this.data)
                     this.saveState(action, this.data);
