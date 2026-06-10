@@ -218,6 +218,11 @@ function renderHighlight() {
         "sum",
         "left",
         "and",
+        "else",
+        "end",
+        "case",
+        "when",
+        "then",
         "max",
         "asc",
         "desc"
