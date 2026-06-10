@@ -33,7 +33,9 @@ LEFT JOIN warp_quantity ON fabric_recipe.quantity_id = warp_quantity.warp_id
 LEFT JOIN weft_quantity ON fabric_recipe.quantity_id = weft_quantity.weft_id
 
 JOIN tape_speed ON fabric_recipe.tape_recipe_id = tape_speed.recipe_id
-JOIN tape_length ON tape_speed.density_id = tape_length.density_id
+-- JOIN tape_length ON tape_speed.density_id = tape_length.density_id
+JOIN tape_length ON (tape_speed.density_id,class_yarn_id) = (tape_length.density_id,2)
+
 JOIN tape_density ON tape_speed.density_id = tape_density.id
 JOIN color color_tape ON fabric_recipe.color_id = color_tape.id
 JOIN additive ON fabric_recipe.additive_id = additive.id
