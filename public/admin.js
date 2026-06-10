@@ -218,7 +218,9 @@ function renderHighlight() {
         "sum",
         "left",
         "and",
-        "max"
+        "max",
+        "asc",
+        "desc"
     ];
 
     const regex = new RegExp(
