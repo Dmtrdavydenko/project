@@ -77,3 +77,28 @@ textarea {
 .form {
     display: inline-block;
 }
+.keyword {
+    color: #569CD6; /* SELECT, FROM, WHERE */
+    font-weight: bold;
+}
+
+.function {
+    color: #DCDCAA; /* COUNT, SUM */
+}
+
+.command {
+    color: #C586C0; /* INSERT, UPDATE */
+    font-weight: bold;
+}
+
+.logic {
+    color: #4EC9B0; /* CASE, WHEN, ELSE */
+}
+
+.sort {
+    color: #CE9178; /* ASC, DESC */
+}
+
+.alias {
+    color: #9CDCFE; /* AS */
+}

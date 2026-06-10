@@ -189,57 +189,51 @@ function escapeHtml(text) {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 }
+const keywordGroups = {
+    keyword: [
+        "select", "from", "where", "join", "on",
+        "group", "by", "order", "having"
+    ],
 
+    function: [
+        "count", "sum", "max", "round"
+    ],
+
+    command: [
+        "insert", "into", "values",
+        "update", "delete", "create",
+        "table", "show"
+    ],
+
+    logic: [
+        "and", "case", "when",
+        "then", "else", "end"
+    ],
+
+    sort: [
+        "asc", "desc"
+    ],
+
+    alias: [
+        "as"
+    ]
+};
 function renderHighlight() {
-
     let html = escapeHtml(textArea.value);
 
-    const keywords = [
-        "select",
-        "from",
-        "join",
-        "on",
-        "where",
-        "group",
-        "by",
-        "order",
-        "having",
-        "insert",
-        "into",
-        "values",
-        "update",
-        "delete",
-        "show",
-        "create",
-        "table",
-        "count",
-        "as",
-        "round",
-        "sum",
-        "left",
-        "and",
-        "else",
-        "end",
-        "case",
-        "when",
-        "then",
-        "max",
-        "asc",
-        "desc"
-    ];
+    Object.entries(keywordGroups).forEach(([className, words]) => {
+        const regex = new RegExp(
+            `\\b(${words.join('|')})\\b`,
+            'gi'
+        );
 
-    const regex = new RegExp(
-        `\\b(${keywords.join('|')})\\b`,
-        'gi'
-    );
-
-    html = html.replace(
-        regex,
-        match => `<span class="sql">${match.toUpperCase()}</span>`
-    );
+        html = html.replace(
+            regex,
+            match => `<span class="${className}">${match.toUpperCase()}</span>`
+        );
+    });
 
     html += '\n';
-
     light.innerHTML = html;
 }
 
