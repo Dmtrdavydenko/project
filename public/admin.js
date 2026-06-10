@@ -192,7 +192,7 @@ function escapeHtml(text) {
 const keywordGroups = {
     keyword: [
         "select", "from", "where", "join", "on",
-        "group", "by", "order", "having"
+        "group","order by", "having"
     ],
 
     function: [
