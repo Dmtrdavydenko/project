@@ -102,15 +102,18 @@ class DataTape {
         const text = await response.text();
 
         try {
+            const valid = data => {
+                if (!Array.isArray(data)) throw new Error("is not Array");
+                if (Array.isArray(data[0]))
+                    return data[0];
+                else
+                    return data;
+            }
             const data = JSON.parse(text);
+            const checked = valid(data);
             console.info("Load server sql");
-            console.info(data);
-            if (!Array.isArray(data)) throw new Error("is not Array");
-
-            if (Array.isArray(data[0]))
-                return data[0];
-            else
-                return data;
+            console.info(checked);
+            return checked;
         } catch (error) {
             console.log("\x1b[33m [" + text + "]");
             console.dir(error);
