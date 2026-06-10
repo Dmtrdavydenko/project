@@ -191,6 +191,7 @@ class DataTape {
 
     saveState(action, tapeData) {
         if (action === "getThreads") {
+            console.log(tapeData);
             try {
                 localStorage.setItem('tapeSettings', JSON.stringify(tapeData));
             } catch (e) {
