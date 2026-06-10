@@ -24,14 +24,16 @@ class DataTape {
                 const localData = this.loadState(action);
                 if (localData) {
                     console.log("\x1b[34mnetwork localStorage");
-                    return localData;
+                    console.log(localData);
+                    this.data = localData;
                 } else if (localSpace[action]) {
                     console.log("\x1b[34mnetwork hardcode");
-                    return localSpace[action];
+                    console.log(localSpace[action]);
+                    this.data = localSpace[action];
                 }
             } catch (error) {
-                console.log("\x1b[34mnetwork");
                 console.warn("Local load failed:", error.message);
+                console.log(localSpace[action]);
                 this.data = localSpace[action];
             }
 
@@ -923,12 +925,12 @@ localSpace.getThreads = [
 
         if (document.hidden) {
             //Thread.data = myThread;
-            localStorage.setItem('tapeSettings', JSON.stringify(myThread));
+            //localStorage.setItem('tapeSettings', JSON.stringify(myThread));
             console.log(myThread);
         }
     });
     window.addEventListener("beforeunload", () => {
-        localStorage.setItem('tapeSettings', JSON.stringify(myThread));
+        //localStorage.setItem('tapeSettings', JSON.stringify(myThread));
     });
     function create3() {
         const TimeStart = document.createElement("input");
