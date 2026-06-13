@@ -112,9 +112,9 @@ export class ManualRepository {
                     rows: rows,
                     all: all
                 };
-            } catch (err) {
-                console.error('Ошибка:', err);
-                throw err;
+            } catch (error) {
+                console.error('Ошибка:', error);
+                throw error;
             } finally {
                 if (connection) connection.release();
             }
