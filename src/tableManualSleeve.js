@@ -12,7 +12,7 @@ export class ManualRepository {
         //});
         this.getConnection = connect;
     }
-    async static connect(connect) {
+    static connect(connect) {
         this.getConnection = connect;
     }
 
@@ -64,9 +64,9 @@ export class ManualRepository {
             values: values
         };
     }
-    async select(filters = {}) {
+    async select(filters = {}, conn) {
         try {
-            const connection = this.getConnection;
+            const connection = conn;
             try {
                 const { whereClause, values } = this.buildWhereClause(filters);
                 const query = `
