@@ -775,7 +775,7 @@ async function select(body) {
         throw err;
     } finally {
         if (connection) connection.release();
-        console.log("Соединение возвращено.");
+        console.log("Соединение возвращено. SELECT");
     }
 }
 async function getTable(body) {
