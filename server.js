@@ -1009,8 +1009,8 @@ ORDER BY l.loom_number ASC;
             case "fabric_recipe":
 
 
-                if (connection) connection.release();
-                console.log("Соединение возвращено.");
+                //if (connection) connection.release();
+                //console.log("Соединение возвращено.");
 
                 const keysToDelete = [];
                 for (const key in body) {
@@ -1620,7 +1620,7 @@ async function getAwaitConnect(maxRetries = 5, retryDelay = 3000) {
                 throw new Error(`Не удалось подключиться к MySQL после ${maxRetries} попыток. Последняя ошибка: ${error.message}`);
             }
             if (error.code === "ECONNREFUSED") {
-                console.log(`⏳ Ожидание ${retryDelay / 1000} секунд перед повтором...`);
+                console.log(`Ожидание ${retryDelay / 1000} секунд перед повтором...`);
                 await new Promise(resolve => setTimeout(resolve, retryDelay));
             } else {
                 throw error; // Другие ошибки не ретраим

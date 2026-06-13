@@ -115,7 +115,6 @@ export class ManualRepository {
                 throw err;
             } finally {
                 if (connection) connection.release();
-                console.log("Соединение возвращено.");
             }
         } catch (error) {
             console.error('Error selecting manual data:', error);

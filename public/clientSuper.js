@@ -41,10 +41,7 @@ class DataTape {
             (async () => {
                 try {
                     const serverData = await this.request(action, params);
-                    if (serverData.length === 1)
-                        this.data = serverData;
-                    else
-                        this.data = serverData;
+                    this.data = serverData;
 
                     console.log(action, this.data)
                     this.saveState(action, this.data);
