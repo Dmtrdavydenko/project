@@ -116,7 +116,7 @@ export class ManualRepository {
                 console.error('Ошибка:', error);
                 throw error;
             } finally {
-                //if (connection) connection.release();
+                if (connection) connection.release();
             }
         } catch (error) {
             console.error('Error selecting manual data:', error);
