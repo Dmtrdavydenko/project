@@ -407,7 +407,7 @@ async function getMetaDataTable(body) {
         get3
     };
 }
-const manual = new ManualRepository(getAwaitConnect);
+const manual = new ManualRepository();
 async function select(body) {
     const connection = await getAwaitConnect();
     try {

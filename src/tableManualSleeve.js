@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise";
 export class ManualRepository {
-    constructor(connect) {
+    constructor(connect = null) {
         //this.connect = mysql.createPool({
         //    host: process.env.DB_HOST,
         //    user: process.env.DB_USER,
@@ -116,7 +116,7 @@ export class ManualRepository {
                 console.error('Ошибка:', error);
                 throw error;
             } finally {
-                if (connection) connection.release();
+                //if (connection) connection.release();
             }
         } catch (error) {
             console.error('Error selecting manual data:', error);
