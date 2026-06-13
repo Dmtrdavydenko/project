@@ -12,6 +12,9 @@ export class ManualRepository {
         //});
         this.getConnection = connect;
     }
+    static connect(connect) {
+        this.getConnection = connect;
+    }
 
     /**
      * Валидация данных перед вставкой
@@ -63,8 +66,7 @@ export class ManualRepository {
     }
     async select(filters = {}) {
         try {
-            const connection = await this.getConnection();
-
+            const connection = this.getConnection;
             try {
                 const { whereClause, values } = this.buildWhereClause(filters);
                 const query = `
@@ -108,7 +110,7 @@ export class ManualRepository {
                 return {
                     success: true,
                     rows: rows,
-                    all:all
+                    all: all
                 };
             } catch (err) {
                 console.error('Ошибка:', err);

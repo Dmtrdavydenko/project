@@ -407,10 +407,9 @@ async function getMetaDataTable(body) {
         get3
     };
 }
+const manual = new ManualRepository(getAwaitConnect);
 async function select(body) {
-
-    const connection = await getAwaitConnect();;
-
+    const connection = await getAwaitConnect();
     try {
         console.log('Успешно подключено к базе данных MySQL!');
 
@@ -1021,7 +1020,7 @@ ORDER BY l.loom_number ASC;
                 keysToDelete.forEach(key => delete body[key]);
                 //const manual = new ManualRepository(pool);
                 try {
-                    //return await manual.insertManual(transformKeys(body));
+                    ManualRepository.connect(connection);
                     return await manual.select(transformKeys(body));
                 } catch (error) {
                     console.log('select failed: ' + error.message);
@@ -1313,7 +1312,6 @@ async function insertGenerate(body) {
         console.log("Соединение возвращено.");
     }
 }
-const manual = new ManualRepository(getAwaitConnect);
 async function insert(body) {
     const connection = await pool.getConnection();
 
