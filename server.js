@@ -648,7 +648,7 @@ async function select(body) {
                 keysToDelete.forEach(key => delete body[key]);
                 //const manual = new ManualRepository(pool);
                 try {
-                    ManualRepository.connect(connection);
+                    await ManualRepository.connect(connection);
                     return await manual.select(transformKeys(body));
                 } catch (error) {
                     console.log('select failed: ' + error.message);

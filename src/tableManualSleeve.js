@@ -12,7 +12,7 @@ export class ManualRepository {
         //});
         this.getConnection = connect;
     }
-    static connect(connect) {
+    async static connect(connect) {
         this.getConnection = connect;
     }
 
