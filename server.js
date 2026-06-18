@@ -708,7 +708,7 @@ async function select(body) {
                     "ORDER BY density ASC";
                 break;
             case "tape_length":
-                sql = loadSQL("./src/sql/looms/tape_length.sql");
+                sql = loadSQL("./src/sql/tape_length/select.sql");
                 break;
             default:
                 sql = 'SELECT * FROM `' + body.table.name + "`";
