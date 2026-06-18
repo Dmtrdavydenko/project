@@ -1,10 +1,10 @@
-select 
+SELECT 
 tl.id,
 density_id,
 class_yarn_id,
 density,
 length,
-length*density/1000000 as weight
-from tape_length tl
-join tape_density td on tl.density_id = td.id
-order by class_yarn_id, density_id
+length*density/1000000 AS weight
+FROM tape_length tl
+JOIN tape_density td ON tl.density_id = td.id
+ORDER BY class_yarn_id, density_id
