@@ -221,14 +221,31 @@ const keywordGroups = {
         "'"
     ]
 };
+//function renderHighlight() {
+//    let html = escapeHtml(textArea.value);
+
+//    Object.entries(keywordGroups).forEach(([className, words]) => {
+//        const regex = new RegExp(
+//            `\\b(${words.join('|')})\\b`,
+//            'gi'
+//        );
+
+//        html = html.replace(
+//            regex,
+//            match => `<span class="${className}">${match.toUpperCase()}</span>`
+//        );
+//    });
+
+//    html += '\n';
+//    light.innerHTML = html;
+//}
 function renderHighlight() {
     let html = escapeHtml(textArea.value);
 
     Object.entries(keywordGroups).forEach(([className, words]) => {
-        const regex = new RegExp(
-            `\\b(${words.join('|')})\\b`,
-            'gi'
-        );
+        const regex = className === 'text'
+            ? new RegExp(`(${words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g')
+            : new RegExp(`\\b(${words.join('|')})\\b`, 'gi');
 
         html = html.replace(
             regex,
