@@ -216,6 +216,9 @@ const keywordGroups = {
 
     alias: [
         "as"
+    ],
+    text: [
+        "'"
     ]
 };
 function renderHighlight() {

@@ -1,12 +1,12 @@
 .success {
-  /*             background-color: green; */
-  /* Change to green on success */
-  /*             transform: scale(1.1); */
-  /* Slightly enlarge the button */
-  animation: successAnimation 3s;
-  /*             animation: successAnimation 3s infinite; */
-  /*             animation: successAnimation 1s forwards; */
-  /* Apply success animation */
+    /*             background-color: green; */
+    /* Change to green on success */
+    /*             transform: scale(1.1); */
+    /* Slightly enlarge the button */
+    animation: successAnimation 3s;
+    /*             animation: successAnimation 3s infinite; */
+    /*             animation: successAnimation 1s forwards; */
+    /* Apply success animation */
 }
 
 @keyframes successAnimation {
@@ -14,21 +14,22 @@
         background-color: lightgreen;
     }
 }
+
 .reject {
-  /*             background-color: green; */
-  /* Change to green on success */
-  /*             transform: scale(1.1); */
-  /* Slightly enlarge the button */
-  animation: rejectAnimation 3s;
-  /*             animation: successAnimation 3s infinite; */
-  /*             animation: successAnimation 1s forwards; */
-  /* Apply success animation */
+    /*             background-color: green; */
+    /* Change to green on success */
+    /*             transform: scale(1.1); */
+    /* Slightly enlarge the button */
+    animation: rejectAnimation 3s;
+    /*             animation: successAnimation 3s infinite; */
+    /*             animation: successAnimation 1s forwards; */
+    /* Apply success animation */
 }
 
 @keyframes rejectAnimation {
-  50% {
-    background-color: red;
-  }
+    50% {
+        background-color: red;
+    }
 }
 
 body {
@@ -74,9 +75,11 @@ textarea {
     color: #0066cc;
     font-weight: 600;
 }
+
 .form {
     display: inline-block;
 }
+
 .keyword {
     color: #569CD6; /* SELECT, FROM, WHERE */
     font-weight: bold;
@@ -101,4 +104,8 @@ textarea {
 
 .alias {
     color: #9CDCFE; /* AS */
+}
+
+.text {
+    color: #d13d8e;
 }
