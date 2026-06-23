@@ -88,3 +88,12 @@ textarea {
 .btn::after {
     content:" "
 }
+label {
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+    label input {
+        margin-right: 8px;
+    }
