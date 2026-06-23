@@ -243,9 +243,19 @@ function renderHighlight() {
     let html = escapeHtml(textArea.value);
 
     Object.entries(keywordGroups).forEach(([className, words]) => {
-        const regex = className === 'text'
-            ? new RegExp(`(${words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g')
-            : new RegExp(`\\b(${words.join('|')})\\b`, 'gi');
+
+        if (className === 'text') {
+            html = html.replace(
+                /'[^']*'/g,
+                match => `<span class="${className}">${match}</span>`
+            );
+            return;
+        }
+
+        const regex = new RegExp(
+            `\\b(${words.join('|')})\\b`,
+            'gi'
+        );
 
         html = html.replace(
             regex,
