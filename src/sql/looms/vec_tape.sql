@@ -15,8 +15,8 @@ LEFT JOIN color c
     ON te.color_id = c.id
 LEFT JOIN additive a
     ON te.additive_id = a.id
-left JOIN tape_length tl ON ts.density_id = tl.density_id
-left JOIN yarn_type yt ON tl.class_yarn_id = yt.yarn_id
+LEFT JOIN tape_length tl ON ts.density_id = tl.density_id
+LEFT JOIN yarn_type yt ON tl.class_yarn_id = yt.yarn_id
 ),
 
 consumption AS (
