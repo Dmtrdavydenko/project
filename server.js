@@ -2555,8 +2555,32 @@ server.on("request", async (req, res) => {
                 }
                 res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
                 console.log(filePath);
-                const fileStream = fs.createReadStream(filePath);
-                fileStream.pipe(res);
+                //const fileStream = fs.createReadStream(filePath);
+                //fileStream.pipe(res);
+                fs.readFile(filePath, "utf8", (err, html) => {
+                    if (err) {
+                        res.writeHead(500);
+                        return res.end();
+                    }
+
+                    const roleFile = path.join(
+                        process.cwd(),
+                        `public/forms/roles/${user.role}.html`
+                    );
+
+                    const roleHtml = fs.readFileSync(roleFile, "utf8");
+
+                    html = html.replace(
+                        "<!-- ROLE_CONTENT -->",
+                        roleHtml
+                    );
+
+                    res.writeHead(200, {
+                        "Content-Type": "text/html; charset=utf-8"
+                    });
+
+                    res.end(html);
+                });
             });
             // Здесь отдаём статический файл из файловой системы
         }
