@@ -2443,8 +2443,13 @@ server.on("request", async (req, res) => {
             if (pathname === "/hh.json") {
                 filePath = path.join(process.cwd(), "/public/models", pathname);
             }
+
+
             if (route === "/loom") {
                 filePath = path.join(process.cwd(), "/public/interface", pathname);
+            }
+            if (route === "/weaver") {
+                filePath = path.join(process.cwd(), "/public/forms", pathname);
             }
             if (route === "/authentication") {
                 filePath = path.join(process.cwd(), "/public/forms", pathname);
