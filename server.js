@@ -2425,13 +2425,13 @@ server.on("request", async (req, res) => {
                 } else {
                     user.fabric_recipe = [];
                 }
-                //const sqlReg = loadSQL("./src/sql/user_profile/select.sql");
-                //const [userRows] = await connection.execute(sqlReg, [user.user_id]);
-                //if (userRows.length > 0) {
-                //    user.profile = userRows[0];
-                //} else {
-                //    user.profile = null;
-                //}
+                const sqlReg = loadSQL("./src/sql/user_profile/select.sql");
+                const [userRows] = await connection.execute(sqlReg, [user.user_id]);
+                if (userRows.length > 0) {
+                    user.profile = userRows[0];
+                } else {
+                    user.profile = null;
+                }
                 const sqlPerm = loadSQL("./src/sql/user_permission/select_by_user_id.sql");
                 const [permRows] = await connection.execute(sqlPerm, [user.user_id]);
                 if (permRows.length > 0) {
