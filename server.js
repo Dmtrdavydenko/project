@@ -2567,14 +2567,14 @@ server.on("request", async (req, res) => {
                         res.end();
                         return
                     }
+                    if (roleFile) {
+                        const roleHtml = fs.readFileSync(roleFile, "utf8");
 
-                    const roleHtml = fs.readFileSync(roleFile, "utf8");
-
-                    html = html.replace(
-                        "<!-- ROLE_CONTENT -->",
-                        roleHtml
-                    );
-
+                        html = html.replace(
+                            "<!-- ROLE_CONTENT -->",
+                            roleHtml
+                        );
+                    }
                     //res.writeHead(200, {
                     //    "Content-Type": "text/html; charset=utf-8"
                     //});
