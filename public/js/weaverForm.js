@@ -1145,7 +1145,7 @@ grid.classList.add("container-grid");
     const data = await response.json();
     const dataRow = data.fabric_recipe;
     console.log({ response, dataRow });
-    fio.value = data.fio;
+    fio.value = data.profile.fio;
 
     const uniqueSleeveWidths = [];
     const seen = new Set();
