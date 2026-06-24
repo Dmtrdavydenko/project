@@ -2552,6 +2552,7 @@ server.on("request", async (req, res) => {
               <pre>${route}</pre>
             </body>
             </html>`);
+                    return;
                 }
                 res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
                 console.log(filePath);
@@ -2575,9 +2576,9 @@ server.on("request", async (req, res) => {
                         roleHtml
                     );
 
-                    res.writeHead(200, {
-                        "Content-Type": "text/html; charset=utf-8"
-                    });
+                    //res.writeHead(200, {
+                    //    "Content-Type": "text/html; charset=utf-8"
+                    //});
 
                     res.end(html);
                 });
