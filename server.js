@@ -3179,7 +3179,7 @@ server.on("request", async (req, res) => {
                 }
             })
             return;
-        } else if (pathname.startsWith("/api/fabric_recipe/select")) {
+        } else if (pathname.startsWith("/api/weaving_logs/insert")) {
 
             const user = await getUserBySession(req);
 
@@ -3208,12 +3208,20 @@ server.on("request", async (req, res) => {
 
 
 
-                    const sqlFabricRecipe = loadSQL("./src/sql/fabric_recipe/select.sql");
-                    const [fabric_recipe] = await connection.execute(sqlFabricRecipe);
-                    if (fabric_recipe.length > 0) {
-                        user.fabric_recipe = fabric_recipe;
+                    const sqlWeavingLogs = loadSQL("./src/sql/weaving_logs/insert.sql");
+                    const [weaving_logs] = await connection.execute(sqlWeavingLogs,
+                        [
+                            user.user_id,
+                            new Date(data.dateTime).toISOString().slice(0, 10),
+                            Number(data.smena),
+                            Number(data.loom),
+                            Number(data.recipe),
+                            Number(data.product)
+                    ]);
+                    if (weaving_logs.length > 0) {
+                        user.weaving_logs = weaving_logs;
                     } else {
-                        user.fabric_recipe = [];
+                        user.weaving_logs = [];
                     }
 
                     res.writeHead(200, {
@@ -3222,7 +3230,7 @@ server.on("request", async (req, res) => {
 
                     res.end(JSON.stringify({
                         success: true,
-                        result: fabric_recipe,
+                        result: weaving_logs,
                         user: user,
                         message: "Информация добавлена"
                     }));

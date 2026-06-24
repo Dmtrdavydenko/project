@@ -20,7 +20,7 @@ form.addEventListener("submit", async function (event) {
     console.log(data);
     try {
 
-        const response = await fetch("/app", {
+        const response = await fetch("/api/weaving_logs/insert", {
 
             method: "POST",
 
