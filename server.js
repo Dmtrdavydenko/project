@@ -2467,7 +2467,7 @@ server.on("request", async (req, res) => {
                     const [user_role] = await connection.execute(sqlUserRole, [user.user_id]);
                     if (user_role.length > 0) {
                         if (user_role.map(i => i.role_name).includes("weaver")) {
-                            roleFile = path.join(process.cwd(), "public/forms/roles", "weaver.html");
+                            //roleFile = path.join(process.cwd(), "public/forms/roles", "weaver.html");
                         }
                     }
                 } catch (error) {
@@ -3085,6 +3085,68 @@ server.on("request", async (req, res) => {
                         result: result,
                         user: user,
                         message: "Данные изменены"
+                    }));
+                    return
+                } catch (error) {
+
+                    res.writeHead(400, {
+                        "Content-Type": "application/json"
+                    });
+
+                    res.end(JSON.stringify({
+                        success: false,
+                        error: error.message
+                    }));
+                    return;
+                } finally {
+                    if (connection) connection.release();
+                }
+            })
+            return;
+        } else if (pathname.startsWith("/api/fabric_recipe/select")) {
+
+            const user = await getUserBySession(req);
+
+            if (!user) {
+                res.writeHead(302, {
+                    Location: "/authentication"
+                });
+
+                res.end();
+                return
+            }
+            let chunks = [];
+
+            req.on("data", (chunk) => {
+                chunks.push(chunk);
+            });
+            req.on("end", async () => {
+
+                const connection = await getAwaitConnect();
+                try {
+
+                    const buffer = Buffer.concat(chunks);
+                    const raw = buffer.toString().trim();
+                    if (!raw) throw new Error("Empty body");
+                    const data = JSON.parse(raw);
+
+
+
+                    const sqlFabricRecipe = loadSQL("./src/sql/fabric_recipe/select.sql");
+                    const [sqlFabricRecipe] = await connection.execute(sqlUserRole, [user.user_id]);
+                    if (sqlFabricRecipe.length > 0) {
+
+                    }
+
+                    res.writeHead(200, {
+                        "Content-Type": "application/json"
+                    });
+
+                    res.end(JSON.stringify({
+                        success: true,
+                        result: result,
+                        user: user,
+                        message: "Информация добавлена"
                     }));
                     return
                 } catch (error) {
