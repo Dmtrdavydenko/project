@@ -2469,13 +2469,11 @@ server.on("request", async (req, res) => {
                     const [user_role] = await connection.execute(sqlUserRole, [user.user_id]);
                     if (user_role.length > 0) {
                         if (user_role.map(i => i.role_name).includes("weaver")) {
-                            roleFile = path.join(process.cwd(),`public/forms/roles/weaver.html`);
+                            roleFile = path.join(process.cwd(), "public/forms/roles", "weaver.html");
                         }
                         if (user_role.map(i => i.role_name).includes("admin")) {
-                            roleFile = path.join(process.cwd(), `public/forms/roles/admin.html`);
+                            roleFile = path.join(process.cwd(), "public/forms/roles", "admin.html");
                         }
-                    } else {
-                        user.user_role = [];
                     }
                 } catch (error) {
                     res.writeHead(500, { 'Content-Type': 'application/json' });
