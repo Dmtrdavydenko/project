@@ -1143,7 +1143,7 @@ grid.classList.add("container-grid");
     const response = await fetch(api);
     if (!response.ok) throw new Error("");
     const data = await response.json();
-    const dataRow = data.result;
+    const dataRow = data.fabric_recipe;
     console.log({ response, dataRow });
 
 
