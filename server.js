@@ -2471,9 +2471,9 @@ server.on("request", async (req, res) => {
                         if (user_role.map(i => i.role_name).includes("weaver")) {
                             roleFile = path.join(process.cwd(), "public/forms/roles", "weaver.html");
                         }
-                        if (user_role.map(i => i.role_name).includes("admin")) {
-                            roleFile = path.join(process.cwd(), "public/forms/roles", "admin.html");
-                        }
+                        //if (user_role.map(i => i.role_name).includes("admin")) {
+                        //    roleFile = path.join(process.cwd(), "public/forms/roles", "admin.html");
+                        //}
                     }
                 } catch (error) {
                     res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -2564,7 +2564,8 @@ server.on("request", async (req, res) => {
                 fs.readFile(filePath, "utf8", (err, html) => {
                     if (err) {
                         res.writeHead(500);
-                        return res.end();
+                        res.end();
+                        return
                     }
 
                     const roleHtml = fs.readFileSync(roleFile, "utf8");
