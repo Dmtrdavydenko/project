@@ -4,11 +4,6 @@ console.log(smena);
 console.log(loom);
 console.log(recipe);
 console.log(product);
-
-const minute = DateTime.valueAsNumber;
-console.log(minute/720);
-console.log(minute/720%16);
-console.log(minute/720%(16*720));
 function form1() {
     this.fio = fio.value;
     this.dateTime = DateTime.valueAsNumber;

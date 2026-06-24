@@ -2565,7 +2565,7 @@ server.on("request", async (req, res) => {
 
                     const roleFile = path.join(
                         process.cwd(),
-                        `public/forms/roles/${user.role}.html`
+                        `public/forms/roles/weaver.html`
                     );
 
                     const roleHtml = fs.readFileSync(roleFile, "utf8");
