@@ -2460,28 +2460,28 @@ server.on("request", async (req, res) => {
                     return;
                 }
                 // check role app html render role
-                const connection = await getAwaitConnect();
-                try {
-                    const sqlUserRole = loadSQL("./src/sql/user_role/select_by_user_id.sql");
-                    const [user_role] = await connection.execute(sqlUserRole, [user.user_id]);
-                    if (user_role.length > 0) {
-                        if (user_role.map(i => i.role_name).includes("weaver")) {
+                //const connection = await getAwaitConnect();
+                //try {
+                //    const sqlUserRole = loadSQL("./src/sql/user_role/select_by_user_id.sql");
+                //    const [user_role] = await connection.execute(sqlUserRole, [user.user_id]);
+                //    if (user_role.length > 0) {
+                //        if (user_role.map(i => i.role_name).includes("weaver")) {
                             
 
-                        }
-                    } else {
-                        user.user_role = [];
-                    }
-                } catch (error) {
-                    res.writeHead(500, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({
-                        error: error.message
-                    }));
-                    return;
+                //        }
+                //    } else {
+                //        user.user_role = [];
+                //    }
+                //} catch (error) {
+                //    res.writeHead(500, { 'Content-Type': 'application/json' });
+                //    res.end(JSON.stringify({
+                //        error: error.message
+                //    }));
+                //    return;
 
-                } finally {
-                    if (connection) connection.release();
-                }
+                //} finally {
+                //    if (connection) connection.release();
+                //}
 
                 filePath = path.join(process.cwd(), "/public/forms", "profile.html");
 
