@@ -708,7 +708,7 @@ async function select(body) {
                     "ORDER BY density ASC";
                 break;
             case "tape_length":
-                sql = loadSQL("./src/sql/tape_length/select.sql");
+                sql = loadSQL("./src/sql/tape_length/tape_length.sql");
                 break;
             default:
                 sql = 'SELECT * FROM `' + body.table.name + "`";
@@ -2378,8 +2378,9 @@ server.on("request", async (req, res) => {
                 } else {
                     user.roles = [];
                 }
-                const sqlUserRole = loadSQL("./src/sql/user_role/select.sql");
-                const [user_pore] = await connection.execute(sqlUserRole);
+                //const sqlUserRole = loadSQL("./src/sql/user_role/select.sql");
+                const sqlUserRole = loadSQL("./src/sql/user_role/select_by_user_id.sql");
+                const [user_pore] = await connection.execute(sqlUserRole, [user.user_id]);
                 if (user_pore.length > 0) {
                     user.user_pore = user_pore;
                 } else {

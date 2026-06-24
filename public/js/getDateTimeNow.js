@@ -4,9 +4,9 @@ DateTime.valueAsNumber = (now.getTime() - now.getTimezoneOffset() * 60000);
 
 const SHIFT_MS = 720 * 60000;
 const globalOffset = 5;
-const shift = Math.floor(DateTime.valueAsNumber / SHIFT_MS);
+const shift = Math.floor((DateTime.valueAsNumber + (4 * 60000 * 60)) / SHIFT_MS);
 const cycle = (shift + globalOffset) % 16;
-console.log({ shift });
+console.log({ shift }, ((DateTime.valueAsNumber + (4 * 60000*60)) / SHIFT_MS));
 console.log({ cycle });
 
 
@@ -16,4 +16,26 @@ const table = [
 
 
 console.log(table[cycle]);
-smena.value = table[cycle % 2][cycle % 8];
+smena.value = table[cycle];
+product.value = 2000;
+
+const shifts = [
+    { day: 1, night: 4 },
+    { day: 1, night: 4 },
+    { day: 2, night: 1 },
+    { day: 2, night: 1 },
+    { day: 3, night: 2 },
+    { day: 3, night: 2 },
+    { day: 4, night: 3 },
+    { day: 4, night: 3 }
+];
+const p = Math.floor(cycle / 2);
+
+const isNight = cycle % 2 === 1;
+
+const result = isNight ? shifts[p].night : shifts[p].day;
+console.log({ result });
+
+fio.value = "Weaver";
+loom.value = 1;
+recipe.value = 19;
