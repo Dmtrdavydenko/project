@@ -1142,7 +1142,8 @@ grid.classList.add("container-grid");
 
     const response = await fetch(api);
     if (!response.ok) throw new Error("");
-    const dataRow = await response.json();
+    const data = await response.json();
+    const dataRow = data.result;
     console.log({ response, dataRow });
 
 

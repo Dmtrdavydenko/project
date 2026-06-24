@@ -3133,9 +3133,11 @@ server.on("request", async (req, res) => {
 
 
                     const sqlFabricRecipe = loadSQL("./src/sql/fabric_recipe/select.sql");
-                    const [sqlFabricRecipe] = await connection.execute(sqlUserRole, [user.user_id]);
-                    if (sqlFabricRecipe.length > 0) {
-
+                    const [fabric_recipe] = await connection.execute(sqlFabricRecipe);
+                    if (fabric_recipe.length > 0) {
+                        user.fabric_recipe = fabric_recipe;
+                    } else {
+                        user.fabric_recipe = [];
                     }
 
                     res.writeHead(200, {
@@ -3144,7 +3146,7 @@ server.on("request", async (req, res) => {
 
                     res.end(JSON.stringify({
                         success: true,
-                        result: result,
+                        result: fabric_recipe,
                         user: user,
                         message: "Информация добавлена"
                     }));
