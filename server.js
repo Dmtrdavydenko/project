@@ -2380,11 +2380,11 @@ server.on("request", async (req, res) => {
                 }
                 //const sqlUserRole = loadSQL("./src/sql/user_role/select.sql");
                 const sqlUserRole = loadSQL("./src/sql/user_role/select_by_user_id.sql");
-                const [user_pore] = await connection.execute(sqlUserRole, [user.user_id]);
-                if (user_pore.length > 0) {
-                    user.user_pore = user_pore;
+                const [user_role] = await connection.execute(sqlUserRole, [user.user_id]);
+                if (user_role.length > 0) {
+                    user.user_role = user_role;
                 } else {
-                    user.user_pore = [];
+                    user.user_role = [];
                 }
             } catch (error) {
                 res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -2458,6 +2458,29 @@ server.on("request", async (req, res) => {
                     });
                     res.end();
                     return;
+                }
+                // check role app html render role
+                const connection = await getAwaitConnect();
+                try {
+                    const sqlUserRole = loadSQL("./src/sql/user_role/select_by_user_id.sql");
+                    const [user_role] = await connection.execute(sqlUserRole, [user.user_id]);
+                    if (user_role.length > 0) {
+                        if (user_role.map(i => i.role_name).includes("weaver")) {
+                            
+
+                        }
+                    } else {
+                        user.user_role = [];
+                    }
+                } catch (error) {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({
+                        error: error.message
+                    }));
+                    return;
+
+                } finally {
+                    if (connection) connection.release();
                 }
 
                 filePath = path.join(process.cwd(), "/public/forms", "profile.html");
@@ -2825,11 +2848,11 @@ server.on("request", async (req, res) => {
                     const [result] = await connection.execute(sqlReg, [user.user_id, user.role_id]);
 
                     const sqlUserRole = loadSQL("./src/sql/user_role/select.sql");
-                    const [user_pore] = await connection.execute(sqlUserRole);
-                    if (user_pore.length > 0) {
-                        user.user_pore = user_pore;
+                    const [user_role] = await connection.execute(sqlUserRole);
+                    if (user_role.length > 0) {
+                        user.user_role = user_role;
                     } else {
-                        user.user_pore = [];
+                        user.user_role = [];
                     }
 
                     res.writeHead(200, {
@@ -2917,11 +2940,11 @@ server.on("request", async (req, res) => {
                     const [result] = await connection.execute(sqlReg, [user.user_id, user.role_id]);
 
                     const sqlUserRole = loadSQL("./src/sql/user_role/select.sql");
-                    const [user_pore] = await connection.execute(sqlUserRole);
-                    if (user_pore.length > 0) {
-                        user.user_pore = user_pore;
+                    const [user_role] = await connection.execute(sqlUserRole);
+                    if (user_role.length > 0) {
+                        user.user_role = user_role;
                     } else {
-                        user.user_pore = [];
+                        user.user_role = [];
                     }
 
                     res.writeHead(200, {
