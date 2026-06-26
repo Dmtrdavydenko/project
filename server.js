@@ -2486,6 +2486,90 @@ server.on("request", async (req, res) => {
             res.end(JSON.stringify(user));
             return
         }
+        if (pathname === "/api/weaving_logs/select") {
+
+            const user = await getUserBySession(req);
+            if (!user) {
+                res.writeHead(401, {
+                    "Content-Type": "application/json"
+                });
+
+                res.end(JSON.stringify({
+                    success: false,
+                    redirect: "/authentication"
+                }));
+                return;
+            }
+            const connection = await getAwaitConnect();
+            try {
+                const sqlUserWeaver = loadSQL("./src/sql/weaving_logs/select.sql");
+                const [user_productions] = await connection.execute(sqlUserWeaver, [user.user_id]);
+                if (user_productions.length > 0) {
+                    user.user_productions = user_productions;
+                } else {
+                    user.user_productions = [];
+                }
+
+                //const sqlFabricRecipe = loadSQL("./src/sql/fabric_recipe/select.sql");
+                //const [fabric_recipe] = await connection.execute(sqlFabricRecipe);
+                //if (fabric_recipe.length > 0) {
+                //    user.fabric_recipe = fabric_recipe;
+                //} else {
+                //    user.fabric_recipe = [];
+                //}
+                const sqlReg = loadSQL("./src/sql/user_profile/select.sql");
+                const [userRows] = await connection.execute(sqlReg, [user.user_id]);
+                if (userRows.length > 0) {
+                    user.profile = userRows[0];
+                } else {
+                    user.profile = null;
+                }
+                //const sqlPerm = loadSQL("./src/sql/user_permission/select_by_user_id.sql");
+                //const [permRows] = await connection.execute(sqlPerm, [user.user_id]);
+                //if (permRows.length > 0) {
+                //    user.permissions = permRows;
+                //} else {
+                //    user.permissions = [];
+                //}
+
+                //const sqlUsers = loadSQL("./src/sql/users/select.sql");
+                //const [usersRows] = await connection.execute(sqlUsers, [user.user_id]);
+                //if (usersRows.length > 0) {
+                //    user.users = usersRows;
+                //} else {
+                //    user.users = [];
+                //}
+                //const sqlRoles = loadSQL("./src/sql/roles/select.sql");
+                //const [rolesRows] = await connection.execute(sqlRoles, [user.user_id]);
+                //if (rolesRows.length > 0) {
+                //    user.roles = rolesRows;
+                //} else {
+                //    user.roles = [];
+                //}
+                //const sqlUserRole = loadSQL("./src/sql/user_role/select.sql");
+                //const sqlUserRole = loadSQL("./src/sql/user_role/select_by_user_id.sql");
+                //const [user_role] = await connection.execute(sqlUserRole, [user.user_id]);
+                //if (user_role.length > 0) {
+                //    user.user_role = user_role;
+                //} else {
+                //    user.user_role = [];
+                //}
+            } catch (error) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({
+                    error: error.message
+                }));
+                return;
+
+            } finally {
+                if (connection) connection.release();
+            }
+            res.writeHead(200, {
+                "Content-Type": "application/json"
+            });
+            res.end(JSON.stringify(user));
+            return
+        }
         if (pathname.startsWith('/api')) {
             // Здесь обработка запроса к базе данных и возврат JSON
             // pathname оставляем как есть, не меняем
