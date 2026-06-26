@@ -2586,9 +2586,9 @@ server.on("request", async (req, res) => {
                         if (user_role.map(i => i.role_name).includes("weaver")) {
                             roleFile = path.join(process.cwd(), "public/forms/roles", "weaver.html");
                         }
-                        //if (user_role.map(i => i.role_name).includes("admin")) {
-                        //    roleFile = path.join(process.cwd(), "public/forms/roles", "admin.html");
-                        //}
+                        if (user_role.map(i => i.role_name).includes("admin")) {
+                            roleFile = path.join(process.cwd(), "public/forms/roles", "admin.html");
+                        }
                     }
                 } catch (error) {
                     res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -3269,6 +3269,55 @@ server.on("request", async (req, res) => {
                 }
             })
             return;
+        } else if (pathname.startsWith("/api/weaving_logs/select")) {
+            const user = await getUserBySession(req);
+
+            if (!user) {
+                res.writeHead(302, {
+                    Location: "/authentication"
+                });
+
+                res.end();
+                return
+            }
+            const connection = await getAwaitConnect();
+            try {
+
+                const buffer = Buffer.concat(chunks);
+                const raw = buffer.toString().trim();
+                if (!raw) throw new Error("Empty body");
+                const data = JSON.parse(raw);
+
+                const sqlUserWeaver = loadSQL("./src/sql/weaving_logs/select.sql");
+                const [user_productions] = await connection.execute(sqlUserWeaver,[user.user_id]);
+                if (user_productions.length > 0) {
+                    user.user_productions = user_productions;
+                } else {
+                    user.user_productions = [];
+                }
+                res.writeHead(200, {
+                    "Content-Type": "application/json"
+                });
+                res.end(JSON.stringify({
+                    success: true,
+                    result: user_productions,
+                    user: user,
+                    message: "Информация добавлена"
+                }));
+                return
+            } catch (error) {
+                res.writeHead(400, {
+                    "Content-Type": "application/json"
+                });
+
+                res.end(JSON.stringify({
+                    success: false,
+                    error: error.message
+                }));
+                return;
+            } finally {
+                if (connection) connection.release();
+            }
         } else {
             res.writeHead(404);
             res.end("Not Found");

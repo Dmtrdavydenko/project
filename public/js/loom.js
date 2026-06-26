@@ -2527,9 +2527,9 @@ async function sendUpdateTextileId(update) {
         console.log(logme);
 
     });
-    document.body.append(inputSS);
-    document.body.append(div);
-    document.body.append(buttonSend);
+    //document.body.append(inputSS);
+    //document.body.append(div);
+    //document.body.append(buttonSend);
 
 
 
