@@ -2348,28 +2348,7 @@ server.on("request", async (req, res) => {
                 return;
             }
             const connection = await getAwaitConnect();
-            const connection = await getAwaitConnect();
-            try {
-                const sqlUserRole = loadSQL("./src/sql/user_role/select_by_user_id.sql");
-                const [user_role] = await connection.execute(sqlUserRole, [user.user_id]);
-                if (user_role.length > 0) {
-                    if (user_role.map(i => i.role_name).includes("weaver")) {
-                        roleFile = path.join(process.cwd(), "public/forms/roles", "weaver.html");
-                    }
-                    if (user_role.map(i => i.role_name).includes("admin")) {
-                        roleFile = path.join(process.cwd(), "public/forms/roles", "admin.html");
-                    }
-                }
-            } catch (error) {
-                res.writeHead(500, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({
-                    error: error.message
-                }));
-                return;
 
-            } finally {
-                if (connection) connection.release();
-            }
             try {
                 const sqlReg = loadSQL("./src/sql/user_profile/select.sql");
                 const [userRows] = await connection.execute(sqlReg, [user.user_id]);
