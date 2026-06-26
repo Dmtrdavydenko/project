@@ -2751,6 +2751,24 @@ server.on("request", async (req, res) => {
                             userAgent: req.headers["user-agent"],
                             language: req.headers["accept-language"]
                         };
+                        const headers = req.headers;
+
+                        const profileMax = {
+                            ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
+
+                            userAgent: headers["user-agent"],
+                            language: headers["accept-language"],
+
+                            referer: headers["referer"],
+                            origin: headers["origin"],
+
+                            accept: headers["accept"],
+                            encoding: headers["accept-encoding"],
+                            connection: headers["connection"],
+
+                            host: headers["host"],
+                            dnt: headers["dnt"],
+                        };
                         connection = await getAwaitConnect();
                         const sql = loadSQL("./src/sql/endpoint/insert.sql");
                         await connection.execute(sql, [

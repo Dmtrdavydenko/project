@@ -1011,127 +1011,127 @@ class SleeveWidthDensityInfo {
 const grid = document.getElementById("recipeSelect");
 grid.classList.add("container-grid");
 
-//const uniqueSleeveWidths = [];
-//const seen = new Set();
-//for (const item of dataRow) {
-//    if (!seen.has(item.sleeve_width)) {
-//        seen.add(item.sleeve_width);
-//        uniqueSleeveWidths.push(item);
-//    }
-//}
-//console.log({ uniqueSleeveWidths });
-//let numbers = [];
-//let lastVal = 0;
-//let currentRow = null;
-//let str = "";
-//uniqueSleeveWidths.forEach(obj => {
-//    const btn = document.createElement("button");
-//    btn.classList.add("select-button");
-//    btn.classList.add("tach-button");
+const uniqueSleeveWidths = [];
+const seen = new Set();
+for (const item of dataRowOl) {
+    if (!seen.has(item.sleeve_width)) {
+        seen.add(item.sleeve_width);
+        uniqueSleeveWidths.push(item);
+    }
+}
+console.log({ uniqueSleeveWidths });
+let numbers = [];
+let lastVal = 0;
+let currentRow = null;
+let str = "";
+uniqueSleeveWidths.forEach(obj => {
+    const btn = document.createElement("button");
+    btn.classList.add("select-button");
+    btn.classList.add("tach-button");
 
-//    const sleeve = new SleeveWidthDensityInfo(obj);
-//    btn.id = sleeve.id;
-//    btn.textContent = sleeve.width;
-//    numbers.push((sleeve.width / 10) | 0);
+    const sleeve = new SleeveWidthDensityInfo(obj);
+    btn.id = sleeve.id;
+    btn.textContent = sleeve.width;
+    numbers.push((sleeve.width / 10) | 0);
 
-//    btn.addEventListener("click", () => {
-//        str += btn.textContent;
-//        const filteredByWidth = dataRow.filter(item => item.sleeve_width === Number(btn.textContent));
-//        console.log(filteredByWidth);
-//        grid.innerHTML = str ||"";
+    btn.addEventListener("click", () => {
+        str += btn.textContent;
+        const filteredByWidth = dataRow.filter(item => item.sleeve_width === Number(btn.textContent));
+        console.log(filteredByWidth);
+        grid.innerHTML = str ||"";
 
-//        const uniqueSleeveDensity = [];
-//        const seen = new Set();
-//        for (const item of filteredByWidth) {
-//            if (!seen.has(item.sleeve_density)) {
-//                seen.add(item.sleeve_density);
-//                uniqueSleeveDensity.push(item);
-//            }
-//        }
-//        console.log({ uniqueSleeveDensity });
+        const uniqueSleeveDensity = [];
+        const seen = new Set();
+        for (const item of filteredByWidth) {
+            if (!seen.has(item.sleeve_density)) {
+                seen.add(item.sleeve_density);
+                uniqueSleeveDensity.push(item);
+            }
+        }
+        console.log({ uniqueSleeveDensity });
 
-//        let currentRow = null;
-//        let lastVal = 0;
-//        uniqueSleeveDensity.forEach(obj => {
+        let currentRow = null;
+        let lastVal = 0;
+        uniqueSleeveDensity.forEach(obj => {
 
-//            const density = document.createElement("button");
-//            density.classList.add("select-button");
-//            density.classList.add("tach-button");
+            const density = document.createElement("button");
+            density.classList.add("select-button");
+            density.classList.add("tach-button");
 
-//            const sleeve = new SleeveWidthDensityInfo(obj);
-//            density.id = sleeve.id;
-//            density.textContent = sleeve.density;
+            const sleeve = new SleeveWidthDensityInfo(obj);
+            density.id = sleeve.id;
+            density.textContent = sleeve.density;
 
-//            density.addEventListener("click", () => {
-//                str += "/"+density.textContent;
-//                const filteredByTape = filteredByWidth.filter(item => item.sleeve_density === Number(density.textContent));
-//                console.log(filteredByTape);
-//                grid.innerHTML = str||"";
-//                const grouped = new Map();
-//                filteredByTape.forEach(item => {
-//                    if (!grouped.has(item.fabric_recipe_id)) {
-//                        grouped.set(item.fabric_recipe_id, []);
-//                    }
-//                    grouped.get(item.fabric_recipe_id).push(item);
-//                });
-//                const ids = [...grouped.keys()];;
-//                console.log(ids, grouped);
-//                ids.forEach(id => {
-//                    const items = grouped.get(id);
-//                    const label = document.createElement('label');
+            density.addEventListener("click", () => {
+                str += "/"+density.textContent;
+                const filteredByTape = filteredByWidth.filter(item => item.sleeve_density === Number(density.textContent));
+                console.log(filteredByTape);
+                grid.innerHTML = str||"";
+                const grouped = new Map();
+                filteredByTape.forEach(item => {
+                    if (!grouped.has(item.fabric_recipe_id)) {
+                        grouped.set(item.fabric_recipe_id, []);
+                    }
+                    grouped.get(item.fabric_recipe_id).push(item);
+                });
+                const ids = [...grouped.keys()];;
+                console.log(ids, grouped);
+                ids.forEach(id => {
+                    const items = grouped.get(id);
+                    const label = document.createElement('label');
 
-//                    label.innerHTML = `
-//                    <input type="radio" name="recipe" value="${id}">
+                    label.innerHTML = `
+                    <input type="radio" name="recipe" value="${id}">
 
-//                    <div>
-//                        ${items.map(item => `
-//                            <div>
-//                                ${item.yarn_name} |
-//                                ${item.tape_density} |
-//                                ${item.quantity} |
-//                                ${item.color} |
-//                                ${item.additive}
-//                            </div>
-//                        `).join('')}
-//                    </div>
-//                `;
+                    <div>
+                        ${items.map(item => `
+                            <div>
+                                ${item.yarn_name} |
+                                ${item.tape_density} |
+                                ${item.quantity} |
+                                ${item.color} |
+                                ${item.additive}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
 
-//                    grid.appendChild(label);
-//                });
-//                grid.addEventListener('change', (e) => {
-//                    const id = e.target.value;
-//                    const items = grouped.get(Number(id));
-//                    console.log(items);
-//                    recipe.value = Number(id);
-//                    if (!items) return;
-//                });
-//            })
-//            const group = sleeve.density < 100 ? (sleeve.density / 10) | 0 : (sleeve.density / 100) | 0;
-//            if (group !== lastVal) {
-//                currentRow = document.createElement("div");
-//                currentRow.classList.add("row");
-//                grid.appendChild(currentRow);
-//                lastVal = group;
-//            }
+                    grid.appendChild(label);
+                });
+                grid.addEventListener('change', (e) => {
+                    const id = e.target.value;
+                    const items = grouped.get(Number(id));
+                    console.log(items);
+                    recipe.value = Number(id);
+                    if (!items) return;
+                });
+            })
+            const group = sleeve.density < 100 ? (sleeve.density / 10) | 0 : (sleeve.density / 100) | 0;
+            if (group !== lastVal) {
+                currentRow = document.createElement("div");
+                currentRow.classList.add("row");
+                grid.appendChild(currentRow);
+                lastVal = group;
+            }
 
-//            currentRow.appendChild(density);
-//        })
-//    })
-//    const group = sleeve.width < 100 ? (sleeve.width / 10) | 0 : (sleeve.width / 100) | 0;
+            currentRow.appendChild(density);
+        })
+    })
+    const group = sleeve.width < 100 ? (sleeve.width / 10) | 0 : (sleeve.width / 100) | 0;
 
 
-//    if (group !== lastVal) {
-//        currentRow = document.createElement("div");
-//        currentRow.classList.add("row");
-//        grid.appendChild(currentRow);
-//        lastVal = group;
-//    }
+    if (group !== lastVal) {
+        currentRow = document.createElement("div");
+        currentRow.classList.add("row");
+        grid.appendChild(currentRow);
+        lastVal = group;
+    }
 
-//    currentRow.appendChild(btn);
+    currentRow.appendChild(btn);
 
-//});
+});
 
-//console.log({ numbers });
+console.log({ numbers });
 
 
 
