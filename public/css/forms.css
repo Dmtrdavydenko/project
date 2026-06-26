@@ -115,7 +115,7 @@ label {
     background: #eee;
 }
 
-weaver-production-cell {
+.weaver-production-cell {
     border: 1px solid #ccc;
     padding: 6px;
 }
