@@ -29,12 +29,14 @@ body {
     gap: 12px 16px;
     align-items: center;
 }
+
 .user-role-grid {
     display: grid;
     grid-template-columns: 250px 1fr auto;
     gap: 12px 16px;
     align-items: center;
 }
+
 .container-grid {
     display: grid;
     gap: 8px; /* расстояние между группами */
@@ -61,7 +63,7 @@ body {
 }
 
 /*input,*/
-form>input,
+form > input,
 textarea,
 select {
     width: 100%;
@@ -85,9 +87,11 @@ textarea {
         margin-bottom: -6px;
     }
 }
+
 .btn::after {
-    content:" "
+    content: " "
 }
+
 label {
     display: block;
     margin-bottom: 10px;
@@ -97,3 +101,21 @@ label {
     label input {
         margin-right: 8px;
     }
+
+
+
+.table-production-weaver {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-header-weaver-production {
+    border: 1px solid #ccc;
+    padding: 6px;
+    background: #eee;
+}
+
+weaver-production-cell {
+    border: 1px solid #ccc;
+    padding: 6px;
+}

@@ -4,20 +4,27 @@ function createTable(data, mountEl) {
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");
-
+    table.classList.add("table-production-weaver");
     const keys = Object.keys(data[0]);
+    const labels = {
+        id: "ID",
+        work_date: "Дата",
+        shift: "Смена",
+        loom: "Станок",
+        production: "Производство"
+    };
 
     // header
     thead.innerHTML = `
         <tr>
-            ${keys.map(key => `<th>${key}</th>`).join("")}
+            ${keys.map(key => `<th class="table-header-weaver-production">${labels[key] ?? key}</th>`).join("")}
         </tr>
     `;
 
     // body
     tbody.innerHTML = data.map(row => `
         <tr>
-            ${keys.map(key => `<td>${row[key] ?? ""}</td>`).join("")}
+            ${keys.map(key => `<td class="weaver-production-cell">${row[key] ?? ""}</td>`).join("")}
         </tr>
     `).join("");
 
@@ -34,8 +41,12 @@ function createTable(data, mountEl) {
     const data = await response.json();
     console.log({ response, data });
 
-    console.log(data.user_productions);
-    createTable(data.user_productions, userProduction);
+    const formattedData = data.user_productions.map(row => ({
+        ...row,
+        work_date: new Date(row.work_date).toLocaleDateString()
+    }));
+    console.log(formattedData);
+    createTable(formattedData, userProduction);
     //profile.textContent = profile.textContent.trim().replace(/X/g, data.profile.login);
 
     //id.value = data.user_id;
