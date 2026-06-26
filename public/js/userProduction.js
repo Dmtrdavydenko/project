@@ -1,3 +1,33 @@
+function createTable(data, mountEl) {
+    if (!data || data.length === 0) return;
+
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
+
+    const keys = Object.keys(data[0]);
+
+    // header
+    thead.innerHTML = `
+        <tr>
+            ${keys.map(key => `<th>${key}</th>`).join("")}
+        </tr>
+    `;
+
+    // body
+    tbody.innerHTML = data.map(row => `
+        <tr>
+            ${keys.map(key => `<td>${row[key] ?? ""}</td>`).join("")}
+        </tr>
+    `).join("");
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+
+    mountEl.appendChild(table);
+
+    return table;
+}
 (async (api) => {
 
     const response = await fetch(api);
@@ -5,6 +35,7 @@
     console.log({ response, data });
 
     console.log(data.user_productions);
+    createTable(data.user_productions, userProduction);
     //profile.textContent = profile.textContent.trim().replace(/X/g, data.profile.login);
 
     //id.value = data.user_id;
