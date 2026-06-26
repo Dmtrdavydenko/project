@@ -11,7 +11,10 @@ function createTable(data, mountEl) {
         work_date: "Дата",
         shift: "Смена",
         loom: "Станок",
-        production: "Производство"
+        production: "Производство",
+        'w/d': "Ш/П",
+        weft: "Уток",
+        warp: "Основа"
     };
 
     // header
