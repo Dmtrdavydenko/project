@@ -34,8 +34,7 @@ async function createSourceTable(name = selectTableName.value) {
     const data = (await getSourceTable(name))[0];
     console.info(data);
     if (data.length > 0) {
-        const table = createTable(data);
-        container.appendChild(table);
+        createTable(data, container);
     }
 }
 
@@ -75,9 +74,11 @@ function createSelectOptions(dataArray) {
         selectTableName.appendChild(option);
     });
 }
-function createTable(data) {
+function createTable(data, container) {
     if (!data || data.length === 0) {
-        return '<p>Пусто</p>';
+        const p = document.createElement("p");
+        p.textContent = "Пусто";
+        return p;
     }
 
     let table = document.createElement('table');
@@ -115,8 +116,7 @@ function createTable(data) {
 
     const spanTableName = document.createElement("span");
     spanTableName.textContent = selectTableName.value;
-    table.before(spanTableName);
-    table.before(document.createElement("hr"));
+    container.appendChild(document.createElement("hr"), spanTableName, document.createElement("hr"), table);
     return table;
 }
 async function loadTable() {
@@ -242,7 +242,7 @@ async function loadTable() {
                 }
             });
         }
-        const table = createTable(result.rows);
+        createTable(result.rows, container);
         //if (selectTableName.value === "tape_length") {
         //    formContainer.appendChild(renderForm(result.k));
         //}
@@ -258,7 +258,6 @@ async function loadTable() {
         //} else {
         //    table.addEventListener("click", queryTarget);
         //}
-        container.appendChild(table);
         //await getTypeTableHeder();
         //await getTypeKey();
     } else {
