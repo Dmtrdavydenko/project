@@ -1,0 +1,88 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+nav {
+    background: #333;
+    color: #fff;
+    padding: 10px 20px;
+}
+
+    nav a {
+        color: #fff;
+        text-decoration: none;
+        margin-right: 15px;
+    }
+
+    nav button {
+        background-color: #555;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
+
+        nav button:hover {
+            background-color: #777;
+        }
+
+
+.main-content {
+    display: flex;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.zone {
+    flex: 1;
+    border-right: 1px solid #ccc;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+    .zone:last-child {
+        border-right: none;
+    }
+
+.half {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin-bottom: 15px;
+    border: 0.7px dashed black;
+}
+
+    .half button, #footerBlock button {
+        margin: 3px;
+    }
+
+
+/* Общий блок с 12 кнопками под колонками */
+#footerBlock {
+    padding: 10px 20px;
+    border-top: 1px solid #ccc;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    border: 0.7px dashed black;
+}
+
+    #footerBlock button {
+        cursor: pointer;
+    }
+div button.active {
+    background-color: #4caf50;
+    border-color: #388e3c;
+    color: white;
+}
+
+div button:focus {
+    box-shadow: 0 0 3px 2px #05e7f7;
+}
