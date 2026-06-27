@@ -116,7 +116,7 @@ function createTable(data, container) {
 
     const spanTableName = document.createElement("span");
     spanTableName.textContent = selectTableName.value;
-    container.appendChild(document.createElement("hr"), spanTableName, document.createElement("hr"), table);
+    container.append(document.createElement("hr"), spanTableName, document.createElement("hr"), table);
     return table;
 }
 async function loadTable() {
