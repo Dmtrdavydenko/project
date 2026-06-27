@@ -1,9 +1,47 @@
+const label = document.createElement('label');
+label.setAttribute('for', 'name');
+label.textContent = 'Выберите таблицу';
+
 const selectTableName = document.createElement("select");
 selectTableName.name = "name";
 selectTableName.id = "name";
 selectTableName.autocomplete = 'off';
 selectTableName.addEventListener('change', loadTable);
+
+const sourceTable = document.createElement("button");
+sourceTable.textContent = "Показать источник таблицу";
+sourceTable.addEventListener("click", () => {
+    createSourceTable();
+});
+async function getSourceTable(name) {
+    return await fetch("https://worktime.up.railway.app/app", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "getSourceTable",
+            table: {
+                name: name,
+            }
+        }),
+    }).then((response) => response.json());
+}
+async function createSourceTable(name = selectTableName.value) {
+    const container = document.getElementById('table-container');
+    container.innerHTML = '';
+
+    const data = (await getSourceTable(name))[0];
+    console.info(data);
+    if (data.length > 0) {
+        const table = createTable(data);
+        container.appendChild(table);
+    }
+}
+
+main.append(label);
 main.append(selectTableName);
+main.append(sourceTable);
 async function getTableName() {
     try {
         const response = await fetch("https://worktime.up.railway.app/app", {
