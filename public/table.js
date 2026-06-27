@@ -1,3 +1,9 @@
+const selectTableName = document.createElement("select");
+selectTableName.name = "name";
+selectTableName.id = "name";
+selectTableName.autocomplete = 'off';
+selectTableName.addEventListener('change', loadTable);
+main.append(selectTableName);
 async function getTableName() {
     try {
         const response = await fetch("https://worktime.up.railway.app/app", {
