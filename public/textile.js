@@ -8,7 +8,7 @@ console.log(document.location.href);
 
 function createTable(data) {
     if (!data || data.length === 0) {
-        return '<p>U</p>';
+        return '<p>Пусто</p>';
     }
 
     let table = document.createElement('table');

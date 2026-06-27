@@ -37,6 +37,46 @@ function createSelectOptions(dataArray) {
         selectTableName.appendChild(option);
     });
 }
+function createTable(data) {
+    if (!data || data.length === 0) {
+        return '<p>Пусто</p>';
+    }
+
+    let table = document.createElement('table');
+    table.style.width = '100%';
+    table.style.borderCollapse = 'collapse';
+
+    let thead = document.createElement('thead');
+    let headerRow = document.createElement('tr');
+    Object.keys(data[0]).forEach(key => {
+        let th = document.createElement('th');
+        th.textContent = key;
+        th.style.border = '1px solid #ccc';
+        th.style.padding = '8px';
+        th.style.backgroundColor = '#222';
+        th.style.color = '#fff';
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    let tbody = document.createElement('tbody');
+    data.forEach((row, i) => {
+        let tr = document.createElement('tr');
+        tr.id = i + 1;
+        Object.values(row).forEach(value => {
+            let td = document.createElement('td');
+            td.textContent = value;
+            td.style.border = '1px solid #ccc';
+            td.style.padding = '8px';
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+
+    return table;
+}
 async function loadTable() {
     const ans = await request();
     const result = ans.data;
