@@ -9,7 +9,7 @@ selectTableName.autocomplete = 'off';
 selectTableName.addEventListener('change', loadTable);
 
 const sourceTable = document.createElement("button");
-sourceTable.textContent = "Показать источник таблицу";
+sourceTable.textContent = "Показать таблицу исходную";
 sourceTable.addEventListener("click", () => {
     createSourceTable();
 });
@@ -113,6 +113,10 @@ function createTable(data) {
     });
     table.appendChild(tbody);
 
+    const spanTableName = document.createElement("span");
+    spanTableName.textContent = selectTableName.value;
+    table.before(spanTableName);
+    table.before(document.createElement("hr"));
     return table;
 }
 async function loadTable() {
@@ -254,11 +258,6 @@ async function loadTable() {
         //} else {
         //    table.addEventListener("click", queryTarget);
         //}
-
-        const spanTableName = document.createElement("span");
-        spanTableName.textContent = selectTableName.value;
-        container.appendChild(spanTableName);
-        container.appendChild(document.createElement("hr"));
         container.appendChild(table);
         //await getTypeTableHeder();
         //await getTypeKey();
