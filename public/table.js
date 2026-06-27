@@ -191,6 +191,45 @@ async function loadTable() {
     }
 
 }
+async function request() {
+    const response = await fetch("https://worktime.up.railway.app/app", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            action: "select",
+            table: {
+                name: selectTableName.value,
+            }
+        }),
+    })
+    for (const [key, value] of response.headers.entries()) {
+        console.log("\x1b[34m [" + key + "][" + value + "]");
+    }
+    const contentType = response.headers.get('content-type');
+    console.log("\x1b[33m [" + contentType + "]");
+
+    if (!response.ok) {
+        throw new Error(`Ошибка HTTP: ${response.status}`);
+    }
+    const text = await response.text();
+
+    try {
+        const data = JSON.parse(text);
+        console.info("Load server sql", data);
+        return { ok: true, data };
+    } catch (error) {
+        console.log("\x1b[33m [" + text + "]");
+        console.dir(error);
+        if (error.message.includes("is not valid JSON")) {
+            throw new Error("is not valid JSON");
+        }
+        if (error.message === "Unexpected end of JSON input") {
+            throw error;
+        }
+    }
+}
 (async () => {
     const tableName = await getTableName();
     console.log(tableName);
