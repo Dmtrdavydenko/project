@@ -2007,8 +2007,8 @@ function createA(item) {
 const nav = document.body.querySelector("nav");
 nav.addEventListener("click", nv)
 async function nv(event) {
-    const nav = event.target.closest("nav");
-    if (!nav) return;
+    const button = event.target.closest("button");
+    if (!button) return;
     console.log(event.target.textContent);
     update(event.target.textContent);
 }
@@ -2058,7 +2058,7 @@ async function sendUpdateTextileId(update) {
     new CircularChart({
         container: document.getElementById('warp-count'),
 
-        centerText: 'Основа Кол',
+        centerText: 'Основа Кол-во',
 
         data: statWarpCountData
     }).render();
@@ -2067,7 +2067,7 @@ async function sendUpdateTextileId(update) {
     new CircularChart({
         container: document.getElementById('weft-count'),
 
-        centerText: 'Уток Кол',
+        centerText: 'Уток Кол-во',
 
         data: statWeftCountData
     }).render();
