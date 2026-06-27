@@ -21,6 +21,16 @@ async function getTableName() {
     }
 
 }
+function createSelectOptions(dataArray) {
+    selectTableName.innerHTML = '';
+    dataArray.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.value;
+        option.textContent = item.value;
+        option.dataset.isParent = item.isParent;
+        selectTableName.appendChild(option);
+    });
+}
 async function loadTable() {
     const ans = await request();
     const result = ans.data;
@@ -169,7 +179,7 @@ async function loadTable() {
         //await getTypeTableHeder();
         //await getTypeKey();
     } else {
-        formContainer.appendChild(renderForm(result.k));
+        //formContainer.appendChild(renderForm(result.k));
 
         container.textContent = "Empty";
     }
