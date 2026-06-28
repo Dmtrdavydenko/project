@@ -4,7 +4,7 @@ SELECT
     sleeve_width as fabric_w,
     sleeve_density as fabric_d,
    -- CONCAT(sw.sleeve_width, '/', sd.sleeve_density) as 'w/d',
-    model_of_the_loom_id as model_id,
+   -- model_of_the_loom_id as model_id,
     loom_machine.name as name,
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN weft_quantity END) AS q_weft,
     GROUP_CONCAT(CASE WHEN yarn_type.yarn_id = 2 THEN tape_density.density END) AS d_weft,
