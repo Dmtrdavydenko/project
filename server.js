@@ -969,54 +969,6 @@ async function insert(body) {
     }
 }
 async function insertTime(body) {
-    //const connection = await pool.getConnection();
-
-    //try {
-    //console.log('Успешно подключено к базе данных MySQL!');
-
-    //connection.execute("TRUNCATE TABLE timestamps");
-    //const times = body.data.map(time => time / 1000);
-    //const values = body.data.map(tape => [tape.time / 1000, tape.name]);
-    //const placeholders = body.data.map(() => '(FROM_UNIXTIME(?), ?)').join(', ');
-    //const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
-    // Вставка новой записи
-
-
-
-    //const values = body.data.map(tape => [tape.time / 1000, tape.name]);
-    //const placeholders = body.data.map(() => "'(CONVERT_TZ(FROM_UNIXTIME(?), 'Asia/Novosibirsk', 'UTC'), ?)'").join(', ');
-    //const sql = `INSERT INTO timestamps (task_time, TapeExtrusion_id) VALUES ${placeholders}`;
-    //return await connection.execute(sql, values.flat());
-
-
-    // tape.time — это **миллисекунды** от эпохи **в таймзоне Asia/Novosibirsk**
-    //const values = body.data.flatMap(tape => [tape.time / 1000, tape.name]);
-
-    // Запрос должен быть: CONVERT_TZ(FROM_UNIXTIME(?), 'Asia/Novosibirsk', '+00:00')
-
-
-
-
-
-    //console.log('Inserted ID:', insertResult.insertId);
-
-    // Получаем все данные из таблицы после вставки
-    //const [rows] = await connection.execute(
-    //    'SELECT id, width, density FROM ' + body.table.name + ' ORDER BY id'
-    //);
-    //delete body.action;
-    //delete body.table.name;
-    //delete body.table;
-    //return await manual.insertManual(transformKeys(body));
-    //} catch (err) {
-    //    console.error('Ошибка:', err);
-    //    throw err;
-    //} finally {
-    //    if (connection) connection.release();
-    //    console.log("Соединение возвращено.");
-    //}
-
-
     console.log("CALL=", insertTime.name);
     let connection = null;
     const placeholders = body.data.map(() => '(CONVERT_TZ(FROM_UNIXTIME(?), ?, ?), ?)').join(', ');
@@ -1042,65 +994,6 @@ async function insertTime(body) {
         console.log("Соединение возвращено.");
     }
 }
-
-
-//async function getTape() {
-//    console.log("CALL=", getTape.name)
-//    let maxRetries = 5;
-//    let currentRetry = 0;
-//    const retryDelay = 3000; // 3000 ms 3s
-//    while (currentRetry < maxRetries) {
-//        try {
-//            const connection = await pool.getConnection();
-//            try {
-//                console.log('Успешно подключено к базе данных MySQL!');
-//                const sql = "SELECT tape_extrusion.recipe_id as id, tape_speed.thread_id as group_id, density, yarn_name as type, " +
-//                    "color, additive, thread_time, thread_time * 60 as time_seconds, thread_time * 60 * 1000 as time_milliseconds " +
-//                    "FROM tape_extrusion " +
-//                    "JOIN tape_speed ON tape_extrusion.tape_id = tape_speed.thread_id " +
-//                    "JOIN Tape   ON tape_speed.tape_id = Tape.id " +
-//                    "JOIN yarn_type ON Tape.class_yarn_id = yarn_type.yarn_id " +
-//                    "JOIN color ON tape_extrusion.color_id = color.id " +
-//                    "JOIN additive ON tape_extrusion.additive_id = additive.id " +
-//                    "ORDER BY density ASC";
-//                //const data = await connection.execute(sql);
-//                //console.log(data);
-//                return await connection.execute(sql);
-//            } catch (error) {
-//                console.error('Ошибка:', error);
-//                throw error;
-//            } finally {
-//                if (connection) connection.release();
-//                console.log("Соединение возвращено.");
-//            }
-//        } catch (error) {
-//            currentRetry++;
-//            console.error('Error connection MySQL:', error.message);
-//            console.error(error);
-//            if (currentRetry >= maxRetries) {
-//                console.error(`Ошибка подключения MySQL после ${maxRetries} попыток:`, error.message);
-//                throw new Error(`Не удалось подключиться к MySQL после ${maxRetries} попыток. Последняя ошибка: ${error.message}`);
-//            }
-
-
-//            if (error.code === "ECONNREFUSED") {
-//                console.log(`Ошибка подключения MySQL (попытка ${currentRetry}/${maxRetries}). Ожидание ${retryDelay / 1000} секунд перед повтором...`);
-//                await new Promise(resolve => setTimeout(resolve, retryDelay)); // Ожидание 3 сек
-//            } else {
-//                throw error;
-//            }
-
-//            const exception = {
-//                errno: -111,
-//                code: 'ECONNREFUSED',
-//                syscall: 'connect',
-//                address: 'fd12:4459:818b:0:1000:8:70f2:9146',
-//                port: 3306,
-//                fatal: true
-//            }
-//        }
-//    }
-//}
 async function getTape() {
     console.log("CALL=", getTape.name)
     let connection = null;
