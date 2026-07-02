@@ -72,7 +72,7 @@ export class ManualRepository {
                 const query = `
                 SELECT
                     fr.fabric_recipe_id,
-                    f.fabric_wd_id,
+                    fr.fabric_wd_id,
 
                     fw.sleeve_width,
                     fd.sleeve_density,
