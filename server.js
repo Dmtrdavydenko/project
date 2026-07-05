@@ -2661,22 +2661,73 @@ server.on("request", async (req, res) => {
     if (req.url === "/cli") {
         const clientProfile = {
             ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
-            userAgent: req.headers["user-agent"],
-            language: req.headers["accept-language"],
-            referer: req.headers["referer"],
-            origin: req.headers["origin"],
-            encoding: req.headers["accept-encoding"],
-            accept: req.headers["accept"],
-            host: req.headers["host"],
-            dnt: req.headers["dnt"],
-
             cfIp: req.headers["cf-connecting-ip"],
             realIp: req.headers["x-real-ip"],
+            xForwardedFor: req.headers["x-forwarded-for"],
+            xForwardedHost: req.headers["x-forwarded-host"],
+            xForwardedProto: req.headers["x-forwarded-proto"],
+            xForwardedPort: req.headers["x-forwarded-port"],
+
+            userAgent: req.headers["user-agent"],
+            language: req.headers["accept-language"],
+            encoding: req.headers["accept-encoding"],
+            accept: req.headers["accept"],
+            acceptCharset: req.headers["accept-charset"],
+            acceptLanguage: req.headers["accept-language"],
+            connection: req.headers["connection"],
+            host: req.headers["host"],
+
+            referer: req.headers["referer"],
+            origin: req.headers["origin"],
+
+            dnt: req.headers["dnt"],
+            upgradeInsecureRequests: req.headers["upgrade-insecure-requests"],
+            secFetchSite: req.headers["sec-fetch-site"],
+            secFetchMode: req.headers["sec-fetch-mode"],
+            secFetchUser: req.headers["sec-fetch-user"],
+            secFetchDest: req.headers["sec-fetch-dest"],
+
+            secChUa: req.headers["sec-ch-ua"],
+            secChUaPlatform: req.headers["sec-ch-ua-platform"],
+            secChUaMobile: req.headers["sec-ch-ua-mobile"],
+            secChUaArch: req.headers["sec-ch-ua-arch"],
+            secChUaModel: req.headers["sec-ch-ua-model"],
+            secChUaFullVersion: req.headers["sec-ch-ua-full-version"],
+            secChUaFullVersionList: req.headers["sec-ch-ua-full-version-list"],
+
+            cookie: req.headers["cookie"],
 
             tls: {
                 encrypted: req.socket.encrypted,
+                protocol: req.socket.getProtocol?.(),
                 cipher: req.socket.getCipher?.(),
-            }
+                alpnProtocol: req.socket.alpnProtocol,
+                servername: req.socket.servername,
+            },
+
+            socket: {
+                remoteAddress: req.socket.remoteAddress,
+                remotePort: req.socket.remotePort,
+                localAddress: req.socket.localAddress,
+                localPort: req.socket.localPort,
+                bytesRead: req.socket.bytesRead,
+                bytesWritten: req.socket.bytesWritten,
+                timeout: req.socket.timeout,
+            },
+
+            proxy: {
+                via: req.headers["via"],
+                forwarded: req.headers["forwarded"],
+                realIp: req.headers["x-real-ip"],
+                clusterClientIp: req.headers["x-cluster-client-ip"],
+                trueClientIp: req.headers["true-client-ip"],
+            },
+
+            method: req.method,
+            url: req.url,
+            httpVersion: req.httpVersion,
+
+            timestamp: Date.now(),
         };
         res.writeHead(200, {
             "Content-Type": "text/plain"
