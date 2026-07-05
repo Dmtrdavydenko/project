@@ -2658,6 +2658,31 @@ server.on("request", async (req, res) => {
             // Здесь отдаём статический файл из файловой системы
         }
     }
+    if (req.url === "/cli") {
+        const clientProfile = {
+            ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
+            userAgent: req.headers["user-agent"],
+            language: req.headers["accept-language"],
+            referer: req.headers["referer"],
+            origin: req.headers["origin"],
+            encoding: req.headers["accept-encoding"],
+            accept: req.headers["accept"],
+            host: req.headers["host"],
+            dnt: req.headers["dnt"],
+
+            cfIp: req.headers["cf-connecting-ip"],
+            realIp: req.headers["x-real-ip"],
+
+            tls: {
+                encrypted: req.socket.encrypted,
+                cipher: req.socket.getCipher?.(),
+            }
+        };
+        res.writeHead(200, {
+            "Content-Type": "text/plain"
+        });
+        res.end(JSON.stringify(clientProfile));
+    }
     if (req.url === "/app") {
         if (req.method === "POST") {
             let chunks = [];
