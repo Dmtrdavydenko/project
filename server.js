@@ -2744,7 +2744,7 @@ server.on("request", async (req, res) => {
         res.end(`
 <html>
 <body>
-<script>
+<script defer>
     const profileServer = ${JSON.stringify(clientProfile_server)};
     console.log(profileServer);
     let clientProfile = {
