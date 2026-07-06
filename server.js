@@ -2729,10 +2729,28 @@ server.on("request", async (req, res) => {
 
             timestamp: Date.now(),
         };
-        res.writeHead(200, {
+        let ContentType = {};
+        ContentType.textPlain = {
             "Content-Type": "text/plain"
-        });
-        res.end(JSON.stringify(clientProfile));
+        }
+        ContentType.json = {
+            "Content-Type": "application/json"
+        }
+        ContentType.html = {
+            "Content-Type": "text/html"
+        }
+        
+        res.writeHead(200, ContentType.html);
+        res.end(`
+<html>
+<body>
+<script>
+    const profile = ${JSON.stringify(clientProfile)};
+    console.log(profile);
+</script>
+</body>
+</html>
+`);
     }
     if (req.url === "/app") {
         if (req.method === "POST") {
