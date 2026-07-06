@@ -2747,6 +2747,7 @@ server.on("request", async (req, res) => {
 <script defer>
     const profileServer = ${JSON.stringify(clientProfile_server)};
     console.log(profileServer);
+    (async () => {
     let clientProfile = {
   // =========================
   // BASIC BROWSER INFO
@@ -2932,6 +2933,7 @@ server.on("request", async (req, res) => {
   },
 };
     console.log(clientProfile);
+    })();
 </script>
 </body>
 </html>
