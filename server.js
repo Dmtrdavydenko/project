@@ -2745,8 +2745,193 @@ server.on("request", async (req, res) => {
 <html>
 <body>
 <script>
-    const profile = ${JSON.stringify(clientProfile)};
-    console.log(profile);
+    const profileServer = ${JSON.stringify(clientProfile_server)};
+    console.log(profileServer);
+    let clientProfile = {
+  // =========================
+  // BASIC BROWSER INFO
+  // =========================
+  userAgent: navigator.userAgent,
+  platform: navigator.platform,
+  language: navigator.language,
+  languages: navigator.languages,
+  cookieEnabled: navigator.cookieEnabled,
+  doNotTrack: navigator.doNotTrack,
+
+  // =========================
+  // HARDWARE / DEVICE
+  // =========================
+  hardwareConcurrency: navigator.hardwareConcurrency,
+  deviceMemory: navigator.deviceMemory,
+  maxTouchPoints: navigator.maxTouchPoints,
+
+  // =========================
+  // SCREEN / DISPLAY
+  // =========================
+  screen: {
+    width: screen.width,
+    height: screen.height,
+    availWidth: screen.availWidth,
+    availHeight: screen.availHeight,
+    colorDepth: screen.colorDepth,
+    pixelDepth: screen.pixelDepth,
+    orientation: screen.orientation?.type,
+  },
+
+  // =========================
+  // WINDOW / VIEWPORT
+  // =========================
+  viewport: {
+    innerWidth: window.innerWidth,
+    innerHeight: window.innerHeight,
+    outerWidth: window.outerWidth,
+    outerHeight: window.outerHeight,
+    devicePixelRatio: window.devicePixelRatio,
+  },
+
+  // =========================
+  // TIMEZONE / LOCALE
+  // =========================
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  timezoneOffset: new Date().getTimezoneOffset(),
+
+  locale: Intl.DateTimeFormat().resolvedOptions().locale,
+
+  // =========================
+  // AUDIO FINGERPRINT (WebAudio)
+  // =========================
+  audioFingerprint: await (async () => {
+    try {
+      const ctx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 44100, 44100);
+      const osc = ctx.createOscillator();
+      const comp = ctx.createDynamicsCompressor();
+
+      osc.type = "triangle";
+      osc.frequency.value = 10000;
+
+      osc.connect(comp);
+      comp.connect(ctx.destination);
+
+      osc.start(0);
+      const buffer = await ctx.startRendering();
+
+      let sum = 0;
+      for (let i = 0; i < buffer.length; i++) {
+        sum += buffer.getChannelData(0)[i];
+      }
+
+      return sum.toString();
+    } catch {
+      return null;
+    }
+  })(),
+
+  // =========================
+  // CANVAS FINGERPRINT
+  // =========================
+  canvasFingerprint: (() => {
+    try {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      ctx.textBaseline = "top";
+      ctx.font = "14px Arial";
+      ctx.fillText("fingerprint", 2, 2);
+
+      return canvas.toDataURL();
+    } catch {
+      return null;
+    }
+  })(),
+
+  // =========================
+  // WEBGL FINGERPRINT
+  // =========================
+  webgl: (() => {
+    try {
+      const canvas = document.createElement("canvas");
+      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+
+      if (!gl) return null;
+
+      const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+
+      return {
+        vendor: gl.getParameter(gl.VENDOR),
+        renderer: gl.getParameter(gl.RENDERER),
+        unmaskedVendor: debugInfo
+          ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL)
+          : null,
+        unmaskedRenderer: debugInfo
+          ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)
+          : null,
+      };
+    } catch {
+      return null;
+    }
+  })(),
+
+  // =========================
+  // CLIENT HINTS (MODERN BROWSERS)
+  // =========================
+  clientHints: {
+    ua: navigator.userAgentData?.brands,
+    mobile: navigator.userAgentData?.mobile,
+    platform: navigator.userAgentData?.platform,
+  },
+
+  // =========================
+  // NAVIGATION / REFERRER
+  // =========================
+  referrer: document.referrer,
+  url: location.href,
+
+  // =========================
+  // STORAGE CAPABILITIES
+  // =========================
+  storage: {
+    localStorage: (() => {
+      try {
+        return !!window.localStorage;
+      } catch {
+        return false;
+      }
+    })(),
+    sessionStorage: (() => {
+      try {
+        return !!window.sessionStorage;
+      } catch {
+        return false;
+      }
+    })(),
+  },
+
+  // =========================
+  // BROWSER FEATURES DETECTION
+  // =========================
+  features: {
+    webgl: !!window.WebGLRenderingContext,
+    webgl2: !!window.WebGL2RenderingContext,
+    websockets: "WebSocket" in window,
+    serviceWorker: "serviceWorker" in navigator,
+    notifications: "Notification" in window,
+    permissions: !!navigator.permissions,
+  },
+
+  // =========================
+  // PERFORMANCE SIGNALS
+  // =========================
+  performance: {
+    memory: performance.memory
+      ? {
+          jsHeapSizeLimit: performance.memory.jsHeapSizeLimit,
+          totalJSHeapSize: performance.memory.totalJSHeapSize,
+          usedJSHeapSize: performance.memory.usedJSHeapSize,
+        }
+      : null,
+  },
+};
+    console.log(clientProfile);
 </script>
 </body>
 </html>
