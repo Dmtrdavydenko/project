@@ -2659,7 +2659,7 @@ server.on("request", async (req, res) => {
         }
     }
     if (req.url === "/cli") {
-        const clientProfile = {
+        const clientProfile_server = {
             ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
             cfIp: req.headers["cf-connecting-ip"],
             realIp: req.headers["x-real-ip"],
