@@ -711,7 +711,6 @@ async function select(body) {
         //select.pri = primaryKeyColumn;
         //select.name = body.table.name;
 
-
         function decodeSlice(data, start, length, encoding = 'utf-8') {
             const slice = data.slice(start, start + length);
             const decoder = new TextDecoder(encoding);
