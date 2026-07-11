@@ -2657,287 +2657,287 @@ server.on("request", async (req, res) => {
             // Здесь отдаём статический файл из файловой системы
         }
     }
-    if (req.url === "/cli") {
-        const clientProfile_server = {
-            ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
-            cfIp: req.headers["cf-connecting-ip"],
-            realIp: req.headers["x-real-ip"],
-            xForwardedFor: req.headers["x-forwarded-for"],
-            xForwardedHost: req.headers["x-forwarded-host"],
-            xForwardedProto: req.headers["x-forwarded-proto"],
-            xForwardedPort: req.headers["x-forwarded-port"],
+//    if (req.url === "/cli") {
+//        const clientProfile_server = {
+//            ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
+//            cfIp: req.headers["cf-connecting-ip"],
+//            realIp: req.headers["x-real-ip"],
+//            xForwardedFor: req.headers["x-forwarded-for"],
+//            xForwardedHost: req.headers["x-forwarded-host"],
+//            xForwardedProto: req.headers["x-forwarded-proto"],
+//            xForwardedPort: req.headers["x-forwarded-port"],
 
-            userAgent: req.headers["user-agent"],
-            language: req.headers["accept-language"],
-            encoding: req.headers["accept-encoding"],
-            accept: req.headers["accept"],
-            acceptCharset: req.headers["accept-charset"],
-            acceptLanguage: req.headers["accept-language"],
-            connection: req.headers["connection"],
-            host: req.headers["host"],
+//            userAgent: req.headers["user-agent"],
+//            language: req.headers["accept-language"],
+//            encoding: req.headers["accept-encoding"],
+//            accept: req.headers["accept"],
+//            acceptCharset: req.headers["accept-charset"],
+//            acceptLanguage: req.headers["accept-language"],
+//            connection: req.headers["connection"],
+//            host: req.headers["host"],
 
-            referer: req.headers["referer"],
-            origin: req.headers["origin"],
+//            referer: req.headers["referer"],
+//            origin: req.headers["origin"],
 
-            dnt: req.headers["dnt"],
-            upgradeInsecureRequests: req.headers["upgrade-insecure-requests"],
-            secFetchSite: req.headers["sec-fetch-site"],
-            secFetchMode: req.headers["sec-fetch-mode"],
-            secFetchUser: req.headers["sec-fetch-user"],
-            secFetchDest: req.headers["sec-fetch-dest"],
+//            dnt: req.headers["dnt"],
+//            upgradeInsecureRequests: req.headers["upgrade-insecure-requests"],
+//            secFetchSite: req.headers["sec-fetch-site"],
+//            secFetchMode: req.headers["sec-fetch-mode"],
+//            secFetchUser: req.headers["sec-fetch-user"],
+//            secFetchDest: req.headers["sec-fetch-dest"],
 
-            secChUa: req.headers["sec-ch-ua"],
-            secChUaPlatform: req.headers["sec-ch-ua-platform"],
-            secChUaMobile: req.headers["sec-ch-ua-mobile"],
-            secChUaArch: req.headers["sec-ch-ua-arch"],
-            secChUaModel: req.headers["sec-ch-ua-model"],
-            secChUaFullVersion: req.headers["sec-ch-ua-full-version"],
-            secChUaFullVersionList: req.headers["sec-ch-ua-full-version-list"],
+//            secChUa: req.headers["sec-ch-ua"],
+//            secChUaPlatform: req.headers["sec-ch-ua-platform"],
+//            secChUaMobile: req.headers["sec-ch-ua-mobile"],
+//            secChUaArch: req.headers["sec-ch-ua-arch"],
+//            secChUaModel: req.headers["sec-ch-ua-model"],
+//            secChUaFullVersion: req.headers["sec-ch-ua-full-version"],
+//            secChUaFullVersionList: req.headers["sec-ch-ua-full-version-list"],
 
-            cookie: req.headers["cookie"],
+//            cookie: req.headers["cookie"],
 
-            tls: {
-                encrypted: req.socket.encrypted,
-                protocol: req.socket.getProtocol?.(),
-                cipher: req.socket.getCipher?.(),
-                alpnProtocol: req.socket.alpnProtocol,
-                servername: req.socket.servername,
-            },
+//            tls: {
+//                encrypted: req.socket.encrypted,
+//                protocol: req.socket.getProtocol?.(),
+//                cipher: req.socket.getCipher?.(),
+//                alpnProtocol: req.socket.alpnProtocol,
+//                servername: req.socket.servername,
+//            },
 
-            socket: {
-                remoteAddress: req.socket.remoteAddress,
-                remotePort: req.socket.remotePort,
-                localAddress: req.socket.localAddress,
-                localPort: req.socket.localPort,
-                bytesRead: req.socket.bytesRead,
-                bytesWritten: req.socket.bytesWritten,
-                timeout: req.socket.timeout,
-            },
+//            socket: {
+//                remoteAddress: req.socket.remoteAddress,
+//                remotePort: req.socket.remotePort,
+//                localAddress: req.socket.localAddress,
+//                localPort: req.socket.localPort,
+//                bytesRead: req.socket.bytesRead,
+//                bytesWritten: req.socket.bytesWritten,
+//                timeout: req.socket.timeout,
+//            },
 
-            proxy: {
-                via: req.headers["via"],
-                forwarded: req.headers["forwarded"],
-                realIp: req.headers["x-real-ip"],
-                clusterClientIp: req.headers["x-cluster-client-ip"],
-                trueClientIp: req.headers["true-client-ip"],
-            },
+//            proxy: {
+//                via: req.headers["via"],
+//                forwarded: req.headers["forwarded"],
+//                realIp: req.headers["x-real-ip"],
+//                clusterClientIp: req.headers["x-cluster-client-ip"],
+//                trueClientIp: req.headers["true-client-ip"],
+//            },
 
-            method: req.method,
-            url: req.url,
-            httpVersion: req.httpVersion,
+//            method: req.method,
+//            url: req.url,
+//            httpVersion: req.httpVersion,
 
-            timestamp: Date.now(),
-        };
-        let ContentType = {};
-        ContentType.textPlain = {
-            "Content-Type": "text/plain"
-        }
-        ContentType.json = {
-            "Content-Type": "application/json"
-        }
-        ContentType.html = {
-            "Content-Type": "text/html"
-        }
+//            timestamp: Date.now(),
+//        };
+//        let ContentType = {};
+//        ContentType.textPlain = {
+//            "Content-Type": "text/plain"
+//        }
+//        ContentType.json = {
+//            "Content-Type": "application/json"
+//        }
+//        ContentType.html = {
+//            "Content-Type": "text/html"
+//        }
         
-        res.writeHead(200, ContentType.html);
-        res.end(`
-<html>
-<body>
-<script defer>
-    const profileServer = ${JSON.stringify(clientProfile_server)};
-    console.log(profileServer);
-    (async () => {
-    let clientProfile = {
-  // =========================
-  // BASIC BROWSER INFO
-  // =========================
-  userAgent: navigator.userAgent,
-  platform: navigator.platform,
-  language: navigator.language,
-  languages: navigator.languages,
-  cookieEnabled: navigator.cookieEnabled,
-  doNotTrack: navigator.doNotTrack,
+//        res.writeHead(200, ContentType.html);
+//        res.end(`
+//<html>
+//<body>
+//<script defer>
+//    const profileServer = ${JSON.stringify(clientProfile_server)};
+//    console.log(profileServer);
+//    (async () => {
+//    let clientProfile = {
+//  // =========================
+//  // BASIC BROWSER INFO
+//  // =========================
+//  userAgent: navigator.userAgent,
+//  platform: navigator.platform,
+//  language: navigator.language,
+//  languages: navigator.languages,
+//  cookieEnabled: navigator.cookieEnabled,
+//  doNotTrack: navigator.doNotTrack,
 
-  // =========================
-  // HARDWARE / DEVICE
-  // =========================
-  hardwareConcurrency: navigator.hardwareConcurrency,
-  deviceMemory: navigator.deviceMemory,
-  maxTouchPoints: navigator.maxTouchPoints,
+//  // =========================
+//  // HARDWARE / DEVICE
+//  // =========================
+//  hardwareConcurrency: navigator.hardwareConcurrency,
+//  deviceMemory: navigator.deviceMemory,
+//  maxTouchPoints: navigator.maxTouchPoints,
 
-  // =========================
-  // SCREEN / DISPLAY
-  // =========================
-  screen: {
-    width: screen.width,
-    height: screen.height,
-    availWidth: screen.availWidth,
-    availHeight: screen.availHeight,
-    colorDepth: screen.colorDepth,
-    pixelDepth: screen.pixelDepth,
-    orientation: screen.orientation?.type,
-  },
+//  // =========================
+//  // SCREEN / DISPLAY
+//  // =========================
+//  screen: {
+//    width: screen.width,
+//    height: screen.height,
+//    availWidth: screen.availWidth,
+//    availHeight: screen.availHeight,
+//    colorDepth: screen.colorDepth,
+//    pixelDepth: screen.pixelDepth,
+//    orientation: screen.orientation?.type,
+//  },
 
-  // =========================
-  // WINDOW / VIEWPORT
-  // =========================
-  viewport: {
-    innerWidth: window.innerWidth,
-    innerHeight: window.innerHeight,
-    outerWidth: window.outerWidth,
-    outerHeight: window.outerHeight,
-    devicePixelRatio: window.devicePixelRatio,
-  },
+//  // =========================
+//  // WINDOW / VIEWPORT
+//  // =========================
+//  viewport: {
+//    innerWidth: window.innerWidth,
+//    innerHeight: window.innerHeight,
+//    outerWidth: window.outerWidth,
+//    outerHeight: window.outerHeight,
+//    devicePixelRatio: window.devicePixelRatio,
+//  },
 
-  // =========================
-  // TIMEZONE / LOCALE
-  // =========================
-  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  timezoneOffset: new Date().getTimezoneOffset(),
+//  // =========================
+//  // TIMEZONE / LOCALE
+//  // =========================
+//  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+//  timezoneOffset: new Date().getTimezoneOffset(),
 
-  locale: Intl.DateTimeFormat().resolvedOptions().locale,
+//  locale: Intl.DateTimeFormat().resolvedOptions().locale,
 
-  // =========================
-  // AUDIO FINGERPRINT (WebAudio)
-  // =========================
-  audioFingerprint: await (async () => {
-    try {
-      const ctx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 44100, 44100);
-      const osc = ctx.createOscillator();
-      const comp = ctx.createDynamicsCompressor();
+//  // =========================
+//  // AUDIO FINGERPRINT (WebAudio)
+//  // =========================
+//  audioFingerprint: await (async () => {
+//    try {
+//      const ctx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 44100, 44100);
+//      const osc = ctx.createOscillator();
+//      const comp = ctx.createDynamicsCompressor();
 
-      osc.type = "triangle";
-      osc.frequency.value = 10000;
+//      osc.type = "triangle";
+//      osc.frequency.value = 10000;
 
-      osc.connect(comp);
-      comp.connect(ctx.destination);
+//      osc.connect(comp);
+//      comp.connect(ctx.destination);
 
-      osc.start(0);
-      const buffer = await ctx.startRendering();
+//      osc.start(0);
+//      const buffer = await ctx.startRendering();
 
-      let sum = 0;
-      for (let i = 0; i < buffer.length; i++) {
-        sum += buffer.getChannelData(0)[i];
-      }
+//      let sum = 0;
+//      for (let i = 0; i < buffer.length; i++) {
+//        sum += buffer.getChannelData(0)[i];
+//      }
 
-      return sum.toString();
-    } catch {
-      return null;
-    }
-  })(),
+//      return sum.toString();
+//    } catch {
+//      return null;
+//    }
+//  })(),
 
-  // =========================
-  // CANVAS FINGERPRINT
-  // =========================
-  canvasFingerprint: (() => {
-    try {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
+//  // =========================
+//  // CANVAS FINGERPRINT
+//  // =========================
+//  canvasFingerprint: (() => {
+//    try {
+//      const canvas = document.createElement("canvas");
+//      const ctx = canvas.getContext("2d");
 
-      ctx.textBaseline = "top";
-      ctx.font = "14px Arial";
-      ctx.fillText("fingerprint", 2, 2);
+//      ctx.textBaseline = "top";
+//      ctx.font = "14px Arial";
+//      ctx.fillText("fingerprint", 2, 2);
 
-      return canvas.toDataURL();
-    } catch {
-      return null;
-    }
-  })(),
+//      return canvas.toDataURL();
+//    } catch {
+//      return null;
+//    }
+//  })(),
 
-  // =========================
-  // WEBGL FINGERPRINT
-  // =========================
-  webgl: (() => {
-    try {
-      const canvas = document.createElement("canvas");
-      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+//  // =========================
+//  // WEBGL FINGERPRINT
+//  // =========================
+//  webgl: (() => {
+//    try {
+//      const canvas = document.createElement("canvas");
+//      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 
-      if (!gl) return null;
+//      if (!gl) return null;
 
-      const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+//      const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
 
-      return {
-        vendor: gl.getParameter(gl.VENDOR),
-        renderer: gl.getParameter(gl.RENDERER),
-        unmaskedVendor: debugInfo
-          ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL)
-          : null,
-        unmaskedRenderer: debugInfo
-          ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)
-          : null,
-      };
-    } catch {
-      return null;
-    }
-  })(),
+//      return {
+//        vendor: gl.getParameter(gl.VENDOR),
+//        renderer: gl.getParameter(gl.RENDERER),
+//        unmaskedVendor: debugInfo
+//          ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL)
+//          : null,
+//        unmaskedRenderer: debugInfo
+//          ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)
+//          : null,
+//      };
+//    } catch {
+//      return null;
+//    }
+//  })(),
 
-  // =========================
-  // CLIENT HINTS (MODERN BROWSERS)
-  // =========================
-  clientHints: {
-    ua: navigator.userAgentData?.brands,
-    mobile: navigator.userAgentData?.mobile,
-    platform: navigator.userAgentData?.platform,
-  },
+//  // =========================
+//  // CLIENT HINTS (MODERN BROWSERS)
+//  // =========================
+//  clientHints: {
+//    ua: navigator.userAgentData?.brands,
+//    mobile: navigator.userAgentData?.mobile,
+//    platform: navigator.userAgentData?.platform,
+//  },
 
-  // =========================
-  // NAVIGATION / REFERRER
-  // =========================
-  referrer: document.referrer,
-  url: location.href,
+//  // =========================
+//  // NAVIGATION / REFERRER
+//  // =========================
+//  referrer: document.referrer,
+//  url: location.href,
 
-  // =========================
-  // STORAGE CAPABILITIES
-  // =========================
-  storage: {
-    localStorage: (() => {
-      try {
-        return !!window.localStorage;
-      } catch {
-        return false;
-      }
-    })(),
-    sessionStorage: (() => {
-      try {
-        return !!window.sessionStorage;
-      } catch {
-        return false;
-      }
-    })(),
-  },
+//  // =========================
+//  // STORAGE CAPABILITIES
+//  // =========================
+//  storage: {
+//    localStorage: (() => {
+//      try {
+//        return !!window.localStorage;
+//      } catch {
+//        return false;
+//      }
+//    })(),
+//    sessionStorage: (() => {
+//      try {
+//        return !!window.sessionStorage;
+//      } catch {
+//        return false;
+//      }
+//    })(),
+//  },
 
-  // =========================
-  // BROWSER FEATURES DETECTION
-  // =========================
-  features: {
-    webgl: !!window.WebGLRenderingContext,
-    webgl2: !!window.WebGL2RenderingContext,
-    websockets: "WebSocket" in window,
-    serviceWorker: "serviceWorker" in navigator,
-    notifications: "Notification" in window,
-    permissions: !!navigator.permissions,
-  },
+//  // =========================
+//  // BROWSER FEATURES DETECTION
+//  // =========================
+//  features: {
+//    webgl: !!window.WebGLRenderingContext,
+//    webgl2: !!window.WebGL2RenderingContext,
+//    websockets: "WebSocket" in window,
+//    serviceWorker: "serviceWorker" in navigator,
+//    notifications: "Notification" in window,
+//    permissions: !!navigator.permissions,
+//  },
 
-  // =========================
-  // PERFORMANCE SIGNALS
-  // =========================
-  performance: {
-    memory: performance.memory
-      ? {
-          jsHeapSizeLimit: performance.memory.jsHeapSizeLimit,
-          totalJSHeapSize: performance.memory.totalJSHeapSize,
-          usedJSHeapSize: performance.memory.usedJSHeapSize,
-        }
-      : null,
-  },
-};
-    console.log(clientProfile);
-    })();
-</script>
-</body>
-</html>
-`);
-    }
+//  // =========================
+//  // PERFORMANCE SIGNALS
+//  // =========================
+//  performance: {
+//    memory: performance.memory
+//      ? {
+//          jsHeapSizeLimit: performance.memory.jsHeapSizeLimit,
+//          totalJSHeapSize: performance.memory.totalJSHeapSize,
+//          usedJSHeapSize: performance.memory.usedJSHeapSize,
+//        }
+//      : null,
+//  },
+//};
+//    console.log(clientProfile);
+//    })();
+//</script>
+//</body>
+//</html>
+//`);
+//    }
     if (req.url === "/app") {
         if (req.method === "POST") {
             let chunks = [];
