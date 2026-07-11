@@ -3683,54 +3683,57 @@ console.log("Server listening on " + PORT);
 //import path from 'path';
 //import url from 'url';
 
-import { WebSocketServer } from 'ws';
+//import { WebSocketServer } from 'ws';
 
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+//const __filename = url.fileURLToPath(import.meta.url);
+//const __dirname = path.dirname(__filename);
 
-let state = {
-    text: '',
-    width: 1000,
-    height: 400
-};
-function createCanvasCode(text) {
-    const scale = 1.3;
-    const can = {}
-    can.width = state.width * scale;
-    can.height = state.height * scale;
-    let font = 13.3333;
-    font *= scale;
-    let lineHeight = 1.2 * font;
-    return `
-const canvas = document.createElement('canvas');
-canvas.width = ${can.width + 20};
-canvas.height = ${can.height + 16};
+//let state = {
+//    text: '',
+//    width: 1000,
+//    height: 400
+//};
+//function createCanvasCode(text) {
+//    const scale = 1.3;
+//    const can = {}
+//    can.width = state.width * scale;
+//    can.height = state.height * scale;
+//    let font = 13.3333;
+//    font *= scale;
+//    let lineHeight = 1.2 * font;
+//    return `
+//const canvas = document.createElement('canvas');
+//canvas.width = ${can.width + 20};
+//canvas.height = ${can.height + 16};
 
-const ctx = canvas.getContext('2d');
+//const ctx = canvas.getContext('2d');
 
-ctx.clearRect(0, 0, canvas.width, canvas.height);
+//ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-ctx.fillStyle = '#ffffff';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
+//ctx.fillStyle = '#ffffff';
+//ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-ctx.fillStyle = '#000000';
-ctx.font = '${font}px Arial';
+//ctx.fillStyle = '#000000';
+//ctx.font = '${font}px Arial';
 
-const lines = ${JSON.stringify(text)}.split('\\n');
+//const lines = ${JSON.stringify(text)}.split('\\n');
 
-let y = 16;
+//let y = 16;
 
-for (const line of lines) {
-    ctx.fillText(line, 20, y);
-    y += ${lineHeight};
-}
+//for (const line of lines) {
+//    ctx.fillText(line, 20, y);
+//    y += ${lineHeight};
+//}
 
-// вставляем canvas в страницу (или контейнер)
-const app = document.getElementById("app");
-app.innerHTML = "";
-app.appendChild(canvas);
-`;
-}
+//// вставляем canvas в страницу (или контейнер)
+//const app = document.getElementById("app");
+//app.innerHTML = "";
+//app.appendChild(canvas);
+//`;
+//}
+
+
+
 //console.log(__filename);
 //console.log(__dirname);
 
@@ -3759,47 +3762,47 @@ app.appendChild(canvas);
 //        res.end(data);
 //    });
 //});
-const wss = new WebSocketServer({ server });
+//const wss = new WebSocketServer({ server });
 
-function broadcastCanvasCode() {
+//function broadcastCanvasCode() {
 
-    const code = createCanvasCode(state.text);
+//    const code = createCanvasCode(state.text);
 
-    const payload = JSON.stringify({
-        type: 'canvas-code',
-        code
-    });
+//    const payload = JSON.stringify({
+//        type: 'canvas-code',
+//        code
+//    });
 
-    for (const client of wss.clients) {
+//    for (const client of wss.clients) {
 
-        if (client.readyState === 1) {
-            client.send(payload);
-        }
-    }
-}
+//        if (client.readyState === 1) {
+//            client.send(payload);
+//        }
+//    }
+//}
 
-wss.on('connection', (ws) => {
-    ws.send(JSON.stringify({
-        type: 'canvas-code',
-        code: createCanvasCode(state.text)
-    }));
+//wss.on('connection', (ws) => {
+//    ws.send(JSON.stringify({
+//        type: 'canvas-code',
+//        code: createCanvasCode(state.text)
+//    }));
 
-    ws.on('message', (msg) => {
+//    ws.on('message', (msg) => {
 
-        const data = JSON.parse(msg.toString());
+//        const data = JSON.parse(msg.toString());
 
-        if (data.type === 'text-change') {
-            console.log(data.text);
+//        if (data.type === 'text-change') {
+//            console.log(data.text);
 
-            state.text = data.text;
-            state.width = data.width;
-            state.height = data.height;
+//            state.text = data.text;
+//            state.width = data.width;
+//            state.height = data.height;
 
-            broadcastCanvasCode();
+//            broadcastCanvasCode();
 
-        }
-    });
-});
+//        }
+//    });
+//});
 
 
 
