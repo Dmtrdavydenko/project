@@ -2648,12 +2648,57 @@ server.on("request", async (req, res) => {
             </html>`);
                     return;
                 }
+
+
+                const requestId = crypto.randomUUID();
+                res.setHeader('X-Request-Id', requestId);
+
+                /** asp mimic */
+                res.setHeader('Server', 'Microsoft-IIS/10.0');
+                res.setHeader('X-Powered-By', 'ASP.NET');
+                res.setHeader('X-AspNet-Version', '4.0.30319');
+                res.setHeader('X-AspNetMvc-Version', '5.2');
+
+                res.setHeader('X-OWA-Version', '15.0.1497.2');
+                res.setHeader('X-FEServer', 'EXCH01');
+                res.setHeader('X-BackendServer', 'EXCH02');
+                res.setHeader('X-CalculatedBETarget', 'exch02.domain.local');
+                res.setHeader('X-CalculatedFETarget', 'exch01.domain.local');
+                res.setHeader('X-DiagInfo', 'EXCH01');
+                res.setHeader('X-BEServer', 'EXCH02');
+                /** asp mimic */
+
+                res.setHeader('X-Spam-Status', 'No, score=-0.0 required=5.0 tests=BAYES_50,SPF_PASS autolearn=ham');
+                res.setHeader('X-Spam-Level', '');
+                res.setHeader('X-Spam-Flag', 'NO');
+                res.setHeader('X-Virus-Scanned', 'amavisd-new at mail.example.com');
+                res.setHeader('X-Antivirus', 'ClamAV');
+
+                res.setHeader('Content-Security-Policy',
+                    "default-src 'self'; script-src 'self' 'unsafe-inline' https:; " +
+                    "style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; " +
+                    "font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'self'; " +
+                    "base-uri 'self'; form-action 'self';"
+                );
+                res.setHeader('X-Mailru-Msgtype', 'mail');
+                res.setHeader('X-Priority', '3');
+
                 res.setHeader('server', 'nginx/1.28.0');
-                res.setHeader('x-xss-protection', '1; mode=block; report=https://cspreport.mail.ru/xxssprotection');
-                res.setHeader('x-content-type-options', 'nosniff');
-                res.setHeader('x-frame-options', 'SAMEORIGIN');
-                res.setHeader('x-host', '26.lf.home-release.rc.mrucl.ru');
-                res.setHeader('x-etime', '0.001');
+                res.setHeader('X-Content-Type-Options', 'nosniff');
+                res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+
+                res.setHeader('X-XSS-Protection', '1; mode=block; report=https://cspreport.mail.ru/xxssprotection');
+
+                res.setHeader('X-Host', '26.lf.home-release.rc.mrucl.ru');
+
+                const startTime = process.hrtime();
+                const originalEnd = res.end;
+                res.end = function (chunk, encoding, callback) {
+                    const diff = process.hrtime(startTime);
+                    const elapsedSec = diff[0] + diff[1] / 1e9;
+                    this.setHeader('X-Etime', elapsedSec.toFixed(3));
+                    originalEnd.call(this, chunk, encoding, callback);
+                };
 
                 res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
 
