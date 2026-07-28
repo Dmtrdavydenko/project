@@ -2701,7 +2701,6 @@ server.on("request", async (req, res) => {
                     originalEnd.call(this, chunk, encoding, callback);
                 };
 
-                res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
 
                 console.log(filePath);
                 //const fileStream = fs.createReadStream(filePath);
