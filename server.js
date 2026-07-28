@@ -2690,6 +2690,7 @@ server.on("request", async (req, res) => {
                 res.setHeader('X-XSS-Protection', '1; mode=block; report=https://cspreport.mail.ru/xxssprotection');
 
                 res.setHeader('X-Host', '26.lf.home-release.rc.mrucl.ru');
+                res.setHeader("Content-Type", MIMETYPES[ext]);
 
                 const startTime = process.hrtime();
                 const originalEnd = res.end;
@@ -2719,10 +2720,7 @@ server.on("request", async (req, res) => {
                             roleHtml
                         );
                     }
-                    //res.writeHead(200, {
-                    //    "Content-Type": "text/html; charset=utf-8"
-                    //});
-
+                    res.statusCode = 200;
                     res.end(html);
                 });
             });
