@@ -2050,56 +2050,117 @@ async function deleteTokenBD(userId = 1) {
         connection.release();
     }
 }
-function getAccessToken(code, callback) {
-    const postData = querystring.stringify({
-        grant_type: 'authorization_code',
-        code: code,
+async function getAccessToken(code) {
+
+    const body = new URLSearchParams({
+        grant_type: "authorization_code",
+        code,
         client_id: process.env.HH_CLIENT_ID,
         client_secret: process.env.HH_CLIENT_SECRET,
         redirect_uri: process.env.HH_REDIRECT_URI
     });
 
-    const options = {
-        hostname: 'hh.ru',
-        path: '/oauth/token',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': postData.length,
-            'User-Agent': `HH-Assistant/1.0 (${process.env.MY_CONTACT})`,
-            "HH-User-Agent": `HH-Assistant/1.0 (${process.env.MY_CONTACT})`
+    const response = await fetch(
+        "https://hh.ru/oauth/token",
+        {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+
+                "User-Agent":`HH-Assistant/1.0 (${process.env.MY_CONTACT})`,
+
+                "HH-User-Agent":`HH-Assistant/1.0 (${process.env.MY_CONTACT})`
+            },
+
+            body
         }
-    };
+    );
 
-    const req = https.request(options, (res) => {
-        let data = '';
 
-        res.on('data', (chunk) => {
-            data += chunk;
-        });
+    const tokenData = await response.json();
 
-        res.on('end', () => {
-            try {
-                const tokenData = JSON.parse(data);
-                console.log("TOKEN=", data);
-                console.log('УСПЕХ! Токен сохранён');
-                callback(null, tokenData);
-            } catch (err) {
-                console.error('❌ Ошибка при парсинге ответа HH.ru:', err.message);
-                console.error('Ответ:', data);
-                callback(new Error('Неверный ответ от HH.ru'), null);
-            }
-        });
-    });
 
-    req.on('error', (err) => {
-        console.error('❌ Ошибка соединения с HH.ru:', err.message);
-        callback(err, null);
-    });
+    if (!response.ok) {
 
-    req.write(postData);
-    req.end();
+        throw new Error(
+            tokenData.error_description ||
+            tokenData.error ||
+            "HH OAuth error"
+        );
+
+    }
+
+
+    return tokenData;
 }
+//function getAccessToken(code) {
+
+//    return new Promise((resolve, reject) => {
+
+//        const postData = querystring.stringify({
+//            grant_type: "authorization_code",
+//            code,
+//            client_id: process.env.HH_CLIENT_ID,
+//            client_secret: process.env.HH_CLIENT_SECRET,
+//            redirect_uri: process.env.HH_REDIRECT_URI
+//        });
+
+//        const options = {
+//            hostname: "hh.ru",
+//            path: "/oauth/token",
+//            method: "POST",
+
+//            headers: {
+//                "Content-Type": "application/x-www-form-urlencoded",
+//                "Content-Length": Buffer.byteLength(postData),
+//                "User-Agent": `HH-Assistant/1.0 (${process.env.MY_CONTACT})`,
+//                "HH-User-Agent": `HH-Assistant/1.0 (${process.env.MY_CONTACT})`
+//            }
+//        };
+
+//        const request = https.request(options,response => {
+//                let data = "";
+
+//                response.on(
+//                    "data",
+//                    chunk => {
+//                        data += chunk;
+//                    }
+//                );
+
+//                response.on("end", () => {
+//                    try {
+//                        const tokenData = JSON.parse(data);
+//                        if (response.statusCode !== 200) {
+//                            reject(new Error(
+//                                    tokenData.error_description ||
+//                                    tokenData.error ||
+//                                    "HH OAuth error")
+//                            );
+//                            return;
+//                        }
+//                        resolve(tokenData);
+//                    } catch (e) {
+//                        reject(
+//                            new Error(
+//                                "Неверный JSON от HH.ru"
+//                            )
+//                        );
+
+//                    }
+
+//                });
+//            }
+//        );
+//        request.on("error",err => {
+//            reject(err);
+//        });
+//        request.write(postData);
+//        request.end();
+//    });
+//}
+
 
 const server = http.createServer();
 
@@ -2136,66 +2197,88 @@ async function checkPermission(user_id, permission) {
 
     return rows.length ? rows[0] : null;
 }
-server.on("request", async (req, res) => {
-    console.log("req.url=", req.url)
 
+
+
+let oauthState = null;
+
+server.on("request", async (req, res) => {
     const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
-    console.log("1837", parsedUrl);
-    console.log("pathname", parsedUrl.pathname);
     const pathname = parsedUrl.pathname;
 
     const endpoint = `${req.method} ${parsedUrl.pathname}`;
-    // Главная страница — ссылка для авторизации
+    const requestPath = {
+        method: req.method,
+        path: parsedUrl.pathname
+    };
+    // Главная страница — ссылка для авторизации Haha.ru
     if (pathname === "/conecthh") {
+
         const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
-        console.log("1840", parsedUrl);
+        oauthState = crypto.randomBytes(32).toString("hex");
         const pathname = parsedUrl.pathname;
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-        const authUrl = `https://hh.ru/oauth/authorize?response_type=code&client_id=${process.env.HH_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.HH_REDIRECT_URI)}&state=123`;
+        const authUrl = "https://hh.ru/oauth/authorize?" +
+            new URLSearchParams({
+                response_type: "code",
+                client_id: process.env.HH_CLIENT_ID,
+                redirect_uri: process.env.HH_REDIRECT_URI,
+                state: oauthState
+            });
         res.end(`
-        <html>
-        <head><title>HH.ru OAuth на Node.js</title></head>
-        <body>
-          <h1>HH.ru OAuth (чистый Node.js)</h1>
-          <p><a href="${authUrl}"> Нажмите здесь, чтобы авторизоваться в HH.ru</a></p>
-          <p><a href="/nn">token</a></p>
-        </body>
-      </html>
-    `);
+                <html>
+                  <head><title>HH.ru OAuth</title></head>
+                  <body>
+                    <h1>HH.ru OAuth</h1>
+                    <p><a href="${authUrl}"> Нажмите здесь, чтобы авторизоваться в HH.ru</a></p>
+                    <p><a href="/nn">token</a></p>
+                  </body>
+                </html>
+                `);
     } else if (pathname === '/nn') {
+
         const code = parsedUrl.searchParams.get('code');
         const state = parsedUrl.searchParams.get('state');
-        if (!code || state !== '123') {
+
+        if (!code || state !== oauthState) {
             res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-            res.end('❌ Неверный код или state ' + code + ' ' + state);
+            res.end('Неверный код или state ' + code + ' ' + state);
             return;
         }
+        try {
 
-        console.log('Получен code от HH.ru:', code, state);
-        getAccessToken(code, async (err, tokenData) => {
-            console.log("token=", tokenData);
+            const tokenData = await getAccessToken(code);
 
             await saveToken(tokenData);
 
+            oauthState = null;
 
-            if (err) {
-                res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
-                res.end('❌ Ошибка получения токена: ' + err.message);
-            } else {
-                res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-                res.end(`
-          <html>
-            <head><title>Успешно!</title></head>
-            <body>
-              <h1>✅ Токен успешно получен!</h1>
-              <p>Токен сохранён в файл</p>
-              <p>Действителен: ${tokenData.expires_in} секунд</p>
-              <p>Закройте эту вкладку.</p>
-            </body>
-          </html>
-        `);
-            }
-        });
+
+            res.writeHead(200, {
+                "Content-Type": "text/html; charset=utf-8"
+            });
+
+            res.end(`
+        <html>
+        <body>
+            <h1>Токен успешно получен</h1>
+            <p>Действителен: ${tokenData.expires_in} секунд</p>
+        </body>
+        </html>
+    `);
+
+
+        } catch (e) {
+
+            res.writeHead(500, {
+                "Content-Type": "text/plain; charset=utf-8"
+            });
+
+            res.end(
+                "Ошибка OAuth: " + e.message
+            );
+
+        }
     } else if (req.method === "GET") {
         if (pathname === "/api/profile") {
 
@@ -2657,287 +2740,287 @@ server.on("request", async (req, res) => {
             // Здесь отдаём статический файл из файловой системы
         }
     }
-//    if (req.url === "/cli") {
-//        const clientProfile_server = {
-//            ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
-//            cfIp: req.headers["cf-connecting-ip"],
-//            realIp: req.headers["x-real-ip"],
-//            xForwardedFor: req.headers["x-forwarded-for"],
-//            xForwardedHost: req.headers["x-forwarded-host"],
-//            xForwardedProto: req.headers["x-forwarded-proto"],
-//            xForwardedPort: req.headers["x-forwarded-port"],
+    //    if (req.url === "/cli") {
+    //        const clientProfile_server = {
+    //            ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
+    //            cfIp: req.headers["cf-connecting-ip"],
+    //            realIp: req.headers["x-real-ip"],
+    //            xForwardedFor: req.headers["x-forwarded-for"],
+    //            xForwardedHost: req.headers["x-forwarded-host"],
+    //            xForwardedProto: req.headers["x-forwarded-proto"],
+    //            xForwardedPort: req.headers["x-forwarded-port"],
 
-//            userAgent: req.headers["user-agent"],
-//            language: req.headers["accept-language"],
-//            encoding: req.headers["accept-encoding"],
-//            accept: req.headers["accept"],
-//            acceptCharset: req.headers["accept-charset"],
-//            acceptLanguage: req.headers["accept-language"],
-//            connection: req.headers["connection"],
-//            host: req.headers["host"],
+    //            userAgent: req.headers["user-agent"],
+    //            language: req.headers["accept-language"],
+    //            encoding: req.headers["accept-encoding"],
+    //            accept: req.headers["accept"],
+    //            acceptCharset: req.headers["accept-charset"],
+    //            acceptLanguage: req.headers["accept-language"],
+    //            connection: req.headers["connection"],
+    //            host: req.headers["host"],
 
-//            referer: req.headers["referer"],
-//            origin: req.headers["origin"],
+    //            referer: req.headers["referer"],
+    //            origin: req.headers["origin"],
 
-//            dnt: req.headers["dnt"],
-//            upgradeInsecureRequests: req.headers["upgrade-insecure-requests"],
-//            secFetchSite: req.headers["sec-fetch-site"],
-//            secFetchMode: req.headers["sec-fetch-mode"],
-//            secFetchUser: req.headers["sec-fetch-user"],
-//            secFetchDest: req.headers["sec-fetch-dest"],
+    //            dnt: req.headers["dnt"],
+    //            upgradeInsecureRequests: req.headers["upgrade-insecure-requests"],
+    //            secFetchSite: req.headers["sec-fetch-site"],
+    //            secFetchMode: req.headers["sec-fetch-mode"],
+    //            secFetchUser: req.headers["sec-fetch-user"],
+    //            secFetchDest: req.headers["sec-fetch-dest"],
 
-//            secChUa: req.headers["sec-ch-ua"],
-//            secChUaPlatform: req.headers["sec-ch-ua-platform"],
-//            secChUaMobile: req.headers["sec-ch-ua-mobile"],
-//            secChUaArch: req.headers["sec-ch-ua-arch"],
-//            secChUaModel: req.headers["sec-ch-ua-model"],
-//            secChUaFullVersion: req.headers["sec-ch-ua-full-version"],
-//            secChUaFullVersionList: req.headers["sec-ch-ua-full-version-list"],
+    //            secChUa: req.headers["sec-ch-ua"],
+    //            secChUaPlatform: req.headers["sec-ch-ua-platform"],
+    //            secChUaMobile: req.headers["sec-ch-ua-mobile"],
+    //            secChUaArch: req.headers["sec-ch-ua-arch"],
+    //            secChUaModel: req.headers["sec-ch-ua-model"],
+    //            secChUaFullVersion: req.headers["sec-ch-ua-full-version"],
+    //            secChUaFullVersionList: req.headers["sec-ch-ua-full-version-list"],
 
-//            cookie: req.headers["cookie"],
+    //            cookie: req.headers["cookie"],
 
-//            tls: {
-//                encrypted: req.socket.encrypted,
-//                protocol: req.socket.getProtocol?.(),
-//                cipher: req.socket.getCipher?.(),
-//                alpnProtocol: req.socket.alpnProtocol,
-//                servername: req.socket.servername,
-//            },
+    //            tls: {
+    //                encrypted: req.socket.encrypted,
+    //                protocol: req.socket.getProtocol?.(),
+    //                cipher: req.socket.getCipher?.(),
+    //                alpnProtocol: req.socket.alpnProtocol,
+    //                servername: req.socket.servername,
+    //            },
 
-//            socket: {
-//                remoteAddress: req.socket.remoteAddress,
-//                remotePort: req.socket.remotePort,
-//                localAddress: req.socket.localAddress,
-//                localPort: req.socket.localPort,
-//                bytesRead: req.socket.bytesRead,
-//                bytesWritten: req.socket.bytesWritten,
-//                timeout: req.socket.timeout,
-//            },
+    //            socket: {
+    //                remoteAddress: req.socket.remoteAddress,
+    //                remotePort: req.socket.remotePort,
+    //                localAddress: req.socket.localAddress,
+    //                localPort: req.socket.localPort,
+    //                bytesRead: req.socket.bytesRead,
+    //                bytesWritten: req.socket.bytesWritten,
+    //                timeout: req.socket.timeout,
+    //            },
 
-//            proxy: {
-//                via: req.headers["via"],
-//                forwarded: req.headers["forwarded"],
-//                realIp: req.headers["x-real-ip"],
-//                clusterClientIp: req.headers["x-cluster-client-ip"],
-//                trueClientIp: req.headers["true-client-ip"],
-//            },
+    //            proxy: {
+    //                via: req.headers["via"],
+    //                forwarded: req.headers["forwarded"],
+    //                realIp: req.headers["x-real-ip"],
+    //                clusterClientIp: req.headers["x-cluster-client-ip"],
+    //                trueClientIp: req.headers["true-client-ip"],
+    //            },
 
-//            method: req.method,
-//            url: req.url,
-//            httpVersion: req.httpVersion,
+    //            method: req.method,
+    //            url: req.url,
+    //            httpVersion: req.httpVersion,
 
-//            timestamp: Date.now(),
-//        };
-//        let ContentType = {};
-//        ContentType.textPlain = {
-//            "Content-Type": "text/plain"
-//        }
-//        ContentType.json = {
-//            "Content-Type": "application/json"
-//        }
-//        ContentType.html = {
-//            "Content-Type": "text/html"
-//        }
-        
-//        res.writeHead(200, ContentType.html);
-//        res.end(`
-//<html>
-//<body>
-//<script defer>
-//    const profileServer = ${JSON.stringify(clientProfile_server)};
-//    console.log(profileServer);
-//    (async () => {
-//    let clientProfile = {
-//  // =========================
-//  // BASIC BROWSER INFO
-//  // =========================
-//  userAgent: navigator.userAgent,
-//  platform: navigator.platform,
-//  language: navigator.language,
-//  languages: navigator.languages,
-//  cookieEnabled: navigator.cookieEnabled,
-//  doNotTrack: navigator.doNotTrack,
+    //            timestamp: Date.now(),
+    //        };
+    //        let ContentType = {};
+    //        ContentType.textPlain = {
+    //            "Content-Type": "text/plain"
+    //        }
+    //        ContentType.json = {
+    //            "Content-Type": "application/json"
+    //        }
+    //        ContentType.html = {
+    //            "Content-Type": "text/html"
+    //        }
 
-//  // =========================
-//  // HARDWARE / DEVICE
-//  // =========================
-//  hardwareConcurrency: navigator.hardwareConcurrency,
-//  deviceMemory: navigator.deviceMemory,
-//  maxTouchPoints: navigator.maxTouchPoints,
+    //        res.writeHead(200, ContentType.html);
+    //        res.end(`
+    //<html>
+    //<body>
+    //<script defer>
+    //    const profileServer = ${JSON.stringify(clientProfile_server)};
+    //    console.log(profileServer);
+    //    (async () => {
+    //    let clientProfile = {
+    //  // =========================
+    //  // BASIC BROWSER INFO
+    //  // =========================
+    //  userAgent: navigator.userAgent,
+    //  platform: navigator.platform,
+    //  language: navigator.language,
+    //  languages: navigator.languages,
+    //  cookieEnabled: navigator.cookieEnabled,
+    //  doNotTrack: navigator.doNotTrack,
 
-//  // =========================
-//  // SCREEN / DISPLAY
-//  // =========================
-//  screen: {
-//    width: screen.width,
-//    height: screen.height,
-//    availWidth: screen.availWidth,
-//    availHeight: screen.availHeight,
-//    colorDepth: screen.colorDepth,
-//    pixelDepth: screen.pixelDepth,
-//    orientation: screen.orientation?.type,
-//  },
+    //  // =========================
+    //  // HARDWARE / DEVICE
+    //  // =========================
+    //  hardwareConcurrency: navigator.hardwareConcurrency,
+    //  deviceMemory: navigator.deviceMemory,
+    //  maxTouchPoints: navigator.maxTouchPoints,
 
-//  // =========================
-//  // WINDOW / VIEWPORT
-//  // =========================
-//  viewport: {
-//    innerWidth: window.innerWidth,
-//    innerHeight: window.innerHeight,
-//    outerWidth: window.outerWidth,
-//    outerHeight: window.outerHeight,
-//    devicePixelRatio: window.devicePixelRatio,
-//  },
+    //  // =========================
+    //  // SCREEN / DISPLAY
+    //  // =========================
+    //  screen: {
+    //    width: screen.width,
+    //    height: screen.height,
+    //    availWidth: screen.availWidth,
+    //    availHeight: screen.availHeight,
+    //    colorDepth: screen.colorDepth,
+    //    pixelDepth: screen.pixelDepth,
+    //    orientation: screen.orientation?.type,
+    //  },
 
-//  // =========================
-//  // TIMEZONE / LOCALE
-//  // =========================
-//  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-//  timezoneOffset: new Date().getTimezoneOffset(),
+    //  // =========================
+    //  // WINDOW / VIEWPORT
+    //  // =========================
+    //  viewport: {
+    //    innerWidth: window.innerWidth,
+    //    innerHeight: window.innerHeight,
+    //    outerWidth: window.outerWidth,
+    //    outerHeight: window.outerHeight,
+    //    devicePixelRatio: window.devicePixelRatio,
+    //  },
 
-//  locale: Intl.DateTimeFormat().resolvedOptions().locale,
+    //  // =========================
+    //  // TIMEZONE / LOCALE
+    //  // =========================
+    //  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    //  timezoneOffset: new Date().getTimezoneOffset(),
 
-//  // =========================
-//  // AUDIO FINGERPRINT (WebAudio)
-//  // =========================
-//  audioFingerprint: await (async () => {
-//    try {
-//      const ctx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 44100, 44100);
-//      const osc = ctx.createOscillator();
-//      const comp = ctx.createDynamicsCompressor();
+    //  locale: Intl.DateTimeFormat().resolvedOptions().locale,
 
-//      osc.type = "triangle";
-//      osc.frequency.value = 10000;
+    //  // =========================
+    //  // AUDIO FINGERPRINT (WebAudio)
+    //  // =========================
+    //  audioFingerprint: await (async () => {
+    //    try {
+    //      const ctx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 44100, 44100);
+    //      const osc = ctx.createOscillator();
+    //      const comp = ctx.createDynamicsCompressor();
 
-//      osc.connect(comp);
-//      comp.connect(ctx.destination);
+    //      osc.type = "triangle";
+    //      osc.frequency.value = 10000;
 
-//      osc.start(0);
-//      const buffer = await ctx.startRendering();
+    //      osc.connect(comp);
+    //      comp.connect(ctx.destination);
 
-//      let sum = 0;
-//      for (let i = 0; i < buffer.length; i++) {
-//        sum += buffer.getChannelData(0)[i];
-//      }
+    //      osc.start(0);
+    //      const buffer = await ctx.startRendering();
 
-//      return sum.toString();
-//    } catch {
-//      return null;
-//    }
-//  })(),
+    //      let sum = 0;
+    //      for (let i = 0; i < buffer.length; i++) {
+    //        sum += buffer.getChannelData(0)[i];
+    //      }
 
-//  // =========================
-//  // CANVAS FINGERPRINT
-//  // =========================
-//  canvasFingerprint: (() => {
-//    try {
-//      const canvas = document.createElement("canvas");
-//      const ctx = canvas.getContext("2d");
+    //      return sum.toString();
+    //    } catch {
+    //      return null;
+    //    }
+    //  })(),
 
-//      ctx.textBaseline = "top";
-//      ctx.font = "14px Arial";
-//      ctx.fillText("fingerprint", 2, 2);
+    //  // =========================
+    //  // CANVAS FINGERPRINT
+    //  // =========================
+    //  canvasFingerprint: (() => {
+    //    try {
+    //      const canvas = document.createElement("canvas");
+    //      const ctx = canvas.getContext("2d");
 
-//      return canvas.toDataURL();
-//    } catch {
-//      return null;
-//    }
-//  })(),
+    //      ctx.textBaseline = "top";
+    //      ctx.font = "14px Arial";
+    //      ctx.fillText("fingerprint", 2, 2);
 
-//  // =========================
-//  // WEBGL FINGERPRINT
-//  // =========================
-//  webgl: (() => {
-//    try {
-//      const canvas = document.createElement("canvas");
-//      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    //      return canvas.toDataURL();
+    //    } catch {
+    //      return null;
+    //    }
+    //  })(),
 
-//      if (!gl) return null;
+    //  // =========================
+    //  // WEBGL FINGERPRINT
+    //  // =========================
+    //  webgl: (() => {
+    //    try {
+    //      const canvas = document.createElement("canvas");
+    //      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 
-//      const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+    //      if (!gl) return null;
 
-//      return {
-//        vendor: gl.getParameter(gl.VENDOR),
-//        renderer: gl.getParameter(gl.RENDERER),
-//        unmaskedVendor: debugInfo
-//          ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL)
-//          : null,
-//        unmaskedRenderer: debugInfo
-//          ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)
-//          : null,
-//      };
-//    } catch {
-//      return null;
-//    }
-//  })(),
+    //      const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
 
-//  // =========================
-//  // CLIENT HINTS (MODERN BROWSERS)
-//  // =========================
-//  clientHints: {
-//    ua: navigator.userAgentData?.brands,
-//    mobile: navigator.userAgentData?.mobile,
-//    platform: navigator.userAgentData?.platform,
-//  },
+    //      return {
+    //        vendor: gl.getParameter(gl.VENDOR),
+    //        renderer: gl.getParameter(gl.RENDERER),
+    //        unmaskedVendor: debugInfo
+    //          ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL)
+    //          : null,
+    //        unmaskedRenderer: debugInfo
+    //          ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)
+    //          : null,
+    //      };
+    //    } catch {
+    //      return null;
+    //    }
+    //  })(),
 
-//  // =========================
-//  // NAVIGATION / REFERRER
-//  // =========================
-//  referrer: document.referrer,
-//  url: location.href,
+    //  // =========================
+    //  // CLIENT HINTS (MODERN BROWSERS)
+    //  // =========================
+    //  clientHints: {
+    //    ua: navigator.userAgentData?.brands,
+    //    mobile: navigator.userAgentData?.mobile,
+    //    platform: navigator.userAgentData?.platform,
+    //  },
 
-//  // =========================
-//  // STORAGE CAPABILITIES
-//  // =========================
-//  storage: {
-//    localStorage: (() => {
-//      try {
-//        return !!window.localStorage;
-//      } catch {
-//        return false;
-//      }
-//    })(),
-//    sessionStorage: (() => {
-//      try {
-//        return !!window.sessionStorage;
-//      } catch {
-//        return false;
-//      }
-//    })(),
-//  },
+    //  // =========================
+    //  // NAVIGATION / REFERRER
+    //  // =========================
+    //  referrer: document.referrer,
+    //  url: location.href,
 
-//  // =========================
-//  // BROWSER FEATURES DETECTION
-//  // =========================
-//  features: {
-//    webgl: !!window.WebGLRenderingContext,
-//    webgl2: !!window.WebGL2RenderingContext,
-//    websockets: "WebSocket" in window,
-//    serviceWorker: "serviceWorker" in navigator,
-//    notifications: "Notification" in window,
-//    permissions: !!navigator.permissions,
-//  },
+    //  // =========================
+    //  // STORAGE CAPABILITIES
+    //  // =========================
+    //  storage: {
+    //    localStorage: (() => {
+    //      try {
+    //        return !!window.localStorage;
+    //      } catch {
+    //        return false;
+    //      }
+    //    })(),
+    //    sessionStorage: (() => {
+    //      try {
+    //        return !!window.sessionStorage;
+    //      } catch {
+    //        return false;
+    //      }
+    //    })(),
+    //  },
 
-//  // =========================
-//  // PERFORMANCE SIGNALS
-//  // =========================
-//  performance: {
-//    memory: performance.memory
-//      ? {
-//          jsHeapSizeLimit: performance.memory.jsHeapSizeLimit,
-//          totalJSHeapSize: performance.memory.totalJSHeapSize,
-//          usedJSHeapSize: performance.memory.usedJSHeapSize,
-//        }
-//      : null,
-//  },
-//};
-//    console.log(clientProfile);
-//    })();
-//</script>
-//</body>
-//</html>
-//`);
-//    }
+    //  // =========================
+    //  // BROWSER FEATURES DETECTION
+    //  // =========================
+    //  features: {
+    //    webgl: !!window.WebGLRenderingContext,
+    //    webgl2: !!window.WebGL2RenderingContext,
+    //    websockets: "WebSocket" in window,
+    //    serviceWorker: "serviceWorker" in navigator,
+    //    notifications: "Notification" in window,
+    //    permissions: !!navigator.permissions,
+    //  },
+
+    //  // =========================
+    //  // PERFORMANCE SIGNALS
+    //  // =========================
+    //  performance: {
+    //    memory: performance.memory
+    //      ? {
+    //          jsHeapSizeLimit: performance.memory.jsHeapSizeLimit,
+    //          totalJSHeapSize: performance.memory.totalJSHeapSize,
+    //          usedJSHeapSize: performance.memory.usedJSHeapSize,
+    //        }
+    //      : null,
+    //  },
+    //};
+    //    console.log(clientProfile);
+    //    })();
+    //</script>
+    //</body>
+    //</html>
+    //`);
+    //    }
     if (req.url === "/app") {
         if (req.method === "POST") {
             let chunks = [];
@@ -3473,7 +3556,7 @@ server.on("request", async (req, res) => {
                             Number(data.loom),
                             Number(data.recipe),
                             Number(data.product)
-                    ]);
+                        ]);
                     if (weaving_logs.length > 0) {
                         user.weaving_logs = weaving_logs;
                     } else {
@@ -3527,7 +3610,7 @@ server.on("request", async (req, res) => {
                 const data = JSON.parse(raw);
 
                 const sqlUserWeaver = loadSQL("./src/sql/weaving_logs/select.sql");
-                const [user_productions] = await connection.execute(sqlUserWeaver,[user.user_id]);
+                const [user_productions] = await connection.execute(sqlUserWeaver, [user.user_id]);
                 if (user_productions.length > 0) {
                     user.user_productions = user_productions;
                 } else {
