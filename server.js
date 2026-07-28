@@ -2094,72 +2094,6 @@ async function getAccessToken(code) {
 
     return tokenData;
 }
-//function getAccessToken(code) {
-
-//    return new Promise((resolve, reject) => {
-
-//        const postData = querystring.stringify({
-//            grant_type: "authorization_code",
-//            code,
-//            client_id: process.env.HH_CLIENT_ID,
-//            client_secret: process.env.HH_CLIENT_SECRET,
-//            redirect_uri: process.env.HH_REDIRECT_URI
-//        });
-
-//        const options = {
-//            hostname: "hh.ru",
-//            path: "/oauth/token",
-//            method: "POST",
-
-//            headers: {
-//                "Content-Type": "application/x-www-form-urlencoded",
-//                "Content-Length": Buffer.byteLength(postData),
-//                "User-Agent": `HH-Assistant/1.0 (${process.env.MY_CONTACT})`,
-//                "HH-User-Agent": `HH-Assistant/1.0 (${process.env.MY_CONTACT})`
-//            }
-//        };
-
-//        const request = https.request(options,response => {
-//                let data = "";
-
-//                response.on(
-//                    "data",
-//                    chunk => {
-//                        data += chunk;
-//                    }
-//                );
-
-//                response.on("end", () => {
-//                    try {
-//                        const tokenData = JSON.parse(data);
-//                        if (response.statusCode !== 200) {
-//                            reject(new Error(
-//                                    tokenData.error_description ||
-//                                    tokenData.error ||
-//                                    "HH OAuth error")
-//                            );
-//                            return;
-//                        }
-//                        resolve(tokenData);
-//                    } catch (e) {
-//                        reject(
-//                            new Error(
-//                                "Неверный JSON от HH.ru"
-//                            )
-//                        );
-
-//                    }
-
-//                });
-//            }
-//        );
-//        request.on("error",err => {
-//            reject(err);
-//        });
-//        request.write(postData);
-//        request.end();
-//    });
-//}
 
 
 const server = http.createServer();
@@ -2235,7 +2169,8 @@ server.on("request", async (req, res) => {
                   </body>
                 </html>
                 `);
-    } else if (pathname === '/nn') {
+    }
+    if (pathname === '/nn') {
 
         const code = parsedUrl.searchParams.get('code');
         const state = parsedUrl.searchParams.get('state');
@@ -2259,13 +2194,13 @@ server.on("request", async (req, res) => {
             });
 
             res.end(`
-        <html>
-        <body>
-            <h1>Токен успешно получен</h1>
-            <p>Действителен: ${tokenData.expires_in} секунд</p>
-        </body>
-        </html>
-    `);
+                 <html>
+                 <body>
+                     <h1>Токен успешно получен</h1>
+                     <p>Действителен: ${tokenData.expires_in} секунд</p>
+                 </body>
+                 </html>
+             `);
 
 
         } catch (e) {
@@ -2279,7 +2214,8 @@ server.on("request", async (req, res) => {
             );
 
         }
-    } else if (req.method === "GET") {
+    }
+    if (req.method === "GET") {
         if (pathname === "/api/profile") {
 
             const user = await getUserBySession(req);
@@ -2712,7 +2648,15 @@ server.on("request", async (req, res) => {
             </html>`);
                     return;
                 }
+                res.setHeader('server', 'nginx/1.28.0');
+                res.setHeader('x-xss-protection', '1; mode=block; report=https://cspreport.mail.ru/xxssprotection');
+                res.setHeader('x-content-type-options', 'nosniff');
+                res.setHeader('x-frame-options', 'SAMEORIGIN');
+                res.setHeader('x-host', '26.lf.home-release.rc.mrucl.ru');
+                res.setHeader('x-etime', '0.001');
+
                 res.writeHead(200, { "Content-Type": MIMETYPES[ext] });
+
                 console.log(filePath);
                 //const fileStream = fs.createReadStream(filePath);
                 //fileStream.pipe(res);
