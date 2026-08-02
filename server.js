@@ -2651,8 +2651,8 @@ server.on("request", async (req, res) => {
 
                 res.setHeader('Content-Security-Policy',
                     "default-src 'self'; script-src 'self' 'unsafe-inline' https:; " +
-                    "style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; " +
-                    "font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'self'; " +
+                    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; " +
+                    "font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https:; frame-ancestors 'self'; " +
                     "base-uri 'self'; form-action 'self';"
                 );
                 res.setHeader('X-Mailru-Msgtype', 'mail');
