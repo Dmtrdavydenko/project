@@ -110,8 +110,8 @@ class DataTape {
         return [...this.data].sort(compareFunction);
     }
 }
-const Tape = new DataTape("https://worktime.up.railway.app/app");
-const Thread = new DataTape("https://worktime.up.railway.app/app");
+const Tape = new DataTape("https://abworktime.up.railway.app/app");
+const Thread = new DataTape("https://abworktime.up.railway.app/app");
 
 
 const localSpace = {};
@@ -1426,7 +1426,7 @@ localSpace.getTapeDensity = [
 
 
         setTime.addEventListener("click", async function () {
-            const response = await fetch("https://worktime.up.railway.app/app", {
+            const response = await fetch("https://abworktime.up.railway.app/app", {
                 //response = await fetch(document.location.href, {
                 method: "POST",
                 headers: {
@@ -1912,7 +1912,7 @@ localSpace.getTapeDensity = [
 
             //let response = {}
 
-            let response = await fetch("https://worktime.up.railway.app/app", {
+            let response = await fetch("https://abworktime.up.railway.app/app", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json;charset=utf-8",
@@ -1925,7 +1925,7 @@ localSpace.getTapeDensity = [
             console.log(response);
 
 
-            response = await fetch("https://worktime.up.railway.app/app", {
+            response = await fetch("https://abworktime.up.railway.app/app", {
                 //response = await fetch(document.location.href, {
                 method: "POST",
                 headers: {

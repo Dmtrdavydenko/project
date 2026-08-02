@@ -8,6 +8,8 @@ import crypto from "crypto";
 import mysql from "mysql2/promise";
 import bcrypt from "bcrypt";
 
+import { handleApi } from "./routes/api.js";
+
 //const mysql = require('mysql2/promise');
 
 const PORT = process.env.PORT || 3000;
@@ -50,17 +52,19 @@ const dbConfig = {
     user: process.env.MYSQLUSER,
     password: process.env.MYSQLPASSWORD,
     database: process.env.MYSQLDATABASE,
-    port: process.env.MYSQLPORT || 3306, // Укажите порт по умолчанию, если переменная не установлена
+    port: process.env.MYSQLPORT || 3306,
 };
 
 import { ManualRepository } from "./src/tableManualSleeve.js";
 import { loadSQL } from "./src/utils.js";
+
+import { getAwaitConnect } from "./src/database/connection.js";
 //const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL; // считываем из env railway
 
-const pool = mysql.createPool(dbConfig); // создаём пул подключений
+//const pool = mysql.createPool(dbConfig); // создаём пул подключений
 let copyQuerySql;
 async function getColumnsJoin(body) {
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
     let sql = "SELECT * " +
         "FROM textile t " +
         "JOIN sleeve_width_density  swd ON t.wd_id = swd.sleeve_width_density_id " +
@@ -122,7 +126,7 @@ function decodeMetadataBuffer(metadata) {
 
 async function getTableColumns(body) {
     // Создаём подключение к базе данных
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
     try {
         // Выполняем запрос DESCRIBE для получения колонок таблицы
         const [rows] = await connection.execute(`DESCRIBE \`${body.table.name}\``);
@@ -179,7 +183,7 @@ async function getPriKey(nameTable) {
     //return primaryKeyColumns.length ? (primaryKeyColumns.length > 1 ? primaryKeyColumns : primaryKeyColumns[0]) : null;
 }
 async function slt() {
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
 
     try {
         console.log('Успешно подключено к базе данных MySQL!');
@@ -221,7 +225,7 @@ async function slt() {
 
 }
 async function getQuntity(body) {
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
 
     const keysToDelete = [];
     for (const key in body) {
@@ -282,7 +286,7 @@ async function getSourceTable(body) {
     //    throw new Error('Недопустимое имя таблицы');
     //}
     try {
-        const connection = await pool.getConnection();
+        const connection = await getAwaitConnect();
         console.log('Подключение к MySQL успешно установлено');
         try {
             const request = `SELECT * FROM \`${body.table.name}\`;`
@@ -325,7 +329,7 @@ async function where(filters = {}) {
 
 async function getMeta1(body) {
     try {
-        const connection = await pool.getConnection();
+        const connection = await getAwaitConnect();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
             console.log("bodyTableName: ", body.table.name);
@@ -357,7 +361,7 @@ async function getMeta1(body) {
 }
 async function getMeta2(body) {
     try {
-        const connection = await pool.getConnection();
+        const connection = await getAwaitConnect();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
 
@@ -378,7 +382,7 @@ async function getMeta2(body) {
 }
 async function getMeta3(body) {
     try {
-        const connection = await pool.getConnection();
+        const connection = await getAwaitConnect();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
 
@@ -763,7 +767,7 @@ async function select(body) {
     }
 }
 async function getTable(body) {
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
 
     try {
         console.log('Успешно подключено к базе данных MySQL!');
@@ -901,7 +905,7 @@ async function insertGenerate(body) {
     const shape = body.table.fields.map(() => '?').join(', ');
     const sql = "INSERT INTO `" + body.table.name + "` (" + body.table.fields.join(', ') + ") VALUES (" + shape + ")";
     console.log(body, sql);
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
     try {
         console.log('Успешно подключено к базе данных MySQL!');
 
@@ -925,7 +929,7 @@ async function insertGenerate(body) {
     }
 }
 async function insert(body) {
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
 
     try {
         console.log("data server", body);
@@ -1108,39 +1112,9 @@ async function getTapeDensity() {
         console.log("Соединение возвращено.");
     }
 }
-async function getAwaitConnect(maxRetries = 5, retryDelay = 3000) {
-    console.log("CALL=", getAwaitConnect.name)
-    let currentRetry = 0;
-    while (currentRetry < maxRetries) {
-        try {
-            const connection = await pool.getConnection();
-            console.log("Успешное подключение к MySQL");
-            return connection;
-        } catch (error) {
-            currentRetry++;
-            console.error(`Ошибка подключения MySQL (попытка ${currentRetry}/${maxRetries}):`, error.message);
-            if (currentRetry >= maxRetries) {
-                throw new Error(`Не удалось подключиться к MySQL после ${maxRetries} попыток. Последняя ошибка: ${error.message}`);
-            }
-            if (error.code === "ECONNREFUSED") {
-                console.log(`Ожидание ${retryDelay / 1000} секунд перед повтором...`);
-                await new Promise(resolve => setTimeout(resolve, retryDelay));
-            } else {
-                throw error; // Другие ошибки не ретраим
-            }
-            const exception = {
-                errno: -111,
-                code: 'ECONNREFUSED',
-                syscall: 'connect',
-                port: 3306,
-                fatal: true
-            }
-        }
-    }
-}
 async function setToDay() {
     try {
-        const connection = await pool.getConnection();
+        const connection = await getAwaitConnect();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
             const sql = `
@@ -1267,7 +1241,7 @@ async function getDay(body) {
 }
 async function getTime() {
     try {
-        const connection = await pool.getConnection();
+        const connection = await getAwaitConnect();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
             const sql = `
@@ -1329,7 +1303,7 @@ async function getTime() {
 }
 async function devGetTime() {
     try {
-        const connection = await pool.getConnection();
+        const connection = await getAwaitConnect();
         try {
             console.log('Успешно подключено к базе данных MySQL!');
             const sql = `
@@ -1415,7 +1389,7 @@ async function getThreads() {
 
 
 async function createTable() {
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
 
 
     connection.connect(err => {
@@ -1463,7 +1437,7 @@ async function setWhere(body) {
     const sqlQuery = `UPDATE ${body.table.name} SET ${body.table.colum_name} = ? WHERE ${body.table.whereColum} = ?`;
     const params = [body.table.value, body.table.id]; // если нужно добавить 1 к id
     //const params = [body.table.value, body.table.id + 1]; // если нужно добавить 1 к id
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
     try {
 
 
@@ -1565,7 +1539,7 @@ async function main() {
 
 
     try {
-        const conn = await pool.getConnection();
+        const conn = await getAwaitConnect();
 
         // Создание таблиц
         await conn.query(threadPP);
@@ -1609,7 +1583,7 @@ async function main() {
 async function dropTable(body) {
     const dropTableQuery = `DROP TABLE IF EXISTS ??`;
     try {
-        const conn = await pool.getConnection();
+        const conn = await getAwaitConnect();
         await conn.query(dropTableQuery, [body.table.name]);
         console.log(`Таблица ${body.table.name} успешно удалена`);
         conn.release();
@@ -1631,7 +1605,7 @@ async function dropTable(body) {
 
 async function getAllTableNames() {
     // Создаём подключение к базе данных
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
     const parentNamesSet = new Set([
         "tape_speed",
         "additive",
@@ -1678,7 +1652,7 @@ async function getAllTableNames() {
 
 async function getAllColumnsAndTypes() {
     // Создаём подключение к базе данных
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
 
     try {
         // Выполняем запрос SHOW TABLES
@@ -1716,7 +1690,7 @@ async function getAllColumnsAndTypes() {
 
 async function getTableColumnsAndTypes() {
     // Создаём подключение к базе данных
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
 
     try {
         // Выполняем запрос SHOW TABLES
@@ -1800,7 +1774,7 @@ const decodedId = decodeToken(token);
 async function sql(body) {
 
     // Создаём подключение к базе данных
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
     let all
     try {
         // Выполняем переданный SQL-запрос
@@ -1824,7 +1798,7 @@ async function sql(body) {
 
 //async function getTableColumns(body) {
 //    // Создаём подключение к базе данных
-//    const connection = await pool.getConnection();
+//    const connection = await getAwaitConnect();
 
 //    try {
 //        // Выполняем запрос DESCRIBE для получения колонок таблицы
@@ -1846,7 +1820,7 @@ async function sql(body) {
 
 async function getColumnsAndTypesForTable(body) {
     // Создаём подключение к базе данных
-    const connection = await pool.getConnection();
+    const connection = await getAwaitConnect();
 
     try {
         // Выполняем запрос для получения информации о столбцах указанной таблицы
@@ -2455,21 +2429,22 @@ server.on("request", async (req, res) => {
             return
         }
         if (pathname.startsWith('/api')) {
+            return handleApi(req, res, pathname);
             // Здесь обработка запроса к базе данных и возврат JSON
             // pathname оставляем как есть, не меняем
 
-            const base = path.basename(pathname);
-            console.log(base);
-            getTableColumns({ table: { name: "textile" } })
-                .then(result => {
-                    res.setHeader('Content-Type', 'application/json');
-                    res.end(JSON.stringify(result));
-                })
-                .catch(error => {
-                    res.statusCode = 500;
-                    res.end(JSON.stringify({ error: error.message }));
-                    console.error(error);
-                });
+            //const base = path.basename(pathname);
+            //console.log(base);
+            //getTableColumns({ table: { name: "textile" } })
+            //    .then(result => {
+            //        res.setHeader('Content-Type', 'application/json');
+            //        res.end(JSON.stringify(result));
+            //    })
+            //    .catch(error => {
+            //        res.statusCode = 500;
+            //        res.end(JSON.stringify({ error: error.message }));
+            //        console.error(error);
+            //    });
         } else {
             // Для остальных маршрутов — отдаём HTML страницы
             const parsedUrl = url.parse(req.url, true);

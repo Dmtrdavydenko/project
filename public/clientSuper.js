@@ -218,8 +218,8 @@ class DataTape {
         }
     }
 }
-const Tape = new DataTape("https://worktime.up.railway.app/app");
-const Thread = new DataTape("https://worktime.up.railway.app/app");
+const Tape = new DataTape("https://abworktime.up.railway.app/app");
+const Thread = new DataTape("https://abworktime.up.railway.app/app");
 const localSpace = {};
 localSpace.getTape = [
     {

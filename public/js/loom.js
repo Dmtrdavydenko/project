@@ -1,5 +1,5 @@
 async function request(action, params = {}) {
-    const response = await fetch("https://worktime.up.railway.app/app", {
+    const response = await fetch("https://abworktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -55,7 +55,7 @@ const selectColumName = document.createElement("select");
 
 async function getTableName() {
     try {
-        const response = await fetch("https://worktime.up.railway.app/app", {
+        const response = await fetch("https://abworktime.up.railway.app/app", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
@@ -1961,7 +1961,7 @@ function update(field = "loom") {
 
 
 async function getSelectedValue() {
-    const result = await fetch("https://worktime.up.railway.app/app", {
+    const result = await fetch("https://abworktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -1978,7 +1978,7 @@ async function getSelectedValue() {
     //return await [{ "Field": "textile_id", "Type": "smallint unsigned", "Null": "NO", "Key": "PRI", "Default": null, "Extra": "auto_increment" }, { "Field": "textile_width", "Type": "tinyint unsigned", "Null": "YES", "Key": "", "Default": null, "Extra": "" }, { "Field": "textile_density", "Type": "tinyint unsigned", "Null": "YES", "Key": "", "Default": null, "Extra": "" }, { "Field": "warp_quantity", "Type": "smallint unsigned", "Null": "YES", "Key": "", "Default": null, "Extra": "" }, { "Field": "warp_name", "Type": "varchar(100)", "Null": "YES", "Key": "", "Default": null, "Extra": "" }, { "Field": "textile_number", "Type": "tinyint unsigned", "Null": "YES", "Key": "", "Default": null, "Extra": "" }]
 }
 async function getSelectedValueT() {
-    const result = await fetch("https://worktime.up.railway.app/app", {
+    const result = await fetch("https://abworktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -2025,7 +2025,7 @@ inputSS.type = "number";
 
 async function sendUpdateTextileId(update) {
     try {
-        const response = await fetch('https://worktime.up.railway.app/app', {
+        const response = await fetch('https://abworktime.up.railway.app/app', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json;charset=utf-8' },
             body: JSON.stringify({
@@ -2592,7 +2592,7 @@ async function sendUpdateTextileId(update) {
 
 
 async function select(tableNmae) {
-    return await fetch("https://worktime.up.railway.app/app", {
+    return await fetch("https://abworktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -2606,7 +2606,7 @@ async function select(tableNmae) {
     }).then((response) => response.json());
 }
 async function selectWidth(tableNmae) {
-    return await fetch("https://worktime.up.railway.app/app", {
+    return await fetch("https://abworktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",

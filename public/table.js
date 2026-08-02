@@ -14,7 +14,7 @@ sourceTable.addEventListener("click", () => {
     createSourceTable();
 });
 async function getSourceTable(name) {
-    return await fetch("https://worktime.up.railway.app/app", {
+    return await fetch("https://abworktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -43,7 +43,7 @@ main.append(selectTableName);
 main.append(sourceTable);
 async function getTableName() {
     try {
-        const response = await fetch("https://worktime.up.railway.app/app", {
+        const response = await fetch("https://abworktime.up.railway.app/app", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
@@ -268,7 +268,7 @@ async function loadTable() {
 
 }
 async function request() {
-    const response = await fetch("https://worktime.up.railway.app/app", {
+    const response = await fetch("https://abworktime.up.railway.app/app", {
         method: "POST",
         headers: {
             "Content-Type": "application/json;charset=utf-8",

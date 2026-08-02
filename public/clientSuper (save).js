@@ -770,7 +770,7 @@ send.addEventListener("click", async function (e) {
         //        },
         //    }),
         //}).then((response) => response.json());
-        response = await fetch("https://worktime.up.railway.app/", {
+        response = await fetch("https://abworktime.up.railway.app/", {
             //response = await fetch(document.location.href, {
             method: "POST",
             headers: {
