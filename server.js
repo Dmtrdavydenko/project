@@ -8,7 +8,7 @@ import crypto from "crypto";
 import mysql from "mysql2/promise";
 import bcrypt from "bcrypt";
 
-import { handleApi } from "./src/routes/api.js";
+//import { handleApi } from "./src/routes/api.js";
 
 //const mysql = require('mysql2/promise');
 
