@@ -1,6 +1,6 @@
 import { profileController } from "../controllers/profile.controller.js";
-import { fabricRecipeController } from "../controllers/fabricRecipe.controller.js";
-import { weavingLogsController } from "../controllers/weavingLogs.controller.js";
+//import { fabricRecipeController } from "../controllers/fabricRecipe.controller.js";
+//import { weavingLogsController } from "../controllers/weavingLogs.controller.js";
 
 const routes = {
     "/api/profile": profileController,
