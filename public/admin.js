@@ -1,88 +1,6 @@
-console.log("textile");
-console.log(document.location.href);
-document.getElementById('subscribeForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const page = document.getElementById('pages').value;
-    const n = document.getElementById('count').value;
-    console.log("form", e, this, page, n);
-    await fetchVacancies(page, n);
-
-});
 const setVacancies = new Set();
 const vectorL = new Set();
-document.getElementById('getData').addEventListener('click', async function (e) {
-    e.preventDefault();
-    try {
-        const response = await fetch('hh.json'); // Путь к файлу
-        console.log(response);
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-
-        const items = await response.json(); // Парсим JSON
-        console.log(items);
-        let grafic = new Set();
-        for (let i = 0; i < items.length; i++) {
-            setVacancies.add(items[i].name);
-            grafic.add(items[i].work_schedule_by_days[0]?.name);
-            const obj = {
-                name: items[i].name,
-                working_hours: items[i].working_hours[0]?.name,
-                work_schedule_by_days: items[i].work_schedule_by_days[0]?.name,
-                requirement: items[i].snippet.requirement,
-                responsibility: items[i].snippet.responsibility,
-                schedule: items[i].schedule.name,
-                salary_from: items[i].salary_range?.from || "",
-                salary_to: items[i].salary_range?.to || items[i].salary_range?.from || "",
-                frequency: items[i].salary_range?.frequency?.name || "",
-                currency: items[i].salary_range?.currency || "",
-                experience: items[i].salary_range?.experience?.name || "",
-            }
-            //console.log(`Обработка элемента ${i}:`, obj.name);
-            //console.log(obj);
-            vectorL.add(JSON.stringify(obj).length);
-        }
-        // Выводим красиво отформатированный JSON
-        //resultDiv.textContent = JSON.stringify(items, null, 2);
-        console.log(setVacancies);
-        console.log(grafic);
-    } catch (error) {
-        //resultDiv.textContent = `Ошибка: ${error.message}`;
-        console.error('Ошибка загрузки JSON:', error);
-    }
-
-});
 let mydata = [];
-async function fetchVacancies(page = 0, n = 100) {
-
-    const url = 'https://api.hh.ru/vacancies?area=11&page=' + page + '&per_page=' + n;
-
-    try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'User-Agent': 'MyApp/1.0 (your-email@example.com)',
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-
-        console.log('✅ Successfully fetched data from HH.ru');
-        console.log(`Total vacancies found: ${data.found}`);
-        console.log(`First vacancy: ${data.items[0]?.name || 'None'}`);
-        console.log(data);
-        console.log(JSON.stringify(data.items));
-        mydata.push(data.items);
-        return data;
-    } catch (error) {
-        console.error('❌ Error fetching vacancies:', error.message);
-        throw error;
-    }
-}
 function createTable(data) {
     if (!data || data.length === 0) {
         return '<p>U</p>';
@@ -178,6 +96,9 @@ app.classList.add("editor");
 const light = document.createElement("div");
 light.classList.add("highlight");
 
+const suggestions = document.createElement("div");
+suggestions.classList.add("suggestions");
+
 const textArea = document.createElement("textarea");
 textArea.classList.add("editor-textarea");
 
@@ -192,11 +113,11 @@ function escapeHtml(text) {
 const keywordGroups = {
     keyword: [
         "select", "from", "where", "with","left","join", "on",
-        "group","order by", "having"
+        "group by","order by", "having"
     ],
 
     function: [
-        "count", "sum", "max", "round"
+        "count", "sum", "max", "round", "set"
     ],
 
     command: [
@@ -221,26 +142,441 @@ const keywordGroups = {
         "'"
     ]
 };
-//function renderHighlight() {
-//    let html = escapeHtml(textArea.value);
 
-//    Object.entries(keywordGroups).forEach(([className, words]) => {
-//        const regex = new RegExp(
-//            `\\b(${words.join('|')})\\b`,
-//            'gi'
-//        );
 
-//        html = html.replace(
-//            regex,
-//            match => `<span class="${className}">${match.toUpperCase()}</span>`
-//        );
-//    });
+const wordMemory = {};
 
-//    html += '\n';
-//    light.innerHTML = html;
-//}
+function rememberWord(word) {
+
+    word = word.toUpperCase();
+
+    if (!word)
+        return;
+
+    if (!wordMemory[word]) {
+
+        const points = wordToPoints(word);
+
+        wordMemory[word] = {
+
+            token: word,
+
+            count: 1,
+
+            // Координаты символов
+            points,
+
+            // Вектор изменений между символами
+            vector: pointsToVectors(points),
+
+            vec: Array.from({ length: 8 }, () => Math.random() * 2 - 1),
+            // Числовые признаки всего токена
+            features: points.map(point => point[0])
+
+        };
+
+    } else {
+
+        wordMemory[word].count++;
+
+    }
+}
+function pointsToVectors(points) {
+    const vectors = [];
+
+    let previous = [0, 0];
+
+    for (const point of points) {
+        vectors.push([
+            point[0] - previous[0],
+            point[1] - previous[1]
+        ]);
+
+        previous = point;
+    }
+
+    return vectors;
+}
+function wordToPoints(word) {
+    return [...word].map((char, position) => [
+        char.charCodeAt(0),
+        position
+    ]);
+}
+function pointsToVectors(points) {
+    const vectors = [];
+
+    let previous = [0, 0];
+
+    for (const point of points) {
+        vectors.push([
+            point[0] - previous[0],
+            point[1] - previous[1]
+        ]);
+
+        previous = point;
+    }
+
+    return vectors;
+}
+function testMyMet(src) {
+    function getAllKeywords() {
+        const result = [];
+
+        Object.entries(keywordGroups).forEach(
+            ([className, words]) => {
+
+                if (className === 'text') {
+                    return;
+                }
+
+                words.forEach(word => {
+                    result.push({
+                        word: word.toUpperCase(),
+                        className
+                    });
+                });
+            }
+        );
+
+        return result;
+    }
+    function getAllWords() {
+
+        return Object
+            .entries(wordMemory)
+            .map(([word, data]) => ({
+
+                word,
+
+                count: data.count,
+
+                vector: data.vector,
+
+                className: "memory"
+
+            }));
+
+    }
+    function getCurrentWord() {
+        const text = textArea.value.toUpperCase();
+        const cursor = textArea.selectionStart;
+
+        const before = text.slice(0, cursor);
+
+        const match = before.match(/[a-zA-Z_][a-zA-Z0-9_]*$/);
+
+        return match ? match[0] : '';
+    }
+    function wordToPoints(word) {
+        return [...word].map((char, position) => [
+            char.charCodeAt(0),
+            position
+        ]);
+    }
+    function pointsToVectors(points) {
+        const vectors = [];
+
+        let previous = [0, 0];
+
+        for (const point of points) {
+            vectors.push([
+                point[0] - previous[0],
+                point[1] - previous[1]
+            ]);
+
+            previous = point;
+        }
+
+        return vectors;
+    }
+    function cosineSimilarity(a, b) {
+        const dot =
+            a[0] * b[0] +
+            a[1] * b[1];
+
+        const lengthA =
+            Math.sqrt(a[0] ** 2 + a[1] ** 2);
+
+        const lengthB =
+            Math.sqrt(b[0] ** 2 + b[1] ** 2);
+
+        if (lengthA === 0 || lengthB === 0) {
+            return 0;
+        }
+
+        return dot / (lengthA * lengthB);
+    }
+    function euclideanDistance(a, b) {
+        return Math.sqrt(
+            (a[0] - b[0]) ** 2 +
+            (a[1] - b[1]) ** 2
+        );
+    }
+    function lengthDifference(a, b) {
+        const lengthA = Math.sqrt(a.reduce((s, x) => s + x * x, 0));
+        const lengthB = Math.sqrt(b.reduce((s, x) => s + x * x, 0));
+
+        return Math.abs(lengthA - lengthB);
+    }
+    function lengthRatio(a, b) {
+        const lengthA = Math.sqrt(
+            a.reduce((sum, x) => sum + x ** 2, 0)
+        );
+
+        const lengthB = Math.sqrt(
+            b.reduce((sum, x) => sum + x ** 2, 0)
+        );
+
+        if (lengthA === 0 || lengthB === 0) {
+            return 0;
+        }
+
+        return Math.min(lengthA, lengthB) / Math.max(lengthA, lengthB);
+    }
+    function wordSimilarity(wordA, wordB) {
+        const pointsA = wordToPoints(wordA);
+        const pointsB = wordToPoints(wordB);
+
+        const vectorsA = pointsToVectors(pointsA);
+        const vectorsB = pointsToVectors(pointsB);
+        //console.log("pointA",...pointsA);
+        //console.log("pointB", ...pointsB);
+        //console.log("vec__A",...vectorsA);
+        //console.log("vec__B", ...vectorsB);
+
+        const count = Math.min(
+            vectorsA.length,
+            vectorsB.length
+        );
+
+        //console.log(count);
+
+        if (count === 0) {
+            return 0;
+        }
+
+        let sum = 0;
+
+        for (let i = 0; i < count; i++) {
+            sum += cosineSimilarity(
+                vectorsA[i],
+                vectorsB[i]
+            ) * lengthRatio(vectorsA[i], vectorsB[i]);
+        }
+        //console.log(sum, count);
+        //console.log(sum/count);
+
+        return sum / count;
+    }
+    function getSuggestions(input, limit = 10) {
+        if (!input) {
+            return [];
+        }
+
+        const candidates = [
+            ...getAllKeywords(),
+            //...getAllWords()
+        ];
+
+        return candidates
+            .map(item => ({
+                ...item,
+                score: wordSimilarity(input, item.word)
+            }))
+            .filter(item => item.score > 0)
+            .sort((a, b) => b.score - a.score)
+            .slice(0, limit);
+    }
+
+    const currentWord = getCurrentWord();
+    console.log(currentWord);
+
+
+    const words = src
+        .toUpperCase()
+        .split(/\s+/)
+        .filter(Boolean);
+
+
+    //words.forEach(word => {
+
+    //    rememberWord(word);
+
+    //});
+
+    const words_point = words.map(i => wordToPoints(i));
+    const words_vec2 = words.map(i => pointsToVectors(wordToPoints(i)));
+
+    let model = {}
+    model["input"] = src;
+    model["tokens"] = words;
+    model["point"] = words_point;
+    model["vector"] = words_vec2;
+
+    console.log(
+        model
+    );
+
+    console.log(
+        'Ввод:',
+        src
+    );
+
+    console.log(
+        'tokens:',
+        JSON.stringify(words)
+    );
+    console.log(
+        'Точки:',
+        JSON.stringify(words_point)
+
+    );
+    console.log(
+        'Вектор:',
+        JSON.stringify(words_vec2)
+    );
+
+
+    console.log(
+        "Память:",
+        wordMemory
+    );
+    console.log(
+        "Память:",
+        JSON.stringify(wordMemory)
+    );
+    console.log(
+        "SQL:",
+        getAllKeywords()
+    );
+    if (!currentWord) {
+        suggestions.style.display = 'none';
+        return;
+    }
+
+    if (currentWord) {
+        const suggestions = getSuggestions(currentWord, 7);
+
+        console.log(
+            'Ввод:',
+            currentWord
+        );
+
+
+
+        console.log(
+            'Подходящие:',
+            suggestions
+        );
+        showSuggestions(suggestions);
+    }
+}
+function showSuggestions(words) {
+
+    if (!words.length) {
+        suggestions.style.display = 'none';
+        return;
+    }
+
+    selectedIndex = 0;
+
+    suggestions.innerHTML = words
+        .map((item, index) => `
+            <div
+                class="suggestion ${index === 0 ? 'active' : ''}"
+                data-word="${item.word}"
+            >
+                ${item.word}
+
+                <span class="suggestion-score">
+                    ${item.score.toFixed(2)}
+                </span>
+            </div>
+        `)
+        .join('');
+
+    suggestions.style.display = 'block';
+}
+function updateActiveSuggestion() {
+
+    const items =
+        suggestions.querySelectorAll('.suggestion');
+
+    items.forEach((item, index) => {
+
+        item.classList.toggle(
+            'active',
+            index === selectedIndex
+        );
+
+    });
+}
+function replaceCurrentWord(word) {
+
+    const text = textArea.value;
+
+    const cursor =
+        textArea.selectionStart;
+
+
+    const before =
+        text.slice(0, cursor);
+
+    const after =
+        text.slice(cursor);
+
+
+    const match =
+        before.match(
+            /[a-zA-Z_][a-zA-Z0-9_]*$/
+        );
+
+
+    if (!match) {
+        return;
+    }
+
+
+    const start =
+        cursor - match[0].length;
+
+
+    textArea.value =
+        text.slice(0, start)
+        + word
+        + after;
+
+
+    const newCursor =
+        start + word.length;
+
+
+    textArea.setSelectionRange(
+        newCursor,
+        newCursor
+    );
+
+
+    suggestions.style.display = 'none';
+
+
+    renderHighlight();
+}
+let selectedIndex = 0;
+
+
 function renderHighlight() {
+
     let html = escapeHtml(textArea.value);
+    const input = html.toUpperCase();
+
+    console.log(input);
+
+    //rememberInput(input);
+
+    testMyMet(input);
+
 
     Object.entries(keywordGroups).forEach(([className, words]) => {
 
@@ -311,8 +647,106 @@ function syncScroll() {
 
     light.scrollLeft = textArea.scrollLeft;
 }
+let lastSavedWord = "";
+function getLastWord() {
 
+    const text = textArea.value.toUpperCase();
+
+    //const words = text.match(/[A-Z_][A-Z0-9_]*$/);
+
+    const words = text.match(/[A-Z_*][A-Z0-9_*]*$/);
+    return words ? words[0] : "";
+}
+function saveLastWord() {
+
+    const word = getLastWord();
+
+
+    if (
+        word &&
+        word !== lastSavedWord
+    ) {
+
+        rememberWord(word);
+
+        lastSavedWord = word;
+
+        console.log(
+            "Запомнил:",
+            word
+        );
+
+    }
+
+}
 textArea.addEventListener('input', renderHighlight);
+
+textArea.addEventListener('keydown', (event) => {
+
+    const items =
+        suggestions.querySelectorAll('.suggestion');
+
+
+    if (!items.length) {
+        return;
+    }
+
+
+    if (event.key === 'ArrowDown') {
+
+        event.preventDefault();
+
+        selectedIndex++;
+
+        if (selectedIndex >= items.length) {
+            selectedIndex = 0;
+        }
+
+        updateActiveSuggestion();
+    }
+
+
+    if (event.key === 'ArrowUp') {
+
+        event.preventDefault();
+
+        selectedIndex--;
+
+        if (selectedIndex < 0) {
+            selectedIndex = items.length - 1;
+        }
+
+        updateActiveSuggestion();
+    }
+
+
+    if (event.key === 'Escape') {
+
+        suggestions.style.display = 'none';
+
+    }
+
+
+    if (event.key === 'Enter') {
+
+        event.preventDefault();
+
+        const word = items[selectedIndex].dataset.word;
+
+        replaceCurrentWord(word);
+    }
+
+    if (
+        event.key === " " ||
+        event.key === "Enter" ||
+        event.key === ";"
+    ) {
+
+        saveLastWord();
+
+    }
+
+});
 
 textArea.addEventListener('scroll', syncScroll);
 
@@ -335,10 +769,13 @@ table.append(thead);
 table.append(tbody);
 const textAsk = document.createElement("textarea");
 
+
+let rows = {};
 const queryButton = document.createElement("button");
 queryButton.textContent = "Сделать запрос sql";
 queryButton.addEventListener("click", async () => {
     const data = await sqlQuery(textArea.value);
+    rows = data;
     await render(data[0]);
 });
 
@@ -362,23 +799,24 @@ const showTable = document.createElement("button");
 showTable.textContent = "Показать таблицу";
 showTable.addEventListener("click", showTableFn);
 
-main.append(dropInput);
-main.append(drop);
-main.append(getAllTablesName);
-main.append(selectTable);
-main.append(list);
-main.append(getColumnsTypes);
+//main.append(dropInput);
+//main.append(drop);
+//main.append(getAllTablesName);
+//main.append(selectTable);
+//main.append(list);
+//main.append(getColumnsTypes);
 app.append(light);
+app.append(suggestions);
 app.append(textArea);
 main.append(app);
 main.append(queryButton);
 main.append(document.createElement("hr"));
 main.append(table);
 main.append(document.createElement("hr"));
-main.append(textAsk);
-main.append(form);
-main.append(sendButton);
-main.append(showTable);
+//main.append(textAsk);
+//main.append(form);
+//main.append(sendButton);
+//main.append(showTable);
 
 
 function Textile(inputId, inputWidth, inputDensity) {
