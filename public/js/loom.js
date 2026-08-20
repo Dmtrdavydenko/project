@@ -1754,7 +1754,7 @@ async function loadAndRenderButtons(field = "loom") {
     try {
         //allNumbers = getDataT();
         allNumbers = await request("getLoomsRecipe");
-        console.log({ allNumbers: allNumbers });
+        console.log({ looms: allNumbers });
         for (const item of allNumbers) {
             for (const key in item) {
                 if (!isNaN(item[key]) && item[key] !== '') {
@@ -1807,6 +1807,9 @@ async function loadAndRenderButtons(field = "loom") {
 
         // Группировка по loom
         const loomGroups = groupBy(allNumbers, i => i.loom);
+
+       
+        console.log(loomGroups);
 
         // Создаём уникальные кнопки для loom и присваиваем их элементам
         const allNumbersLoom = [];
