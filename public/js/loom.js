@@ -1752,8 +1752,8 @@ let allNumbers
 async function loadAndRenderButtons(field = "loom") {
     console.log("init");
     try {
-        //allNumbers = getDataT();
-        allNumbers = await request("getLoomsRecipe");
+        allNumbers = getDataT();
+        //allNumbers = await request("getLoomsRecipe");
         console.log({ looms: allNumbers });
         for (const item of allNumbers) {
             for (const key in item) {
