@@ -575,7 +575,7 @@ function renderHighlight() {
 
     //rememberInput(input);
 
-    testMyMet(input);
+    //testMyMet(input);
 
 
     Object.entries(keywordGroups).forEach(([className, words]) => {
